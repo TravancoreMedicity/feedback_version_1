@@ -59,6 +59,7 @@ const RoootLayouts = () => {
 
   // GENERATE OTP FUNCTION
   const generateOtp = useCallback(() => {
+    console.log(mobileNumber);
     if (mobileNumber === "") {
       warningNofity("Mobile Number cannot be empty");
       return;
@@ -124,6 +125,8 @@ const RoootLayouts = () => {
               authTimeStamp: getTime(new Date(tokenValidity)),
             };
 
+            console.log(authData);
+
             setAuth((prev) => {
               return {
                 ...prev,
@@ -131,7 +134,7 @@ const RoootLayouts = () => {
                 userInfo: authData,
               };
             });
-            socket.emit("login", { user_slno });  // EMIT THE USER LOGIN EVENT TO SOCKET
+            // socket.emit("login", { user_slno });  // EMIT THE USER LOGIN EVENT TO SOCKET
             localStorage.setItem("app_auth", JSON.stringify(authData));
             setOpen(true);
             setTimeout(() => {
@@ -414,7 +417,7 @@ const RoootLayouts = () => {
           )}
         </Box>
         {/* USER CREDENTIALS BASED LOGIN MODAL */}
-        <Box
+        {/* <Box
           sx={{
             top: `${top}%`,
             position: 'absolute',
@@ -557,7 +560,7 @@ const RoootLayouts = () => {
               </Box>
             </Box>
           </Box>
-        </Box>
+        </Box> */}
       </Box>
     </Box >
   );

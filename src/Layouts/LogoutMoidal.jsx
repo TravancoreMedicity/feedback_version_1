@@ -24,7 +24,6 @@ const LogoutMoidal = () => {
 
         if (userSlno) {
             const userId = atob(JSON.parse(userSlno)?.authNo);
-
             if (userId) {
                 // localStorage.removeItem("app_auth");
                 // window.location.href = "/";

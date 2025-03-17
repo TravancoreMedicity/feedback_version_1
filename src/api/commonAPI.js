@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import axiosApi from "../Axios/Axios";
+import {axiosApi} from "../Axios/Axios";
 
 export const getDocTypeMasterList = async () => {
   return await axiosApi

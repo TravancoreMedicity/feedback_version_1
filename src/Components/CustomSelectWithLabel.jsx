@@ -10,7 +10,7 @@ const CustomSelectWithLabel = ({
   dataCollection,
   labelName,
   placeholder
-}) => {
+}) => { 
   return (
     <Box className="flex flex-1 flex-col" >
       <Typography level='body-sm'

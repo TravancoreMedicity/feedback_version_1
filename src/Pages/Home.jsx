@@ -9,12 +9,22 @@ import "./Style.css";
 import Header from "../Layouts/Header";
 import DrawerWindow from "../Layouts/DrawerWindow";
 import { useCallback } from "react";
+import { useMediaQuery } from "@mui/material";
 
 function Home() {
 
   const [drawerWidth, setDrawerWidth] = useState(240);
   const [dark, setDark] = useState(false);
-  // const drawerWidth = 240;
+  const isMdUp = useMediaQuery('(min-width: 960px)');
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleindicator = useCallback((event) => {
+    setAnchorEl(event.currentTarget);
+  })
+
+  const handlepopoveClose = useCallback(() => {
+    setAnchorEl(null)
+  }, [setAnchorEl])
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
@@ -39,6 +49,9 @@ function Home() {
   //   setIsClosing(false);
   // };
 
+
+
+
   const handleDrawerToggle = useCallback(() => {
     setDrawerWidth(drawerWidth === 0 ? 240 : 0);
     setMobileOpen(drawerWidth === 0 ? true : false);
@@ -52,6 +65,10 @@ function Home() {
 
       {/* TOP APPLICATION BAR START HERE  */}
       <Header
+        handlepopoveClose={handlepopoveClose}
+        handleindicator={handleindicator}
+        anchorEl={anchorEl}
+        isMdUp={isMdUp}
         handleDrawerToggle={handleDrawerToggle}
         drawerWidth={drawerWidth}
         dark={dark}
@@ -59,13 +76,13 @@ function Home() {
       />
       {/* TOP APPLICATION BAR END HERE  */}
 
-
       {/* NAVIGATION BAR LEFT SIDE */}
-      <DrawerWindow
-        drawerWidth={drawerWidth}
-        handleDrawerClose={handleDrawerClose}
-      />
-
+      {
+        isMdUp && <DrawerWindow
+          drawerWidth={drawerWidth}
+          handleDrawerClose={handleDrawerClose}
+        />
+      }
       {/* MAIN CONTENT START  */}
       <Box
         component="main"

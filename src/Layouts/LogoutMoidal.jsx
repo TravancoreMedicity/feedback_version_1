@@ -11,7 +11,7 @@ import settings from '../assets/setting.gif'
 import exit from '../assets/exit.gif'
 import { useNavigate } from 'react-router-dom';
 import { PeopleTag } from 'iconoir-react'
-import axiosApi from '../Axios/Axios';
+import { axiosApi } from '../Axios/Axios';
 import { toast } from 'react-toastify';
 // import { socket } from '../ws/socket';
 
@@ -20,11 +20,11 @@ const LogoutMoidal = () => {
     const navigate = useNavigate()
     const handleLogout = useCallback(async () => {
         const userSlno = localStorage.getItem("app_auth");
-        // socket.disconnect();
+        console.log(userSlno);
+
 
         if (userSlno) {
             const userId = atob(JSON.parse(userSlno)?.authNo);
-
             if (userId) {
                 // localStorage.removeItem("app_auth");
                 // window.location.href = "/";
@@ -52,6 +52,9 @@ const LogoutMoidal = () => {
                     }, 1000); // Wait 3 seconds before redirecting
                 }
             }
+
+        } else {
+            console.log("no localstorage");
 
         }
     }, [])

@@ -1,14 +1,14 @@
 // @ts-nocheck
 import Axios from "axios";
-import { API_URL, RETURN_URL } from "../Constant/Static";
+import { API_URL, ELLIDER_API_URL, RETURN_URL } from "../Constant/Static";
 import { toast } from "react-toastify";
 
-const axiosApi = Axios.create({
+export const axiosApi = Axios.create({
     baseURL: API_URL,
     withCredentials: true,
     headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
+        "Content-Type": 'application/json',
+        "Accept": 'application/json',
         "Accept-Language": "en-GB,en",
     },
 });
@@ -51,7 +51,7 @@ axiosApi.interceptors.response.use(
                 });
                 setTimeout(() => {
                     window.location.href = "/";
-                }, 3000); // Wait 3 seconds before redirecting
+                }, 2000); // Wait 3 seconds before redirecting
             }
         }
 
@@ -67,4 +67,14 @@ axiosApi.interceptors.response.use(
     }
 );
 
-export default axiosApi;
+
+export const axiosellider = Axios.create({
+    baseURL: ELLIDER_API_URL,
+    headers: {
+        "Content-Type": 'application/json',
+        "Accept": 'application/json',
+        "Accept-Language": "en-GB,en"
+    }
+});
+
+

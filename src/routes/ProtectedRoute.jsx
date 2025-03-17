@@ -5,11 +5,7 @@ import useValidateToken from '../hooks/useValidateToken'
 import { Backdrop } from '@mui/material'
 
 const ProtectedRoute = () => {
-
-    const isValid = true;
-    let isLoading;
-    // const { isValid, isLoading } = useValidateToken()
-
+    const { isValid, isLoading } = useValidateToken()
     const handleReturnHome = useCallback(() => {
         localStorage.removeItem("app_auth");
         window.location.href = "/";

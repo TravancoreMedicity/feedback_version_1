@@ -4,7 +4,7 @@ import { useIdleTimer } from 'react-idle-timer'
 import { millisecondsToSeconds } from "date-fns";
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axiosApi from '../Axios/Axios';
+import {axiosApi} from '../Axios/Axios';
 import { toast } from 'react-toastify';
 
 const IdleTimer = () => {

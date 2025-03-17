@@ -65,6 +65,28 @@ export const isValidOTPMobileNumber = (mobile) => {
     return regex.test(mobile);
 };
 
+
+// utils/validateEnglish.js
+
+export const validateEnglishInput = (english) => {
+    const englishRegex = /^[A-Za-z0-9\s,.\-?!():;]*$/;
+    if (!englishRegex.test(english)) {
+        return false;
+    }
+    return true;
+};
+
+// utils/validateMalayalam.js
+export const validateMalayalamInput = (malayalam) => {
+    // Regular expression to check for Malayalam characters
+    const malayalamRegex = /^[\u0D00-\u0D7F\s,.\-?!()]*$/; // Allows Malayalam characters and common punctuation
+    if (!malayalamRegex.test(malayalam)) {
+        return false; // Return false if validation fails
+    }
+    return true; // Return true if validation passes
+};
+
+
 export const isValidPassword = (password) => {
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/;
     /*
@@ -117,3 +139,17 @@ export const infoNofity = (message) => toast.info(message, {
     draggable: true,
     progress: undefined,
 });
+
+
+export const employeeID = () => {
+    const localData = localStorage.getItem("app_auth");
+    const employeeID = atob(JSON.parse(localData)?.authNo);
+    return employeeID;
+};
+
+
+export const EmpauthId = () => {
+    const localData = localStorage.getItem("app_auth");
+    const EmpauthId = atob(JSON.parse(localData)?.authId);
+    return EmpauthId;
+};

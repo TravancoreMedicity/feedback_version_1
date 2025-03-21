@@ -1,15 +1,39 @@
-import React, { memo } from 'react'
+import React, { memo, useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { getAllBlockedBed } from '../../Function/CommonFunction'
-import { Box, Grid, Typography } from '@mui/joy'
-import ApartmentIcon from '@mui/icons-material/Apartment';
+import { getAllBlockedBed, getBedRemarkStatus } from '../../Function/CommonFunction'
+import { Box,} from '@mui/joy'
 import BedList from '../Maintentance/BedList';
+import ComputerTwoToneIcon from '@mui/icons-material/ComputerTwoTone';
+import ChecklistHeaders from '../../Components/ChecklistHeaders';
 
 const InfromationTechnology = () => {
-    const { data: getllBlockedBed } = useQuery({
+
+    const { data: getllBlockedBed, refetch: getallBlokedbedRefetch } = useQuery({
         queryKey: ["getallblockedbed"],
         queryFn: () => getAllBlockedBed()
     })
+
+    //get bed status based on the remarks and verification
+    const { data: getallremarkstatus, refetch: getallremarkrefetch } = useQuery({
+        queryKey: ["getbedremarkstatus"],
+        queryFn: () => getBedRemarkStatus()
+    })
+
+    const filteredBlockedBeds = useMemo(() => {
+        return getllBlockedBed?.filter((blockedBed) => {
+            const remarkStatus = getallremarkstatus?.find((remark) => remark.fb_bdc_no === blockedBed.fb_bdc_no);
+            return !(remarkStatus && remarkStatus.fb_bed_status === 0);
+        });
+    }, [getllBlockedBed, getallremarkstatus]);
+
+
+    const filterbedwithremarks = useMemo(() => {
+        return getallremarkstatus?.filter((blockedBed) => {
+            const remarkStatus = getllBlockedBed?.find((remark) => remark.fb_bdc_no === blockedBed.fb_bdc_no);
+            return remarkStatus && remarkStatus.fb_bed_status === 1;
+        });
+    }, [getllBlockedBed, getallremarkstatus]);
+
     return (
         <Box sx={{ minHeight: '100vh' }}>
             <Box
@@ -27,26 +51,12 @@ const InfromationTechnology = () => {
                     borderColor: "rgba(var(--border-primary))",
                     borderRadius: 5
                 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }} className="border-b-[0.2rem] border-iconprimary p-0 cursor-pointer" >
-                        <ApartmentIcon sx={{
-                            color: 'rgba(var(--font-primary-white))',
-                            fontSize: 28,
-                            fontWeight: 700,
-                            mt: 2
-                        }} />
-                        <Typography
-                            level='body-sm'
-                            fontWeight={'md'}
-                            sx={{
-                                fontFamily: 'var(--font-varient)',
-                                color: 'rgba(var(--font-primary-white))',
-                                fontSize: 22,
-                                fontWeight: 700,
-                                mt: 2
-                            }}>
-                            INFORMATION TECHNOLOGY
-                        </Typography>
-                    </Box>
+                    <ChecklistHeaders icon={<ComputerTwoToneIcon sx={{
+                        color: 'rgba(var(--font-primary-white))',
+                        fontSize: 28,
+                        fontWeight: 700,
+                        mt: 2
+                    }} />} name={'INFORMATION TECHNOLOGY'} />
                     <Box
                         sx={{
                             gap: 3,
@@ -55,9 +65,16 @@ const InfromationTechnology = () => {
                             mt: 1,
                         }}>
                         {
-                            getllBlockedBed?.map((item, index) => {
+                            filteredBlockedBeds?.map((item, index) => {
+                                const matchdata = filterbedwithremarks?.find((remark) => remark.fb_bdc_no === item.fb_bdc_no)
                                 return <Box key={index}>
-                                    <BedList data={item} />
+                                    <BedList
+                                        getallremarkrefetch={getallremarkrefetch}
+                                        getallBlokedbedRefetch={getallBlokedbedRefetch}
+                                        matchdata={matchdata}
+                                        data={item}
+                                        name={"INFROMATION TECHNOLOGY"}
+                                        icon={<ComputerTwoToneIcon className='hoverClass' sx={{ width: 30, height: 30, color: 'rgba(var(--icon-primary))', }} />} />
                                 </Box>
                             })}
                     </Box>
@@ -67,4 +84,4 @@ const InfromationTechnology = () => {
     )
 }
 
-export default InfromationTechnology
+export default memo(InfromationTechnology)

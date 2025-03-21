@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Box, Typography } from "@mui/joy";
 import StarRating from './StarRendering';
 
@@ -61,6 +61,6 @@ const FeedBackGridComponent = ({ name, totalRating, count }) => {
     )
 }
 
-export default FeedBackGridComponent
+export default memo(FeedBackGridComponent)
 
 

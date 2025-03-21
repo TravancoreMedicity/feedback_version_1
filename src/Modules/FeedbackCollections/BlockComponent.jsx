@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/joy';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { memo, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserNurse } from '@fortawesome/free-solid-svg-icons';
 import { axiosApi, axiosellider } from '../../Axios/Axios';
@@ -164,4 +164,4 @@ const BlockComponent = ({
     )
 }
 
-export default BlockComponent
+export default memo(BlockComponent)

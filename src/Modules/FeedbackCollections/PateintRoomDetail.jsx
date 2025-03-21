@@ -1,10 +1,16 @@
 import { Box, Grid, Typography } from '@mui/joy'
-import React, { memo, useCallback, useEffect, useRef, useState } from 'react'
+import React, { lazy, memo, Suspense, useCallback, useState } from 'react'
 import DefaultPageLayout from '../../Components/DefaultPageLayout'
-import RoomComponent from './RoomComponent';
 import { axiosApi } from '../../Axios/Axios';
 import { warningNofity } from '../../Constant/Constant';
 import MeetingRoomTwoToneIcon from '@mui/icons-material/MeetingRoomTwoTone';
+import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
+import { getBedRemarkStatus } from '../../Function/CommonFunction';
+import { useQuery } from '@tanstack/react-query';
+
+
+
+const RoomComponent = lazy(() => import('./RoomComponent'));
 
 const PateintRoomDetail = ({ beddetail, nsname, view, setView, nscode }) => {
 
@@ -13,39 +19,21 @@ const PateintRoomDetail = ({ beddetail, nsname, view, setView, nscode }) => {
     const [patientfeedbackdata, setPatientFeedBackData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false)
-    // const [boxWidth, setBoxWidth] = useState(0);
-    // const boxRef = useRef(null);
 
-    // // Resize observer callback
-    // const handleResize = useCallback(() => {
-    //     if (boxRef.current) {
-    //         const width = boxRef.current.offsetWidth;
-    //         // Only update if width has changed
-    //         if (width !== boxWidth) {
-    //             setBoxWidth(width);
-    //         }
-    //     }
-    // }, [boxWidth]);
-    // useEffect(() => {
-    //     if (boxRef.current) {
-    //         const observer = new ResizeObserver(handleResize);
-    //         observer.observe(boxRef.current); // Observe the box element for size changes
-    //         return () => {
-    //             observer.disconnect();
-    //         };
-    //     }
-    // }, [handleResize]);
-
+    //GROUP BED DETAIL BASED ON THE ROOM CATEGORIES
     const groupedBeds = beddetail?.reduce((acc, bed) => {
         const key = bed.fb_rtc_desc; // Grouping based only on RTC_DESC
-        if (!acc[key]) {
-            acc[key] = [];
-        }
-        acc[key].push(bed);
+        acc[key] = acc[key] ? [...acc[key], bed] : [bed];
         return acc;
     }, {});
 
+    //QUERY FOR GETTING ALL BED REMARKS
+    const { data: getallremarkstatus } = useQuery({
+        queryKey: ["getbedremarkstatus"],
+        queryFn: () => getBedRemarkStatus()
+    });
 
+    //FETCHING INFORMATION THAT HAVE ALREADY SUBMITTED FEEDBACK
     const FetchPatientFeedback = useCallback(async (inpatientDetail) => {
         const searchdata = {
             fb_patient_num: inpatientDetail[0]?.fb_pt_no,
@@ -60,38 +48,6 @@ const PateintRoomDetail = ({ beddetail, nsname, view, setView, nscode }) => {
             warningNofity("Error in Fetching Data")
         }
     }, [inpatientDetailfrommeliora])
-
-    // const GetInpatientDetails = useCallback(async (bdcode) => {
-    //     const insertData = {
-    //         NS_CODE: nscode,
-    //         BD_CODE: Number(bdcode)
-    //     }
-    //     try {
-    //         setInpatientDetail({});
-    //         const response = await axiosellider.post('/melioraEllider/inpatientdetil', insertData)
-    //         const { success, data } = response.data;
-    //         if (success === 1) {
-    //             warningNofity("No Patient Data");
-    //             setAnchorEl(null);
-    //             setInpatientDetail({})
-    //             return;
-    //         }
-    //         if (success !== 2) {
-    //             warningNofity("Error in fetching In Patient Detail :)");
-    //             setAnchorEl(null);
-    //             setInpatientDetail({})
-    //             return;
-    //         }
-    //         setInpatientDetail(prev => ({
-    //             ...prev,
-    //             [bdcode]: data || null  // Store null if no data
-    //         }));
-    //         FetchPatientFeedback(data)
-    //     } catch (error) {
-    //         warningNofity("Error in Api")
-    //         setAnchorEl(null)
-    //     }
-    // }, [nscode, setInpatientDetail, setAnchorEl, FetchPatientFeedback])
 
 
     //Fetching Patient Detail From the Melior
@@ -196,26 +152,31 @@ const PateintRoomDetail = ({ beddetail, nsname, view, setView, nscode }) => {
                                         <Box sx={{ width: "100%", mt: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                             <Box sx={{ width: '98%' }}>
                                                 <Grid container spacing={1}>
-                                                    {beddetail?.map((item, index) => (
-                                                        <Grid xs={12} sm={3} lg={2} xl={1.5} key={index}>
-                                                            <RoomComponent
-                                                                inpatientDetail={inpatientDetailfrommeliora[item.fb_bd_code] || []} // Only pass relevant data
-                                                                bdcode={item.fb_bd_code}
-                                                                roomnumber={item.fb_bdc_no}
-                                                                ispresent={item.fb_bdc_occup}
-                                                                // getdetail={GetInpatientDetails}
-                                                                getdetail={GetPatientDetailFromMeliora}
-                                                                setAnchorEl={setAnchorEl}
-                                                                anchorEl={anchorEl}
-                                                                feedbackedexit={patientfeedbackdata}
-                                                                isvip={item?.fb_bdc_vipbed}
-                                                                multiple={item?.OCCU}
-                                                                loading={loading}
-                                                                open={open}
-                                                                setOpen={setOpen}
-                                                            />
-                                                        </Grid>
-                                                    ))}
+                                                    {beddetail?.map((item, index) => {
+                                                        const result = getallremarkstatus?.find((val) => val.fb_bd_code === Number(item.fb_bd_code))
+                                                        return (
+                                                            <Grid xs={12} sm={3} lg={2} xl={1.5} key={index}>
+                                                                <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
+                                                                    <RoomComponent
+                                                                        remarkstatus={result}
+                                                                        inpatientDetail={inpatientDetailfrommeliora[item.fb_bd_code] || []} // Only pass relevant data
+                                                                        bdcode={item.fb_bd_code}
+                                                                        roomnumber={item.fb_bdc_no}
+                                                                        ispresent={item.fb_bdc_occup}
+                                                                        getdetail={GetPatientDetailFromMeliora}
+                                                                        setAnchorEl={setAnchorEl}
+                                                                        anchorEl={anchorEl}
+                                                                        feedbackedexit={patientfeedbackdata}
+                                                                        isvip={item?.fb_bdc_vipbed}
+                                                                        multiple={item?.OCCU}
+                                                                        loading={loading}
+                                                                        open={open}
+                                                                        setOpen={setOpen}
+                                                                    />
+                                                                </Suspense>
+                                                            </Grid>
+                                                        )
+                                                    })}
                                                 </Grid>
                                             </Box>
                                         </Box>

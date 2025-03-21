@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
-import { Box, Typography, Chip } from '@mui/joy';
+import React, { memo, useState } from 'react';
+import { Box, Typography, Chip, Tooltip } from '@mui/joy';
 import CustomCheckBoxWithLabel from '../../Components/CustomCheckBoxWithLabel';
 import VerifiedTwoToneIcon from '@mui/icons-material/VerifiedTwoTone';
 import WorkspacePremiumTwoToneIcon from '@mui/icons-material/WorkspacePremiumTwoTone';
 import NewReleasesTwoToneIcon from '@mui/icons-material/NewReleasesTwoTone';
+import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
 
 
-const BedListCard = ({ setSelectedItems, selectedItems }) => {
+const BedListCard = ({ setSelectedItems, selectedItems, status, totallength, trueitemlength, dep, current }) => {
     // State to track the selected checkboxes
     // Handle checkbox change
     const handleCheckboxChange = (label) => {
@@ -15,6 +16,9 @@ const BedListCard = ({ setSelectedItems, selectedItems }) => {
             [label]: !prevState[label]
         }));
     };
+
+
+
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, px: 1, mt: 1 }}>
@@ -54,7 +58,7 @@ const BedListCard = ({ setSelectedItems, selectedItems }) => {
                                 fontFamily: 'var(--font-varient)',
                                 fontWeight: 600,
                                 fontSize: 12,
-                            }} >{item}  GOOD CONDITION </Chip> : <Chip startDecorator={<NewReleasesTwoToneIcon sx={{
+                            }} > {status === 1 && (totallength === trueitemlength) ? "ASSET VERIFIED" : `${item} GOOD CONDITION`} </Chip> : <Chip startDecorator={<NewReleasesTwoToneIcon sx={{
                                 animation: 'blink 1.5s infinite', // Apply the blink animation
                                 '@keyframes blink': {
                                     '0%': {
@@ -78,10 +82,22 @@ const BedListCard = ({ setSelectedItems, selectedItems }) => {
                     </Box>
 
                     <Box sx={{ width: '20%', display: 'flex', justifyContent: 'end', gap: 3 }}>
-                        <CustomCheckBoxWithLabel
-                            checkBoxValue={selectedItems[item]}
-                            handleCheckBoxValue={() => handleCheckboxChange(item)}
-                        />
+                        {
+                            status === 1 && (totallength === trueitemlength) && (dep !== current) ? <Tooltip title="Asset Verified">
+                                <CheckBoxOutlinedIcon sx={{
+                                    width: 30,
+                                    height: 30,
+                                    mr: 1,
+                                    color: 'green',
+                                    cursor: 'pointer'
+                                }} />
+                            </Tooltip> : <CustomCheckBoxWithLabel
+                                disabled={status === 1 && (totallength === trueitemlength) && (dep !== current)}
+                                checkBoxValue={selectedItems[item]}
+                                handleCheckBoxValue={() => handleCheckboxChange(item)}
+                            />
+                        }
+
                     </Box>
                 </Box>
             ))}
@@ -89,4 +105,4 @@ const BedListCard = ({ setSelectedItems, selectedItems }) => {
     );
 };
 
-export default BedListCard;
+export default memo(BedListCard);

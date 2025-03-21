@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/joy'
-import React from 'react'
+import React, { memo } from 'react'
 import PersonIcon from '@mui/icons-material/Person';
 
 const PatientCardHeader = ({ roomnumber }) => {
@@ -67,4 +67,4 @@ const PatientCardHeader = ({ roomnumber }) => {
     )
 }
 
-export default PatientCardHeader
+export default memo(PatientCardHeader)

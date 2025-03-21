@@ -12,60 +12,60 @@ const CleaningRoom = ({
     item,
 }) => {
 
-    const [open, setOpen] = useState(false)
-    const [data, setData] = useState({})
-    const [activeButton, setActiveButton] = useState(null);
-    const [remarks, setRemarks] = useState("")
-    const [beddetail, setBeddetail] = useState({
-        fb_bed_slno: 0,
-        fb_bd_code: 0,
-        fb_ns_code: "",
-        fb_bdc_no: ""
-    })
+    // const [open, setOpen] = useState(false)
+    // const [data, setData] = useState({})
+    // const [activeButton, setActiveButton] = useState(null);
+    // const [remarks, setRemarks] = useState("")
+    // const [beddetail, setBeddetail] = useState({
+    //     fb_bed_slno: 0,
+    //     fb_bd_code: 0,
+    //     fb_ns_code: "",
+    //     fb_bdc_no: ""
+    // })
 
-    const { fb_bed_slno, fb_bd_code, fb_ns_code, fb_bdc_no } = beddetail;
+    // const { fb_bed_slno, fb_bd_code, fb_ns_code, fb_bdc_no } = beddetail;
 
-    const HandleBedRequest = useCallback(async () => {
-        const insertData = {
-            fb_bed_slno: fb_bed_slno,
-            fb_bd_code: fb_bd_code,
-            fb_bdc_no: fb_bdc_no,
-            fb_ns_code: fb_ns_code,
-            fb_bed_reason: activeButton,
-            fb_bed_remarks: remarks,
-            fb_bed_status: 1,
-            create_user: employeeID()
-        }
-        try {
-            const response = await axiosApi.post('/feedback/insertbedremarks', insertData);
-            const { success } = response.data;
-            if (success !== 2) return warningNofity("Error in Inserting Data")
-            succesNofity("Successfully Inserted Data")
-            setActiveButton(null)
-            setRemarks("")
-            setOpen(false)
-        } catch (error) {
-            warningNofity("Error in Inserting Data")
-        }
+    // const HandleBedRequest = useCallback(async () => {
+    //     const insertData = {
+    //         fb_bed_slno: fb_bed_slno,
+    //         fb_bd_code: fb_bd_code,
+    //         fb_bdc_no: fb_bdc_no,
+    //         fb_ns_code: fb_ns_code,
+    //         fb_bed_reason: activeButton,
+    //         fb_bed_remarks: remarks,
+    //         fb_bed_status: 1,
+    //         create_user: employeeID()
+    //     }
+    //     try {
+    //         const response = await axiosApi.post('/feedback/insertbedremarks', insertData);
+    //         const { success } = response.data;
+    //         if (success !== 2) return warningNofity("Error in Inserting Data")
+    //         succesNofity("Successfully Inserted Data")
+    //         setActiveButton(null)
+    //         setRemarks("")
+    //         setOpen(false)
+    //     } catch (error) {
+    //         warningNofity("Error in Inserting Data")
+    //     }
 
-    }, [fb_bed_slno, fb_bd_code, fb_ns_code, fb_bdc_no, activeButton, remarks, setOpen])
+    // }, [fb_bed_slno, fb_bd_code, fb_ns_code, fb_bdc_no, activeButton, remarks, setOpen])
 
 
-    const HanldeModalOpen = useCallback((item) => {
-        setData(item)
-        setOpen(true)
-        setBeddetail({
-            fb_bed_slno: item?.fb_bed_slno,
-            fb_bd_code: item?.fb_bd_code,
-            fb_ns_code: item?.fb_ns_code,
-            fb_bdc_no: item?.fb_bdc_no
-        })
-    }, [setOpen, setData])
+    // const HanldeModalOpen = useCallback((item) => {
+    //     setData(item)
+    //     setOpen(true)
+    //     setBeddetail({
+    //         fb_bed_slno: item?.fb_bed_slno,
+    //         fb_bd_code: item?.fb_bd_code,
+    //         fb_ns_code: item?.fb_ns_code,
+    //         fb_bdc_no: item?.fb_bdc_no
+    //     })
+    // }, [setOpen, setData])
 
 
     return (
         <>
-            <MaintenanceModal
+            {/* <MaintenanceModal
                 open={open}
                 setOpen={setOpen}
                 item={data}
@@ -75,9 +75,9 @@ const CleaningRoom = ({
                 setActiveButton={setActiveButton}
                 setBeddetail={setBeddetail}
                 HandleBedRequest={HandleBedRequest}
-            />
+            /> */}
             <Box
-                onClick={() => HanldeModalOpen(item)}
+                // onClick={() => HanldeModalOpen(item)}
                 sx={{
                     width: 220,
                     display: 'flex',

@@ -20,11 +20,15 @@ import {
     HomeAltSlimHoriz,
     Settings,
     MessageText,
-    Industry
+    Industry,
+    Computer,
+    Heart,
+    TaskList
 } from 'iconoir-react'
 import { EmpauthId } from "../Constant/Constant";
 import { getUserModules } from "../Function/CommonFunction";
 import { useQuery } from "@tanstack/react-query";
+import ComputerTwoToneIcon from '@mui/icons-material/ComputerTwoTone';
 
 const DrawerWindow = memo(({ drawerWidth, handleDrawerClose }) => {
 
@@ -49,18 +53,19 @@ const DrawerWindow = memo(({ drawerWidth, handleDrawerClose }) => {
         return [
             { modslno: 1, menu: "Dashboard", text: "/Home/Dashboard", icon: <HomeAltSlimHoriz height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
             { modslno: 2, menu: "FeedBack Links", text: "/Home/Feedbackdetail", icon: <MessageText height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
-            { modslno: 3, menu: "FeedBackCollection", text: "/Home/collectiondetail", icon: <MessageText height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
+            { modslno: 3, menu: "FeedBackCollection", text: "/Home/collectiondetail", icon: <TaskList height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
             { modslno: 4, menu: "Settings", text: "/Home/Settings", icon: <Settings height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
-            { modslno: 4, menu: "Maintenance", text: "/Home/Maintenace", icon: <Industry height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
-            { modslno: 4, menu: "InformationTechnology", text: "/Home/it", icon: <Industry height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
-            { modslno: 4, menu: "BioMedical", text: "/Home/biomedical", icon: <Industry height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
+            { modslno: 5, menu: "CheckList", text: "/Home/Maintenace", icon: <Industry height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
+            { modslno: 6, menu: "InformationTechnology", text: "/Home/it", icon: <Computer height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
+            { modslno: 7, menu: "BioMedical", text: "/Home/biomedical", icon: <Heart height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
+            { modslno: 8, menu: "HouseKeeping", text: "/Home/housekeeping", icon: <Heart height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
         ]
     }, [])
 
 
     useEffect(() => {
         if (allmoduleitem?.length) {
-            const filteredItems = drawerMenu.filter((menuItem) =>
+            const filteredItems = drawerMenu?.filter((menuItem) =>
                 allmoduleitem.some((module) => menuItem.modslno === module.fb_module_slno)
             );
             setarr(filteredItems);

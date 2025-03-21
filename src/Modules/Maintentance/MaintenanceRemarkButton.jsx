@@ -1,9 +1,7 @@
 import { Box } from '@mui/joy';
-import React, { act, useCallback, useState } from 'react';
+import React, { memo, useCallback } from 'react';
 import Button from '@mui/joy/Button';
 import PauseCircleFilledTwoToneIcon from '@mui/icons-material/PauseCircleFilledTwoTone';
-import WindPowerTwoToneIcon from '@mui/icons-material/WindPowerTwoTone';
-import CleaningServicesTwoToneIcon from '@mui/icons-material/CleaningServicesTwoTone';
 import FiberNewTwoToneIcon from '@mui/icons-material/FiberNewTwoTone';
 
 const MaintenanceRemarkButton = ({
@@ -19,7 +17,7 @@ const MaintenanceRemarkButton = ({
         if (activeButton !== buttonName) {
             setRemarks("")
         }
-    }, [setActiveButton, activeButton]);
+    }, [setActiveButton, activeButton, setRemarks]);
     // Function to get the icon color based on active button
     const getIconColor = (buttonName) => {
         return activeButton === buttonName ? 'rgb(216, 75, 154, 1)' : 'inherit';
@@ -34,7 +32,7 @@ const MaintenanceRemarkButton = ({
                     display: 'flex',
                     justifyContent: 'space-between',
                     gap: 2,
-                    mb:2
+                    mb: 2
                 }}
             >
                 <Button
@@ -111,10 +109,8 @@ const MaintenanceRemarkButton = ({
                     />
                 </Box>
             }
-
-
         </>
     );
 }
 
-export default MaintenanceRemarkButton;
+export default memo(MaintenanceRemarkButton);

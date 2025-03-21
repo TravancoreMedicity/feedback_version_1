@@ -1,5 +1,5 @@
-import React from 'react';
-import { Box, Tooltip, Typography } from '@mui/joy';
+import React, { memo } from 'react';
+import { Box, Typography } from '@mui/joy';
 import LocalHotelTwoToneIcon from '@mui/icons-material/LocalHotelTwoTone';
 import MapsHomeWorkTwoToneIcon from '@mui/icons-material/MapsHomeWorkTwoTone';
 import BedTwoToneIcon from '@mui/icons-material/BedTwoTone';
@@ -108,4 +108,4 @@ const MaintenanceCard = ({
     );
 };
 
-export default MaintenanceCard;
+export default memo(MaintenanceCard);

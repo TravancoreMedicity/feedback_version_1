@@ -3,7 +3,9 @@ import React, { memo, } from 'react';
 import VerifiedUserTwoToneIcon from '@mui/icons-material/VerifiedUserTwoTone';
 import BedListCard from './BedListCard';
 
-const BedListOtherDep = ({ name, selectedItems, setSelectedItems }) => {
+const BedListOtherDep = ({ name, selectedItems, setSelectedItems, status, dep, current }) => {
+    const selectmaintenance = selectedItems ? Object.values(selectedItems).filter(value => value === true).length : 0;
+    const totallength = selectedItems ? Object.values(selectedItems).length : 0;
     return (
         <Box sx={{
             p: 1,
@@ -36,10 +38,17 @@ const BedListOtherDep = ({ name, selectedItems, setSelectedItems }) => {
                         fontSize: 18,
                         fontWeight: 700
                     }}>
-                    {name} CHECKLIST
+                    {name} {status === 1 && (totallength === selectmaintenance) ? "VERIFIED" : 'CHECKLIST'}
                 </Typography>
             </Box>
-            <BedListCard selectedItems={selectedItems} setSelectedItems={setSelectedItems} />
+            <BedListCard
+                dep={dep}
+                current={current}
+                status={status}
+                totallength={totallength}
+                trueitemlength={selectmaintenance}
+                selectedItems={selectedItems}
+                setSelectedItems={setSelectedItems} />
         </Box>
     );
 };

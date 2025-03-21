@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import PendingActionsTwoToneIcon from '@mui/icons-material/PendingActionsTwoTone';
 import { Box, Tooltip, Typography } from '@mui/joy';
 
@@ -104,4 +104,4 @@ const MaintenaceRemarkCard = () => {
     )
 }
 
-export default MaintenaceRemarkCard
+export default memo(MaintenaceRemarkCard)

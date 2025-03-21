@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/joy';
-import React, { useCallback, useState } from 'react';
+import React, { memo, useCallback, useState } from 'react';
 import { Popover } from '@mui/material';
 import FeedbackCategoryProgress from './FeedbackCategoryProgress';
 import StarRendering from './StarRendering';
@@ -181,7 +181,7 @@ const FeedBackFormComponent = ({ name, totalMark, len, progress, totalForm, form
     );
 }
 
-export default FeedBackFormComponent;
+export default memo(FeedBackFormComponent);
 
 
 

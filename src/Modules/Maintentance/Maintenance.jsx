@@ -1,17 +1,42 @@
-import React, { memo } from 'react'
+import React, { lazy, memo, Suspense, useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { getAllBlockedBed } from '../../Function/CommonFunction'
-import { Box, Grid, Typography } from '@mui/joy'
-import ApartmentIcon from '@mui/icons-material/Apartment';
-import CleaningRoom from './CleaningRoom'
-import BedList from './BedList';
+import { getAllBlockedBed, getBedRemarkStatus } from '../../Function/CommonFunction'
+import { Box } from '@mui/joy'
 import EngineeringTwoToneIcon from '@mui/icons-material/EngineeringTwoTone';
+import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
+import ChecklistHeaders from '../../Components/ChecklistHeaders';
+
+
+const BedList = lazy(() => import('./BedList'));
 
 const Maintenance = () => {
-    const { data: getllBlockedBed } = useQuery({
+
+    const { data: getllBlockedBed, refetch: getallBlokedbedRefetch } = useQuery({
         queryKey: ["getallblockedbed"],
         queryFn: () => getAllBlockedBed()
     })
+
+    //get bed status based on the remarks and verification
+    const { data: getallremarkstatus, refetch: getallremarkrefetch } = useQuery({
+        queryKey: ["getbedremarkstatus"],
+        queryFn: () => getBedRemarkStatus()
+    })
+
+    const filteredBlockedBeds = useMemo(() => {
+        return getllBlockedBed?.filter((blockedBed) => {
+            const remarkStatus = getallremarkstatus?.find((remark) => remark.fb_bdc_no === blockedBed.fb_bdc_no);
+            return !(remarkStatus && remarkStatus.fb_bed_status === 0);
+        });
+    }, [getllBlockedBed, getallremarkstatus]);
+
+
+    const filterbedwithremarks = useMemo(() => {
+        return getallremarkstatus?.filter((blockedBed) => {
+            const remarkStatus = getllBlockedBed?.find((remark) => remark.fb_bdc_no === blockedBed.fb_bdc_no);
+            return remarkStatus && remarkStatus.fb_bed_status === 1;
+        });
+    }, [getllBlockedBed, getallremarkstatus]);
+
 
 
 
@@ -33,26 +58,13 @@ const Maintenance = () => {
                         borderColor: "rgba(var(--border-primary))",
                         borderRadius: 5
                     }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center' }} className="border-b-[0.2rem] border-iconprimary p-0 cursor-pointer" >
-                            <ApartmentIcon sx={{
+                        <ChecklistHeaders
+                            icon={<EngineeringTwoToneIcon sx={{
                                 color: 'rgba(var(--font-primary-white))',
                                 fontSize: 28,
                                 fontWeight: 700,
                                 mt: 2
-                            }} />
-                            <Typography
-                                level='body-sm'
-                                fontWeight={'md'}
-                                sx={{
-                                    fontFamily: 'var(--font-varient)',
-                                    color: 'rgba(var(--font-primary-white))',
-                                    fontSize: 22,
-                                    fontWeight: 700,
-                                    mt: 2
-                                }}>
-                                MAINTENACE
-                            </Typography>
-                        </Box>
+                            }} />} name={'MAINTENACE'} />
                         <Box
                             sx={{
                                 gap: 3,
@@ -61,9 +73,15 @@ const Maintenance = () => {
                                 mt: 1,
                             }}>
                             {
-                                getllBlockedBed?.map((item, index) => {
+                                filteredBlockedBeds?.map((item, index) => {
+                                    const matchdata = filterbedwithremarks?.find((remark) => remark.fb_bdc_no === item.fb_bdc_no)
                                     return <Box key={index}>
-                                        <BedList data={item} name={"MAINTENACE"} icon={<EngineeringTwoToneIcon className='hoverClass' sx={{ width: 30, height: 30, color: 'rgba(var(--icon-primary))', }} />} />
+                                        <Suspense fallback={<CustomBackDropWithOutState message={"loading"} />}>
+                                            <BedList
+                                                getallremarkrefetch={getallremarkrefetch}
+                                                getallBlokedbedRefetch={getallBlokedbedRefetch}
+                                                matchdata={matchdata} data={item} name={"MAINTENACE"} icon={<EngineeringTwoToneIcon className='hoverClass' sx={{ width: 30, height: 30, color: 'rgba(var(--icon-primary))', }} />} />
+                                        </Suspense>
                                     </Box>
                                 })}
                         </Box>

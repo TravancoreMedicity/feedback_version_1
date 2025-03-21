@@ -1,12 +1,6 @@
 import { Box, Grid, Typography } from '@mui/joy'
 import { Popover } from '@mui/material'
-import React, { useCallback, useMemo } from 'react'
-import {
-    HomeAltSlimHoriz,
-    Settings,
-    MessageText,
-    Industry
-} from 'iconoir-react';
+import React, { memo, useCallback, useMemo } from 'react'
 import CollectionsBookmarkTwoToneIcon from '@mui/icons-material/CollectionsBookmarkTwoTone';
 import DashboardTwoToneIcon from '@mui/icons-material/DashboardTwoTone';
 import ChatTwoToneIcon from '@mui/icons-material/ChatTwoTone';
@@ -14,6 +8,7 @@ import SettingsSuggestTwoToneIcon from '@mui/icons-material/SettingsSuggestTwoTo
 import EngineeringTwoToneIcon from '@mui/icons-material/EngineeringTwoTone';
 import LaptopTwoToneIcon from '@mui/icons-material/LaptopTwoTone';
 import BiotechTwoToneIcon from '@mui/icons-material/BiotechTwoTone';
+import CleaningServicesTwoToneIcon from '@mui/icons-material/CleaningServicesTwoTone';
 import { useNavigate } from 'react-router-dom';
 
 const FloatingDrawer = ({ anchorEl, handlepopoveClose }) => {
@@ -22,7 +17,7 @@ const FloatingDrawer = ({ anchorEl, handlepopoveClose }) => {
     const handleListItemClick = useCallback((event, index, route) => {
         navigation(route);
         handlepopoveClose()
-    }, [navigation]);
+    }, [navigation,handlepopoveClose]);
 
     const drawerMenu = useMemo(() => {
         return [
@@ -30,9 +25,10 @@ const FloatingDrawer = ({ anchorEl, handlepopoveClose }) => {
             { modslno: 2, menu: "FeedBack Links", text: "/Home/Feedbackdetail", icon: <ChatTwoToneIcon color="rgba(var(--drawer-font-color))" className='hoverClass' sx={{ width: 30, height: 30, color: "#d90429" }} /> },
             { modslno: 3, menu: "FeedBackCollection", text: "/Home/collectiondetail", icon: <CollectionsBookmarkTwoToneIcon className='hoverClass' sx={{ width: 30, height: 30, color: "blue" }} /> },
             { modslno: 4, menu: "Settings", text: "/Home/Settings", icon: <SettingsSuggestTwoToneIcon color="rgba(var(--drawer-font-color))" className='hoverClass' sx={{ width: 30, height: 30, color: "#ffbe0b" }} /> },
-            { modslno: 4, menu: "Maintenance", text: "/Home/Maintenace", icon: <EngineeringTwoToneIcon color="rgba(var(--drawer-font-color))" className='hoverClass' sx={{ width: 30, height: 30, color: "#fb6f92" }} /> },
-            { modslno: 4, menu: "InformationTechnology", text: "/Home/it", icon: <LaptopTwoToneIcon color="rgba(var(--drawer-font-color))" className='hoverClass' sx={{ width: 30, height: 30, color: "#4ad66d" }} /> },
-            { modslno: 4, menu: "BioMedical", text: "/Home/biomedical", icon: <BiotechTwoToneIcon color="rgba(var(--drawer-font-color))" className='hoverClass' sx={{ width: 30, height: 30, color: "#4cc9f0" }} /> },
+            { modslno: 5, menu: "CheckList", text: "/Home/Maintenace", icon: <EngineeringTwoToneIcon color="rgba(var(--drawer-font-color))" className='hoverClass' sx={{ width: 30, height: 30, color: "#fb6f92" }} /> },
+            { modslno: 6, menu: "InformationTechnology", text: "/Home/it", icon: <LaptopTwoToneIcon color="rgba(var(--drawer-font-color))" className='hoverClass' sx={{ width: 30, height: 30, color: "#4ad66d" }} /> },
+            { modslno: 7, menu: "BioMedical", text: "/Home/biomedical", icon: <BiotechTwoToneIcon color="rgba(var(--drawer-font-color))" className='hoverClass' sx={{ width: 30, height: 30, color: "#4cc9f0" }} /> },
+            { modslno: 8, menu: "HouseKeeping", text: "/Home/housekeeping", icon: <CleaningServicesTwoToneIcon color="rgba(var(--drawer-font-color))" className='hoverClass' sx={{ width: 30, height: 30, color: "#8a5a44" }} /> },
         ]
     }, []);
 
@@ -127,6 +123,6 @@ const FloatingDrawer = ({ anchorEl, handlepopoveClose }) => {
     )
 }
 
-export default FloatingDrawer
+export default memo(FloatingDrawer)
 
 

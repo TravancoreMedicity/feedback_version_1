@@ -35,6 +35,7 @@ import NurstationMaster from "./Masters/NurstationMaster.jsx";
 import Maintenance from "./Modules/Maintentance/Maintenance.jsx";
 import InfromationTechnology from "./Modules/IT/InfromationTechnology.jsx";
 import Biomedical from "./Modules/Biomedical/Biomedical.jsx";
+import HouseKeeping from "./Modules/HouseKeeping.jsx/HouseKeeping.jsx";
 
 
 
@@ -81,12 +82,12 @@ const routes = createBrowserRouter([
     children: [],
     errorElement: <ErrorElement />,
   },
-  {
-    path: "scanner", element:
-      <Suspense fallback={<CommonFinalFeedSkeleton />} >
-        <Scanner />
-      </Suspense>, errorElement: <ErrorElement />
-  },
+  // {
+  //   path: "scanner", element:
+  //     <Suspense fallback={<CommonFinalFeedSkeleton />} >
+  //       <Scanner />
+  //     </Suspense>, errorElement: <ErrorElement />
+  // },
   {
     path: "/feedback/:encodedId",
     element: (
@@ -239,8 +240,13 @@ const routes = createBrowserRouter([
               <Suspense fallback={<CommonFinalFeedSkeleton />} >
                 <Biomedical />
               </Suspense>, errorElement: <ErrorElement />
+          },
+          {
+            path: "housekeeping", element:
+              <Suspense fallback={<CommonFinalFeedSkeleton />} >
+                <HouseKeeping />
+              </Suspense>, errorElement: <ErrorElement />
           }
-
 
 
 
@@ -266,43 +272,43 @@ const routes = createBrowserRouter([
         path: "/qrscan",
         element: <Qrscan />,
       },
-      {
-        path: "/ChooseFeedback", element:
-          <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
-            <ChooseFeedbacks />
-          </Suspense>,
-        errorElement: <ErrorElement />
-      },
-      {
-        path: "/opFeedback", element:
-          <Suspense fallback={<Opskeleton />} >
-            <Opfeedback />
-          </Suspense>, errorElement: <ErrorElement />
-      },
-      {
-        path: "/ipFeedback", element:
-          <Suspense fallback={<Opskeleton />} >
-            <Ipfeedback />
-          </Suspense>, errorElement: <ErrorElement />
-      },
-      {
-        path: "/labFeedback", element:
-          <Suspense fallback={<Opskeleton />} >
-            <LaboratoryFeedback />
-          </Suspense>, errorElement: <ErrorElement />
-      },
-      {
-        path: "/PharmacyFeedback", element:
-          <Suspense fallback={<CommonFinalFeedSkeleton />} >
-            <PharmacyFeedback />
-          </Suspense>, errorElement: <ErrorElement />
-      },
-      {
-        path: "/radiologyfeed", element:
-          <Suspense fallback={<RadiologyFeedbackSkeleton />} >
-            <RadiologyFeedback />
-          </Suspense>, errorElement: <ErrorElement />
-      },
+      // {
+      //   path: "/ChooseFeedback", element:
+      //     <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
+      //       <ChooseFeedbacks />
+      //     </Suspense>,
+      //   errorElement: <ErrorElement />
+      // },
+      // {
+      //   path: "/opFeedback", element:
+      //     <Suspense fallback={<Opskeleton />} >
+      //       <Opfeedback />
+      //     </Suspense>, errorElement: <ErrorElement />
+      // },
+      // {
+      //   path: "/ipFeedback", element:
+      //     <Suspense fallback={<Opskeleton />} >
+      //       <Ipfeedback />
+      //     </Suspense>, errorElement: <ErrorElement />
+      // },
+      // {
+      //   path: "/labFeedback", element:
+      //     <Suspense fallback={<Opskeleton />} >
+      //       <LaboratoryFeedback />
+      //     </Suspense>, errorElement: <ErrorElement />
+      // },
+      // {
+      //   path: "/PharmacyFeedback", element:
+      //     <Suspense fallback={<CommonFinalFeedSkeleton />} >
+      //       <PharmacyFeedback />
+      //     </Suspense>, errorElement: <ErrorElement />
+      // },
+      // {
+      //   path: "/radiologyfeed", element:
+      //     <Suspense fallback={<RadiologyFeedbackSkeleton />} >
+      //       <RadiologyFeedback />
+      //     </Suspense>, errorElement: <ErrorElement />
+      // },
       { path: "/Color", element: <Colors /> },
     ],
     errorElement: <ErrorElement />,

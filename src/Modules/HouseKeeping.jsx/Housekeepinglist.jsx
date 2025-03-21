@@ -1,64 +1,19 @@
 import { Box, Typography } from '@mui/joy'
-import React, { memo, useCallback, useState } from 'react'
-import BedListModal from './BedListModal';
+import React, { memo, useState } from 'react'
 import CampaignTwoToneIcon from '@mui/icons-material/CampaignTwoTone';
 import PauseCircleFilledTwoToneIcon from '@mui/icons-material/PauseCircleFilledTwoTone';
 import HandymanTwoToneIcon from '@mui/icons-material/HandymanTwoTone';
-import { assetData } from '../../Constant/Data';
-import CardAttachment from '../../Components/CardAttachment';
+// import CardAttachment from '../../Components/CardAttachment';
 
 
-const BedList = ({ data, name, icon, matchdata, getallremarkrefetch, getallBlokedbedRefetch }) => {
+const Housekeepinglist = ({ data }) => {
 
     const [open, setOpen] = useState(false)
-    const [selectmaintentance, setSelectMaintenance] = useState({});
-    const [setinformationtech, setInformationTech] = useState({});
-    const [setbiomedical, setBioMedical] = useState({});
-
-    //STATIC ASSET DATA
-    const groupedByDepid = assetData?.reduce((acc, item) => {
-        acc[item.depid] = [...(acc[item.depid] || []), item];
-        return acc;
-    }, {});
-
-
-    //SETTING THE GROUPED DATA TO A STATE
-    const UpdateStateDynamically = useCallback(() => {
-        let maintenacedata = {};
-        let itdata = {};
-        let biomedicaldata = {};
-
-        Object.entries(groupedByDepid).map(([depid, group]) => {
-            group.map(({ asset }) => {
-                if (depid === "1") {
-                    itdata[asset] = false;
-                } else if (depid === "17") {
-                    maintenacedata[asset] = false;
-                } else if (depid === "36") {
-                    biomedicaldata[asset] = false;
-                }
-            });
-        });
-        setSelectMaintenance(maintenacedata)
-        setInformationTech(itdata)
-        setBioMedical(biomedicaldata)
-    }, [setSelectMaintenance, setInformationTech, setBioMedical, groupedByDepid, open]);
-
-
-    //MODAL OPEN
-    const HandleCheckList = useCallback((val) => {
-        UpdateStateDynamically()
-        setOpen(true)
-    }, [setOpen, UpdateStateDynamically])
-
-
-    // console.log('getallremarkrefetch:', getallremarkrefetch);
-    // console.log('getallBlokedbedRefetch:', getallBlokedbedRefetch);
 
 
     return (
         <>
-            <BedListModal
+            {/* <BedListModal
                 getallremarkrefetch={getallremarkrefetch}
                 getallBlokedbedRefetch={getallBlokedbedRefetch}
                 icon={icon}
@@ -75,7 +30,7 @@ const BedList = ({ data, name, icon, matchdata, getallremarkrefetch, getallBloke
                 setInformationTech={setInformationTech}
                 setbiomedical={setbiomedical}
                 setBioMedical={setBioMedical}
-            />
+            /> */}
             <Box
                 sx={{
                     backgroundColor: 'rgba(var(--bg-card))',
@@ -214,19 +169,10 @@ const BedList = ({ data, name, icon, matchdata, getallremarkrefetch, getallBloke
                                 }} />
                         }
 
-                        <Typography sx={{
-                            fontFamily: 'var(--font-varient)',
-                            color: 'rgba(var(--font-primary-white))',
-                            fontWeight: 700,
-                            fontSize: 14
-                        }}>
-                            {matchdata && matchdata !== undefined ? (matchdata.fb_bed_reason === 1 ? "RENOVATION" : 'ONHOLD') : data?.fb_bdc_occup === "N" ? "NOT READY" : ""}
-                        </Typography>
-
                     </Box>
                     {/* <CardAttachment /> */}
                     <Box
-                        onClick={() => HandleCheckList(data?.fb_bdc_no)}
+                        // onClick={() => HandleCheckList(data?.fb_bdc_no)}
                         sx={{
                             width: 130,
                             height: 40,
@@ -265,4 +211,4 @@ const BedList = ({ data, name, icon, matchdata, getallremarkrefetch, getallBloke
     )
 }
 
-export default memo(BedList)
+export default memo(Housekeepinglist)

@@ -1,7 +1,6 @@
-import React from 'react'
+import React, { memo } from 'react'
 import PendingActionsTwoToneIcon from '@mui/icons-material/PendingActionsTwoTone';
-import { Box, Button, Tooltip, Typography } from '@mui/joy';
-import MaintenaceRemarkCard from './MaintenaceRemarkCard';
+import { Box, Typography } from '@mui/joy';
 import MaintenanceRemarkButton from './MaintenanceRemarkButton';
 const MaintenaceRemark = ({
     setRemarks,
@@ -50,4 +49,4 @@ const MaintenaceRemark = ({
     )
 }
 
-export default MaintenaceRemark
+export default memo(MaintenaceRemark)

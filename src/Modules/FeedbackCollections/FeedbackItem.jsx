@@ -1,14 +1,15 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { Box, Tooltip, Typography } from "@mui/joy";
 import FeedbackOutlinedIcon from '@mui/icons-material/FeedbackOutlined';
 
 
-const FeedbackItem = ({ item, feedbackedexit, currentIndex, inpatientDetail, handlebuttonClick }) => {
+const FeedbackItem = ({ index, item, feedbackedexit, currentIndex, inpatientDetail, handlebuttonClick }) => {
     const isFeedbackGiven = feedbackedexit?.some(fb =>
         fb.fdmast_slno === item.fdmast_slno && fb.fb_patient_name === inpatientDetail[currentIndex]?.fb_ptc_name
     );
     return (
         <Box
+            key={index}
             sx={{
                 width: '48%',
                 height: '48%',
@@ -47,4 +48,4 @@ const FeedbackItem = ({ item, feedbackedexit, currentIndex, inpatientDetail, han
     )
 }
 
-export default FeedbackItem
+export default memo(FeedbackItem)

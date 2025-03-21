@@ -1,6 +1,5 @@
 import { format, subMonths, subYears, startOfMonth } from "date-fns";
-import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined';
-import vipimage from "../assets/vip.png"
+
 
 
 export const loginType = [
@@ -167,6 +166,14 @@ export const blockSet3 = [
 ];
 
 
+export const ItdepId = 1;
+export const MtdepId = 17;
+export const BmdepId = 36;
+
+
+
+
+
 
 export const Indicator = [
     { name: "Occupied", color: "rgba(19, 112, 241, 0.68)" }, // Blue
@@ -181,3 +188,15 @@ export const Indicator = [
     { name: "Blocked", color: "rgba(200, 0, 180, 0.8)" }, // LightWhite (Close to White Smoke)
 ];
 
+
+
+export const assetData = [
+    { slno: 1, asset: "AIR CONDITIONER", assetno: 'TM/MT/38382', depid: 17, bed_no: 'C8H3IH2' },
+    { slno: 2, asset: "TELEVISION", assetno: 'TM/MT/38383', depid: 17, bed_no: 'C8H3IH2' },
+    { slno: 3, asset: "FAN", assetno: 'TM/MT/38384', depid: 17, bed_no: 'C8H3IH2' },
+    { slno: 4, asset: "BULB", assetno: 'TM/MT/38384', depid: 17, bed_no: 'C8H3IH2' },
+    { slno: 5, asset: "TELEPHONE", assetno: 'TM/IT/38384', depid: 1, bed_no: 'C8H3IH2' },
+    { slno: 6, asset: "WIFI", assetno: 'TM/IT/38384', depid: 1, bed_no: 'C8H3IH2' },
+    { slno: 7, asset: "ECG MACHINE", assetno: 'TM/BM/38386', depid: 36, bed_no: 'C8H3IH2' },
+    { slno: 8, asset: "THERMOMETER", assetno: 'TM/BM/38389', depid: 36, bed_no: 'C8H3IH2' },
+]

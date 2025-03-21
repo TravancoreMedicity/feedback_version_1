@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/joy'
-import React from 'react'
+import React, { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const CollectionComponent = ({ name, id }) => {
@@ -46,4 +46,4 @@ const CollectionComponent = ({ name, id }) => {
     )
 }
 
-export default CollectionComponent
+export default memo(CollectionComponent)

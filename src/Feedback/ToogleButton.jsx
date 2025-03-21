@@ -1,9 +1,8 @@
-import React from "react";
+import React, { memo } from "react";
 import { Button, Box } from "@mui/material";
 
 const ToggleButton = ({ label, icon, color, clicked }) => {
 
-    console.log(clicked, "clicked");
 
     const getBorder = () => {
         if (clicked === "yes" && label === "Yes") {
@@ -45,4 +44,4 @@ const ToggleButton = ({ label, icon, color, clicked }) => {
     );
 };
 
-export default ToggleButton;
+export default memo(ToggleButton);

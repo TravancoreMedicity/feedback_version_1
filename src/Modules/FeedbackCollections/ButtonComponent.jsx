@@ -1,5 +1,6 @@
 import { Box } from '@mui/joy';
 import { ArrowLeftCircle, ArrowRightCircle, } from 'iconoir-react';
+import { memo } from 'react';
 
 const ButtonComponent = ({ nextPatient, prevPatient }) => {
     return (
@@ -10,7 +11,7 @@ const ButtonComponent = ({ nextPatient, prevPatient }) => {
             height: 40,
             border: 0.03,
             borderColor: "rgba(var(--border-primary))",
-            mt:1
+            mt: 1
         }} >
             <Box
                 onClick={prevPatient}
@@ -26,7 +27,6 @@ const ButtonComponent = ({ nextPatient, prevPatient }) => {
                     px: 2
                 }}>
                 <ArrowLeftCircle style={{ color: 'rgba(var(--font-primary-white))', cursor: 'pointer' }} />
-                {/* <button onClick={prevPatient} disabled={currentIndex === 0} aria-hidden={false}>Previous</button> */}
             </Box>
             <Box
                 onClick={nextPatient}
@@ -42,10 +42,9 @@ const ButtonComponent = ({ nextPatient, prevPatient }) => {
                     px: 2
                 }}>
                 <ArrowRightCircle style={{ color: 'rgba(var(--font-primary-white))', cursor: 'pointer' }} />
-                {/* <button onClick={nextPatient} disabled={currentIndex === inpatientDetail.length - 1} aria-hidden={false}>Next</button> */}
             </Box>
         </Box>
     )
 }
 
-export default ButtonComponent
+export default memo(ButtonComponent)

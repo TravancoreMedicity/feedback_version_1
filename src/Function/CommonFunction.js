@@ -70,6 +70,22 @@ export const getAllBlockedBed = async () => {
     return data ? data : [];
 }
 
+export const getBedRemarkStatus = async () => {
+    const result = await axiosApi.get("/feedback/getberremarkstatus");
+    const { data, success } = result.data;
+    if (success === 1) return warningNofity("Error in fetching Data");
+    return data ? data : [];
+}
+
+
+export const getallHouseKeepingBed = async () => {
+    const result = await axiosApi.get("/feedback/getallhkbeds");
+    const { data, success } = result.data;
+    if (success === 1) return warningNofity("Error in fetching Data");
+    return data ? data : [];
+}
+
+
 
 //not using 
 export const getLoggedEmpDetail = async (id) => {
@@ -281,6 +297,14 @@ export const getDepartmentEmployee = async (id) => {
     })
 }
 
+export const getBedRemarkDetails = async (id) => {
+    return axiosApi.get(`/feedback/getbedremarkDetail/${id}`).then((res) => {
+        const { success, data } = res.data;
+        if (success === 2) {
+            return data ? data : []
+        }
+    })
+}
 
 export const getallemployeeright = async () => {
     const result = await axiosApi.get("/feedback/getallemployeeright");

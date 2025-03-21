@@ -1,10 +1,11 @@
 import { Box, Grid, Typography } from '@mui/joy'
-import React from 'react'
-import BlockComponent from './BlockComponent'
-import {
-    ViewStructureDown
-} from 'iconoir-react'
+import React, { lazy, memo, Suspense } from 'react'
+import { ViewStructureDown } from 'iconoir-react'
 import ApartmentIcon from '@mui/icons-material/Apartment';
+import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
+
+// import BlockComponent from './BlockComponent'
+const BlockComponent = lazy(() => import('./BlockComponent'));
 
 const CollectionDetail = ({
     setBedDetail,
@@ -16,7 +17,6 @@ const CollectionDetail = ({
     setLoading,
     loading
 }) => {
-
 
     const filteredData = elidernursingstation?.flatMap((item) =>
         getallnursestation
@@ -58,7 +58,8 @@ const CollectionDetail = ({
                         borderColor: "rgba(var(--border-primary))",
                         borderRadius: 5
                     }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center' }} className="border-b-[0.2rem] border-iconprimary p-0 cursor-pointer" >
+                        <Box sx={{ display: 'flex', alignItems: 'center' }}
+                            className="border-b-[0.2rem] border-iconprimary p-0 cursor-pointer" >
                             <ApartmentIcon sx={{
                                 color: 'rgba(var(--font-primary-white))',
                                 fontSize: 28,
@@ -122,19 +123,21 @@ const CollectionDetail = ({
                                         }}>
                                         <Grid container >
                                             {rooms.map((room, index) => (
-                                                <Grid xs={5} sm={4} lg={3} xl={3} key={index}>
-                                                    <BlockComponent
-                                                        setNsName={setNsName}
-                                                        stationname={room.NSC_DESC}
-                                                        key={room.fb_nurse_stn_slno} // Unique key for each block
-                                                        code={room.fb_ns_code}
-                                                        setBedDetail={setBedDetail}
-                                                        setView={setView}
-                                                        setNsCode={setNsCode}
-                                                        setLoading={setLoading}
-                                                        loading={loading}
-                                                    // setAllPatientDetail={setAllPatientDetail}
-                                                    />
+                                                <Grid xs={5} sm={4} lg={3} xl={2} key={index}>
+                                                    <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
+                                                        <BlockComponent
+                                                            setNsName={setNsName}
+                                                            stationname={room.NSC_DESC}
+                                                            key={room.fb_nurse_stn_slno} // Unique key for each block
+                                                            code={room.fb_ns_code}
+                                                            setBedDetail={setBedDetail}
+                                                            setView={setView}
+                                                            setNsCode={setNsCode}
+                                                            setLoading={setLoading}
+                                                            loading={loading}
+                                                        // setAllPatientDetail={setAllPatientDetail}
+                                                        />
+                                                    </Suspense>
                                                 </Grid>
                                             ))}
                                         </Grid>
@@ -149,4 +152,4 @@ const CollectionDetail = ({
     );
 }
 
-export default CollectionDetail;
+export default memo(CollectionDetail);

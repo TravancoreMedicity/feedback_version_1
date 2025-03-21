@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Phone, Calendar, IpAddressTag, UserBadgeCheck, DatabaseScriptPlus, Male } from 'iconoir-react';
 import { Box, Tooltip, Typography } from '@mui/joy';
 import { format } from 'date-fns';
@@ -18,8 +18,16 @@ const PatinetCard = ({ inpatientDetail }) => {
                         : 'N/A', icon: <Calendar fontSize={12} style={{ color: 'rgba(var(--font-primary-white))', cursor: 'pointer' }} />
                 },
                 {
-                    label: 'Address', value: (inpatientDetail?.fb_ptc_loadd1
-                        || '') + (inpatientDetail?.fb_ptc_loadd2 || '') + (inpatientDetail?.fb_ptc_loadd3 || ''), icon: <DatabaseScriptPlus fontSize={12} style={{ color: 'rgba(var(--font-primary-white))', cursor: 'pointer' }} />
+                    label: 'Address',
+                    value:
+                        (inpatientDetail?.fb_ptc_loadd1 || '') +
+                            (inpatientDetail?.fb_ptc_loadd2 || '') +
+                            (inpatientDetail?.fb_ptc_loadd3 || '')
+                            ? (inpatientDetail?.fb_ptc_loadd1 || '') +
+                            (inpatientDetail?.fb_ptc_loadd2 || '') +
+                            (inpatientDetail?.fb_ptc_loadd3 || '')
+                            : 'Address is not found',
+                    icon: <DatabaseScriptPlus fontSize={12} style={{ color: 'rgba(var(--font-primary-white))', cursor: 'pointer' }} />
                 },
             ].map((item, index) => (
                 <Box key={index} sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
@@ -54,4 +62,4 @@ const PatinetCard = ({ inpatientDetail }) => {
     );
 };
 
-export default PatinetCard;
+export default memo(PatinetCard);

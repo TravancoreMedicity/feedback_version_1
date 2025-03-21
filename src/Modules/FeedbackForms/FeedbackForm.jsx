@@ -28,9 +28,7 @@ const FeedbackForm = () => {
     });
     const { encodedId } = useParams();
     const location = useLocation();
-
     const { PatientName, feedbackId, inpatientNumber, patientNo } = formData;
-
 
     useEffect(() => {
         try {
@@ -63,6 +61,7 @@ const FeedbackForm = () => {
 
     const IsComponentPresent = feedbackDtlDisplay &&
         feedbackDtlDisplay?.filter(item => item.fb_answer_component !== null && item.fb_answer_component !== "");
+
     const ComponentName = IsComponentPresent?.map((item) => item.fb_answer_component);
 
     const hanldeuseranswers = useCallback((question, answer) => {
@@ -149,8 +148,11 @@ const FeedbackForm = () => {
         fb_patient_name: PatientName ? PatientName : null,
         fb_patient_mob: mobilenumber ? mobilenumber : null,
         fb_answers: combinedFeedbackData,
-        create_user: Number(employeeID()) //confusion in this part check later
+        // create_user: Number(feedbackId) === 18 ? 1 : Number(employeeID()) //confusion in this part check later
+        create_user: 1 //confusion in this part check later
     }), [patientNo, PatientName, mobilenumber, combinedFeedbackData, feedbackId, inpatientNumber])
+
+
 
     const handlesubmit = useCallback(async () => {
         const answerlength = Object.keys(useranswer)?.length;
@@ -160,11 +162,11 @@ const FeedbackForm = () => {
             warningNofity("Please Answer all Questions?")
             return
         }
-        if (ComponentName?.includes("Mobileinput") && mobilenumber.length < 10) {
+        if (ComponentName?.includes("MobileInputBox") && mobilenumber.length < 10) {
             setMobileValidation("Enter a valid Mobile Numbe")
             return
         }
-        if (ComponentName?.includes("Mobileinput") && mobilevalidation !== "") {
+        if (ComponentName?.includes("MobileInputBox") && mobilevalidation !== "") {
             warningNofity("Mobile validation error");
             return
         }
@@ -257,7 +259,7 @@ const FeedbackForm = () => {
                         <Box sx={{
                             width: { xs: "90%", sm: '85%' },
                             minHeight: 60,
-                            mb: 2,
+                            mb: 2
                         }}>
                             <Box sx={{
                                 widows: '100%',

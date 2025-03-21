@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/joy'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { memo, useCallback, useMemo, useState } from 'react'
 import VerifiedUserTwoToneIcon from '@mui/icons-material/VerifiedUserTwoTone';
 import { getDepartmentEmployee, getLoggedEmpDetail } from '../../Function/CommonFunction';
 import { EmpauthId } from '../../Constant/Constant';
@@ -7,7 +7,6 @@ import { useQuery } from '@tanstack/react-query';
 import CustomDateTimePicker from '../../Components/CustomDateTimePicker ';
 import { format } from 'date-fns';
 import MultipleSelect from '../../Components/MultipleSelect';
-
 
 const MaintenanceVerification = ({
     remark,
@@ -26,19 +25,19 @@ const MaintenanceVerification = ({
     });
     const departmentSection = useMemo(() => getlogempdetail?.[0]?.em_dept_section, [getlogempdetail]);
 
-    const { data: departmentemp, isLoading: emploading, error: emperror } = useQuery({
+    const { data: departmentemp } = useQuery({
         queryKey: ['fetchalldepemployee', departmentSection],
         queryFn: () => getDepartmentEmployee(departmentSection),
         enabled: !!departmentSection,
     })
-    const handleChange = (e) => {
+    const handleChange = useCallback((e) => {
         setVerificationDetail({ ...verificationdetail, [e.target.name]: e.target.value })
-    };
+    }, [verificationdetail, setVerificationDetail]);
 
 
-    const hanldmultiplechange = (e, val) => {
+    const hanldmultiplechange = useCallback((e, val) => {
         setEmpid(val); // Update the selected emp IDs
-    };
+    },[setEmpid]);
 
     const handleTimeChange = useCallback((e) => {
         const selectedTime = e.target.value;
@@ -120,14 +119,12 @@ const MaintenanceVerification = ({
                     value={remark}
                     placeholder={` Remarks`}
                     style={{
-                        // backgroundColor: "rgba(var(--bg-card))",
                         width: '100%',
                         minHeight: '70px',
                         fontFamily: "var(--font-varient)",
-                        color: 'rgba(var(--font-primary-white))',
+                        // color: 'rgba(var(--font-primary-white))',
                         fontSize: "14px",
                         borderWidth: '2.8px',
-                        borderRadius: 5,
                         borderRadius: '6px',
                         backgroundColor: 'rgba(var(--input-bg-color))',
                         borderColor: 'rgba(var(--input-border-color))',
@@ -189,4 +186,4 @@ const MaintenanceVerification = ({
     )
 }
 
-export default MaintenanceVerification
+export default memo(MaintenanceVerification)

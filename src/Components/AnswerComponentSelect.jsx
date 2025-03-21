@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { memo, useCallback, useState } from 'react';
 import { Box, Textarea } from '@mui/joy';
 import Rulesyesorno from '../Feedback/Rulesyesorno';
 import ChooseEmoji from '../Feedback/ChooseEmoji';
@@ -100,4 +100,4 @@ const AnswerComponentSelect = ({
     );
 };
 
-export default AnswerComponentSelect;
+export default memo(AnswerComponentSelect);

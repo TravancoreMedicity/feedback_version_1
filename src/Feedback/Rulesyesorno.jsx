@@ -1,9 +1,5 @@
 import { Box, Input, Textarea } from '@mui/joy'
-import React, { useCallback, useState } from 'react'
-import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
-import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
-import ThumbDownAltIcon from '@mui/icons-material/ThumbDownAlt';
+import React, { memo, useCallback, useState } from 'react'
 import ToggleButton from './ToogleButton';
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
@@ -29,7 +25,7 @@ const Rulesyesorno = ({
         usermobilenumber: ''
     })
     const { TextValue, inputvalue, usermobilenumber } = extradetail;
-    const handleImageClick = (item, questionid, value) => {
+    const handleImageClick = useCallback((item, questionid, value) => {
         if (item === "no") {
             hanldecomponent(questionid, component != null ? component : '')
             setExtraDetail({ TextValue: "", inputvalue: "", usermobilenumber: '' })
@@ -47,7 +43,9 @@ const Rulesyesorno = ({
             setClicked(item);
             hanldeuseranswers(questionid, value)
         }
-    };
+    }, [component,clicked,hanldecomponent,hanldeuseranswers]);
+
+
     const hanldeadditioanlinfo = useCallback((e) => {
         const { name, value } = e.target;
         if (name === "usermobilenumber" && value.length > 10) {
@@ -65,15 +63,11 @@ const Rulesyesorno = ({
         } else {
             hanldeuseranswers(`${questionid}_suggest`, value)
         }
-    }, [questionid]);
+    }, [questionid, setMobileValidation, hanldeuseranswers, extradetail, setMobileNumber]);
 
     const resultObject = value != null && value !== undefined
         ? Object.fromEntries(value.split(', ').map(item => item.split(': ')))
         : {};
-
-
-    // console.log(resultObject,"resultobject");
-
 
     const { Yes, No } = resultObject;
 
@@ -109,39 +103,15 @@ const Rulesyesorno = ({
                             alignItems: 'center',
                             justifyContent: 'center',
                             cursor: 'pointer',
-                            // border: clicked === 'yes' ? '2px solid rgba(0, 128, 0, 0.56)' : ' 1px solid rgba(0, 128, 0, 0.56)',
-                            // filter: clicked === 'yes' ? `drop-shadow(0px 0px 15px rgba(4, 154, 46, 0.7))` : '',
                             bgcolor: ' rgba(255, 255, 255, 0.8)'
                         }}
                         onClick={() => handleImageClick("yes", questionid, Yes)} alt=""
                     >
-                        {/* {
-                            clicked === "yes" ? <ThumbUpIcon
-                                sx={{
-                                    width: '90%',
-                                    height: '90%',
-                                    color: 'rgba(0, 128, 0, 0.56)'
-
-                                }}
-
-                            /> : <ThumbUpOffAltIcon
-                                sx={{
-                                    width: '90%',
-                                    height: '90%',
-                                    color: 'rgba(0, 128, 0, 0.56)'
-
-                                }}
-
-                            />
-                        } */}
                         <ToggleButton label="Yes" icon={clicked === "yes" ? <CheckCircleIcon color="success" sx={{
                             width: 30, height: 30
                         }} /> : <CheckCircleOutlineRoundedIcon color="success" sx={{
                             width: 30, height: 30
                         }} />} color="green" clicked={clicked} />
-
-
-
                     </Box>
                     <Box
                         sx={{
@@ -154,29 +124,10 @@ const Rulesyesorno = ({
                             alignItems: 'center',
                             justifyContent: 'center',
                             cursor: 'pointer',
-                            // border: clicked === 'no' ? '2px solid rgba(224, 15, 15, 0.56)' : ' 1px solid rgba(224, 15, 15, 0.56)',
-                            // filter: clicked === 'no' ? `drop-shadow(0px 0px 15px rgba(178, 0, 0, 0.46))` : '',
                             bgcolor: ' rgba(255, 255, 255, 0.8)'
                         }}
                         onClick={() => handleImageClick("no", questionid, No)}
                     >
-                        {/* {
-                            clicked === 'no' ? <ThumbDownAltIcon
-                                sx={{
-                                    width: '90%',
-                                    height: '90%',
-                                    color: 'rgba(224, 15, 15, 0.56)',
-
-                                }}
-                            /> : <ThumbDownOffAltIcon
-                                sx={{
-                                    width: '90%',
-                                    height: '90%',
-                                    color: 'rgba(224, 15, 15, 0.56)',
-
-                                }}
-                            />
-                        } */}
                         <ToggleButton label="No" icon={clicked === 'no' ? <CancelIcon color="error" sx={{
                             width: 30, height: 30
                         }} /> : <HighlightOffRoundedIcon color="error" sx={{
@@ -296,4 +247,4 @@ const Rulesyesorno = ({
 }
 
 
-export default Rulesyesorno;
+export default memo(Rulesyesorno);

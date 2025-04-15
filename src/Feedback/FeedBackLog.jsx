@@ -1,7 +1,6 @@
-import { Box, Typography } from '@mui/joy';
+import { Box } from '@mui/joy';
 import React, { useState, useEffect } from 'react';
 
-// const logo = require("../../src/assets/medicitylogo.png");
 const logo = require("../../src/assets/medilogo.png");
 
 const FeedBackLog = () => {
@@ -17,7 +16,7 @@ const FeedBackLog = () => {
                 setScrolled(false);
             }
         };
-        window.addEventListener('scroll',    handleScroll);
+        window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
@@ -27,23 +26,22 @@ const FeedBackLog = () => {
         <Box
             sx={{
                 width: '100%',
-                height:{ xs:scrolled ? 80 : 90,sm:scrolled ? 100 : 120},
+                height: { xs: scrolled ? 80 : 90, sm: scrolled ? 100 : 120 },
                 display: 'flex',
                 flexDirection: "column",
                 alignItems: 'center',
                 justifyContent: 'center',
                 py: 1,
                 bgcolor: 'white',
-                padding: scrolled ? '10px 0' : '20px 0' ,
-                transition: 'all 0.3s ease', 
+                padding: scrolled ? '10px 0' : '20px 0',
+                transition: 'all 0.3s ease',
             }}
         >
             <Box
                 sx={{
                     width: { xs: scrolled ? 170 : 200, sm: scrolled ? 230 : 250 },
-                    height:{ xs:scrolled ?80 : 90,sm:scrolled ?90 : 120},
+                    height: { xs: scrolled ? 80 : 90, sm: scrolled ? 90 : 120 },
                     transition: 'all 0.3s ease',
-                    // bgcolor:'red'
                 }}
             >
                 <img

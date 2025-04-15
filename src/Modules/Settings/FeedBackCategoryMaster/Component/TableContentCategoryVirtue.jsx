@@ -2,16 +2,10 @@ import { Box, IconButton, Tooltip, Typography } from "@mui/joy";
 import React from "react";
 import { memo } from "react";
 import { useCallback } from "react";
-import {
-
-    EditPencil
-} from "iconoir-react";
+import { EditPencil } from "iconoir-react";
 
 const TableContentCategoryVirtue = ({ data }) => {
-    console.log("jhsgjhdfjghj");
-
-    console.log("data", data);
-
+   
     const HanldeUpdation = useCallback(
         async (rowData) => {
             // let value = allfeedbackcategory?.filter(item => item.fb_category_name === rowData.fb_category_name)
@@ -147,10 +141,3 @@ const TableContentCategoryVirtue = ({ data }) => {
 };
 
 export default memo(TableContentCategoryVirtue);
-  {/* <TableVirtuoso
-                    style={{ height: "100%", width: "100%" }}
-                    className="flex flex-1 bg-tablebody/40"
-                    data={allfeedbackNames}
-                    fixedHeaderContent={() => <TableHeaderCategoryVirtue />}
-                    itemContent={(index, data) => <TableContentCategoryVirtue data={data} />}
-                /> */}

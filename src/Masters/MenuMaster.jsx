@@ -2,22 +2,26 @@
 import React, { Suspense, lazy, useCallback, useState } from 'react'
 import { memo } from 'react'
 import DefaultPageLayout from '../Components/DefaultPageLayout'
-import CustomInputWithLabel from '../Components/CustomInputWithLabel'
 import { warningNofity, succesNofity, errorNofity, employeeID } from '../Constant/Constant'
 import MasterPageLayout from '../Components/MasterPageLayout'
 import CommonMenuList from '../Components/CommonMenuList'
-import {axiosApi} from '../Axios/Axios'
+import { axiosApi } from '../Axios/Axios'
 import { Box } from '@mui/joy'
-import CustomCheckBoxWithLabel from '../Components/CustomCheckBoxWithLabel'
 import CustomBackDropWithOutState from '../Components/CustomBackDropWithOutState'
 import { useQuery } from '@tanstack/react-query'
-import {  getallmenumaster } from '../Function/CommonFunction'
+import { getallmenumaster } from '../Function/CommonFunction'
 import { IconButton, Tooltip } from "@mui/joy";
 import { EditPencil } from "iconoir-react";
-import SelectModuleMaster from '../Components/SelectModuleMaster'
-// import { getDocTypeMasterList } from '../api/docTypeMasterApi'
+
+// import CustomInputWithLabel from '../Components/CustomInputWithLabel'
+// import SelectModuleMaster from '../Components/SelectModuleMaster'
+// import CustomCheckBoxWithLabel from '../Components/CustomCheckBoxWithLabel'
+
 
 const FeedbackCategoryMasterList = lazy(() => import('../Components/CustomTable'));
+const CustomInputWithLabel = lazy(() => import('../Components/CustomInputWithLabel'));
+const SelectModuleMaster = lazy(() => import('../Components/SelectModuleMaster'));
+const CustomCheckBoxWithLabel = lazy(() => import('../Components/CustomCheckBoxWithLabel'));
 
 const MenuMaster = () => {
 
@@ -99,7 +103,7 @@ const MenuMaster = () => {
                 setMenuItems({ moudleid: 0, menu_name: "", status: false })
             }
         }
-    }, [fetchallmenumaster, moudleid, menu_name, status, updationdetail,updateflag])
+    }, [fetchallmenumaster, moudleid, menu_name, status, updationdetail, updateflag])
 
     return (
         <DefaultPageLayout label="Feedback SubCategory Master" >

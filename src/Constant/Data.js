@@ -170,9 +170,13 @@ export const ItdepId = 1;
 export const MtdepId = 17;
 export const BmdepId = 36;
 
-
-
-
+// export const departments = [
+//     { dep_id: 1, name: 'IT',custodian_id:3 },
+//     { dep_id: 17, name: 'MAINTENACE',custodian_id:3 },
+//     { dep_id: 36, name: 'BIOMEDICAL',custodian_id:3 },
+//     { dep_id: 43, name: 'OPERATIONS',custodian_id:3 },
+//     { dep_id: 19, name: 'HOUSE KEEPING' ,custodian_id:3},
+// ]
 
 
 export const Indicator = [
@@ -190,13 +194,17 @@ export const Indicator = [
 
 
 
-export const assetData = [
-    { slno: 1, asset: "AIR CONDITIONER", assetno: 'TM/MT/38382', depid: 17, bed_no: 'C8H3IH2' },
-    { slno: 2, asset: "TELEVISION", assetno: 'TM/MT/38383', depid: 17, bed_no: 'C8H3IH2' },
-    { slno: 3, asset: "FAN", assetno: 'TM/MT/38384', depid: 17, bed_no: 'C8H3IH2' },
-    { slno: 4, asset: "BULB", assetno: 'TM/MT/38384', depid: 17, bed_no: 'C8H3IH2' },
-    { slno: 5, asset: "TELEPHONE", assetno: 'TM/IT/38384', depid: 1, bed_no: 'C8H3IH2' },
-    { slno: 6, asset: "WIFI", assetno: 'TM/IT/38384', depid: 1, bed_no: 'C8H3IH2' },
-    { slno: 7, asset: "ECG MACHINE", assetno: 'TM/BM/38386', depid: 36, bed_no: 'C8H3IH2' },
-    { slno: 8, asset: "THERMOMETER", assetno: 'TM/BM/38389', depid: 36, bed_no: 'C8H3IH2' },
-]
+// export const assetData = [
+//     { slno: 61, asset: "AIR CONDITIONER", assetno: 'TM/MT/38382', depid: 17, bed_no: 'C8H3IH2', departmentName: 'MAINTENANCE', item_asset_no: 'TM/MT', item_assent_no_only: 36 },
+//     { slno: 62, asset: "TELEVISION", assetno: 'TM/MT/38383', depid: 17, bed_no: 'C8H3IH2', departmentName: 'MAINTENANCE', item_asset_no: 'TM/MT', item_assent_no_only: 37 },
+//     { slno: 63, asset: "FAN", assetno: 'TM/MT/38384', depid: 17, bed_no: 'C8H3IH2', departmentName: 'MAINTENANCE', item_asset_no: 'TM/MT', item_assent_no_only: 38 },
+//     { slno: 64, asset: "BULB", assetno: 'TM/MT/38385', depid: 17, bed_no: 'C8H3IH2', departmentName: 'MAINTENANCE', item_asset_no: 'TM/MT', item_assent_no_only: 39 },
+//     { slno: 65, asset: "TELEPHONE", assetno: 'TM/IT/38386', depid: 1, bed_no: 'C8H3IH2', departmentName: 'IT', item_asset_no: 'TM/IT', item_assent_no_only: 40 },
+//     { slno: 66, asset: "WIFI", assetno: 'TM/IT/38387', depid: 1, bed_no: 'C8H3IH2', departmentName: 'IT', item_asset_no: 'TM/IT', item_assent_no_only: 41 },
+//     { slno: 67, asset: "ECG MACHINE", assetno: 'TM/BM/38388', depid: 36, bed_no: 'C8H3IH2', departmentName: 'BIOMEDICAL', item_asset_no: 'TM/BM', item_assent_no_only: 42 },
+//     { slno: 68, asset: "THERMOMETER", assetno: 'TM/BM/38389', depid: 36, bed_no: 'C8H3IH2', departmentName: 'BIOMEDICAL', item_asset_no: 'TM/BM', item_assent_no_only: 43 },
+//     { slno: 69, asset: "BED SHEET", assetno: 'TM/HK/38390', depid: 19, bed_no: 'C8H3IH2', departmentName: 'HOUSEKEEEPING', item_asset_no: 'TM/HK', item_assent_no_only: 44 },
+//     { slno: 40, asset: "FURNITURE", assetno: 'TM/HK/38391', depid: 19, bed_no: 'C8H3IH2', departmentName: 'HOUSEKEEEPING', item_asset_no: 'TM/HK', item_assent_no_only: 45 },
+//     { slno: 41, asset: "CLOCK", assetno: 'TM/OP/383892', depid: 43, bed_no: 'C8H3IH2', departmentName: 'OPERATIONS', item_asset_no: 'TM/OP', item_assent_no_only: 46 },
+//     { slno: 42, asset: "WHITE BOARD", assetno: 'TM/OP/383893', depid: 43, bed_no: 'C8H3IH2', departmentName: 'OPERATIONS', item_asset_no: 'TM/OP', item_assent_no_only: 47 },
+// ]

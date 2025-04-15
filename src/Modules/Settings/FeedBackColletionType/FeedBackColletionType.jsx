@@ -62,7 +62,7 @@ const FeedBackColletionType = () => {
         }
 
         const UpdateinsertingData = {
-            fb_collection_slno: updationdetail.fb_rateing_slno,
+            fb_collection_slno: updationdetail?.fb_rateing_slno,
             fb_collection_name: collectiontype,
             fb_collection_status: status,
             edit_user: employeeID()
@@ -95,7 +95,7 @@ const FeedBackColletionType = () => {
             }
         }
 
-    }, [feedbackcollectiontype, allcollectiontyperefetch, updationdetail, updateflag])
+    }, [ allcollectiontyperefetch, updationdetail, updateflag, collectiontype, status])
 
     return (
         <DefaultPageLayout label="Feedback Rating Master" >

@@ -1,7 +1,7 @@
 import React, { memo, useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { getAllBlockedBed, getBedRemarkStatus } from '../../Function/CommonFunction'
-import { Box,} from '@mui/joy'
+import { Box, } from '@mui/joy'
 import BedList from '../Maintentance/BedList';
 import ComputerTwoToneIcon from '@mui/icons-material/ComputerTwoTone';
 import ChecklistHeaders from '../../Components/ChecklistHeaders';

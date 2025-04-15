@@ -5,23 +5,23 @@ import PauseCircleFilledTwoToneIcon from '@mui/icons-material/PauseCircleFilledT
 import FiberNewTwoToneIcon from '@mui/icons-material/FiberNewTwoTone';
 
 const MaintenanceRemarkButton = ({
-    setRemarks,
     remarks,
     activeButton,
-    setActiveButton
+    setTotalDetail
 }) => {
-    // State to keep track of the active button
-    // Function to handle button click
+
     const handleButtonClick = useCallback((buttonName) => {
-        setActiveButton((prevState) => (prevState === buttonName ? null : buttonName));
-        if (activeButton !== buttonName) {
-            setRemarks("")
-        }
-    }, [setActiveButton, activeButton, setRemarks]);
+        setTotalDetail((prev) => ({
+            ...prev,
+            activeButton: prev?.activeButton === buttonName ? null : buttonName,
+            remarks: prev?.activeButton === buttonName ? prev?.remarks : "" // Reset remarks if switching
+        }));
+    }, [setTotalDetail]);
+    
     // Function to get the icon color based on active button
-    const getIconColor = (buttonName) => {
+    const getIconColor = useCallback((buttonName) => {
         return activeButton === buttonName ? 'rgb(216, 75, 154, 1)' : 'inherit';
-    };
+    }, [activeButton]);
 
     return (
         <>
@@ -83,7 +83,12 @@ const MaintenanceRemarkButton = ({
                     mt: 1
                 }}>
                     <textarea
-                        onChange={(e) => setRemarks(e.target.value)}
+                        onChange={(e) =>
+                            setTotalDetail((prev) => ({
+                                ...prev,
+                                remarks: e.target.value
+                            }))
+                        }
                         value={remarks}
                         placeholder={`${activeButton} Remarks`}
                         style={{

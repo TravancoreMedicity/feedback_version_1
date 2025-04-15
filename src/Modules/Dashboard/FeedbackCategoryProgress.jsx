@@ -5,7 +5,7 @@ import { LinearProgress, Typography } from '@mui/joy';
 
 const FeedbackCategoryProgress = ({ count, mark }) => {
     // caculating the percenteage with the count and mark 
-    const percentage = count > 0 ? Math.min((mark / (count * 5)) * 100, 100) : 0;
+    const percentage = count > 0 ? Math?.min((mark / (count * 5)) * 100, 100) : 0;
 
 
     return (
@@ -34,7 +34,7 @@ const FeedbackCategoryProgress = ({ count, mark }) => {
                         }}
                     >
                         {/* Progress &nbsp; */}
-                        {`${Math.round(Number(percentage))}%`}
+                        {`${Math?.round(Number(percentage))}%`}
                     </Typography>
                 </LinearProgress>
             </FormLabel>

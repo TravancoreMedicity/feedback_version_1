@@ -13,7 +13,8 @@ import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
 import LogoutMoidal from "./LogoutMoidal";
 import IdleTimer from "./IdleTimer";
 import WidgetsTwoToneIcon from '@mui/icons-material/WidgetsTwoTone';
-import { Popover } from "@mui/material";
+
+
 import FloatingDrawer from "./FloatingDrawer";
 
 const Header = ({ handleDrawerToggle, drawerWidth, dark, handleChangeDarkMode, isMdUp, anchorEl, handlepopoveClose, handleindicator }) => {

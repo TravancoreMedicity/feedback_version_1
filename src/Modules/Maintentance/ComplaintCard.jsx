@@ -1,0 +1,196 @@
+import React, { memo, useCallback } from 'react'
+import { format } from 'date-fns';
+import { Button } from '@mui/material';
+import { Box, Typography } from '@mui/joy'
+import { axiosApi } from '../../Axios/Axios';
+import { employeeID, succesNofity, warningNofity } from '../../Constant/Constant';
+
+const ComplaintCard = ({
+    assets,
+    bedslno,
+    checkcomplaint,
+    fetchBedComplaints,
+    selectemp,
+    department,
+    AssetInsert,
+    isinitalchecked,
+    Beddata }) => {
+
+
+    const IsExist = assets?.some(asset =>
+        checkcomplaint?.some(val => asset.complaint_dept_slno === val.complaint_deptslno)
+    );
+
+    const filteredAssets = assets?.filter(asset =>
+        !checkcomplaint?.some(complaint =>
+            complaint.complaint_desc === asset?.fb_asset_name
+        )
+    );
+
+
+    const updatedAssets = filteredAssets?.map(asset => {
+        if (asset?.fb_dep_id === department) {
+            return {
+                ...asset,
+                assigned_employee: selectemp,
+                complaint_status: 1
+            };
+        }
+        return {
+            ...asset,
+            complaint_status: 0
+        };
+    });
+
+
+
+    const handlecomplaintRegistrarion = useCallback(async (department) => {
+
+        if (!assets || assets?.length === 0) return warningNofity("No assets to register complaints");
+
+        const hasAssignedEmployee = updatedAssets?.some(asset => asset.assigned_employee);
+        // Only check selectemp if assigned_employee exists in any asset
+        if (hasAssignedEmployee && (!selectemp || selectemp.length === 0)) {
+            return warningNofity("Please Select Employee");
+        }
+
+        const postdataforcomplaint = {
+            complaint_request_slno: 1,
+            compalint_date: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
+            cm_location: bedslno,
+            cm_assets: updatedAssets,
+            asset_status: 1,
+            create_user: Number(employeeID())
+        };
+
+        const postdata = {
+            fb_bed_slno: Beddata?.fb_bed_slno,
+            fb_bd_code: Beddata?.fb_bd_code,
+            fb_bdc_no: Beddata?.fb_bdc_no,
+            fb_ns_code: Beddata?.fb_ns_code,
+            fb_complaint_postdata: 1,
+            data: AssetInsert
+        };
+
+        try {
+            if (isinitalchecked) {
+                const response = await axiosApi.post('/feedback/insertbedremarks', postdata);
+                if (response.data.success !== 2) {
+                    return warningNofity("Error in Inserting Bed Remarks");
+                }
+            }
+
+            const complaintResponse = await axiosApi.post('/feedback/complaintregistraion', postdataforcomplaint);
+            if (complaintResponse?.data?.success !== 2) {
+                return warningNofity("Error in Inserting Complaint");
+            }
+
+            succesNofity("Complaint Registered Successfully");
+            fetchBedComplaints();
+
+        } catch (error) {
+            warningNofity("Error in Inserting Data");
+        }
+
+    }, [assets, bedslno, fetchBedComplaints, selectemp, updatedAssets, Beddata, isinitalchecked, AssetInsert]);
+
+
+
+
+
+
+    return (
+        <>
+            <Box sx={{
+                display: 'flex',
+                gap: 1,
+                px: 1, mt: 1,
+                borderRadius: 5,
+                border: 0.03,
+                borderColor: "rgba(var(--border-primary))",
+            }}>
+                <Box sx={{ width: '60%' }}>
+                    {(IsExist && filteredAssets?.length === 0 ? checkcomplaint : assets)?.map((item, index) => {
+                        return (
+                            <Box key={index} sx={{
+                                minHeight: 20
+                            }}>
+                                <Box
+                                    sx={{
+                                        display: 'flex',
+                                        width: '100%',
+                                    }}>
+                                    <Box sx={{ width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                        <Box
+                                            sx={{
+                                                height: 30,
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                px: 2,
+                                                justifyContent: 'space-between',
+                                            }}
+                                        >
+                                            <Typography sx={{
+                                                fontFamily: 'var(--font-varient)',
+                                                color: 'rgba(var(--font-primary-white))',
+                                                fontWeight: 500,
+                                                fontSize: 13,
+                                            }}>
+                                                {IsExist && filteredAssets?.length === 0
+                                                    ? `${index + 1}. ${item?.complaint_desc?.toUpperCase()} (${item?.complaint_dept_name})`
+                                                    : `${index + 1}. ${item?.fb_asset_name?.toUpperCase()} (${item?.complaint_dept_name})`}
+
+
+                                            </Typography>
+                                        </Box>
+                                    </Box>
+                                </Box>
+                            </Box>
+                        )
+                    }
+                    )}
+                </Box>
+                <Box sx={{ display: 'flex', alignItems: 'start', justifyContent: 'end', width: '40%', }}>
+                    <Box sx={{
+                        px: 1,
+                        width: '90%',
+                        height: 35,
+                        my: 1,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'end',
+                    }}>
+                        <Button
+                            disabled={IsExist && filteredAssets?.length === 0}
+                            onClick={handlecomplaintRegistrarion}
+                            variant="outlined"
+                            sx={{
+                                fontSize: 11,
+                                fontWeight: 900,
+                                height: 35,
+                                border: '1px solid rgb(216, 75, 154, 1)',
+                                color: 'rgb(216, 75, 154, 1)',
+                                bgcolor: '#fff0f3',
+                                borderRadius: 2,
+                                '&:hover': {
+                                    boxShadow: 'none',
+                                    color: 'rgb(216, 75, 154, 1)',
+                                },
+                            }}>
+                            {
+                                IsExist && filteredAssets?.length === 0 ? 'Complaints Registered ' : 'Register Complaints'
+                            }
+
+                        </Button>
+                    </Box>
+                </Box>
+            </Box>
+        </>
+    )
+}
+
+export default memo(ComplaintCard)
+
+
+
+

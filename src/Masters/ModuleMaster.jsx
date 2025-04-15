@@ -2,20 +2,24 @@
 import React, { Suspense, lazy, useCallback, useState } from 'react'
 import { memo } from 'react'
 import DefaultPageLayout from '../Components/DefaultPageLayout'
-import CustomInputWithLabel from '../Components/CustomInputWithLabel'
 import { warningNofity, succesNofity, errorNofity, employeeID } from '../Constant/Constant'
 import MasterPageLayout from '../Components/MasterPageLayout'
-import {axiosApi} from '../Axios/Axios'
+import { axiosApi } from '../Axios/Axios'
 import { Box } from '@mui/joy'
-import CustomCheckBoxWithLabel from '../Components/CustomCheckBoxWithLabel'
 import CustomBackDropWithOutState from '../Components/CustomBackDropWithOutState'
 import { useQuery } from '@tanstack/react-query'
 import { getallmoudleMaster } from '../Function/CommonFunction'
 import { IconButton, Tooltip } from "@mui/joy";
 import { EditPencil } from "iconoir-react";
-import CommonMenuList from '../Components/CommonMenuList'
 
 
+// import CustomInputWithLabel from '../Components/CustomInputWithLabel'
+// import CustomCheckBoxWithLabel from '../Components/CustomCheckBoxWithLabel'
+// import CommonMenuList from '../Components/CommonMenuList'
+
+const CustomInputWithLabel = lazy(() => import('../Components/CustomInputWithLabel'));
+const CustomCheckBoxWithLabel = lazy(() => import('../Components/CustomCheckBoxWithLabel'));
+const CommonMenuList = lazy(() => import('../Components/CommonMenuList'));
 const FeedbackCategoryMasterList = lazy(() => import('../Components/CustomTable'));
 
 const ModuleMaster = () => {

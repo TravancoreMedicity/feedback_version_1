@@ -43,7 +43,7 @@ const Rulesyesorno = ({
             setClicked(item);
             hanldeuseranswers(questionid, value)
         }
-    }, [component,clicked,hanldecomponent,hanldeuseranswers]);
+    }, [component, clicked, hanldecomponent, hanldeuseranswers]);
 
 
     const hanldeadditioanlinfo = useCallback((e) => {
@@ -66,7 +66,7 @@ const Rulesyesorno = ({
     }, [questionid, setMobileValidation, hanldeuseranswers, extradetail, setMobileNumber]);
 
     const resultObject = value != null && value !== undefined
-        ? Object.fromEntries(value.split(', ').map(item => item.split(': ')))
+        ? Object.fromEntries(value?.split(', ').map(item => item?.split(': ')))
         : {};
 
     const { Yes, No } = resultObject;
@@ -117,7 +117,6 @@ const Rulesyesorno = ({
                         sx={{
                             width: { xs: 60, sm: 70 },
                             height: { xs: 60, sm: 70 },
-                            // bgcolor: clicked === "no" ? 'red' : "",
                             borderRadius: '10%',
                             p: 0.4,
                             display: 'flex',

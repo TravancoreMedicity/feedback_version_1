@@ -1,5 +1,5 @@
 import { Box } from "@mui/joy";
-import React from "react";
+import React, { memo } from "react";
 import { baseColor } from "../Constant/Constant";
 
 const Colors = () => {
@@ -81,4 +81,4 @@ const Colors = () => {
   );
 };
 
-export default Colors;
+export default memo(Colors);

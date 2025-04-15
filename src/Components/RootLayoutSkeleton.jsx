@@ -1,6 +1,6 @@
 import { Grid } from '@mui/joy';
 import { Box, Skeleton } from '@mui/material';
-import React from 'react'
+import React, { memo } from 'react'
 
 const RootLayoutSkeleton = () => {
     return (
@@ -117,4 +117,4 @@ const RootLayoutSkeleton = () => {
     )
 }
 
-export default RootLayoutSkeleton
+export default memo(RootLayoutSkeleton)

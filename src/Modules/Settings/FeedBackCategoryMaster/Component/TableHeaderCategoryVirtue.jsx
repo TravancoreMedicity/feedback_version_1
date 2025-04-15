@@ -1,12 +1,7 @@
-
 import React from 'react'
 import { memo } from 'react'
-// import { baseColor } from '../../../Constant/Constant'
 import { Box } from '@mui/joy'
-// import PanoramaOutlinedIcon from "@mui/icons-material/PanoramaOutlined";
-// import EditCalendarOutlinedIcon from "@mui/icons-material/EditCalendarOutlined";
-// import LocalPrintshopOutlinedIcon from "@mui/icons-material/LocalPrintshopOutlined";
-// import GppGoodIcon from "@mui/icons-material/GppGood";
+
 
 const TableHeaderCategoryVirtue = () => {
     return (

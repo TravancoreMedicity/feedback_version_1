@@ -20,8 +20,6 @@ const LogoutMoidal = () => {
     const navigate = useNavigate()
     const handleLogout = useCallback(async () => {
         const userSlno = localStorage.getItem("app_auth");
-        console.log(userSlno);
-
 
         if (userSlno) {
             const userId = atob(JSON.parse(userSlno)?.authNo);
@@ -53,11 +51,8 @@ const LogoutMoidal = () => {
                 }
             }
 
-        } else {
-            console.log("no localstorage");
-
         }
-    }, [])
+    }, [navigate])
 
     return (
         <Dropdown >

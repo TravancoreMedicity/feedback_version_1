@@ -7,9 +7,6 @@ import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutSt
 
 
 
-// import CollectionDetail from './CollectionDetail'
-// import PateintRoomDetail from './PateintRoomDetail'
-
 const CollectionDetail = lazy(() => import('./CollectionDetail'));
 const PateintRoomDetail = lazy(() => import('./PateintRoomDetail'));
 
@@ -31,6 +28,7 @@ const Feedbackcollection = () => {
         queryKey: ['allnursestation'],
         queryFn: () => getallNurseStation(),
     })
+
 
     return (
         <Box sx={{ minHeight: '100vh' }}>
@@ -58,7 +56,6 @@ const Feedbackcollection = () => {
                         />
                     </Suspense>
             }
-
         </Box>
     )
 }

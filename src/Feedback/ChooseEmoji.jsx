@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { memo, useCallback, useState } from 'react';
 import { Box, Tooltip } from '@mui/joy';
 import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAlt';
 import TagFacesIcon from '@mui/icons-material/TagFaces';
@@ -10,20 +10,20 @@ const ChooseEmoji = ({ questionid, value, hanldeuseranswers }) => {
 
     const [selected, setSelected] = useState('')
     const resultObject = value != null && value !== undefined
-        ? Object.fromEntries(value.split(', ').map(item => item.split(': ')))
+        ? Object.fromEntries(value?.split(', ').map(item => item?.split(': ')))
         : {};
-    const size = Object.keys(resultObject).length;
+    const size = Object.keys(resultObject)?.length;
 
     const handleEmogjiSelection = useCallback((key, questionid, description) => {
         hanldeuseranswers(questionid, description)
         setSelected(key)
-    }, []);
+    }, [hanldeuseranswers]);
 
 
     return (
         <Box sx={{ gap: { xs: 3, sm: 5, md: 4, lg: 5 }, px: 3, display: 'flex', alignItems: 'center', mt: 3, mb: 2 }}>
             {
-                Object.entries(resultObject).map(([key, description], index) => {
+                Object.entries(resultObject)?.map(([key, description], index) => {
                     return (
                         <Box
                             key={index}
@@ -65,4 +65,4 @@ const ChooseEmoji = ({ questionid, value, hanldeuseranswers }) => {
     );
 };
 
-export default ChooseEmoji;
+export default memo(ChooseEmoji);

@@ -1,41 +1,18 @@
 import React, { lazy, Suspense, useEffect, useLayoutEffect } from "react";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import "./App.css";
 import Home from "./Pages/Home";
-import ProtectedRoute from "./routes/ProtectedRoute";
 import Colors from "./Pages/Colors";
+import ErrorElement from "./Pages/ErrorElement";
+import { ToastContainer } from "react-toastify";
+import ProtectedRoute from "./routes/ProtectedRoute";
+import { AuthProvider } from "./Context/AuthProvider";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import CustomBackDropWithOutState from "./Components/CustomBackDropWithOutState";
-import "./App.css";
-import { AuthProvider } from "./Context/AuthProvider";
-import ErrorElement from "./Pages/ErrorElement";
-// import { socket } from "./ws/socket";
-import { ToastContainer } from "react-toastify";
-import RootLayoutSkeleton from "./Components/RootLayoutSkeleton.jsx";
-import Qrscan from "./Pages/Qrscan.jsx";
 import CommonFinalFeedSkeleton from './Feedback/Commoncomponents/commonFinalFeedSkeleton';
-import RadiologyFeedbackSkeleton from './Feedback/Commoncomponents/RadiologyFeedbackSkeleton';
-import Opskeleton from './Feedback/Commoncomponents/Opskeleton';
 
-import FeedBackSubCategoryMaster from "./Modules/Settings/FeedBackSubCategoryMaster/FeedBackSubCategoryMaster";
-import FeedBackCategoryMaster from "./Modules/Settings/FeedBackCategoryMaster/FeedBackCategoryMaster.jsx";
-import FeedBackColletionType from "./Modules/Settings/FeedBackColletionType/FeedBackColletionType.jsx";
-import Feedback from "./Modules/FeedbackForms/Feedback.jsx";
-import FeedbackMaster from "./Modules/Settings/FeedbackMaster/FeedbackMaster.jsx";
-import FeedBackDetail from "./Modules/Settings/FeedBackDetail/FeedBackDetail.jsx";
-import FeedbackForm from "./Modules/FeedbackForms/FeedbackForm.jsx";
-import Feedbackcollection from "./Modules/FeedbackCollections/Feedbackcollection.jsx";
-import ModuleMaster from "./Masters/ModuleMaster.jsx";
-import MenuMaster from "./Masters/MenuMaster.jsx";
-import UserGroupMaster from "./Masters/UserGroupMaster.jsx";
-import UserGroupRightMaster from "./Masters/UserGroupRightMaster.jsx";
-import UserRightMaster from "./Masters/UserRightMaster.jsx";
+// import { socket } from "./ws/socket";
 import Scanner from "./Components/Scanner.jsx";
-import UserModuleRightMaster from "./Masters/UserModuleRightMaster.jsx";
-import NurstationMaster from "./Masters/NurstationMaster.jsx";
-import Maintenance from "./Modules/Maintentance/Maintenance.jsx";
-import InfromationTechnology from "./Modules/IT/InfromationTechnology.jsx";
-import Biomedical from "./Modules/Biomedical/Biomedical.jsx";
-import HouseKeeping from "./Modules/HouseKeeping.jsx/HouseKeeping.jsx";
 
 
 
@@ -43,37 +20,51 @@ import HouseKeeping from "./Modules/HouseKeeping.jsx/HouseKeeping.jsx";
 // Main Modules
 const Dashboard = lazy(() => import("./Modules/Dashboard/Dashboard.jsx"));
 const RoootLayouts = lazy(() => import("./routes/RoootLayouts"));
+const Settings = lazy(() => import("./Modules/Settings/Settings.jsx"));
+
+//all components
+
+const RootLayoutSkeleton = lazy(() => import("./Components/RootLayoutSkeleton.jsx"));
+const Qrscan = lazy(() => import("./Pages/Qrscan.jsx"));
+const FeedBackSubCategoryMaster = lazy(() => import("./Modules/Settings/FeedBackSubCategoryMaster/FeedBackSubCategoryMaster"));
+const FeedBackCategoryMaster = lazy(() => import("./Modules/Settings/FeedBackCategoryMaster/FeedBackCategoryMaster.jsx"));
+const FeedBackColletionType = lazy(() => import("./Modules/Settings/FeedBackColletionType/FeedBackColletionType.jsx"));
+const Feedback = lazy(() => import("./Modules/FeedbackForms/Feedback.jsx"));
+const FeedbackMaster = lazy(() => import("./Modules/Settings/FeedbackMaster/FeedbackMaster.jsx"));
+const FeedBackDetail = lazy(() => import("./Modules/Settings/FeedBackDetail/FeedBackDetail.jsx"));
+const FeedbackForm = lazy(() => import("./Modules/FeedbackForms/FeedbackForm.jsx"));
+const Feedbackcollection = lazy(() => import("./Modules/FeedbackCollections/Feedbackcollection.jsx"));
+const ModuleMaster = lazy(() => import("./Masters/ModuleMaster.jsx"));
+const MenuMaster = lazy(() => import("./Masters/MenuMaster.jsx"));
+const UserGroupMaster = lazy(() => import("./Masters/UserGroupMaster.jsx"));
+const UserGroupRightMaster = lazy(() => import("./Masters/UserGroupRightMaster.jsx"));
+const UserRightMaster = lazy(() => import("./Masters/UserRightMaster.jsx"));
+const UserModuleRightMaster = lazy(() => import("./Masters/UserModuleRightMaster.jsx"));
+const NurstationMaster = lazy(() => import("./Masters/NurstationMaster.jsx"));
+const Maintenance = lazy(() => import("./Modules/Maintentance/Maintenance.jsx"));
+const InfromationTechnology = lazy(() => import("./Modules/IT/InfromationTechnology.jsx"));
+const Biomedical = lazy(() => import("./Modules/Biomedical/Biomedical.jsx"));
+const HouseKeeping = lazy(() => import("./Modules/HouseKeeping.jsx/HouseKeeping.jsx"));
+const RoomMaster = lazy(() => import("./Masters/RoomMaster.jsx"));
+const AssetIemMaster = lazy(() => import("./Masters/AssetIemMaster.jsx"));
+const AssetMapMaster = lazy(() => import("./Masters/AssetMapMaster.jsx"));
+const RoomChecklistMaster = lazy(() => import("./Masters/RoomChecklistMaster.jsx"));
+const Prochecklist = lazy(() => import("./Modules/ProchecheckList/Prochecklist.jsx"));
 
 
 //Feedback
-const ChooseFeedbacks = lazy(() => import("./Feedback/ChooseFeedbacks.jsx"));
-const RadiologyFeedback = lazy(() => import('./Feedback/RadiologyFeedback/RadiologyFeedback'))
-const PharmacyFeedback = lazy(() => import('./Feedback/PharmacyFeedback/PharmacyFeedback'))
-const Opfeedback = lazy(() => import('./Feedback/OPfeedback/Opfeedback'))
-const Ipfeedback = lazy(() => import('./Feedback/IpFeedback/IpFeedback'))
-const LaboratoryFeedback = lazy(() => import('./Feedback/Laboratory/LaboratoryFeedback'))
+// const ChooseFeedbacks = lazy(() => import("./Feedback/ChooseFeedbacks.jsx"));
+// const RadiologyFeedback = lazy(() => import('./Feedback/RadiologyFeedback/RadiologyFeedback'))
+// const PharmacyFeedback = lazy(() => import('./Feedback/PharmacyFeedback/PharmacyFeedback'))
+// const Opfeedback = lazy(() => import('./Feedback/OPfeedback/Opfeedback'))
+// const Ipfeedback = lazy(() => import('./Feedback/IpFeedback/IpFeedback'))
+// const LaboratoryFeedback = lazy(() => import('./Feedback/Laboratory/LaboratoryFeedback'))
 // const AdvancedSearch = lazy(() =>
 //   import("./Modules/Search/AdvancedSearch.jsx")
 // );
 // const FileUpload = lazy(() => import("./Modules/FileUpload/FileUpload.jsx"));
-const Settings = lazy(() => import("./Modules/Settings/Settings.jsx"));
 
-// Sub Modules
-// const UserManagement = lazy(() => import("./Modules/Settings/UserMangement/UserCreation.jsx"));
-// const DocTypeMaster = lazy(() => import("./Modules/Settings/DocumentTypeMaster/DoctypeMaster.jsx"));
-// const SubTypeMaster = lazy(() => import("./Modules/Settings/SubTypeMaster/SubTypeMaster.jsx"));
-// const DocCategory = lazy(() => import("./Modules/Settings/DocumentCategory/DocCategoryMaster.jsx"));
-// const DocSubCategory = lazy(() => import("./Modules/Settings/DocumentSubCategory/DocumentSubCategory.jsx"));
-// const DocGroup = lazy(() => import("./Modules/Settings/DocumentGroup/DocumentGroup.jsx"));
-// const InstituteTypeMaster = lazy(() => import("./Modules/Settings/InstituteTypeMaster/InstituteTypeMaster.jsx"));
-// const InstitutionMaster = lazy(() => import("./Modules/Settings/InstitutionMaster/InstitutionMaster.jsx"));
-// const CourseType = lazy(() => import("./Modules/Settings/CourseType/CourseType.jsx"));
-// const CourseMaster = lazy(() => import("./Modules/Settings/CourseMaster/CourseMaster.jsx"));
-// const RackMaster = lazy(() => import("./Modules/Settings/RackMaster/RackMaster.jsx"));
-// const LocationMaster = lazy(() => import("./Modules/Settings/LocationMaster/LocationMaster.jsx"));
-// const CustodianMaster = lazy(() => import("./Modules/Settings/CustomdienMaster/CustodianMaster.jsx"));
-// const CustodianDepartment = lazy(() => import("./Modules/Settings/CustodienDepartment/CustodianDepartment.jsx"));
-// const FileApprovals = lazy(() => import("./Modules/FileApprovals/FileApprovals.jsx"));
+
 
 const routes = createBrowserRouter([
   {
@@ -82,12 +73,6 @@ const routes = createBrowserRouter([
     children: [],
     errorElement: <ErrorElement />,
   },
-  // {
-  //   path: "scanner", element:
-  //     <Suspense fallback={<CommonFinalFeedSkeleton />} >
-  //       <Scanner />
-  //     </Suspense>, errorElement: <ErrorElement />
-  // },
   {
     path: "/feedback/:encodedId",
     element: (
@@ -128,12 +113,6 @@ const routes = createBrowserRouter([
                 <Feedback />
               </Suspense>, errorElement: <ErrorElement />
           },
-          // {
-          //   path: "FeedbackCollection", element:
-          //     <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
-          //       <Feedbackcollection />
-          //     </Suspense>, errorElement: <ErrorElement />
-          // },
           {
             path: "collectiondetail", element:
               <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
@@ -154,61 +133,67 @@ const routes = createBrowserRouter([
           },
           {
             path: "modulemaster", element:
-              <Suspense fallback={<CommonFinalFeedSkeleton />} >
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
                 <ModuleMaster />
               </Suspense>, errorElement: <ErrorElement />
           },
           {
             path: "groupmaster", element:
-              <Suspense fallback={<CommonFinalFeedSkeleton />} >
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
                 <UserGroupMaster />
               </Suspense>, errorElement: <ErrorElement />
           },
           {
             path: "usergroupright", element:
-              <Suspense fallback={<CommonFinalFeedSkeleton />} >
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
                 <UserGroupRightMaster />
               </Suspense>, errorElement: <ErrorElement />
           },
           {
             path: "userrights", element:
-              <Suspense fallback={<CommonFinalFeedSkeleton />} >
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
                 <UserRightMaster />
               </Suspense>, errorElement: <ErrorElement />
           },
           {
             path: "usermoduleright", element:
-              <Suspense fallback={<CommonFinalFeedSkeleton />} >
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
                 <UserModuleRightMaster />
               </Suspense>, errorElement: <ErrorElement />
           },
           {
             path: "nursestationmast", element:
-              <Suspense fallback={<CommonFinalFeedSkeleton />} >
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
                 <NurstationMaster />
               </Suspense>, errorElement: <ErrorElement />
           },
           {
+            path: "roommaster", element:
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
+                <RoomMaster />
+              </Suspense>, errorElement: <ErrorElement />
+          },
+          {
             path: "menumaster", element:
-              <Suspense fallback={<CommonFinalFeedSkeleton />} >
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
                 <MenuMaster />
               </Suspense>, errorElement: <ErrorElement />
           },
           {
             path: "subcatgMaster", element:
-              <Suspense fallback={<CommonFinalFeedSkeleton />} >
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
                 <FeedBackSubCategoryMaster />
               </Suspense>, errorElement: <ErrorElement />
           },
           {
             path: "catgMaster", element:
-              <Suspense fallback={<CommonFinalFeedSkeleton />} >
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
                 <FeedBackCategoryMaster />
               </Suspense>, errorElement: <ErrorElement />
           },
           {
             path: "collectiontype", element:
-              <Suspense fallback={<CommonFinalFeedSkeleton />} >
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
                 <FeedBackColletionType />
               </Suspense>, errorElement: <ErrorElement />
           },
@@ -225,47 +210,50 @@ const routes = createBrowserRouter([
               </Suspense>, errorElement: <ErrorElement />
           }, {
             path: "Maintenace", element:
-              <Suspense fallback={<CommonFinalFeedSkeleton />} >
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
                 <Maintenance />
               </Suspense>, errorElement: <ErrorElement />
           },
           {
             path: "it", element:
-              <Suspense fallback={<CommonFinalFeedSkeleton />} >
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
                 <InfromationTechnology />
               </Suspense>, errorElement: <ErrorElement />
           },
           {
             path: "biomedical", element:
-              <Suspense fallback={<CommonFinalFeedSkeleton />} >
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
                 <Biomedical />
               </Suspense>, errorElement: <ErrorElement />
           },
           {
             path: "housekeeping", element:
-              <Suspense fallback={<CommonFinalFeedSkeleton />} >
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
                 <HouseKeeping />
               </Suspense>, errorElement: <ErrorElement />
+          },
+          {
+            path: "assetitem", element:
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
+                <AssetIemMaster />
+              </Suspense>, errorElement: <ErrorElement />
+          }, {
+            path: "assetmapping", element:
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
+                <AssetMapMaster />
+              </Suspense>, errorElement: <ErrorElement />
+          }, {
+            path: "roomchecklist", element:
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
+                <RoomChecklistMaster />
+              </Suspense>, errorElement: <ErrorElement />
+          },
+          {
+            path: "prochecklist", element:
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
+                <Prochecklist />
+              </Suspense>, errorElement: <ErrorElement />
           }
-
-
-
-
-          // { path: "UserManagement", element: <UserManagement />, errorElement: <ErrorElement /> },
-          // { path: "DocTypeMaster", element: <DocTypeMaster />, errorElement: <ErrorElement /> },
-          // { path: "SubTypeMaster", element: <SubTypeMaster />, errorElement: <ErrorElement /> },
-          // { path: "DocCategory", element: <DocCategory />, errorElement: <ErrorElement /> },
-          // { path: "DocSubCategory", element: <DocSubCategory />, errorElement: <ErrorElement /> },
-          // { path: "DocGroup", element: <DocGroup />, errorElement: <ErrorElement /> },
-          // { path: "InstituteTypeMaster", element: <InstituteTypeMaster />, errorElement: <ErrorElement /> },
-          // { path: "InstitutionMaster", element: <InstitutionMaster />, errorElement: <ErrorElement /> },
-          // { path: "CourseType", element: <CourseType />, errorElement: <ErrorElement /> },
-          // { path: "CourseMaster", element: <CourseMaster />, errorElement: <ErrorElement /> },
-          // { path: "RackMaster", element: <RackMaster />, errorElement: <ErrorElement /> },
-          // { path: "LocationMaster", element: <LocationMaster />, errorElement: <ErrorElement /> },
-          // { path: "CustodianMaster", element: <CustodianMaster />, errorElement: <ErrorElement /> },
-          // { path: "CustodianDepartment", element: <CustodianDepartment />, errorElement: <ErrorElement /> },
-          // { path: "Color", element: <Colors />, errorElement: <ErrorElement /> },
         ],
       },
       {

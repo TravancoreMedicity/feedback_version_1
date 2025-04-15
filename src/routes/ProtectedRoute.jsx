@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { useCallback } from 'react'
+import React, { memo, useCallback } from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
 import useValidateToken from '../hooks/useValidateToken'
 import { Backdrop } from '@mui/material'
@@ -42,4 +42,4 @@ const ProtectedRoute = () => {
     return isValid === true ? <Outlet /> : <Navigate to="/" replace />
 }
 
-export default ProtectedRoute
+export default memo(ProtectedRoute)

@@ -25,14 +25,14 @@ const BlockComponent = ({
         try {
             setLoading(true)
             const response = await axiosApi.post("/feedback/insertptdetailmlora", insertData);
-            const { success, message } = response.data;
+            const { success } = response.data;
             if (success !== 2) return warningNofity("Error in inserting Patinet Details");
             setLoading(false)
         } catch (error) {
             setLoading(false)
             warningNofity("Error in inserting Patinet infromation");
         }
-    }, []);
+    }, [setLoading]);
 
 
     const GetallPatientDetail = useCallback(async () => {
@@ -51,7 +51,7 @@ const BlockComponent = ({
             setLoading(false)
             warningNofity("Error in Fetching Data...?")
         }
-    }, [code])
+    }, [code, InsertPatientDetailMeliora, setLoading])
 
     const InsertBedDetailMeliora = useCallback(async (data) => {
         const insertData = {
@@ -67,7 +67,7 @@ const BlockComponent = ({
             warningNofity("Error in inserting Bed infromation");
             setLoading(false)
         }
-    }, [])
+    }, [setLoading])
 
     const HandleBedFetchFromMeliora = useCallback(async () => {
         const insertData = {
@@ -83,12 +83,11 @@ const BlockComponent = ({
             setView(1)
             setLoading(false)
         } catch (error) {
-            console.log(error);
             warningNofity("Error in Api")
             setView(0)
             setLoading(false)
         }
-    }, []);
+    }, [code, setBedDetail, setLoading, setView]);
 
     const HandlebedFetching = useCallback(async (code) => {
         GetallPatientDetail()//fetching all inpatient detail in the Nursing Station
@@ -111,9 +110,7 @@ const BlockComponent = ({
             setView(0)
             setLoading(false)
         }
-    }, [setBedDetail, setNsName, setNsCode, setView, stationname]);
-
-
+    }, [setNsName, setNsCode, setView, stationname, GetallPatientDetail, InsertBedDetailMeliora, HandleBedFetchFromMeliora, setLoading]);
 
 
     return (
@@ -144,7 +141,6 @@ const BlockComponent = ({
 
                 }}>
                 <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', flexDirection: 'column' }}>
-                    {/* <HouseRooms style={{ fontSize: 18, color: 'rgba(var(--icon-primary))' }} /> */}
                     <FontAwesomeIcon icon={faUserNurse} style={{ fontSize: 26, color: 'rgba(var(--icon-primary))' }} />
                     <Typography level='body-sm' fontWeight={'md'}
                         sx={{

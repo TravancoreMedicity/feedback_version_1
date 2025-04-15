@@ -121,10 +121,9 @@ const Feedback = () => {
                             {item.feedback_name.toUpperCase()}
                           </Typography>
                         </Box>
-                        <Tooltip sx={{ fontSize: 12 }} title={`${item.feedback_name.toLowerCase()} preview `} placement="top">
+                        <Tooltip sx={{ fontSize: 12 }} title={`${item?.feedback_name?.toLowerCase()} preview `} placement="top">
                           <PlaylistPlayIcon
-                            // onClick={(e) => handletabchange(e, "2", item.fdmast_slno)}
-                            onClick={(e) => openFeedbackForm(item.fdmast_slno)}
+                            onClick={(e) => openFeedbackForm(item?.fdmast_slno)}
                             sx={{
                               cursor: "pointer",
                               transition: "transform 0.3s ease",

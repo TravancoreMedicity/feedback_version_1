@@ -12,7 +12,6 @@ import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { ListSubheader } from "@mui/material";
-// import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import { NavArrowRight } from 'iconoir-react'
 import { useCallback } from "react";
 import { useMemo } from "react";
@@ -20,15 +19,16 @@ import {
     HomeAltSlimHoriz,
     Settings,
     MessageText,
-    Industry,
     Computer,
-    Heart,
-    TaskList
+    TaskList,
+    Microscope,
+    HospitalCircle,
+    BookStack,
+    UserBadgeCheck
 } from 'iconoir-react'
 import { EmpauthId } from "../Constant/Constant";
 import { getUserModules } from "../Function/CommonFunction";
 import { useQuery } from "@tanstack/react-query";
-import ComputerTwoToneIcon from '@mui/icons-material/ComputerTwoTone';
 
 const DrawerWindow = memo(({ drawerWidth, handleDrawerClose }) => {
 
@@ -53,20 +53,21 @@ const DrawerWindow = memo(({ drawerWidth, handleDrawerClose }) => {
         return [
             { modslno: 1, menu: "Dashboard", text: "/Home/Dashboard", icon: <HomeAltSlimHoriz height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
             { modslno: 2, menu: "FeedBack Links", text: "/Home/Feedbackdetail", icon: <MessageText height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
-            { modslno: 3, menu: "FeedBackCollection", text: "/Home/collectiondetail", icon: <TaskList height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
+            { modslno: 3, menu: "FeedBackCollection", text: "/Home/collectiondetail", icon: <BookStack height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
             { modslno: 4, menu: "Settings", text: "/Home/Settings", icon: <Settings height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
-            { modslno: 5, menu: "CheckList", text: "/Home/Maintenace", icon: <Industry height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
-            { modslno: 6, menu: "InformationTechnology", text: "/Home/it", icon: <Computer height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
-            { modslno: 7, menu: "BioMedical", text: "/Home/biomedical", icon: <Heart height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
-            { modslno: 8, menu: "HouseKeeping", text: "/Home/housekeeping", icon: <Heart height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
+            { modslno: 5, menu: "CheckList", text: "/Home/Maintenace", icon: <TaskList height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
+            { modslno: 6, menu: "InformationTech", text: "/Home/it", icon: <Computer height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
+            { modslno: 7, menu: "BioMedical", text: "/Home/biomedical", icon: <Microscope height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
+            { modslno: 8, menu: "HouseKeeping", text: "/Home/housekeeping", icon: <HospitalCircle height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
+            { modslno: 9, menu: "PRO CheckList", text: "/Home/prochecklist", icon: <UserBadgeCheck height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
         ]
-    }, [])
+    }, []);
 
 
     useEffect(() => {
         if (allmoduleitem?.length) {
             const filteredItems = drawerMenu?.filter((menuItem) =>
-                allmoduleitem.some((module) => menuItem.modslno === module.fb_module_slno)
+                allmoduleitem?.some((module) => menuItem?.modslno === module?.fb_module_slno)
             );
             setarr(filteredItems);
         }
@@ -92,15 +93,15 @@ const DrawerWindow = memo(({ drawerWidth, handleDrawerClose }) => {
                     >
                         Menu Selections
                     </ListSubheader>
-                }
-            >
+                }>
                 {arr?.map((val, index) => (
                     <ListItem
                         key={index}
                         disablePadding
                         sx={{ display: "flex" }}
                         secondaryAction={
-                            <NavArrowRight height={20} width={20} color="rgba(var(--drawer-font-color))" className={selectedIndex === index ? "bouncing-element" : ''} />
+                            <NavArrowRight height={20} width={20} color="rgba(var(--drawer-font-color))"
+                                className={selectedIndex === index ? "bouncing-element" : ''} />
                         }
                     >
                         <ListItemButton
@@ -155,7 +156,7 @@ const DrawerWindow = memo(({ drawerWidth, handleDrawerClose }) => {
                                     transform: "translateX(0)",
                                 }}
                             >
-                                {val.menu}
+                                {val?.menu}
                             </Typography>
                         </ListItemButton>
                     </ListItem>
@@ -171,7 +172,6 @@ const DrawerWindow = memo(({ drawerWidth, handleDrawerClose }) => {
             sx={{
                 width: { sm: drawerWidth },
                 transition: "width 0.2s",
-                // flexShrink: { sm: 0 }
             }}
             aria-label="mailbox folders"
         >
@@ -183,16 +183,13 @@ const DrawerWindow = memo(({ drawerWidth, handleDrawerClose }) => {
                         width: drawerWidth,
                         transition: "width 0.5s",
                         backgroundColor: "rgba(var(--bg-drawer))",
-                        // backgroundColor: "rgba(var(--color-blue))",
                     },
                 }}
-                onClose={handleDrawerClose}
-            // open={mobileOpen}
-            >
+                onClose={handleDrawerClose}>
                 {drawer}
             </Drawer>
         </Box>
     )
 })
 
-export default DrawerWindow
+export default memo(DrawerWindow)

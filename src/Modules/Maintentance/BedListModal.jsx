@@ -1,267 +1,219 @@
-import React, { useCallback, memo, useState, useMemo, useEffect, lazy, Suspense } from 'react';
+import React, { useCallback, memo, useState, useMemo, lazy, Suspense, useEffect } from 'react';
 import Modal from '@mui/joy/Modal';
+import { axiosApi } from '../../Axios/Axios';
+import { useQuery } from '@tanstack/react-query';
+import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import { Box, Button, ModalClose, ModalDialog, Typography } from '@mui/joy';
 import VerifiedUserTwoToneIcon from '@mui/icons-material/VerifiedUserTwoTone';
-import { useQuery } from '@tanstack/react-query';
-import { getBedRemarkDetails, getDepartmentEmployee, getLoggedEmpDetail } from '../../Function/CommonFunction';
-import { EmpauthId, employeeID, succesNofity, warningNofity } from '../../Constant/Constant';
-import { axiosApi } from '../../Axios/Axios';
-import { BmdepId, ItdepId, MtdepId } from '../../Constant/Data';
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
+import { EmpauthId, employeeID, succesNofity, warningNofity } from '../../Constant/Constant';
+import { getComplaintDetail, getDepartmentEmployee, getLoggedEmpDetail } from '../../Function/CommonFunction';
+
 
 
 const BedListOtherDep = lazy(() => import('./BedListOtherDep'));
+const RectifyCard = lazy(() => import('./RectifyCard'));
+const AssetComplaint = lazy(() => import('./AssetComplaint'));
 const MaintenanceRemarkButton = lazy(() => import('./MaintenanceRemarkButton'));
 const MultipleSelect = lazy(() => import('../../Components/MultipleSelect'));
 
 
 const BedListModal = ({ open,
     setOpen,
-    name,
     icon,
-    bedslno,
-    bedcode,
-    bedno,
-    nscode,
-    selectmaintentance,
-    setSelectMaintenance,
-    setinformationtech,
-    setInformationTech,
-    setbiomedical,
-    setBioMedical,
+    data,
     getallremarkrefetch,
-    getallBlokedbedRefetch
+    getallBlokedbedRefetch,
+    combinedata,
+    assetData,
+    condition,
+    setCondtion,
+    totaldetail,
+    setTotalDetail,
+    beddetails,
+    isinitalchecked,
+    setIsInitialChecked,
+    getbedremarkRefetch
 }) => {
+
+
 
     const id = EmpauthId()
     const [empid, setEmpid] = useState([]);
-    const [ovarallconditon, setOverallCondition] = useState(null)
-    const [activeButton, setActiveButton] = useState(null);
-    const [remarks, setRemarks] = useState("")
-    const [overallremarks, setOverallRemarks] = useState("")
-    const [selectstatus, setSelecStatus] = useState(false)
+    const { ovarallconditon, activeButton, remarks, overallremarks } = totaldetail;
 
-    //OVERALL CONDITION CHEKING
-    const handleButtonClick = useCallback((buttonName) => {
-        setOverallCondition((prevState) => (prevState === buttonName ? null : buttonName));
-    }, [setOverallCondition]);
+    const { data: checkcomplaint, refetch: fetchBedComplaints } = useQuery({
+        queryKey: ["checkcomplaint", data?.fb_bed_slno],
+        queryFn: () => getComplaintDetail(data?.fb_bed_slno),
+        enabled: !!open,
+        staleTime: Infinity
+    });
 
-    // FUNCTION TO GET ICON COLOR BASED ON THE ACTIVE BUTTON
-    const getIconColor = (buttonName) => {
+
+    const getIconColor = useCallback((buttonName) => {
         return ovarallconditon === buttonName ? 'rgb(216, 75, 154, 1)' : 'rgba(var(--font-primary-white))';
-    };
+    }, [ovarallconditon]);
 
-    //FETCHING EMP DETAIL FOR DEPARTMENT SELECTION FOR DEPARTMENT EMPLOYEE SELECTION
+    //fetching emp detail
     const { data: getlogempdetail } = useQuery({
         queryKey: ["loggedempdetail", id],
-        queryFn: () => getLoggedEmpDetail(id)
+        queryFn: () => getLoggedEmpDetail(id),
+        enabled: !!open,
+        staleTime: Infinity
     });
 
     const departmentSection = useMemo(() => getlogempdetail?.[0]?.em_dept_section, [getlogempdetail]);
     const department = useMemo(() => getlogempdetail?.[0]?.em_department, [getlogempdetail]);
 
-    //FETCHING DEPARTMENT EMPLOYEE FOR THE MULTISELECT BASED ON CURRENT LOGIN
+    //fetching departemployee
     const { data: departmentemp } = useQuery({
         queryKey: ['fetchalldepemployee', departmentSection],
         queryFn: () => getDepartmentEmployee(departmentSection),
         enabled: !!departmentSection,
-    })
+    });
 
-    //MULTIPLE EMPLOYYE SELECTION
+    //multiple employeee selection
     const hanldmultiplechange = useCallback((e, val) => {
         setEmpid(val);
     }, [setEmpid]);
 
-    //CHECKING THE DATA WHOSE CONDITION IS OKE
-    const data = useMemo(() => {
-        const stateMappings = [
-            { depid: "17", state: selectmaintentance },
-            { depid: "1", state: setinformationtech },
-            { depid: "36", state: setbiomedical }
-        ];
+    //Complaint Item
+    const itemforComplaint = useMemo(() => Object.keys(condition)?.filter(key => condition?.[key] === 2), [condition]);
 
-        return stateMappings.map(({ depid, state }) => ({
-            name: depid,
-            values: Object.keys(state).map(key => ({
-                [key]: state[key] ? 1 : 0
-            }))
+    //item which is poor in condition
+    const filteredAssets = useMemo(() => {
+        return combinedata?.flatMap(department =>
+            department?.assets
+                ?.filter(item => itemforComplaint?.includes(item?.fb_asset_name))
+                ?.map(item => ({
+                    ...item,
+                    complaint_dept_slno: department.complaint_dept_slno
+                })) || []
+        );
+    }, [combinedata, itemforComplaint]);
+
+
+    //overall condition checking
+    const handleButtonClick = useCallback((buttonName) => {
+        setTotalDetail((prev) => ({
+            ...prev,
+            ovarallconditon: prev?.ovarallconditon === buttonName ? null : buttonName
         }));
-    }, [selectmaintentance, setinformationtech, setbiomedical]);
+    }, [setTotalDetail]);
 
-
-    //FOR CALCULATION OF THE ASSET CONDITIONS 
-    const selectmaintenance = selectmaintentance ? Object.values(selectmaintentance).filter(value => value === true).length : 0;
-    const selectinformation = setinformationtech ? Object.values(setinformationtech).filter(value => value === true).length : 0;
-    const selectbio = setbiomedical ? Object.values(setbiomedical).filter(value => value === true).length : 0;
-    const TotalCountMT = selectmaintentance ? Object.values(selectmaintentance).length : 0;
-    const TotalCountIT = setinformationtech ? Object.values(setinformationtech).length : 0;
-    const TotalCountBM = setbiomedical ? Object.values(setbiomedical).length : 0;
-
-
-    //FOR DYNAMICALLY CHECKING STATUS FOR SENDING TO OTHER DEPARMENTS
+    //optional part
     useEffect(() => {
-        if ((selectbio + selectinformation + selectmaintenance) === (TotalCountBM + TotalCountIT + TotalCountMT)) {
-            setSelecStatus(true)
-        } else {
-            setSelecStatus(false)
+        if (filteredAssets && filteredAssets.length > 0) {
+            setTotalDetail((prev) => {
+                if (prev.ovarallconditon === "3") {
+                    return {
+                        ...prev,
+                        ovarallconditon: "2"
+                    };
+                }
+                return prev;
+            });
         }
-    }, [selectbio, selectinformation, selectmaintenance, TotalCountBM, TotalCountIT, TotalCountMT, setSelecStatus]);
+    }, [filteredAssets, setTotalDetail]);
 
 
-    //FETCHING BEDREMARKS TO DYNAMICALLY UPDATEIJNG CHECKLIST
-    const { data: bedremarks, refetch: getbedremarkRefetch } = useQuery({
-        queryKey: ['fetchbedremarkdetail', bedcode],
-        queryFn: () => getBedRemarkDetails(bedcode),
-        enabled: !!open,
-    });
+    const assetsArray = Object.entries(condition)?.map(([asset, status]) => ({
+        asset,
+        status
+    }));
 
+
+    const filteredData = assetData
+        ?.filter(a => assetsArray?.some(b => b.asset === a?.fb_asset_name))
+        ?.map(a => {
+            return ({
+                ...a,
+                status: assetsArray?.find(b => b.asset === a?.fb_asset_name)?.status,
+            });
+        });
+
+
+    const postAssetData = filteredData?.filter(
+        item => beddetails && !beddetails?.find(val => val?.fb_asset_name === item?.fb_asset_name
+        ));
 
     //MODAL CLOSE 
     const HanldeModalClose = useCallback(() => {
-        getbedremarkRefetch()
+        if (checkcomplaint?.length > 0 && !isinitalchecked) return warningNofity("Please Complete the Intial CheckList")
         getallremarkrefetch()
         getallBlokedbedRefetch()
         setOpen(false)
+        setTotalDetail({})
         setEmpid([])
-        setActiveButton(null)
-        setRemarks("")
-        setOverallCondition(null)
-        setSelectMaintenance({})
-        setInformationTech({})
-        setBioMedical({})
-    }, [setOpen, setEmpid, setActiveButton, setRemarks, setSelectMaintenance, setInformationTech, setBioMedical, setOverallCondition, getbedremarkRefetch, getallBlokedbedRefetch, getallremarkrefetch]);
+    }, [setOpen, setEmpid, getallBlokedbedRefetch, getallremarkrefetch, setTotalDetail, isinitalchecked, checkcomplaint]);
 
+    const handleInitialCheckList = useCallback(async () => {
 
-    //POST DATA FOR THE API AFTER CALCULATING THE VALUES DYNAMICALLY
-    const postdata = useMemo(() => ({
-        fb_bed_slno: bedslno,
-        fb_bd_code: Number(bedcode),
-        fb_bdc_no: bedno,
-        fb_ns_code: nscode,
-        data: data,
-        fb_overall_condition: ovarallconditon,
-        fb_overall_remarks: overallremarks,
-        fb_it_status: selectstatus ? 1 : selectinformation === TotalCountIT ? 1 : department === ItdepId ? 1 : 0,
-        fb_maintenance_status: selectstatus ? 1 : selectmaintenance === TotalCountMT ? 1 : department === MtdepId ? 1 : 0,
-        fb_biomedical_status: selectstatus ? 1 : selectbio === TotalCountBM ? 1 : department === BmdepId ? 1 : 0,
-        fb_maintenace_emp_assign: department === MtdepId && empid ? empid : bedremarks?.length > 0 && bedremarks?.[0]?.fb_maintenace_emp_assign ? JSON.parse(bedremarks?.[0]?.fb_maintenace_emp_assign) : null,
-        fb_it_emp_assign: department === ItdepId && empid ? empid : bedremarks?.length > 0 && bedremarks?.[0]?.fb_it_emp_assign ? JSON.parse(bedremarks?.[0]?.fb_it_emp_assign) : null,
-        fb_biomedical_emp_assign: department === BmdepId && empid ? empid : bedremarks?.length > 0 && bedremarks?.[0]?.fb_it_remark ? JSON.parse(bedremarks?.[0]?.fb_biomedical_emp_assign) : null,
-        fb_bed_reason: !selectstatus && activeButton ? (activeButton === "Renovation" ? 1 : 2) : null,
-        fb_it_remark: selectstatus ? "Verification Completed" : department === ItdepId && remarks ? remarks : bedremarks?.length > 0 && bedremarks?.[0]?.fb_it_remark ? bedremarks?.[0]?.fb_it_remark : null,
-        fb_biomedical_remarks: selectstatus ? "Verification Completed" : department === BmdepId && remarks ? remarks : bedremarks?.length > 0 && bedremarks?.[0]?.fb_biomedical_remarks ? bedremarks?.[0]?.fb_biomedical_remarks : null,
-        fb_maintenace_remark: selectstatus ? "Verification Completed" : department === MtdepId && remarks ? remarks : bedremarks?.length > 0 && bedremarks?.[0]?.fb_maintenace_remark ? bedremarks?.[0]?.fb_maintenace_remark : null,
-        fb_bed_status: selectstatus ? 0 : 1,
-        create_user: employeeID()
-    }), [overallremarks,TotalCountIT, TotalCountMT, nscode, TotalCountBM, bedslno, bedcode, bedno, data, ovarallconditon, department, empid, activeButton, remarks, BmdepId, MtdepId, ItdepId, selectstatus, bedremarks])
+        if (postAssetData?.length === 0) return warningNofity("Please Select the Assets")
+        if (empid.length === 0) return warningNofity("Please select the Employee");
+        const postdata = {
+            fb_bed_slno: data?.fb_bed_slno,
+            fb_bd_code: data?.fb_bd_code,
+            fb_bdc_no: data?.fb_bdc_no,
+            fb_ns_code: data?.fb_ns_code,
+            fb_bed_status: 0,
+            fb_initail_checked: 'Y',
+            fb_initial_emp_assign: empid,
+            data: postAssetData,
+            create_user: employeeID()
+        };
+
+        try {
+            const response = await axiosApi.post('/feedback/insertbedremarks', postdata);
+            const { success } = response.data;
+            if (success !== 2) return warningNofity("Error in Inserting Data")
+            succesNofity("Initial Verifiction completed")
+            setIsInitialChecked(true)
+            getbedremarkRefetch()
+        } catch (error) {
+            warningNofity("Error in Inserting Data")
+        }
+
+    }, [empid, getbedremarkRefetch, data, postAssetData, setIsInitialChecked])
 
 
     //CHECKLIST INSERTION
     const HandleBedDetailRequest = useCallback(async () => {
-        if (!selectstatus && activeButton === null) return warningNofity("Please select the Bed Status");
+
+        const postdata = {
+            fb_bed_slno: data?.fb_bed_slno,
+            fb_bd_code: data?.fb_bd_code,
+            fb_bdc_no: data?.fb_bdc_no,
+            fb_ns_code: data?.fb_ns_code,
+            fb_bed_status: 0,
+            fb_bed_service_status: activeButton === "Renovation" ? 2 : activeButton === "OnHold" ? 1 : 0,
+            fb_bed_remark: remarks,
+            fb_overall_remarks: overallremarks,
+            fb_overall_condition: ovarallconditon,
+            fb_emp_assign: empid,
+            data: postAssetData,
+            create_user: employeeID()
+        };
+        if (activeButton === null) return warningNofity("Please select the Bed Status");
         if (ovarallconditon === null) return warningNofity("Please select the Overall Condition");
         if (ovarallconditon !== null && overallremarks === "") return warningNofity("Please Enter the Overall Remarks");
         if (activeButton !== null && remarks === "") return warningNofity("Please Enter the Remarks");
+        if (assetData?.length !== Object.entries(condition)?.length) return warningNofity("Please Check all Assets");
         if (empid.length === 0) return warningNofity("Please select the Employee");
+        if (checkcomplaint?.length > 0 && !isinitalchecked) return warningNofity("Please Complete the Intial CheckList")
         try {
             const response = await axiosApi.post('/feedback/insertbedremarks', postdata);
             const { success } = response.data;
             if (success !== 2) return warningNofity("Error in Inserting Data")
             succesNofity("Successfully Inserted Data")
-            HanldeModalClose()
+            getallremarkrefetch()
+            getallBlokedbedRefetch()
+            setOpen(false)
+            getbedremarkRefetch()
         } catch (error) {
             warningNofity("Error in Inserting Data")
         }
-    }, [postdata, selectstatus, activeButton, empid, remarks, HanldeModalClose, ovarallconditon]);
-
-
-    //GROUPING THE DATA BASED ON THE DEPARTMENT ID
-    const groupedData = useMemo(() => {
-        return bedremarks?.reduce((acc, item) => {
-            const depName = item.fb_dep_name;
-            const assetName = item.fb_asset_name;
-            const assetStatus = item.fb_asset_status;
-            if (!acc[depName]) {
-                acc[depName] = {};
-            }
-            acc[depName] = {
-                ...acc[depName],
-                [assetName]: assetStatus,
-            };
-            return acc;
-        }, {});
-    }, [bedremarks]);
-
-
-    // CUSTOME HOOK TO HANDLE THE DEPARTMENT DETAIL EXTRACTION
-    const useDepartmentData = (depid) => {
-        return useMemo(() => {
-            return Object.keys(groupedData?.[depid] || {}).reduce((acc, key) => {
-                acc[key] = groupedData[depid][key] === 1;
-                return acc;
-            }, {});
-        }, [groupedData?.[depid]]);
-    };
-
-    // DATAT FOR EACH DEPARTMENT
-    const selectMaintenanceData = useDepartmentData("17");
-    const infoTechData = useDepartmentData("1");
-    const biomedicalData = useDepartmentData("36");
-
-
-    //THE USEEFFECT ONLY WORK WHEN THE CHECKLIST IS OPEN  FOR THE UPDATION OF THE CHECKLIST
-    useEffect(() => {
-
-        setSelectMaintenance(prevState => ({
-            ...prevState,
-            ...selectMaintenanceData,
-        }));
-
-        setInformationTech(prevState => ({
-            ...prevState,
-            ...infoTechData,
-        }));
-
-        setBioMedical(prevState => ({
-            ...prevState,
-            ...biomedicalData,
-        }));
-        setActiveButton(
-            bedremarks && bedremarks.length > 0
-                ? department === MtdepId && bedremarks?.[0]?.fb_maintenance_status === 1
-                    ? bedremarks?.[0]?.fb_bed_reason === 1 ? "Renovation" : "OnHold"
-                    : department === ItdepId && bedremarks?.[0]?.fb_it_status === 1
-                        ? bedremarks?.[0]?.fb_bed_reason === 1 ? "Renovation" : "OnHold"
-                        : department === BmdepId
-                            ? bedremarks?.[0]?.fb_bed_reason === 1 ? "Renovation" : "OnHold"
-                            : null
-                : null
-        );
-
-        setOverallRemarks(
-            bedremarks && bedremarks.length > 0 && bedremarks?.[0]?.fb_overall_remarks ? bedremarks?.[0]?.fb_overall_remarks : ""
-        );
-
-        setRemarks(
-            bedremarks && bedremarks.length > 0
-                ? department === MtdepId
-                    ? bedremarks?.[0]?.fb_maintenace_remark ?? ""
-                    : department === ItdepId
-                        ? bedremarks?.[0]?.fb_it_remark ?? ""
-                        : department === BmdepId && bedremarks?.[0]?.fb_biomedical_status === 1
-                            ? bedremarks?.[0]?.fb_biomedical_remarks
-                            : ""
-                : "it not maintenance"
-        );
-        setOverallCondition(bedremarks && bedremarks.length > 0 ? department === MtdepId && bedremarks?.[0]?.fb_maintenance_status === 1
-            ? bedremarks?.[0]?.fb_overall_condition ?? null
-            : department === ItdepId && bedremarks?.[0]?.fb_it_status === 1
-                ? bedremarks?.[0]?.fb_overall_condition ?? null
-                : department === BmdepId && bedremarks?.[0]?.fb_biomedical_status === 1
-                    ? bedremarks?.[0]?.fb_overall_condition
-                    : null
-            : null)
-    }, [selectMaintenanceData, infoTechData, biomedicalData, open]);
+    }, [activeButton, empid, remarks, ovarallconditon, getallremarkrefetch, getallBlokedbedRefetch, isinitalchecked, checkcomplaint, assetData, condition, overallremarks, data, postAssetData, setOpen, getbedremarkRefetch]);
 
 
 
@@ -291,80 +243,16 @@ const BedListModal = ({ open,
                     scrollbarWidth: 'none',
                 }}>
                     <ModalClose onClick={HanldeModalClose} />
-                    <Box sx={{
-                        p: 1,
-                        backgroundColor: "rgba(var(--bg-card))",
-                        borderRadius: 5,
-                        minHeight: 200,
-                    }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}
-                            className="border-b-[0.2rem] border-iconprimary p-0 cursor-pointer" >
-                            {icon}
-                            <Typography
-                                level='body-sm'
-                                fontWeight={'md'}
-                                sx={{
-                                    fontFamily: 'var(--font-varient)',
-                                    color: 'rgba(var(--font-primary-white))',
-                                    fontSize: 18,
-                                    fontWeight: 700,
-                                    mt: 1
-                                }}>
-                                CHECK LIST
-                            </Typography>
-                        </Box>
-
-                        <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
-                            <BedListOtherDep
-                                current={MtdepId}
-                                dep={department}
-                                status={bedremarks && bedremarks.length > 0 ? bedremarks[0].fb_maintenance_status : null}
-                                name={"MAINTENANCE"}
-                                selectedItems={selectmaintentance}
-                                setSelectedItems={setSelectMaintenance} />
-                        </Suspense>
-
-                        <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
-                            <BedListOtherDep
-                                current={ItdepId}
-                                dep={department}
-                                status={bedremarks && bedremarks.length > 0 ? bedremarks[0].fb_it_status : null}
-                                name={"INFORMATION TECHNOLOGY"}
-                                selectedItems={setinformationtech}
-                                setSelectedItems={setInformationTech} />
-                        </Suspense>
-
-                        <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
-                            <BedListOtherDep
-                                current={BmdepId}
-                                dep={department}
-                                status={bedremarks && bedremarks.length > 0 ? bedremarks[0].fb_biomedical_status : null}
-                                name={"BIOMEDICAL"}
-                                selectedItems={setbiomedical}
-                                setSelectedItems={setBioMedical} />
-                        </Suspense>
-                        <Box sx={{
+                    {
+                        combinedata && combinedata?.length > 0 ? <Box sx={{
                             p: 1,
                             backgroundColor: "rgba(var(--bg-card))",
                             borderRadius: 5,
-                            mt: 1
+                            minHeight: 200,
                         }}>
-                            <Box sx={{
-                                border: 0,
-                                borderBottom: 1.5,
-                                borderColor: "rgba(var(--tab-border-color))",
-                                borderBottomColor: 'divider',
-                                borderWidth: 2,
-                                display: 'flex',
-                                alignItems: 'center',
-                                width: '100%',
-                                pb: 0.4
-                            }}>
-                                <VerifiedUserTwoToneIcon sx={{
-                                    color: 'rgba(var(--icon-primary))',
-                                    fontSize: 26,
-                                    fontWeight: 700
-                                }} />
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}
+                                className="border-b-[0.2rem] border-iconprimary p-0 cursor-pointer" >
+                                {icon}
                                 <Typography
                                     level='body-sm'
                                     fontWeight={'md'}
@@ -372,104 +260,224 @@ const BedListModal = ({ open,
                                         fontFamily: 'var(--font-varient)',
                                         color: 'rgba(var(--font-primary-white))',
                                         fontSize: 18,
-                                        fontWeight: 700
-                                    }}>OVERALL CONDITIONS</Typography>
+                                        fontWeight: 700,
+                                        mt: 1
+                                    }}>
+                                    CHECK LIST
+                                </Typography>
                             </Box>
-                            <Box
-                                sx={{
-                                    px: 1,
-                                    width: "100%",
-                                    mt: 1,
-                                    display: 'flex',
-                                    justifyContent: 'space-between',
-                                    gap: 2
-                                }}
-                            >
+                            {
+                                combinedata?.map((item, index) => (
+                                    <Suspense key={index} fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
+                                        <BedListOtherDep
+                                            name={item?.complaint_dept_name}
+                                            assets={item?.assets}
+                                            condition={condition}
+                                            setCondtion={setCondtion}
+                                            checkcomplaint={checkcomplaint}
+                                            exists={beddetails}
+                                        />
+                                    </Suspense>
+                                ))
+                            }
+                            <Box sx={{ px: 1, mt: 0.2 }}>
+                                <Typography level='body-sm'
+                                    sx={{
+                                        fontWeight: 600,
+                                        fontFamily: "var(--font-varient)",
+                                        opacity: 0.8,
+                                        paddingLeft: "0.26rem",
+                                        lineHeight: "1.0rem",
+                                        fontSize: "0.81rem",
+                                        color: 'rgba(var(--font-primary-white))',
+                                        paddingY: "0.26rem",
+                                    }}>Select Employee</Typography>
+                                <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
+                                    <MultipleSelect
+                                        data={departmentemp ? departmentemp : []}
+                                        onchange={hanldmultiplechange}
+                                        value={empid}
+                                    />
+                                </Suspense>
+                            </Box>
+                            {
+                                filteredAssets && filteredAssets?.length > 0 &&
+                                <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
+                                    <AssetComplaint
+                                        name={"DAMAGED ASSETS"}
+                                        data={filteredAssets}
+                                        bedslno={data?.fb_bed_slno}
+                                        checkcomplaint={checkcomplaint}
+                                        fetchBedComplaints={fetchBedComplaints}
+                                        selectemp={empid}
+                                        department={department}
+                                        AssetInsert={postAssetData}
+                                        isinitalchecked={isinitalchecked}
+                                        Beddata={data}
+                                    />
+                                </Suspense>
+                            }
+                            <Box sx={{
+                                px: 1,
+                                width: '100%',
+                                height: 65,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                mt: 2
+                            }}>
                                 <Button
+                                    disabled={beddetails?.[0]?.fb_initail_checked === 'Y'}
+                                    onClick={handleInitialCheckList}
                                     variant="outlined"
                                     sx={{
-                                        width: '48%',
-                                        border: '1px solid rgba(var(--border-primary))',
-                                        color: getIconColor("POOR"),
-                                        bgcolor: ovarallconditon === 'POOR' ? '#fae0e4' : ''
-                                    }}
-                                    onClick={() => handleButtonClick("POOR")}>POOR</Button>
-                                <Button
-                                    variant="outlined"
-                                    sx={{
-                                        width: '48%',
-                                        border: '1px solid rgba(var(--border-primary))',
-                                        color: getIconColor("GOOD"),
-                                        bgcolor: ovarallconditon === 'GOOD' ? '#fae0e4' : ''
-                                    }}
-                                    onClick={() => handleButtonClick("GOOD")}>GOOD</Button>
-                                <Button
-                                    variant="outlined"
-                                    sx={{
-                                        width: '48%',
-                                        border: '1px solid rgba(var(--border-primary))',
-                                        color: getIconColor("EXCELLENT"),
-                                        bgcolor: ovarallconditon === 'EXCELLENT' ? '#fae0e4' : '',
-                                    }}
-                                    onClick={() => handleButtonClick("EXCELLENT")}>EXCELLENT</Button>
+                                        fontWeight: 900,
+                                        height: 60,
+                                        width: 250,
+                                        border: '1px solid rgb(216, 75, 154, 1)',
+                                        color: 'rgb(216, 75, 154, 1)',
+                                        bgcolor: '#fff0f3',
+                                        borderRadius: 10,
+                                        fontSize: 15,
+                                        '&:hover': {
+                                            boxShadow: 'none',
+                                            color: 'rgb(216, 75, 154, 1)',
+                                        },
+                                    }}>
+                                    {
+                                        beddetails && beddetails?.length > 0 && beddetails?.[0]?.fb_initail_checked === 'Y' ? "Initial CheckList Completed" : " Complete Initial CheckList "
+                                    }
+
+
+                                </Button>
                             </Box>
 
                             {
-                                ovarallconditon !== null &&
-                                <Box sx={{
-                                    px: 1,
-                                    mt: 1
-                                }}>
-                                    <textarea
-                                        onChange={(e) => setOverallRemarks(e.target.value)}
-                                        value={overallremarks}
-                                        placeholder={`Overall Remarks`}
-                                        style={{
-                                            backgroundColor: "rgba(var(--bg-card))",
-                                            width: '100%',
-                                            minHeight: '70px',
-                                            fontFamily: "var(--font-varient)",
-                                            color: 'rgba(var(--font-primary-white))',
-                                            fontSize: "14px",
-                                            borderWidth: 1,
-                                            borderRadius: 5,
-                                            borderColor: 'rgba(var(--border-primary))',
-                                            padding: '4px',
-                                            outline: 'none'
-                                        }}
-                                        onFocus={(e) => {
-                                            e.target.style.borderColor = 'rgba(var(--border-primary))';
-                                            e.target.style.outline = 'none';
-                                        }}
-                                        onBlur={(e) => {
-                                            e.target.style.borderColor = 'rgba(var(--border-primary))';
-                                        }}
+                                checkcomplaint && checkcomplaint?.length > 0 &&
+                                <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
+                                    <RectifyCard
+                                        name={"FINAL CHECKLIST"}
+                                        data={filteredAssets}
+                                        bedslno={data?.fb_bed_slno}
+                                        checkcomplaint={checkcomplaint}
+                                        fetchBedComplaints={fetchBedComplaints}
+                                        selectemp={empid}
                                     />
-                                </Box>
+                                </Suspense>
                             }
-                        </Box>
-                        <Box sx={{ px: 1, mt: 0.2 }}>
-                            <Typography level='body-sm'
-                                sx={{
-                                    fontWeight: 600,
-                                    fontFamily: "var(--font-varient)",
-                                    opacity: 0.8,
-                                    paddingLeft: "0.26rem",
-                                    lineHeight: "1.0rem",
-                                    fontSize: "0.81rem",
-                                    color: 'rgba(var(--font-primary-white))',
-                                    paddingY: "0.26rem",
-                                }}>Select Employee</Typography>
-                            <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
-                                <MultipleSelect
-                                    data={departmentemp ? departmentemp : []}
-                                    onchange={hanldmultiplechange}
-                                    value={empid}
-                                />
-                            </Suspense>
-                        </Box>
-                        {
-                            (selectbio + selectinformation + selectmaintenance) !== (TotalCountBM + TotalCountIT + TotalCountMT) &&
+                            <Box sx={{
+                                p: 1,
+                                backgroundColor: "rgba(var(--bg-card))",
+                                borderRadius: 5,
+                                mt: 1
+                            }}>
+                                <Box sx={{
+                                    border: 0,
+                                    borderBottom: 1.5,
+                                    borderColor: "rgba(var(--tab-border-color))",
+                                    borderBottomColor: 'divider',
+                                    borderWidth: 2,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    width: '100%',
+                                    pb: 0.4
+                                }}>
+                                    <VerifiedUserTwoToneIcon sx={{
+                                        color: 'rgba(var(--icon-primary))',
+                                        fontSize: 26,
+                                        fontWeight: 700
+                                    }} />
+                                    <Typography
+                                        level='body-sm'
+                                        fontWeight={'md'}
+                                        sx={{
+                                            fontFamily: 'var(--font-varient)',
+                                            color: 'rgba(var(--font-primary-white))',
+                                            fontSize: 18,
+                                            fontWeight: 700
+                                        }}>
+                                        OVERALL CONDITIONS
+                                    </Typography>
+                                </Box>
+                                <Box
+                                    sx={{
+                                        px: 1,
+                                        width: "100%",
+                                        mt: 1,
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        gap: 2
+                                    }}
+                                >
+                                    <Button
+                                        variant="outlined"
+                                        sx={{
+                                            width: '48%',
+                                            border: '1px solid rgba(var(--border-primary))',
+                                            color: getIconColor("1"),
+                                            bgcolor: ovarallconditon === '1' ? '#fae0e4' : ''
+                                        }}
+                                        onClick={() => handleButtonClick("1")}>POOR</Button>
+                                    <Button
+                                        variant="outlined"
+                                        sx={{
+                                            width: '48%',
+                                            border: '1px solid rgba(var(--border-primary))',
+                                            color: getIconColor("2"),
+                                            bgcolor: ovarallconditon === '2' ? '#fae0e4' : ''
+                                        }}
+                                        onClick={() => handleButtonClick("2")}>GOOD</Button>
+                                    <Button
+                                        disabled={filteredAssets && filteredAssets?.length > 0}
+                                        variant="outlined"
+                                        sx={{
+                                            width: '48%',
+                                            border: '1px solid rgba(var(--border-primary))',
+                                            color: getIconColor("3"),
+                                            bgcolor: ovarallconditon === '3' ? '#fae0e4' : '',
+                                        }}
+                                        onClick={() => handleButtonClick("3")}>EXCELLENT</Button>
+                                </Box>
+
+                                {
+                                    ovarallconditon !== null &&
+                                    <Box sx={{
+                                        px: 1,
+                                        mt: 1
+                                    }}>
+                                        <textarea
+                                            onChange={(e) =>
+                                                setTotalDetail((prev) => ({
+                                                    ...prev,
+                                                    overallremarks: e.target.value
+                                                }))
+                                            }
+                                            value={overallremarks}
+                                            placeholder={`Overall Remarks`}
+                                            style={{
+                                                backgroundColor: "rgba(var(--bg-card))",
+                                                width: '100%',
+                                                minHeight: '70px',
+                                                fontFamily: "var(--font-varient)",
+                                                color: 'rgba(var(--font-primary-white))',
+                                                fontSize: "14px",
+                                                borderWidth: 1,
+                                                borderRadius: 5,
+                                                borderColor: 'rgba(var(--border-primary))',
+                                                padding: '4px',
+                                                outline: 'none'
+                                            }}
+                                            onFocus={(e) => {
+                                                e.target.style.borderColor = 'rgba(var(--border-primary))';
+                                                e.target.style.outline = 'none';
+                                            }}
+                                            onBlur={(e) => {
+                                                e.target.style.borderColor = 'rgba(var(--border-primary))';
+                                            }}
+                                        />
+                                    </Box>
+                                }
+                            </Box>
                             <>
                                 <Typography level='body-sm'
                                     sx={{
@@ -486,43 +494,62 @@ const BedListModal = ({ open,
                                     }}>Select Status</Typography>
                                 <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
                                     <MaintenanceRemarkButton
-                                        setRemarks={setRemarks}
+                                        setTotalDetail={setTotalDetail}
                                         remarks={remarks}
                                         activeButton={activeButton}
-                                        setActiveButton={setActiveButton}
                                     />
                                 </Suspense>
                             </>
-                        }
-                        <Box sx={{
-                            px: 1,
-                            width: '100%',
-                            height: 60,
-                            my: 2,
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}>
-                            <Button
-                                onClick={HandleBedDetailRequest}
-                                // disabled={!remarks}
-                                variant="outlined"
-                                sx={{
-                                    fontSize: 16,
-                                    height: '100%',
-                                    border: '1px solid rgb(216, 75, 154, 1)',
-                                    color: 'rgb(216, 75, 154, 1)',
-                                    bgcolor: '#fff0f3',
-                                    borderRadius: 20,
-                                    '&:hover': {
-                                        boxShadow: 'none',
+                            <Box sx={{
+                                px: 1,
+                                width: '100%',
+                                height: 80,
+                                my: 2,
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}>
+                                <Button
+                                    disabled={!isinitalchecked}
+                                    onClick={HandleBedDetailRequest}
+                                    variant="outlined"
+                                    sx={{
+                                        fontSize: 16,
+                                        height: 60,
+                                        border: '1px solid rgb(216, 75, 154, 1)',
                                         color: 'rgb(216, 75, 154, 1)',
-                                    },
-                                }}>
-                                Checklist Verification Completed
-                            </Button>
-                        </Box>
-                    </Box>
+                                        bgcolor: '#fff0f3',
+                                        borderRadius: 20,
+                                        '&:hover': {
+                                            boxShadow: 'none',
+                                            color: 'rgb(216, 75, 154, 1)',
+                                        },
+                                    }}>
+                                    Checklist Verification Completed
+                                </Button>
+                            </Box>
+                        </Box> :
+                            <Box sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                height: 250,
+                                flexDirection: 'column'
+                            }}>
+                                <ReceiptLongIcon sx={{
+                                    color: 'rgba(var(--icon-primary))',
+                                    fontSize: 30,
+                                    fontWeight: 700
+                                }} />
+                                <Typography sx={{
+                                    fontFamily: 'var(--font-varient)',
+                                    color: 'rgba(var(--font-primary-white))',
+                                    fontSize: 18,
+                                    fontWeight: 700
+                                }}>CheckList is Empty</Typography>
+                            </Box>
+                    }
+
                 </ModalDialog>
             </Modal>
         </Box>

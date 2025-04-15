@@ -8,12 +8,12 @@ const FeedbackButton = ({ average, handlesubmit }) => {
 
     const findMostFrequent = useCallback((data) => {
         const feedbackValues = Object.values(data);
-        if (feedbackValues.length === 0) return null;
-        const frequent = feedbackValues.reduce((acc, feedback) => {
+        if (feedbackValues?.length === 0) return null;
+        const frequent = feedbackValues?.reduce((acc, feedback) => {
             acc[feedback] = (acc[feedback] || 0) + 1;
             return acc;
         }, {});
-        return Object.keys(frequent).reduce((a, b) => frequent[a] > frequent[b] ? a : b);
+        return Object.keys(frequent)?.reduce((a, b) => frequent[a] > frequent[b] ? a : b);
     }, []);
 
     const mostFrequentFeedback = findMostFrequent(average);

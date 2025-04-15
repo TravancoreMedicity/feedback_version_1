@@ -1,20 +1,16 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef } from 'react';
 import { memo } from 'react';
 import Menu from '@mui/joy/Menu';
 import MenuItem from '@mui/joy/MenuItem';
-import { Box, Divider, Typography } from '@mui/joy';
-import { useNavigate } from 'react-router-dom';
+import { Box, Typography } from '@mui/joy';
 import { BrightStar } from 'iconoir-react';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import Chip from '@mui/material/Chip';
 import { timeFilters } from '../../Constant/Data';
 
-const DurationModel = ({ setOpen, open, setCurrentFeed, currentfeed ,setFetchDate}) => {
+const DurationModel = ({ setOpen, open, setCurrentFeed, currentfeed, setFetchDate }) => {
 
     const buttonRef = useRef(null); // Reference to the custom button
-    const handleLogout = () => {
-        console.log("Clicked");
-    };
 
     return (
         <>
@@ -36,8 +32,7 @@ const DurationModel = ({ setOpen, open, setCurrentFeed, currentfeed ,setFetchDat
                     color: 'rgba(var(--font-primary-white))',
                     borderRadius: 15,
                     px: 2
-                }}
-            >
+                }}>
                 <BrightStar style={{ color: 'rgba(var(--icon-primary))', fontSize: 13 }} />
                 <Typography sx={{
                     ml: 1,
@@ -48,7 +43,6 @@ const DurationModel = ({ setOpen, open, setCurrentFeed, currentfeed ,setFetchDat
                 }}>{currentfeed}</Typography>
             </Box>
 
-            {/* Dropdown Menu */}
             <Menu
                 open={open}
                 anchorEl={buttonRef.current}
@@ -77,13 +71,12 @@ const DurationModel = ({ setOpen, open, setCurrentFeed, currentfeed ,setFetchDat
                         {
                             timeFilters?.map((item, index) => {
                                 return (
-
                                     <Chip
                                         key={index}
                                         onClick={() => {
-                                            setCurrentFeed(item.label)
+                                            setCurrentFeed(item?.label)
                                             setOpen(false)
-                                            setFetchDate(item.value)
+                                            setFetchDate(item?.value)
                                         }}
                                         sx={{
                                             m: 1,
@@ -96,19 +89,13 @@ const DurationModel = ({ setOpen, open, setCurrentFeed, currentfeed ,setFetchDat
                                             fontSize: 11
                                         }}
                                         icon={<AccessTimeIcon style={{ color: 'rgba(var(--icon-primary))', fontSize: 15 }} />}
-                                        label={item.label}
+                                        label={item?.label}
                                     />
-
-
                                 )
                             })
                         }
                     </Box>
                 </MenuItem>
-                {/* <Divider sx={{ mx: 1, backgroundColor: 'rgba(213,82,155,0.5)' }} /> */}
-
-                {/* <Divider sx={{ mx: 1, backgroundColor: 'rgba(213,82,155,0.5)' }} /> */}
-
             </Menu>
         </>
     );

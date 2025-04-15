@@ -4,7 +4,7 @@ import { ViewStructureDown } from 'iconoir-react'
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
 
-// import BlockComponent from './BlockComponent'
+
 const BlockComponent = lazy(() => import('./BlockComponent'));
 
 const CollectionDetail = ({
@@ -26,12 +26,15 @@ const CollectionDetail = ({
                 NSC_DESC: item.NSC_DESC, // Add NSC_DESC from elidernursingstation
             })) || []
     );
+
+
+
     const groupedData = filteredData?.reduce((acc, item) => {
         return {
             ...acc,
             [item.rm_floor_alias]: {
-                ...(acc[item.rm_floor_alias] || {}),
-                [item.rm_floor_name]: [...(acc[item.rm_floor_alias]?.[item.rm_floor_name] || []), item]
+                ...(acc[item?.rm_floor_alias] || {}),
+                [item?.rm_floor_name]: [...(acc[item?.rm_floor_alias]?.[item?.rm_floor_name] || []), item]
             }
         };
     }, {});
@@ -48,7 +51,7 @@ const CollectionDetail = ({
                 cursor: 'pointer'
             }}>
             {groupedData &&
-                Object.entries(groupedData).map(([alias, floors]) => (
+                Object?.entries(groupedData)?.map(([alias, floors]) => (
                     <Box key={alias} sx={{
                         bgcolor: 'red',
                         mb: 2,
@@ -65,7 +68,6 @@ const CollectionDetail = ({
                                 fontSize: 28,
                                 fontWeight: 700,
                                 mt: 2
-                                // marginTop: 10
                             }} />
                             <Typography
                                 level='body-sm'
@@ -80,7 +82,7 @@ const CollectionDetail = ({
                                 {alias === "QMT/HB/HB" ? "HOSPITAL BLOCK" : 'SERVICE BLOCK'}
                             </Typography>
                         </Box>
-                        {Object.entries(floors).map(([floorName, rooms]) => (
+                        {Object?.entries(floors)?.map(([floorName, rooms]) => (
                             <Box
                                 key={floorName}
                                 className="flex flex-col rounded-xl p-1 w-full"
@@ -122,7 +124,7 @@ const CollectionDetail = ({
                                             mt: 1,
                                         }}>
                                         <Grid container >
-                                            {rooms.map((room, index) => (
+                                            {rooms?.map((room, index) => (
                                                 <Grid xs={5} sm={4} lg={3} xl={2} key={index}>
                                                     <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
                                                         <BlockComponent

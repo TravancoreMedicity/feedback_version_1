@@ -1,17 +1,20 @@
-import React, { memo, lazy, useState, useCallback, useEffect, useMemo } from 'react'
 import { useLocation, useParams } from 'react-router-dom';
-import { FeedbackDetailForDisplay } from '../../Function/CommonFunction';
-import { useQuery } from '@tanstack/react-query';
 import { Box, Typography } from '@mui/joy'
-import FeedbackButton from '../../Feedback/Commoncomponents/FeedbackButton';
-import AnswerComponentSelect from '../../Components/AnswerComponentSelect';
-import { employeeID, errorNofity, warningNofity } from '../../Constant/Constant';
-import TextComponent from '../../Feedback/Commoncomponents/TextComponent';
-import SuccessPage from '../../Components/SuccessPage';
 import { axiosApi } from '../../Axios/Axios';
+import { useQuery } from '@tanstack/react-query';
+import { errorNofity, warningNofity } from '../../Constant/Constant';
+import { FeedbackDetailForDisplay } from '../../Function/CommonFunction';
+import EmojiSkeleton from '../../Feedback/Commoncomponents/ChooseEmogjiSkeleton';
+import QuestionBoxSkeleton from '../../Feedback/Commoncomponents/QuestionBoxSkeleton';
+import React, { memo, lazy, useState, useCallback, useEffect, useMemo, Suspense } from 'react'
 
+
+const TextComponent = lazy(() => import('../../Feedback/Commoncomponents/TextComponent'))
+const SuccessPage = lazy(() => import('../../Components/SuccessPage'))
 const FeedBackLog = lazy(() => import('../../Feedback/FeedBackLog'))
 const QuestionBox = lazy(() => import('../../Feedback/QuestionBox'))
+const FeedbackButton = lazy(() => import('../../Feedback/Commoncomponents/FeedbackButton'))
+const AnswerComponentSelect = lazy(() => import('../../Components/AnswerComponentSelect'))
 
 
 const FeedbackForm = () => {
@@ -58,11 +61,10 @@ const FeedbackForm = () => {
         enabled: feedbackId !== 0
     });
 
-
     const IsComponentPresent = feedbackDtlDisplay &&
-        feedbackDtlDisplay?.filter(item => item.fb_answer_component !== null && item.fb_answer_component !== "");
+        feedbackDtlDisplay?.filter(item => item?.fb_answer_component !== null && item?.fb_answer_component !== "");
 
-    const ComponentName = IsComponentPresent?.map((item) => item.fb_answer_component);
+    const ComponentName = IsComponentPresent?.map((item) => item?.fb_answer_component);
 
     const hanldeuseranswers = useCallback((question, answer) => {
         setUserAnswer((prevValues) => {
@@ -95,18 +97,18 @@ const FeedbackForm = () => {
     // ***************************************************************************
     const combinedFeedbackData = feedbackDtlDisplay?.map(item => {
         // Get the main answer corresponding to the current feedback item (based on fddet_slno)
-        const answer = useranswer[item.fddet_slno];
+        const answer = useranswer[item?.fddet_slno];
 
         // Check if there's a suggestion for the same question (e.g., 78_suggest for 78)
-        const suggestion = useranswer[`${item.fddet_slno}_suggest`];
+        const suggestion = useranswer[`${item?.fddet_slno}_suggest`];
         // Check if there's mobile data for the same question (e.g., 78_mobile for 78)
-        const mobile = useranswer[`${item.fddet_slno}_mobile`];
+        const mobile = useranswer[`${item?.fddet_slno}_mobile`];
         // Return a new object combining the feedback details, answer, suggestion, and mobile
 
-        const Obj_fb_mast_qakey_slno = item.fb_mast_qakey_slno
-            ? item.fb_mast_qakey_slno.split(', ')
+        const Obj_fb_mast_qakey_slno = item?.fb_mast_qakey_slno
+            ? item?.fb_mast_qakey_slno?.split(', ')
                 .reduce((obj, pair) => {
-                    const [key, value] = pair.split(': ');
+                    const [key, value] = pair?.split(': ');
                     obj[key] = value;
                     return obj;
                 }, {})
@@ -114,10 +116,10 @@ const FeedbackForm = () => {
 
         // console.log(Obj_fb_mast_qakey_slno);
 
-        const Obj_fb_mast_qakey_mark = item.fb_mast_qakey_mark
-            ? item.fb_mast_qakey_mark.split(', ')
+        const Obj_fb_mast_qakey_mark = item?.fb_mast_qakey_mark
+            ? item?.fb_mast_qakey_mark?.split(', ')
                 .reduce((obj, pair) => {
-                    const [key, value] = pair.split(': ');
+                    const [key, value] = pair?.split(': ');
                     obj[key] = value;
                     return obj;
                 }, {})
@@ -129,10 +131,10 @@ const FeedbackForm = () => {
         const fbqa_mark = Obj_fb_mast_qakey_mark[fbqa_slno] || null;
 
         return {
-            fdmast_slno: item.fdmast_slno,
-            fb_category_slno: item.fb_category_slno,
-            fb_subcategory_slno: item.fb_subcategory_slno,
-            fddet_slno: item.fddet_slno,
+            fdmast_slno: item?.fdmast_slno,
+            fb_category_slno: item?.fb_category_slno,
+            fb_subcategory_slno: item?.fb_subcategory_slno,
+            fddet_slno: item?.fddet_slno,
             fbqa_slno: Number(fbqa_slno),
             answer: Number(fbqa_mark),
             suggestion: suggestion || null,
@@ -141,6 +143,8 @@ const FeedbackForm = () => {
         };
     });
 
+
+    //FInal postdata for Feedback Submission
     const FinalInsertData = useMemo(() => ({
         fdmast_slno: Number(feedbackId),
         fb_ip_num: inpatientNumber ? inpatientNumber : null,
@@ -162,7 +166,7 @@ const FeedbackForm = () => {
             warningNofity("Please Answer all Questions?")
             return
         }
-        if (ComponentName?.includes("MobileInputBox") && mobilenumber.length < 10) {
+        if (ComponentName?.includes("MobileInputBox") && mobilenumber?.length < 10) {
             setMobileValidation("Enter a valid Mobile Numbe")
             return
         }
@@ -187,7 +191,9 @@ const FeedbackForm = () => {
             {
                 issubmit ? (
                     <>
-                        <SuccessPage setIsSubmit={setIsSubmit} />
+                        <Suspense fallback={"Loading...!"}>
+                            <SuccessPage setIsSubmit={setIsSubmit} />
+                        </Suspense>
                     </>
                 ) : (
                     <Box sx={{
@@ -218,43 +224,47 @@ const FeedbackForm = () => {
                                     return (
                                         <React.Fragment key={index}>
                                             {
-                                                item.fb_question_type === "Normal" ? (
+                                                item?.fb_question_type === "Normal" ? (
                                                     <Box sx={{
                                                         width: "95%",
                                                         minHeight: 70,
                                                         mt: 3,
                                                     }}>
-                                                        <TextComponent
-                                                            english={item.fd_qa_eng}
-                                                            malayalam={item.fd_qa_malay}
-                                                        />
+                                                        <Suspense fallback={<QuestionBoxSkeleton />}>
+                                                            <TextComponent
+                                                                english={item?.fd_qa_eng}
+                                                                malayalam={item?.fd_qa_malay}
+                                                            />
+                                                        </Suspense>
                                                     </Box>
                                                 ) : (
                                                     <>
-                                                        <QuestionBox
-                                                            english={item.fd_qa_eng}
-                                                            malayalam={item.fd_qa_malay}
-                                                        />
+                                                        <Suspense fallback={<QuestionBoxSkeleton />}>
+                                                            <QuestionBox
+                                                                english={item?.fd_qa_eng}
+                                                                malayalam={item?.fd_qa_malay}
+                                                            />
+                                                        </Suspense>
                                                     </>
                                                 )
                                             }
-                                            <AnswerComponentSelect
-                                                type={item.fb_rateing_name}
-                                                answer={item.fb_mast_qakey_data}
-                                                questionid={item.fddet_slno}
-                                                hanldeuseranswers={hanldeuseranswers}
-                                                component={item.fb_answer_component}
-                                                setMobileValidation={setMobileValidation}
-                                                mobilevalidation={mobilevalidation}
-                                                setMobileNumber={setMobileNumber}
-                                                hanldecomponent={hanldecomponent}
-
-                                            />
+                                            <Suspense fallback={<EmojiSkeleton />}>
+                                                <AnswerComponentSelect
+                                                    type={item?.fb_rateing_name}
+                                                    answer={item?.fb_mast_qakey_data}
+                                                    questionid={item?.fddet_slno}
+                                                    hanldeuseranswers={hanldeuseranswers}
+                                                    component={item?.fb_answer_component}
+                                                    setMobileValidation={setMobileValidation}
+                                                    mobilevalidation={mobilevalidation}
+                                                    setMobileNumber={setMobileNumber}
+                                                    hanldecomponent={hanldecomponent}
+                                                />
+                                            </Suspense>
                                         </React.Fragment>
                                     )
                                 })
                             }
-
                         </Box>
                         <Box sx={{
                             width: { xs: "90%", sm: '85%' },
@@ -267,10 +277,12 @@ const FeedbackForm = () => {
                                 alignItems: 'center',
                                 justifyContent: 'center',
                             }}>
-                                <FeedbackButton
-                                    average={useranswer}
-                                    handlesubmit={handlesubmit}
-                                />
+                                <Suspense fallback={"Loading"}>
+                                    <FeedbackButton
+                                        average={useranswer}
+                                        handlesubmit={handlesubmit}
+                                    />
+                                </Suspense>
                             </Box>
                             <Typography sx={{
                                 textAlign: 'center',

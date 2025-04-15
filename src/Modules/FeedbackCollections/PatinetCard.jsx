@@ -8,14 +8,18 @@ const PatinetCard = ({ inpatientDetail }) => {
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, px: 1 }}>
             {[
-                { label: 'Patient Name', value: inpatientDetail?.fb_ptc_name || 'N/A', icon: <UserBadgeCheck fontSize={12} style={{ color: 'rgba(var(--font-primary-white))', cursor: 'pointer' }} /> },
-                { label: 'Patient Ip', value: `${inpatientDetail?.fb_ip_no} / ${inpatientDetail?.fb_pt_no}`, icon: <IpAddressTag fontSize={12} style={{ color: 'rgba(var(--font-primary-white))', cursor: 'pointer' }} /> },
+                { label: 'Patient Name', value: inpatientDetail?.fb_ptc_name || 'Not Available', icon: <UserBadgeCheck fontSize={12} style={{ color: 'rgba(var(--font-primary-white))', cursor: 'pointer' }} /> },
+                { label: 'Patient Ip', value: `${inpatientDetail?.fb_ip_no ?? "IP N/A"} / ${inpatientDetail?.fb_pt_no ?? 'PT N/A'}`, icon: <IpAddressTag fontSize={12} style={{ color: 'rgba(var(--font-primary-white))', cursor: 'pointer' }} /> },
                 { label: 'Mobile No', value: inpatientDetail?.fb_ptc_mobile || 'Not Available', icon: <Phone fontSize={12} style={{ color: 'rgba(var(--font-primary-white))', cursor: 'pointer' }} /> },
-                { label: 'Gender/Age', value: `${inpatientDetail?.fb_ptc_sex === 'F' ? 'F' : 'M'} / ${inpatientDetail?.fb_ptn_yearage} year`, icon: <Male fontSize={12} style={{ color: 'rgba(var(--font-primary-white))', cursor: 'pointer' }} /> },
+                {
+                    label: 'Gender/Age',
+                    value: `${inpatientDetail?.fb_ptc_sex === 'F' ? 'F' : 'M'} / ${inpatientDetail?.fb_ptn_yearage ?? 'Unknown'} year`,
+                    icon: <Male fontSize={12} style={{ color: 'rgba(var(--font-primary-white))', cursor: 'pointer' }} />
+                },
                 {
                     label: 'Admit Date', value: inpatientDetail?.fb_ipd_date
                         ? format(new Date(inpatientDetail.fb_ipd_date), "dd-MM-yyyy hh:mm a")
-                        : 'N/A', icon: <Calendar fontSize={12} style={{ color: 'rgba(var(--font-primary-white))', cursor: 'pointer' }} />
+                        : 'Not Available', icon: <Calendar fontSize={12} style={{ color: 'rgba(var(--font-primary-white))', cursor: 'pointer' }} />
                 },
                 {
                     label: 'Address',

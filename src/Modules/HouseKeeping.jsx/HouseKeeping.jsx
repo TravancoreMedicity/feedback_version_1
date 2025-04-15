@@ -7,14 +7,12 @@ import CleaningServicesTwoToneIcon from '@mui/icons-material/CleaningServicesTwo
 
 const HouseKeeping = () => {
 
-    const { data: housekeepingbeds } = useQuery({
+    const { data: housekeepingbeds = [] } = useQuery({
         queryKey: ["getallhousekeepingbed"],
         queryFn: () => getallHouseKeepingBed()
     });
 
-    console.log(housekeepingbeds, "housekeepingbeds");
-
-
+    
     return (
         <Box sx={{ minHeight: '100vh' }}>
             <Box

@@ -14,7 +14,7 @@ import { useQuery } from '@tanstack/react-query'
 import { getallFeedbackCategory } from '../../../Function/CommonFunction'
 import { IconButton, Tooltip } from "@mui/joy";
 import { EditPencil } from "iconoir-react";
-// import { getDocTypeMasterList } from '../api/docTypeMasterApi'
+
 const FeedbackCategoryMasterList = lazy(() => import('../../../Components/CustomTable'));
 
 const FeedBackCategoryMaster = () => {

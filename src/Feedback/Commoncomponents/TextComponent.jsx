@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/joy'
-import React from 'react'
+import React, { memo } from 'react'
 
 const TextComponent = ({ english, malayalam }) => {
     return (
@@ -26,4 +26,4 @@ const TextComponent = ({ english, malayalam }) => {
     )
 }
 
-export default TextComponent
+export default memo(TextComponent)

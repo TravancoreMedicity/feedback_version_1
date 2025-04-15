@@ -1,35 +1,35 @@
 // @ts-nocheck
 import React, { Suspense, lazy, useCallback, useState } from 'react'
 import { memo } from 'react'
-import DefaultPageLayout from '../../../Components/DefaultPageLayout'
-import CustomInputWithLabel from '../../../Components/CustomInputWithLabel'
-import { sanitizeInput, warningNofity, succesNofity, errorNofity, employeeID } from '../../../Constant/Constant'
-import { useNavigate } from 'react-router-dom'
-import CustomSelectWithLabel from '../../../Components/CustomSelectWithLabel'
-import SelectCmpDocumentMainType from '../../../Components/SelectCmpDocumentMainType'
-import MasterPageLayout from '../../../Components/MasterPageLayout'
-import { commonStatus } from '../../../Constant/Data'
-import CommonMenuList from '../../../Components/CommonMenuList'
-import {axiosApi} from '../../../Axios/Axios'
 import { Box } from '@mui/joy'
-import Table from '@mui/joy/Table'
-import CustomBackDrop from '../../../Components/CustomBackDrop'
-import CustomCheckBoxWithLabel from '../../../Components/CustomCheckBoxWithLabel'
-import CustomBackDropWithOutState from '../../../Components/CustomBackDropWithOutState'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { allfeedbacksubCategory, getallFeedbackCategory } from '../../../Function/CommonFunction'
-import SelectCmpCategoryMaster from '../../../Components/SelectCmpCategoryMaster'
-import { IconButton, Tooltip } from "@mui/joy";
+// import Table from '@mui/joy/Table'
 import { EditPencil } from "iconoir-react";
-// import { getDocTypeMasterList } from '../api/docTypeMasterApi'
+import { IconButton, Tooltip } from "@mui/joy";
+// import { useNavigate } from 'react-router-dom';
+import { axiosApi } from '../../../Axios/Axios';
+// import { commonStatus } from '../../../Constant/Data';
+import CommonMenuList from '../../../Components/CommonMenuList';
+// import CustomBackDrop from '../../../Components/CustomBackDrop';
+import { useQuery } from '@tanstack/react-query';
+import MasterPageLayout from '../../../Components/MasterPageLayout';
+import DefaultPageLayout from '../../../Components/DefaultPageLayout';
+import CustomInputWithLabel from '../../../Components/CustomInputWithLabel';
+// import CustomSelectWithLabel from '../../../Components/CustomSelectWithLabel';
+import CustomCheckBoxWithLabel from '../../../Components/CustomCheckBoxWithLabel';
+import SelectCmpCategoryMaster from '../../../Components/SelectCmpCategoryMaster';
+// import SelectCmpDocumentMainType from '../../../Components/SelectCmpDocumentMainType';
+import CustomBackDropWithOutState from '../../../Components/CustomBackDropWithOutState';
+import { allfeedbacksubCategory } from '../../../Function/CommonFunction';
+import { warningNofity, succesNofity, errorNofity, employeeID } from '../../../Constant/Constant';
+
 
 
 const FeedbackCategoryMasterList = lazy(() => import('../../../Components/CustomTable'));
 
 const FeedBackSubCategoryMaster = () => {
 
-    const navigation = useNavigate()
-    const queryClient = useQueryClient();
+
+    // const queryClient = useQueryClient();
     const [updateflag, setUpdateFlag] = useState(0)
     const [updationdetail, setUpdateDetial] = useState({})
     const [feedbacksubcategory, setFeedbackSubCategory] = useState({
@@ -56,9 +56,9 @@ const FeedBackSubCategoryMaster = () => {
             setUpdateFlag(1)
             setUpdateDetial(rowData)
             setFeedbackSubCategory({
-                categoryid: rowData.fb_category_slno,
-                subcategory: rowData.fb_subcategory_name,
-                status: rowData.fb_subcategory_status
+                categoryid: rowData?.fb_category_slno,
+                subcategory: rowData?.fb_subcategory_name,
+                status: rowData?.fb_subcategory_status
             })
         },
         []
@@ -76,7 +76,7 @@ const FeedBackSubCategoryMaster = () => {
         }
 
         const UpdateinsertingData = {
-            fb_subcategory_slno: updationdetail.fb_subcategory_slno,
+            fb_subcategory_slno: updationdetail?.fb_subcategory_slno,
             fb_subcategory_name: subcategory,
             fb_category_slno: categoryid,
             fb_subcategory_status: status,
@@ -86,8 +86,8 @@ const FeedBackSubCategoryMaster = () => {
             try {
                 const result = await axiosApi.post("/feedback/insertsubcategory", insertData);
                 const { success } = result.data;
-                 if (success === 3) return warningNofity("Feedback Already Occured!")
-                if (success != 2) return errorNofity("Error in inserting Data!")
+                if (success === 3) return warningNofity("Feedback Already Occured!")
+                if (success !== 2) return errorNofity("Error in inserting Data!")
                 allfeedbacksubCategoryrefetch()
                 succesNofity("Successfully Inserted Data..!")
                 setFeedbackSubCategory({ categoryid: 0, subcategory: "", status: false })
@@ -99,7 +99,7 @@ const FeedBackSubCategoryMaster = () => {
             try {
                 const result = await axiosApi.post("/feedback/updatesubcategory", UpdateinsertingData);
                 const { success } = result.data;
-                if (success != 2) return errorNofity("Error in inserting Data!")
+                if (success !== 2) return errorNofity("Error in inserting Data!")
                 allfeedbacksubCategoryrefetch()
                 succesNofity("Successfully Updated Data..!")
                 setUpdateFlag(0)
@@ -109,7 +109,7 @@ const FeedBackSubCategoryMaster = () => {
                 setFeedbackSubCategory({ categoryid: 0, subcategory: "", status: false })
             }
         }
-    }, [feedbacksubcategory])
+    }, [allfeedbacksubCategoryrefetch, categoryid, subcategory, status, updateflag, updationdetail])
 
     return (
         <DefaultPageLayout label="Feedback SubCategory Master" >

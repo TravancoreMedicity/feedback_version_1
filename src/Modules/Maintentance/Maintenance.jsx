@@ -1,13 +1,13 @@
 import React, { lazy, memo, Suspense, useMemo } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { getAllBlockedBed, getBedRemarkStatus } from '../../Function/CommonFunction'
 import { Box } from '@mui/joy'
+import { useQuery } from '@tanstack/react-query'
 import EngineeringTwoToneIcon from '@mui/icons-material/EngineeringTwoTone';
+import { getAllBlockedBed, getBedRemarkStatus } from '../../Function/CommonFunction'
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
-import ChecklistHeaders from '../../Components/ChecklistHeaders';
 
 
 const BedList = lazy(() => import('./BedList'));
+const ChecklistHeaders = lazy(() => import('../../Components/ChecklistHeaders'));
 
 const Maintenance = () => {
 
@@ -24,20 +24,18 @@ const Maintenance = () => {
 
     const filteredBlockedBeds = useMemo(() => {
         return getllBlockedBed?.filter((blockedBed) => {
-            const remarkStatus = getallremarkstatus?.find((remark) => remark.fb_bdc_no === blockedBed.fb_bdc_no);
-            return !(remarkStatus && remarkStatus.fb_bed_status === 0);
+            const remarkStatus = getallremarkstatus?.find((remark) => remark?.fb_bdc_no === blockedBed?.fb_bdc_no);
+            return !(remarkStatus && remarkStatus?.fb_bed_status === 1);
         });
     }, [getllBlockedBed, getallremarkstatus]);
 
 
     const filterbedwithremarks = useMemo(() => {
         return getallremarkstatus?.filter((blockedBed) => {
-            const remarkStatus = getllBlockedBed?.find((remark) => remark.fb_bdc_no === blockedBed.fb_bdc_no);
-            return remarkStatus && remarkStatus.fb_bed_status === 1;
+            const remarkStatus = getllBlockedBed?.find((remark) => remark?.fb_bdc_no === blockedBed?.fb_bdc_no);
+            return remarkStatus; //check this part later
         });
     }, [getllBlockedBed, getallremarkstatus]);
-
-
 
 
     return (
@@ -58,13 +56,15 @@ const Maintenance = () => {
                         borderColor: "rgba(var(--border-primary))",
                         borderRadius: 5
                     }}>
-                        <ChecklistHeaders
-                            icon={<EngineeringTwoToneIcon sx={{
-                                color: 'rgba(var(--font-primary-white))',
-                                fontSize: 28,
-                                fontWeight: 700,
-                                mt: 2
-                            }} />} name={'MAINTENACE'} />
+                        <Suspense fallback={<CustomBackDropWithOutState message={"loading"} />}>
+                            <ChecklistHeaders
+                                icon={<EngineeringTwoToneIcon sx={{
+                                    color: 'rgba(var(--font-primary-white))',
+                                    fontSize: 28,
+                                    fontWeight: 700,
+                                    mt: 2
+                                }} />} name={'MAINTENACE'} />
+                        </Suspense>
                         <Box
                             sx={{
                                 gap: 3,
@@ -74,13 +74,17 @@ const Maintenance = () => {
                             }}>
                             {
                                 filteredBlockedBeds?.map((item, index) => {
-                                    const matchdata = filterbedwithremarks?.find((remark) => remark.fb_bdc_no === item.fb_bdc_no)
+                                    const matchdata = filterbedwithremarks?.find((remark) => remark?.fb_bdc_no === item?.fb_bdc_no)
                                     return <Box key={index}>
                                         <Suspense fallback={<CustomBackDropWithOutState message={"loading"} />}>
                                             <BedList
                                                 getallremarkrefetch={getallremarkrefetch}
                                                 getallBlokedbedRefetch={getallBlokedbedRefetch}
-                                                matchdata={matchdata} data={item} name={"MAINTENACE"} icon={<EngineeringTwoToneIcon className='hoverClass' sx={{ width: 30, height: 30, color: 'rgba(var(--icon-primary))', }} />} />
+                                                matchdata={matchdata} data={item}
+                                                name={"MAINTENACE"}
+                                                icon={<EngineeringTwoToneIcon className='hoverClass'
+                                                    sx={{ width: 30, height: 30, color: 'rgba(var(--icon-primary))' }} />}
+                                            />
                                         </Suspense>
                                     </Box>
                                 })}

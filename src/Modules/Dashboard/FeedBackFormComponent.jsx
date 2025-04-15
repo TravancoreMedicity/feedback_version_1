@@ -66,9 +66,9 @@ const FeedBackFormComponent = ({ name, totalMark, len, progress, totalForm, form
                         mr: 1,
                         fontFamily: 'var(--font-varient)',
                         color: 'rgba(var(--font-primary-white))'
-                    }}>{rating && !isNaN(rating) ? rating.toFixed(1) : 0}</Typography>
+                    }}>{rating && !isNaN(rating) ? rating?.toFixed(1) : 0}</Typography>
                     <Box sx={{ display: 'flex', alignItems: 'start', justifyContent: "start" }}>
-                        <StarRendering totalRating={rating && !isNaN(rating) ? rating.toFixed(1) : 0} />
+                        <StarRendering totalRating={rating && !isNaN(rating) ? rating?.toFixed(1) : 0} />
                     </Box>
                     <Typography sx={{
                         ml: 0.3,
@@ -120,7 +120,6 @@ const FeedBackFormComponent = ({ name, totalMark, len, progress, totalForm, form
                             alignItems: 'center',
                             flexDirection: "column",
                             justifyContent: "center",
-
                         }}>
                             <Box sx={{
                                 width: '100%',
@@ -134,9 +133,9 @@ const FeedBackFormComponent = ({ name, totalMark, len, progress, totalForm, form
                                     mr: 1,
                                     fontFamily: 'var(--font-varient)',
                                     color: 'rgba(var(--font-primary-white))'
-                                }}>{FeedBackRating && !isNaN(FeedBackRating) ? FeedBackRating.toFixed(1) : 0}</Typography>
+                                }}>{FeedBackRating && !isNaN(FeedBackRating) ? FeedBackRating?.toFixed(1) : 0}</Typography>
                                 <Box sx={{ display: 'flex', alignItems: 'start', justifyContent: "start" }}>
-                                    <StarRendering totalRating={FeedBackRating.toFixed(1)} />
+                                    <StarRendering totalRating={FeedBackRating?.toFixed(1)} />
                                 </Box>
                             </Box>
                         </Box>
@@ -161,20 +160,17 @@ const FeedBackFormComponent = ({ name, totalMark, len, progress, totalForm, form
                                                 <Typography sx={{
                                                     fontFamily: 'var(--font-varient)',
                                                     color: 'rgba(var(--font-primary-white))'
-                                                }} fontSize={12}>{item.fb_category_name}</Typography>
+                                                }} fontSize={12}>{item?.fb_category_name}</Typography>
                                             </Box>
                                             <Box sx={{ width: '60%' }}>
-                                                <FeedbackCategoryProgress count={item.totalFeed} mark={item.totalMark} />
+                                                <FeedbackCategoryProgress count={item?.totalFeed} mark={item?.totalMark} />
                                             </Box>
                                         </Box>
                                     )
                                 })
                             }
                         </Box>
-
-
                     </Box>
-
                 </Box>
             </Popover>
         </>

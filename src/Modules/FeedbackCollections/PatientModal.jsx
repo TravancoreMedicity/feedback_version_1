@@ -24,14 +24,14 @@ const PatientModal = ({
   prevPatient,
   ispresent,
   multiple,
-  setRoomStatus
+  setRoomStatus,
+  entering
 }) => {
 
   const handleModalClose = useCallback(() => {
     setOpen(false)
     setRoomStatus({})
   }, [setOpen, setRoomStatus])
-
 
   return (
     <Box>
@@ -55,7 +55,7 @@ const PatientModal = ({
           borderColor: "rgba(var(--border-primary))"
         }}>
           {loading ? <CustomBackDropWithOutState message={"Loading..."} /> : null}
-          {Array.isArray(inpatientDetail) && inpatientDetail.length > 0 ?
+          {entering === 1 ?
             (
               <Box
                 sx={{
@@ -68,7 +68,7 @@ const PatientModal = ({
                   minHeight: 250,
                 }}>
                 <Box sx={{ backgroundColor: "rgba(var(--bg-card))" }}>
-                  <PatientCardHeader roomnumber={roomnumber} />
+                  <PatientCardHeader roomnumber={roomnumber} name={"Patient Detail"} />
                   <Box sx={{ display: 'flex' }}>
                     <Box sx={{ width: '60%', display: 'flex', flexDirection: 'column', gap: 1, px: 2 }}>
                       <Suspense fallback={<CustomBackDropWithOutState message={'loading...!'} />}>
@@ -81,7 +81,7 @@ const PatientModal = ({
                         {
                           allfeedbackNames
                             ?.filter(item => item.feedback_name === "Common" || item.feedback_name === "ip")
-                            .map((item, index) => {
+                            ?.map((item, index) => {
                               return (
                                 <Suspense key={index} fallback={<CustomBackDropWithOutState message={'loading...!'} />}>
                                   <FeedbackItem
@@ -120,7 +120,7 @@ const PatientModal = ({
                   minHeight: 250,
                 }}>
                 <Box sx={{ backgroundColor: "rgba(var(--bg-card))" }}>
-                  <PatientCardHeader roomnumber={roomnumber} />
+                  <PatientCardHeader roomnumber={roomnumber} name={"Bed Detail"} />
                   <Box sx={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 1, px: 2 }}>
                     <Suspense fallback={<CustomBackDropWithOutState message={'loading...!'} />}>
                       <PatientRemarks inpatientDetail={inpatientDetail} />

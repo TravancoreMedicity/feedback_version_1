@@ -13,7 +13,7 @@ import SelectFeedbackMaster from '../../../Components/SelectFeedbackMaster';
 import { employeeID, errorNofity, succesNofity, validateEnglishInput, warningNofity } from '../../../Constant/Constant';
 import { axiosApi } from '../../../Axios/Axios';
 import { IconButton, Tooltip } from "@mui/joy";
-import { EditPencil, Star, ThumbsUp, ThumbsDown, CheckCircle } from "iconoir-react";
+import { EditPencil, Star, ThumbsUp, ThumbsDown } from "iconoir-react";
 import CustomBackDropWithOutState from '../../../Components/CustomBackDropWithOutState';
 import SelectFeedbackRating from '../../../Components/SelectFeedbackRating';
 import CustomInputWithLabel from '../../../Components/CustomInputWithLabel';
@@ -64,12 +64,12 @@ const FeedBackDetail = () => {
 
     const { fb_mast_qakey_data } = updationdetail;
     const resultObject = fb_mast_qakey_data !== null && fb_mast_qakey_data !== undefined ? Object.fromEntries(
-        fb_mast_qakey_data?.split(', ').map(item => item.split(': '))
+        fb_mast_qakey_data?.split(', ')?.map(item => item?.split(': '))
     ) : {}
 
     const filteredData = Object.keys(checkboxanswer)
-        .filter(key => !resultObject.hasOwnProperty(key))
-        .reduce((obj, key) => {
+        ?.filter(key => !resultObject.hasOwnProperty(key))
+        ?.reduce((obj, key) => {
             obj[key] = checkboxanswer[key];
             return obj;
         }, {});
@@ -110,8 +110,6 @@ const FeedBackDetail = () => {
         }));
     }, []);
 
-
-
     const handleCheckBoxAnswer = useCallback((key, value) => {
         setCheckBoxAnswer((prev) => {
             const updatedAnswers = { ...prev }
@@ -150,12 +148,12 @@ const FeedBackDetail = () => {
     } = feedbackdetail;
 
     const Component = component?.filter(item => item.value === componentid)
-    const ratingType = allratingtype && selected ? allratingtype?.filter(item => item.fb_rateing_slno === selected) : '';
-    const ratingName = ratingType.length > 0 ? ratingType[0]?.fb_rateing_name.trim() : '';
-    const ComponentName = Component.length > 0 ? Component[0]?.label.trim() : '';
+    const ratingType = allratingtype && selected ? allratingtype?.filter(item => item?.fb_rateing_slno === selected) : '';
+    const ratingName = ratingType?.length > 0 ? ratingType[0]?.fb_rateing_name.trim() : '';
+    const ComponentName = Component?.length > 0 ? Component[0]?.label.trim() : '';
 
     const ValidateAnswer = useCallback(() => {
-        const size = Object.keys(answers).length;
+        const size = Object.keys(answers)?.length;
 
         if (ratingName === "5 Star Rating" && size !== 5) {
             warningNofity(`Please enter all ${5 - size}  Answer`)
@@ -171,13 +169,11 @@ const FeedBackDetail = () => {
             return false
         }
         return true
-    }, [ratingName, answers, yesorno,Yes,No])
+    }, [ratingName, answers, Yes, No])
 
 
     const HanldeUpdation = useCallback(
         async (rowData) => {
-            console.log(rowData, "data");
-
             const { fb_mast_qakey_data, fb_rateing_slno, fb_answer_component } = rowData;
             const Component = rowData && component?.filter(item => item.label === fb_answer_component);
             const ComponentId = Component?.length > 0 ? Component[0]?.value : '';
@@ -185,10 +181,10 @@ const FeedBackDetail = () => {
                 fb_mast_qakey_data?.split(', ').map(item => item.split(': '))
             ) : {}
             const size = Object.keys(resultObject).length;
-            if (fb_rateing_slno === 1 && Object.keys(resultObject).length > 0) {
+            if (fb_rateing_slno === 1 && Object.keys(resultObject)?.length > 0) {
                 setYesOrNo({
-                    Yes: resultObject.Yes,
-                    No: resultObject.No,
+                    Yes: resultObject?.Yes,
+                    No: resultObject?.No,
                 })
             } else if (fb_rateing_slno === 2) {
                 setCount(size)
@@ -214,9 +210,7 @@ const FeedBackDetail = () => {
                 componentid: ComponentId,
                 status: rowData.feedback_status === 1 ? true : false,
             })
-        },
-        []
-    );
+        }, []);
 
 
 

@@ -1,7 +1,9 @@
 import React, { memo } from 'react'
 import PendingActionsTwoToneIcon from '@mui/icons-material/PendingActionsTwoTone';
 import { Box, Typography } from '@mui/joy';
-import MaintenanceRemarkButton from './MaintenanceRemarkButton';
+
+const MaintenanceRemarkButton = lazy(() => import('./MaintenanceRemarkButton'));
+
 const MaintenaceRemark = ({
     setRemarks,
     remarks,
@@ -15,7 +17,16 @@ const MaintenaceRemark = ({
             borderRadius: 5,
             mt: 1
         }}>
-            <Box sx={{ border: 0, borderBottom: 1.5, borderColor: "rgba(var(--tab-border-color))", borderBottomColor: 'divider', borderWidth: 2, display: 'flex', alignItems: 'center', width: '100%' }} >
+            <Box sx={{
+                border: 0,
+                borderBottom: 1.5,
+                borderColor: "rgba(var(--tab-border-color))",
+                borderBottomColor: 'divider',
+                borderWidth: 2,
+                display: 'flex',
+                alignItems: 'center',
+                width: '100%'
+            }} >
                 <PendingActionsTwoToneIcon sx={{
                     color: 'rgba(var(--icon-primary))',
                     fontSize: 26,
@@ -38,12 +49,14 @@ const MaintenaceRemark = ({
                     width: "100%",
                     mt: 1,
                 }}>
-                <MaintenanceRemarkButton
-                    setRemarks={setRemarks}
-                    remarks={remarks}
-                    activeButton={activeButton}
-                    setActiveButton={setActiveButton}
-                />
+                <Suspense fallback={<CustomBackDropWithOutState message={'Loading...'} />} >
+                    <MaintenanceRemarkButton
+                        setRemarks={setRemarks}
+                        remarks={remarks}
+                        activeButton={activeButton}
+                        setActiveButton={setActiveButton}
+                    />
+                </Suspense>
             </Box>
         </Box>
     )

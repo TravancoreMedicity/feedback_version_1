@@ -1,5 +1,5 @@
 import { Box } from '@mui/joy'
-import React from 'react'
+import React, { memo } from 'react'
 import newicon from '../assets/logo.png'
 import { Skeleton } from '@mui/material';
 
@@ -43,4 +43,4 @@ const LoginlogoHeader = () => {
     )
 }
 
-export default LoginlogoHeader
+export default memo(LoginlogoHeader)

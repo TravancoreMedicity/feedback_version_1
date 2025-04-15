@@ -4,21 +4,28 @@ import { memo } from 'react'
 import DefaultPageLayout from '../Components/DefaultPageLayout'
 import { warningNofity, succesNofity, errorNofity, employeeID } from '../Constant/Constant'
 import MasterPageLayout from '../Components/MasterPageLayout'
-import CommonMenuList from '../Components/CommonMenuList'
 import { axiosApi } from '../Axios/Axios'
 import { Box } from '@mui/joy'
-import CustomCheckBoxWithLabel from '../Components/CustomCheckBoxWithLabel'
 import CustomBackDropWithOutState from '../Components/CustomBackDropWithOutState'
 import { useQuery } from '@tanstack/react-query'
-import { getallemployeeright, getallNurseStation, getallNurseStationMaster, getallOutlets, getDepartmentEmployee, getDepartmentSection } from '../Function/CommonFunction'
+import { getallNurseStation, getallNurseStationMaster } from '../Function/CommonFunction'
 import { IconButton, Tooltip } from "@mui/joy";
 import { EditPencil } from "iconoir-react";
-import SelectUserGroupMaster from '../Components/SelectUserGroupMaster'
-import SelectDepartmentMaster from '../Components/SelectDepartmentMaster'
-import SelectDepartmentSec from '../Components/SelectDepartmentSec'
-import SelectEmployee from '../Components/SelectEmployee'
-import SelectNursingStation from '../Components/SelectNursingStation'
-import SelectFloorMaster from '../Components/SelectFloorMaster'
+
+
+// import CommonMenuList from '../Components/CommonMenuList'
+// import CustomCheckBoxWithLabel from '../Components/CustomCheckBoxWithLabel'
+// import SelectUserGroupMaster from '../Components/SelectUserGroupMaster'
+// import SelectDepartmentMaster from '../Components/SelectDepartmentMaster'
+// import SelectDepartmentSec from '../Components/SelectDepartmentSec'
+// import SelectEmployee from '../Components/SelectEmployee'
+// import SelectNursingStation from '../Components/SelectNursingStation'
+// import SelectFloorMaster from '../Components/SelectFloorMaster'
+
+const CommonMenuList = lazy(() => import('../Components/CommonMenuList'));
+const CustomCheckBoxWithLabel = lazy(() => import('../Components/CustomCheckBoxWithLabel'));
+const SelectNursingStation = lazy(() => import('../Components/SelectNursingStation'));
+const SelectFloorMaster = lazy(() => import('../Components/SelectFloorMaster'));
 const FeedbackCategoryMasterList = lazy(() => import('../Components/CustomTable'));
 
 const NurstationMaster = () => {
@@ -37,11 +44,6 @@ const NurstationMaster = () => {
         setRightsItems({ ...rightsitem, [e.target.name]: e.target.value })
     };
 
-    //Outlets or OU_CODE
-    // const { data: getalloutlets, refetch: fetchalloutlets } = useQuery({
-    //     queryKey: ['getalloutlets'],
-    //     queryFn: () => getallOutlets(),
-    // })
 
     const { data: ellidernusrstation } = useQuery({
         queryKey: ['elidernursestaion'],
@@ -51,7 +53,7 @@ const NurstationMaster = () => {
     const { data: getallnursestation, refetch: fetchallnursinstation } = useQuery({
         queryKey: ['getallnsmaster'],
         queryFn: () => getallNurseStationMaster(),
-    }); 
+    });
 
     const nursestationname = useMemo(() => {
         const filtered = ellidernusrstation?.filter(item => item.NS_CODE === NS_CODE);
@@ -60,7 +62,7 @@ const NurstationMaster = () => {
 
     const handleSubmitUserManagment = useCallback(async () => {
         if (NS_CODE === 0) return warningNofity("Select the Nursing Station")
-        if (FloorType == "") return warningNofity("Select the Block")
+        if (FloorType === "") return warningNofity("Select the Block")
         if (FLOOR_CODE === 0) return warningNofity("Select the Floor")
         const insert_data = {
             fb_ns_code: NS_CODE,
@@ -105,7 +107,7 @@ const NurstationMaster = () => {
                 warningNofity(error)
             }
         }
-    }, [status, updateflag, updationdetail, fetchallnursinstation, FLOOR_CODE, NS_CODE, nursestationname])
+    }, [status, updateflag, updationdetail, fetchallnursinstation, FLOOR_CODE, NS_CODE, nursestationname, FloorType])
 
     const HanldeUpdation = useCallback(
         async (rowData) => {

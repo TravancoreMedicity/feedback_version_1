@@ -2,7 +2,7 @@ import { Box, Typography } from '@mui/joy'
 import React, { memo } from 'react'
 import PersonIcon from '@mui/icons-material/Person';
 
-const PatientCardHeader = ({ roomnumber }) => {
+const PatientCardHeader = ({ roomnumber ,name}) => {
     return (
         <Box
             className="border-b-[0.2rem] border-iconprimary p-0  mb-2 "
@@ -26,7 +26,7 @@ const PatientCardHeader = ({ roomnumber }) => {
                 <Typography sx={{
                     fontFamily: 'var(--font-varient)',
                     color: 'rgba(var(--font-primary-white))',
-                }} fontWeight={600} fontSize={17}>Patient Detail</Typography>
+                }} fontWeight={600} fontSize={17}>{name}</Typography>
             </Box>
             <Box sx={{
                 display: 'flex',

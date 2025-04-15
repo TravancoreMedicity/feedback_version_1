@@ -1,33 +1,25 @@
 // @ts-nocheck
 import React, { Suspense, lazy, useCallback, useState } from 'react'
 import { memo } from 'react'
-import DefaultPageLayout from '../../../Components/DefaultPageLayout'
-import CustomInputWithLabel from '../../../Components/CustomInputWithLabel'
-import { sanitizeInput, warningNofity, succesNofity, errorNofity, employeeID } from '../../../Constant/Constant'
-import { useNavigate } from 'react-router-dom'
-import CustomSelectWithLabel from '../../../Components/CustomSelectWithLabel'
-import SelectCmpDocumentMainType from '../../../Components/SelectCmpDocumentMainType'
-import MasterPageLayout from '../../../Components/MasterPageLayout'
-import { commonStatus } from '../../../Constant/Data'
-import CommonMenuList from '../../../Components/CommonMenuList'
-import {axiosApi} from '../../../Axios/Axios'
 import { Box } from '@mui/joy'
-import Table from '@mui/joy/Table'
-import CustomBackDrop from '../../../Components/CustomBackDrop'
+import { EditPencil } from "iconoir-react";
+import { axiosApi } from '../../../Axios/Axios'
+import { IconButton, Tooltip } from "@mui/joy";
+import CommonMenuList from '../../../Components/CommonMenuList'
+import { useQuery } from '@tanstack/react-query'
+import MasterPageLayout from '../../../Components/MasterPageLayout'
+import DefaultPageLayout from '../../../Components/DefaultPageLayout'
+import { getallfeedbackMaster } from '../../../Function/CommonFunction'
+import CustomInputWithLabel from '../../../Components/CustomInputWithLabel'
 import CustomCheckBoxWithLabel from '../../../Components/CustomCheckBoxWithLabel'
 import CustomBackDropWithOutState from '../../../Components/CustomBackDropWithOutState'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
-import { allfeedbackcollection, getallFeedbackCategory, getallfeedbackMaster } from '../../../Function/CommonFunction'
-import { IconButton, Tooltip } from "@mui/joy";
-import { EditPencil } from "iconoir-react";
+import { warningNofity, succesNofity, errorNofity, employeeID } from '../../../Constant/Constant'
 
 
 const FeedbackCategoryMasterList = lazy(() => import('../../../Components/CustomTable'));
 
 const FeedbackMaster = () => {
 
-    const navigation = useNavigate();
-    const queryClient = useQueryClient();
     const [updateflag, setUpdateFlag] = useState(0);
     const [updationdetail, setUpdateDetial] = useState({})
     const [feedbackmastername, setfeedbackMasterName] = useState({
@@ -80,7 +72,7 @@ const FeedbackMaster = () => {
                 const result = await axiosApi.post("/feedback/insertfeedback", insertData);
                 const { success } = result.data;
                 if (success === 3) return warningNofity("Feedback Already Occured!")
-                if (success != 2) return errorNofity("Error in inserting Data!")
+                if (success !== 2) return errorNofity("Error in inserting Data!")
                 allfeedbackNamesRefectch()
                 succesNofity("Successfully Inserted Data..!")
                 setfeedbackMasterName({ feedbackName: '', status: false })
@@ -92,7 +84,7 @@ const FeedbackMaster = () => {
             try {
                 const result = await axiosApi.post("/feedback/updatetfeedback", UpdateinsertingData);
                 const { success } = result.data;
-                if (success != 2) return errorNofity("Error in inserting Data!")
+                if (success !== 2) return errorNofity("Error in inserting Data!")
                 allfeedbackNamesRefectch()
                 succesNofity("Successfully Updated Data..!")
                 setUpdateFlag(0)
@@ -103,7 +95,7 @@ const FeedbackMaster = () => {
             }
         }
 
-    }, [feedbackmastername, allfeedbackNamesRefectch])
+    }, [allfeedbackNamesRefectch, feedbackName, status, updateflag, updationdetail])
 
     return (
         <DefaultPageLayout label="Feedback  Master" >

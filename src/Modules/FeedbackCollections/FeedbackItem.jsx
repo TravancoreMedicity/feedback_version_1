@@ -5,7 +5,7 @@ import FeedbackOutlinedIcon from '@mui/icons-material/FeedbackOutlined';
 
 const FeedbackItem = ({ index, item, feedbackedexit, currentIndex, inpatientDetail, handlebuttonClick }) => {
     const isFeedbackGiven = feedbackedexit?.some(fb =>
-        fb.fdmast_slno === item.fdmast_slno && fb.fb_patient_name === inpatientDetail[currentIndex]?.fb_ptc_name
+        fb?.fdmast_slno === item?.fdmast_slno && fb?.fb_patient_name === inpatientDetail[currentIndex]?.fb_ptc_name
     );
     return (
         <Box
@@ -22,7 +22,7 @@ const FeedbackItem = ({ index, item, feedbackedexit, currentIndex, inpatientDeta
             }}>
             <Tooltip title={isFeedbackGiven ? `Completed` : ''}>
                 <Box
-                    onClick={!isFeedbackGiven ? () => handlebuttonClick(item.fdmast_slno, inpatientDetail[currentIndex]?.fb_ptc_name, inpatientDetail[currentIndex]?.fb_pt_no, inpatientDetail[currentIndex]?.fb_ptc_mobile, inpatientDetail[currentIndex]?.fb_ip_no) : () => { }}
+                    onClick={!isFeedbackGiven ? () => handlebuttonClick(item?.fdmast_slno, inpatientDetail[currentIndex]?.fb_ptc_name, inpatientDetail[currentIndex]?.fb_pt_no, inpatientDetail[currentIndex]?.fb_ptc_mobile, inpatientDetail[currentIndex]?.fb_ip_no) : () => { }}
                     sx={{
                         width: '60%',
                         height: '50%',
@@ -43,7 +43,7 @@ const FeedbackItem = ({ index, item, feedbackedexit, currentIndex, inpatientDeta
             <Typography sx={{
                 fontFamily: 'var(--font-varient)',
                 color: 'rgba(var(--font-primary-white))',
-            }} fontWeight={900} fontSize={12}>{item.feedback_name}</Typography>
+            }} fontWeight={900} fontSize={12}>{item?.feedback_name}</Typography>
         </Box>
     )
 }

@@ -1,8 +1,11 @@
-import React, { memo, useCallback, useState } from 'react';
+import React, { lazy, memo, Suspense, useCallback, useState } from 'react';
 import { Box, Textarea } from '@mui/joy';
-import Rulesyesorno from '../Feedback/Rulesyesorno';
-import ChooseEmoji from '../Feedback/ChooseEmoji';
-import RadiologyCheckBox from '../Feedback/RadiologyFeedback/RadiologyCheckBox';
+import EmojiSkeleton from '../Feedback/Commoncomponents/ChooseEmogjiSkeleton';
+
+
+const ChooseEmoji = lazy(() => import('../Feedback/ChooseEmoji'))
+const Rulesyesorno = lazy(() => import('../Feedback/Rulesyesorno'))
+const RadiologyCheckBox = lazy(() => import('../Feedback/RadiologyFeedback/RadiologyCheckBox'))
 
 const AnswerComponentSelect = ({
     questionid,
@@ -16,12 +19,12 @@ const AnswerComponentSelect = ({
     hanldecomponent
 }) => {
 
-
     const [textareavalue, setTextAreaValue] = useState("");
+
     const handleDescription = useCallback((e) => {
         setTextAreaValue(e.target.value)
         hanldeuseranswers(questionid, e.target.value)
-    }, [hanldeuseranswers, textareavalue]);
+    }, [hanldeuseranswers, questionid]);
 
 
 
@@ -29,17 +32,19 @@ const AnswerComponentSelect = ({
         <Box sx={{ gap: { xs: 3, sm: 5, md: 4 }, display: 'flex', alignItems: 'center', mt: 3, mb: 2 }}>
             {
                 type && type === "Yes/No" ? (
-                    <Rulesyesorno
-                        questionid={questionid}
-                        value={answer}
-                        hanldeuseranswers={hanldeuseranswers}
-                        component={component}
-                        type={type}
-                        setMobileValidation={setMobileValidation}
-                        mobilevalidation={mobilevalidation}
-                        setMobileNumber={setMobileNumber}
-                        hanldecomponent={hanldecomponent}
-                    />
+                    <Suspense fallback={<EmojiSkeleton />}>
+                        <Rulesyesorno
+                            questionid={questionid}
+                            value={answer}
+                            hanldeuseranswers={hanldeuseranswers}
+                            component={component}
+                            type={type}
+                            setMobileValidation={setMobileValidation}
+                            mobilevalidation={mobilevalidation}
+                            setMobileNumber={setMobileNumber}
+                            hanldecomponent={hanldecomponent}
+                        />
+                    </Suspense>
                 ) : type === "Description Type" ? (
                     <>
                         <Box sx={{
@@ -54,7 +59,6 @@ const AnswerComponentSelect = ({
                                 width: { xs: "80%", sm: '85%' },
                                 minHeight: 100,
                                 borderRadius: '12px',
-                                // bgcolor:'red'
                             }}>
                                 <Textarea
                                     outline="contained"
@@ -80,19 +84,23 @@ const AnswerComponentSelect = ({
                     </>
                 ) : type === "Checkbox Type" ? (
                     <>
-                        <RadiologyCheckBox
-                            questionid={questionid}
-                            value={answer}
-                            hanldeuseranswers={hanldeuseranswers}
-                        />
+                        <Suspense fallback={<EmojiSkeleton />}>
+                            <RadiologyCheckBox
+                                questionid={questionid}
+                                value={answer}
+                                hanldeuseranswers={hanldeuseranswers}
+                            />
+                        </Suspense>
                     </>
                 ) : (
                     <>
-                        <ChooseEmoji
-                            questionid={questionid}
-                            value={answer}
-                            hanldeuseranswers={hanldeuseranswers}
-                        />
+                        <Suspense fallback={<EmojiSkeleton />}>
+                            <ChooseEmoji
+                                questionid={questionid}
+                                value={answer}
+                                hanldeuseranswers={hanldeuseranswers}
+                            />
+                        </Suspense>
                     </>
                 )
             }

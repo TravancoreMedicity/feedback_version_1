@@ -1,12 +1,12 @@
 import { Box, Typography } from '@mui/joy'
-import Grid from '@mui/material/Grid2'
 import React from 'react'
 import { memo } from 'react'
+import Grid from '@mui/material/Grid2'
 import { useNavigate } from 'react-router-dom'
-import DefaultPageLayout from '../../Components/DefaultPageLayout'
-import { EmpauthId } from '../../Constant/Constant'
 import { useQuery } from '@tanstack/react-query'
+import { EmpauthId } from '../../Constant/Constant'
 import { getCurrentEmpMenu } from '../../Function/CommonFunction'
+import DefaultPageLayout from '../../Components/DefaultPageLayout'
 
 const Settings = () => {
 
@@ -36,7 +36,11 @@ const Settings = () => {
     { menuSlno: 9, menuName: 'Menu Master', menuCodeName: 'menumaster' },
     { menuSlno: 10, menuName: 'User Right Master', menuCodeName: 'userrights' },
     { menuSlno: 12, menuName: 'User Module Right Master', menuCodeName: 'usermoduleright' },
-    { menuSlno: 13, menuName: 'Nurse Station Master', menuCodeName: 'nursestationmast' }
+    { menuSlno: 13, menuName: 'Nurse Station Master', menuCodeName: 'nursestationmast' },
+    { menuSlno: 14, menuName: 'Room Master', menuCodeName: 'roommaster' },
+    { menuSlno: 15, menuName: 'Asset Item Master', menuCodeName: 'assetitem' },
+    { menuSlno: 16, menuName: 'Asset Map Master', menuCodeName: 'assetmapping' },
+    { menuSlno: 16, menuName: 'Room CheckList Master', menuCodeName: 'roomchecklist' },
   ]
 
 
@@ -49,26 +53,26 @@ const Settings = () => {
 
   return (
     <Box sx={{ minHeight: '100vh' }}>
-    <DefaultPageLayout label='Master Settings' >
-      <Grid container spacing={1} sx={{ flexGrow: 0, px: 1 }}>
-        {
-          employeemenu?.map((val, idx) => {
-            return (
-              < Grid
-                size={{ xs: 12, sm: 12, md: 6, lg: 3, xl: 3 }}
-                key={idx} onClick={() => navigation(`/Home/${val.menuCodeName}`)} >
-                <Box
-                  className="border-b-[0.2rem] border-iconprimary p-0 cursor-pointer hover:bg-slate-200" >
-                  <Typography level='body-sm' fontWeight={'md'} sx={{ fontFamily: 'var(--font-varient)', color: 'rgba(var(--font-primary-white))' }} >
-                    {val.menuName}
-                  </Typography>
-                </Box>
-              </Grid>
-            )
-          })
-        }
-      </Grid>
-    </DefaultPageLayout >
+      <DefaultPageLayout label='Master Settings' >
+        <Grid container spacing={1} sx={{ flexGrow: 0, px: 1 }}>
+          {
+            employeemenu?.map((val, idx) => {
+              return (
+                < Grid
+                  size={{ xs: 12, sm: 12, md: 6, lg: 3, xl: 3 }}
+                  key={idx} onClick={() => navigation(`/Home/${val.menuCodeName}`)} >
+                  <Box
+                    className="border-b-[0.2rem] border-iconprimary p-0 cursor-pointer hover:bg-slate-200" >
+                    <Typography level='body-sm' fontWeight={'md'} sx={{ fontFamily: 'var(--font-varient)', color: 'rgba(var(--font-primary-white))' }} >
+                      {val.menuName}
+                    </Typography>
+                  </Box>
+                </Grid>
+              )
+            })
+          }
+        </Grid>
+      </DefaultPageLayout >
     </Box>
   )
 }

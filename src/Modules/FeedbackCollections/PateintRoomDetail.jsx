@@ -33,6 +33,7 @@ const PateintRoomDetail = ({ beddetail, nsname, view, setView, nscode }) => {
         queryFn: () => getBedRemarkStatus()
     });
 
+
     //FETCHING INFORMATION THAT HAVE ALREADY SUBMITTED FEEDBACK
     const FetchPatientFeedback = useCallback(async (inpatientDetail) => {
         const searchdata = {
@@ -41,13 +42,13 @@ const PateintRoomDetail = ({ beddetail, nsname, view, setView, nscode }) => {
         }
         try {
             const response = await axiosApi.post('/feedback/getpatientfeedback', searchdata)
-            const { success, data } = response.data;
+            const { success, data } = response?.data;
             if (success === 1) return warningNofity("Error in Fetching data")
             setPatientFeedBackData(data ? data : [])
         } catch (error) {
             warningNofity("Error in Fetching Data")
         }
-    }, [inpatientDetailfrommeliora])
+    }, [])
 
 
     //Fetching Patient Detail From the Melior
@@ -60,7 +61,7 @@ const PateintRoomDetail = ({ beddetail, nsname, view, setView, nscode }) => {
             setLoading(true)
             setInpatientDetailFromMeliora({});
             const response = await axiosApi.post('/feedback/inpatientdetil', insertData)
-            const { success, data } = response.data;
+            const { success, data } = response?.data;
             if (success === 1) {
                 setOpen(true)
                 setInpatientDetailFromMeliora({})

@@ -4,7 +4,7 @@ import { Box, Grid, Typography } from '@mui/joy'
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
-import { Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { succesNofity, errorNofity, sanitizeInput, warningNofity } from '../Constant/Constant';
 import { axiosApi } from '../Axios/Axios';
 import CopyRight from '../Components/CopyRight';
@@ -14,10 +14,10 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 const LoginlogoHeader = lazy(() => import("../Components/LoginlogoHeader"))
 
 const RoootLayouts = () => {
-  const isSmallHeight = useMediaQuery('(max-height: 700px)')
-  const navigate = useNavigate()
-  const location = useLocation();
-  const userDetl = localStorage.getItem('app_auth');
+  const isSmallHeight = useMediaQuery('(max-height: 700px)');
+  const navigate = useNavigate();
+
+  // const userDetl = localStorage.getItem('app_auth');
 
   const [userInput, setUserInput] = useState({
     empid: '',
@@ -28,14 +28,15 @@ const RoootLayouts = () => {
     empidError: '',
     passwordError: ''
   });
-  const handleChange = (e) => {
+  const handleChange = useCallback((e) => {
     const { name, value } = e.target;
     const sanitizedValue = sanitizeInput(value);
     handleError(name, sanitizedValue);
     setUserInput((prev) => {
       return { ...prev, [name]: sanitizedValue }
     })
-  }
+  }, []);
+
   const handleError = (name, value) => {
     if (name === "empid") {
       if (value === "") {
@@ -67,22 +68,22 @@ const RoootLayouts = () => {
 
   const postData = useMemo(() => {
     return {
-      userName: userInput.empid,
-      passWord: userInput.password,
+      userName: userInput?.empid,
+      passWord: userInput?.password,
       method: 1
     }
   }, [userInput])
 
   const handleloginform = useCallback(async () => {
     try {
-      if (userInput.empid === null || userInput.empid === undefined || userInput.empid === "") {
+      if (userInput?.empid === null || userInput?.empid === undefined || userInput?.empid === "") {
         setErrors((prev) => ({
           ...prev,
           empidError: "Employee Id Field is required"
         }))
       }
 
-      if (userInput.password === null || userInput.password === undefined || userInput.password === "") {
+      if (userInput?.password === null || userInput?.password === undefined || userInput?.password === "") {
         setErrors((prev) => ({
           ...prev,
           passwordError: "Password Field is required"
@@ -91,7 +92,7 @@ const RoootLayouts = () => {
       }
 
       const result = await axiosApi.post("/user/checkUserCres", postData, { withCredentials: true })
-      const { message, success, userInfo } = result.data;
+      const { message, success, userInfo } = result?.data;
       if (success === 0) {
         errorNofity(message); // database error
       } else if (success === 1) {
@@ -114,7 +115,7 @@ const RoootLayouts = () => {
     } catch (error) {
       warningNofity(error)
     }
-  }, [postData, userInput.empid, userInput.password, navigate]);
+  }, [postData, userInput, navigate]);
 
 
   // if (userDetl && location.pathname === '/') {
@@ -174,7 +175,7 @@ const RoootLayouts = () => {
             <TextField
               sx={{
                 width: { xs: '100%', sm: '90%' },
-                marginTop: { xs: 3, sm: 2 }, height: 30, marginBottom: errors.empidError ? 5 : 2,
+                marginTop: { xs: 3, sm: 2 }, height: 30, marginBottom: errors?.empidError ? 5 : 2,
                 fontFamily: "var(--font-varient)",
               }}
               id="outlined-emloyee-input"
@@ -184,14 +185,14 @@ const RoootLayouts = () => {
               name='empid'
               autoComplete="current-password"
               onChange={handleChange}
-              error={!!errors.empidError}
-              helperText={errors.empidError}
-              value={userInput.empid}
+              error={!!errors?.empidError}
+              helperText={errors?.empidError}
+              value={userInput?.empid}
             />
             <TextField
               sx={{
                 width: { xs: '100%', sm: '90%' }, marginTop: { xs: 3, sm: 2 }, height: 30,
-                marginBottom: errors.passwordError ? 5 : 2,
+                marginBottom: errors?.passwordError ? 5 : 2,
                 fontFamily: "var(--font-varient)",
               }}
               id="outlined-password-input"
@@ -201,9 +202,9 @@ const RoootLayouts = () => {
               name='password'
               autoComplete="current-password"
               onChange={handleChange}
-              error={!!errors.passwordError}
-              helperText={errors.passwordError}
-              value={userInput.password}
+              error={!!errors?.passwordError}
+              helperText={errors?.passwordError}
+              value={userInput?.password}
             />
             <Button sx={{
               marginTop: { xs: 4, sm: 2 },

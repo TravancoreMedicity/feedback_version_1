@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React from 'react'
+import React, { memo } from 'react'
 import { useRouteError } from 'react-router-dom'
 
 const ErrorElement = () => {
@@ -46,4 +46,4 @@ const ErrorElement = () => {
     )
 }
 
-export default ErrorElement
+export default memo(ErrorElement)

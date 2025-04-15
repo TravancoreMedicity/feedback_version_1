@@ -1,11 +1,11 @@
-import { Box, Divider, Tooltip, Typography } from '@mui/joy';
-import React, { lazy, memo, Suspense, useCallback, useMemo, useState } from 'react';
+import { Box, Typography } from '@mui/joy';
+import React, { lazy, memo, Suspense, useCallback, useState } from 'react';
 import HotelOutlinedIcon from '@mui/icons-material/HotelOutlined';
 import { useQuery } from '@tanstack/react-query';
 import { getallfeedbackMaster, getBedRemarkStatus } from '../../Function/CommonFunction';
 import { OUTLINK_FEEDBACK } from '../../Constant/Static';
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
-import { infoNofity, warningNofity } from '../../Constant/Constant';
+import { infoNofity } from '../../Constant/Constant';
 
 
 const PatientModal = lazy(() => import('./PatientModal'));
@@ -24,41 +24,51 @@ const RoomComponent = ({
     remarkstatus
 }) => {
 
+
+
     const [currentIndex, setCurrentIndex] = useState(0);
     const [modalopen, setModalOpen] = useState(false);
     const [roomstatus, setRoomStatus] = useState({})
+    const [entering, setEntering] = useState(0)
+
+
 
     const { data: allfeedbackNames } = useQuery({
         queryKey: ['allfeedbackname'],
         queryFn: () => getallfeedbackMaster(),
+        staleTime: Infinity
     })
 
     const { data: getallremarkstatus } = useQuery({
         queryKey: ["getbedremarkstatus"],
-        queryFn: () => getBedRemarkStatus()
+        queryFn: () => getBedRemarkStatus(),
+        staleTime: Infinity,
+        enabled: !!bdcode
     });
 
 
     const remarkDetails = useCallback((bdcode) => {
-        const result = getallremarkstatus?.find((item) => item.fb_bd_code === Number(bdcode))
+        const result = getallremarkstatus?.find((item) => item?.fb_bd_code === Number(bdcode))
         setRoomStatus(result)
-    }, [getallremarkstatus, bdcode, setRoomStatus])
+    }, [getallremarkstatus, setRoomStatus])
 
     const handleClick = useCallback(async () => {
-        if (ispresent !== 'T' && ispresent !== 'A') {
-            const isInRemark = await getallremarkstatus?.some((item) => item.fb_bd_code === Number(bdcode));
-            if (!isInRemark) {
+        if (ispresent !== 'A') {
+            const isInRemark = await getallremarkstatus?.some((item) => item?.fb_bd_code === Number(bdcode));
+            if (!isInRemark && ispresent !== 'N') {
                 setModalOpen(true)
                 getdetail(bdcode)
                 setRoomStatus({})
+                setEntering(1)
             } else {
                 setModalOpen(true)
                 remarkDetails(bdcode)
+                setEntering(0)
             }
         } else {
             infoNofity("This Room is Available")
         }
-    }, [open, setModalOpen, getallremarkstatus, setRoomStatus, bdcode, ispresent]);
+    }, [setModalOpen, getallremarkstatus, setRoomStatus, bdcode, ispresent, setEntering, getdetail, remarkDetails]);
 
 
     const openFeedbackForm = useCallback((feedbackId, name, PatientId, patMobile, ipnumber) => {
@@ -79,16 +89,16 @@ const RoomComponent = ({
 
     // Function to go to the next patient card
     const nextPatient = useCallback(() => {
-        if (currentIndex < inpatientDetail.length - 1) {
+        if (currentIndex < inpatientDetail?.length - 1) {
             setCurrentIndex(currentIndex + 1);
         }
-    });
+    }, [currentIndex, inpatientDetail]);
     // Function to go to the previous patient card
     const prevPatient = useCallback(() => {
         if (currentIndex > 0) {
             setCurrentIndex(currentIndex - 1);
         }
-    });
+    }, [currentIndex]);
 
     return (
         <>
@@ -124,7 +134,7 @@ const RoomComponent = ({
                         backgroundColor: ispresent === "A" ? "#8FD14F" :
                             ispresent === "O" && multiple === 2 ? "rgba(207, 118, 133, 0.96)" :
                                 ispresent === "T" ? "rgb(239, 131, 15)" : ispresent === "B" ? "rgba(200, 0, 180, 0.8)" :
-                                    ispresent === "N" && remarkstatus?.fb_bed_reason === 1 ? "rgb(40, 185, 234)" : ispresent === "N" && remarkstatus?.fb_bed_reason === 2 ? "rgb(72, 54, 134)" : ispresent === "N" ? "rgba(235, 18, 18, 0.84)" :
+                                    ispresent === "N" && remarkstatus?.fb_bed_service_status === 2 ? "rgb(40, 185, 234)" : ispresent === "N" && remarkstatus?.fb_bed_service_status === 1 ? "rgb(72, 54, 134)" : ispresent === "N" ? "rgba(235, 18, 18, 0.84)" :
                                         ispresent === "F" ? "rgb(53, 170, 193)" : ispresent === "R" ? "rgb(40, 185, 234)" :
                                             ispresent === "O" ? "rgba(19, 112, 241, 0.68)" : "red",
                         px: 0.6,
@@ -133,7 +143,7 @@ const RoomComponent = ({
                         fontWeight: 900,
                         py: 0.1,
                         borderTopLeftRadius: 8,
-                        borderBottomLeftRadius: 8
+                        borderBottomLeftRadius: 8,
                     }}>
                         <Box sx={{ p: 0, m: 0, lineHeight: 1 }}>B</Box>
                         <Box sx={{ p: 0, m: 0, lineHeight: 1 }}>E</Box>
@@ -172,6 +182,7 @@ const RoomComponent = ({
                     multiple={multiple}
                     setRoomStatus={setRoomStatus}
                     roomstatus={roomstatus}
+                    entering={entering}
                 />
             </Suspense>
         </>

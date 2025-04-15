@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Box, Radio, RadioGroup, FormControlLabel } from '@mui/material';
 
 const RadiologyCheckBox = ({ value, questionid, hanldeuseranswers }) => {
 
 
   const resultObject = value != null && value !== undefined
-    ? Object.fromEntries(value.split(', ').map(item => item.split(': ')))
+    ? Object.fromEntries(value.split(', ').map(item => item?.split(': ')))
     : {};
 
   return (
@@ -62,4 +62,4 @@ const RadiologyCheckBox = ({ value, questionid, hanldeuseranswers }) => {
   );
 };
 
-export default RadiologyCheckBox;
+export default memo(RadiologyCheckBox);

@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/joy';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 
 
 const successAnimation = require('../assets/successanimation.gif');
@@ -107,4 +107,4 @@ const SuccessPage = ({ setIsSubmit }) => {
     );
 }
 
-export default SuccessPage;
+export default memo(SuccessPage);

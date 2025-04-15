@@ -1,11 +1,14 @@
 import { Box, Typography } from '@mui/joy';
-import React, { memo, } from 'react';
+import React, { lazy, memo, Suspense, } from 'react';
 import VerifiedUserTwoToneIcon from '@mui/icons-material/VerifiedUserTwoTone';
-import BedListCard from './BedListCard';
+import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
 
-const BedListOtherDep = ({ name, selectedItems, setSelectedItems, status, dep, current }) => {
-    const selectmaintenance = selectedItems ? Object.values(selectedItems).filter(value => value === true).length : 0;
-    const totallength = selectedItems ? Object.values(selectedItems).length : 0;
+
+
+const BedListCard = lazy(() => import('./BedListCard'));
+
+const BedListOtherDep = ({ name, setCondtion, condition, assets, checkcomplaint, exists }) => {
+
     return (
         <Box sx={{
             p: 1,
@@ -38,17 +41,18 @@ const BedListOtherDep = ({ name, selectedItems, setSelectedItems, status, dep, c
                         fontSize: 18,
                         fontWeight: 700
                     }}>
-                    {name} {status === 1 && (totallength === selectmaintenance) ? "VERIFIED" : 'CHECKLIST'}
+                    {name} CHECKLIST
                 </Typography>
             </Box>
-            <BedListCard
-                dep={dep}
-                current={current}
-                status={status}
-                totallength={totallength}
-                trueitemlength={selectmaintenance}
-                selectedItems={selectedItems}
-                setSelectedItems={setSelectedItems} />
+            <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
+                <BedListCard
+                    assets={assets}
+                    condition={condition}
+                    setCondtion={setCondtion}
+                    checkcomplaint={checkcomplaint}
+                    exists={exists}
+                />
+            </Suspense>
         </Box>
     );
 };

@@ -24,6 +24,9 @@ const Prochecklist = () => {
     }, [getdischargeentrybed]);
 
 
+    console.log(UniqueDischargeBed,"UniqueDischargeBed");
+    
+
     const { data: getproCheckBed, refetch: fetchProcheckdetail } = useQuery({
         queryKey: ['getprocheckbed'],
         queryFn: () => getProcheckedbedDetail(),

@@ -7,6 +7,7 @@ import { FeedbackDetailForDisplay } from '../../Function/CommonFunction';
 import EmojiSkeleton from '../../Feedback/Commoncomponents/ChooseEmogjiSkeleton';
 import QuestionBoxSkeleton from '../../Feedback/Commoncomponents/QuestionBoxSkeleton';
 import React, { memo, lazy, useState, useCallback, useEffect, useMemo, Suspense } from 'react'
+import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
 
 
 const TextComponent = lazy(() => import('../../Feedback/Commoncomponents/TextComponent'))
@@ -23,6 +24,7 @@ const FeedbackForm = () => {
     const [mobilevalidation, setMobileValidation] = useState("");
     const [mobilenumber, setMobileNumber] = useState("");
     const [isnoclicked, setIsNoClicked] = useState({})
+    const [loading, setLoading] = useState(false)
     const [formData, setFormData] = useState({
         PatientName: "",
         feedbackId: 0,
@@ -159,7 +161,7 @@ const FeedbackForm = () => {
 
 
     const handlesubmit = useCallback(async () => {
-
+        setLoading(true)
         const answerlength = Object.keys(useranswer)?.length;
         const clickedNoComplenth = Object.keys(isnoclicked)?.length;
         const isClickedNotMobileInput = Object.values(isnoclicked)?.includes("MobileInputBox")
@@ -185,8 +187,10 @@ const FeedbackForm = () => {
             setIsSubmit(true)
             setUserAnswer({})
             setIsNoClicked({})
+            setLoading(false)
         } catch (err) {
             warningNofity("Error in Submiting FeedbackForm:SERVER")
+            setLoading(false)
         }
     }, [feedbackDtlDisplay, useranswer, FinalInsertData, IsComponentPresent, ComponentName, mobilevalidation, mobilenumber, isnoclicked])
 
@@ -195,7 +199,7 @@ const FeedbackForm = () => {
             {
                 issubmit ? (
                     <>
-                        <Suspense fallback={"Loading...!"}>
+                        <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
                             <SuccessPage setIsSubmit={setIsSubmit} />
                         </Suspense>
                     </>
@@ -311,6 +315,7 @@ const FeedbackForm = () => {
                             }}>
                                 <Suspense fallback={"Loading"}>
                                     <FeedbackButton
+                                        loading={loading}
                                         average={useranswer}
                                         handlesubmit={handlesubmit}
                                     />

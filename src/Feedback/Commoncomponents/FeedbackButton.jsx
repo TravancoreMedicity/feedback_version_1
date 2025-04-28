@@ -4,7 +4,7 @@ import { Box, Typography } from "@mui/joy";
 import { iconMap } from "./Commondetal";
 
 
-const FeedbackButton = ({ average, handlesubmit }) => {
+const FeedbackButton = ({ average, handlesubmit, loading }) => {
 
     const findMostFrequent = useCallback((data) => {
         const feedbackValues = Object.values(data);
@@ -42,7 +42,7 @@ const FeedbackButton = ({ average, handlesubmit }) => {
                 pr: { xs: 3, sm: 5 },
                 cursor: 'pointer'
             }}
-            onClick={handlesubmit}
+            onClick={loading ? undefined : handlesubmit}
         >
             <Box
                 sx={{

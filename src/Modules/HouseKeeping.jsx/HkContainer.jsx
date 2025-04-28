@@ -10,12 +10,12 @@ import CleaningServicesTwoToneIcon from '@mui/icons-material/CleaningServicesTwo
 import { useQuery } from '@tanstack/react-query';
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
 
-
-
 const HkDashboard = lazy(() => import('./HkDashboard'));
 const Housekeepinglist = lazy(() => import('./Housekeepinglist'));
 
 const HkContainer = () => {
+
+    const nobedDetail = require('../../assets/NoBed.png');
     const [value, setValue] = useState("1");
     const [assingedbed, setAssignedBed] = useState([]);
 
@@ -27,11 +27,6 @@ const HkContainer = () => {
     const handleChange = useCallback((event, newValue) => {
         setValue(newValue);
     }, []);
-
-
-    const nobedDetail = require('../../assets/NoBed.png');
-
-
 
     const filterAssignedBed = useMemo(() => (
         getllBlockedBed?.filter(item =>

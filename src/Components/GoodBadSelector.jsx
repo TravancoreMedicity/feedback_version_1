@@ -35,7 +35,7 @@ const GoodBadSelector = ({ handleChangeChecked, value, completed, isexist }) => 
         justifyContent: 'space-between',
         alignContent: 'center',
         py: 0.6,
-        width: '100%'
+        width: { xs: '92%', sm: '100%' }
       }}
     >
       {['Good', 'Damaged']?.map((option) => (
@@ -50,12 +50,12 @@ const GoodBadSelector = ({ handleChangeChecked, value, completed, isexist }) => 
             onChange={() => handleSelect(option)}
             label={
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.2, pb: 1 }}>
-                {option === 'Good' ? <CheckCircleOutlineOutlinedIcon sx={{ width: 15, height: 15 }}
-                  color={selected === 'Good' ? 'success' : 'rgba(var(--icon-primary))'} /> : <CancelOutlinedIcon sx={{ width: 15, height: 15 }} color={selected === 'Damaged' ? 'error' : 'rgba(var(--icon-primary))'} />}
+                {option === 'Good' ? <CheckCircleOutlineOutlinedIcon sx={{ width: { xs: 12, sm: 15 }, height: { xs: 12, sm: 15 } }}
+                  color={selected === 'Good' ? 'success' : 'rgba(var(--icon-primary))'} /> : <CancelOutlinedIcon sx={{ width: { xs: 12, sm: 15 }, height: { xs: 12, sm: 15 } }} color={selected === 'Damaged' ? 'error' : 'rgba(var(--icon-primary))'} />}
                 <Typography sx={{
                   fontFamily: 'var(--font-varient)',
                   color: selected === option ? "#495057" : 'rgba(var(--font-primary-white))',
-                  fontSize: 10,
+                  fontSize: { xs: 7, sm: 10 },
                   fontWeight: 600,
                 }} level="body-sm" >{option}</Typography>
               </Box>

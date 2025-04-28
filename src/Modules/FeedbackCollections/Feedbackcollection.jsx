@@ -27,7 +27,7 @@ const Feedbackcollection = () => {
     const { data: elidernursingstation, } = useQuery({
         queryKey: ['allnursestation'],
         queryFn: () => getallNurseStation(),
-    })
+    });
 
 
     return (

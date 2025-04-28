@@ -208,3 +208,13 @@ export const Indicator = [
 //     { slno: 41, asset: "CLOCK", assetno: 'TM/OP/383892', depid: 43, bed_no: 'C8H3IH2', departmentName: 'OPERATIONS', item_asset_no: 'TM/OP', item_assent_no_only: 46 },
 //     { slno: 42, asset: "WHITE BOARD", assetno: 'TM/OP/383893', depid: 43, bed_no: 'C8H3IH2', departmentName: 'OPERATIONS', item_asset_no: 'TM/OP', item_assent_no_only: 47 },
 // ]
+
+
+export const predefinedCategories = [
+    { fb_category_name: 'CONTENTMENT-OVERALL RATING', fb_category_slno: 1 },
+    { fb_category_name: 'RESPONSIVENESS', fb_category_slno: 2 },
+    { fb_category_name: 'TIMELINESS', fb_category_slno: 3 },
+    { fb_category_name: 'FACILITY ( ENVIRONMENT )', fb_category_slno: 4 },
+    { fb_category_name: 'CLEANLINESS ( ENVIRONMENT )', fb_category_slno: 5 },
+    { fb_category_name: 'RECOMMENDATION', fb_category_slno: 6 },
+];

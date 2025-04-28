@@ -1,29 +1,41 @@
-import React, { lazy, Suspense, useCallback, useState } from 'react';
+import React, { lazy, memo, Suspense, useCallback, useState } from 'react';
 import { Box, Typography } from '@mui/joy'
 import DefaultPageLayout from '../../../Components/DefaultPageLayout'
 import Textarea from '@mui/joy/Textarea';
 import { useQuery } from '@tanstack/react-query';
 import { allfeedbackcollection, fetchFeedbackdtl } from '../../../Function/CommonFunction';
 import CommonMenuList from '../../../Components/CommonMenuList';
-import CustomCheckBoxWithLabel from '../../../Components/CustomCheckBoxWithLabel';
-import SelectCmpCategoryMaster from '../../../Components/SelectCmpCategoryMaster'
-import SelectSubCategoryMaster from '../../../Components/SelectSubCategoryMaster';
-import MasterPageLayout from '../../../Components/MasterPageLayout'
-import SelectFeedbackMaster from '../../../Components/SelectFeedbackMaster';
 import { employeeID, errorNofity, succesNofity, validateEnglishInput, warningNofity } from '../../../Constant/Constant';
 import { axiosApi } from '../../../Axios/Axios';
 import { IconButton, Tooltip } from "@mui/joy";
 import { EditPencil, Star, ThumbsUp, ThumbsDown } from "iconoir-react";
 import CustomBackDropWithOutState from '../../../Components/CustomBackDropWithOutState';
-import SelectFeedbackRating from '../../../Components/SelectFeedbackRating';
-import CustomInputWithLabel from '../../../Components/CustomInputWithLabel';
-import RatingSection from '../../../Components/RatingSection ';
-import SelectAnswerComponent from '../../../Components/SelectAnswerComponent';
 import { component } from '../../../Feedback/Commoncomponents/Commondetal';
-import CheckBoxSection from '../../../Components/CheckBoxSection';
+
+
+// import CustomCheckBoxWithLabel from '../../../Components/CustomCheckBoxWithLabel';
+// import SelectCmpCategoryMaster from '../../../Components/SelectCmpCategoryMaster'
+// import SelectFeedbackMaster from '../../../Components/SelectFeedbackMaster';
+// import SelectSubCategoryMaster from '../../../Components/SelectSubCategoryMaster';
+// import MasterPageLayout from '../../../Components/MasterPageLayout'
+// import SelectFeedbackRating from '../../../Components/SelectFeedbackRating';
+// import CheckBoxSection from '../../../Components/CheckBoxSection';
+// import CustomInputWithLabel from '../../../Components/CustomInputWithLabel';
+// import RatingSection from '../../../Components/RatingSection ';
+// import SelectAnswerComponent from '../../../Components/SelectAnswerComponent';
 // import { PageStar, PrivacyPolicy } from 'iconoir-react'
 
 
+const CustomCheckBoxWithLabel = lazy(() => import('../../../Components/CustomCheckBoxWithLabel'));
+const SelectCmpCategoryMaster = lazy(() => import('../../../Components/SelectCmpCategoryMaster'));
+const SelectFeedbackMaster = lazy(() => import('../../../Components/SelectFeedbackMaster'));
+const SelectSubCategoryMaster = lazy(() => import('../../../Components/SelectSubCategoryMaster'));
+const MasterPageLayout = lazy(() => import('../../../Components/MasterPageLayout'));
+const SelectFeedbackRating = lazy(() => import('../../../Components/SelectFeedbackRating'));
+const CheckBoxSection = lazy(() => import('../../../Components/CheckBoxSection'));
+const CustomInputWithLabel = lazy(() => import('../../../Components/CustomInputWithLabel'));
+const RatingSection = lazy(() => import('../../../Components/RatingSection '));
+const SelectAnswerComponent = lazy(() => import('../../../Components/SelectAnswerComponent'));
 
 const FeedbackCategoryMasterList = lazy(() => import('../../../Components/CustomTable'));
 
@@ -318,26 +330,32 @@ const FeedBackDetail = () => {
                 <MasterPageLayout>
 
                     {/* Feedback Master select Box */}
-                    <SelectFeedbackMaster
-                        label={'Select the Feedback'}
-                        value={feedbackid ? feedbackid : currentFeedbackData}
-                        handleChange={(e, val) => hanldeinputData({ target: { name: 'feedbackid', value: val } })}
-                    />
-
+                    <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
+                        <SelectFeedbackMaster
+                            label={'Select the Feedback'}
+                            value={feedbackid ? feedbackid : currentFeedbackData}
+                            handleChange={(e, val) => hanldeinputData({ target: { name: 'feedbackid', value: val } })}
+                        />
+                    </Suspense>
                     {
                         feedbackid || currentFeedbackData ? <>
-                            <SelectCmpCategoryMaster
-                                label={'Select the Category'}
-                                value={categoryid}
-                                handleChange={(e, val) => hanldeinputData({ target: { name: 'categoryid', value: val } })}
-                            />
+                            <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
 
-                            <SelectSubCategoryMaster
-                                label={'Select the Subcategory'}
-                                value={subcategoryid}
-                                categoryid={categoryid}
-                                handleChange={(e, val) => hanldeinputData({ target: { name: 'subcategoryid', value: val } })}
-                            />
+                                <SelectCmpCategoryMaster
+                                    label={'Select the Category'}
+                                    value={categoryid}
+                                    handleChange={(e, val) => hanldeinputData({ target: { name: 'categoryid', value: val } })}
+                                />
+                            </Suspense>
+                            <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
+
+                                <SelectSubCategoryMaster
+                                    label={'Select the Subcategory'}
+                                    value={subcategoryid}
+                                    categoryid={categoryid}
+                                    handleChange={(e, val) => hanldeinputData({ target: { name: 'subcategoryid', value: val } })}
+                                />
+                            </Suspense>
 
                             <Typography level='body-sm'
                                 sx={{
@@ -353,16 +371,24 @@ const FeedBackDetail = () => {
                                 fontSize='0.7rem'
                             >Select The Question Type</Typography>
                             <Box className="flex flex-1 items-center gap-3 py-[0.299rem]">
-                                <CustomCheckBoxWithLabel
-                                    label="Contained"
-                                    checkBoxValue={QuesitonType === "Contained"}
-                                    handleCheckBoxValue={(e) => hanldeinputData({ target: { name: "QuesitonType", value: "Contained" } })}
-                                />
-                                <CustomCheckBoxWithLabel
-                                    label="Normal"
-                                    checkBoxValue={QuesitonType === "Normal"}
-                                    handleCheckBoxValue={(e) => hanldeinputData({ target: { name: "QuesitonType", value: "Normal" } })}
-                                />
+                                <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
+
+                                    <CustomCheckBoxWithLabel
+                                        label="Contained"
+                                        checkBoxValue={QuesitonType === "Contained"}
+                                        handleCheckBoxValue={(e) => hanldeinputData({ target: { name: "QuesitonType", value: "Contained" } })}
+                                    />
+                                </Suspense>
+
+                                <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
+
+                                    <CustomCheckBoxWithLabel
+                                        label="Normal"
+                                        checkBoxValue={QuesitonType === "Normal"}
+                                        handleCheckBoxValue={(e) => hanldeinputData({ target: { name: "QuesitonType", value: "Normal" } })}
+                                    />
+                                </Suspense>
+
                             </Box>
 
                             <Typography level='body-sm'
@@ -647,4 +673,4 @@ const FeedBackDetail = () => {
     )
 }
 
-export default FeedBackDetail
+export default memo(FeedBackDetail)

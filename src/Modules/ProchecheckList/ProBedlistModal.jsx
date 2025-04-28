@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { lazy, memo, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import Modal from '@mui/joy/Modal';
 import { useQuery } from '@tanstack/react-query';
 import { getallroomchecklist, getprobedChecklistDetail } from '../../Function/CommonFunction';
@@ -7,7 +7,7 @@ import { Box, Button, ModalClose, ModalDialog, Typography } from '@mui/joy';
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
 import { EmpauthId, succesNofity, warningNofity } from '../../Constant/Constant';
 import { axiosApi } from '../../Axios/Axios';
-
+import ModalHeader from '../../Components/ModalHeader';
 
 
 const BedOverallCondition = lazy(() => import('./BedOverallCondition'));
@@ -31,10 +31,11 @@ const ProBedlistModal = ({ open, setOpen, data, fetchProcheckdetail }) => {
     });
 
     const { data: proCheckListDetail, refetch: fetchProcheckListDetail } = useQuery({
-        queryKey: ['checkllistdetail', data?.fb_bd_code],
-        queryFn: () => getprobedChecklistDetail(data?.fb_bd_code),
-        enabled: !!open && !!data?.fb_bd_code
+        queryKey: ['checkllistdetail', data?.fb_bed_slno],
+        queryFn: () => getprobedChecklistDetail(data?.fb_bed_slno),
+        enabled: !!open && !!data?.fb_bed_slno
     });
+
 
     const HanldeModalClose = useCallback(() => {
         setOpen(false)
@@ -52,7 +53,7 @@ const ProBedlistModal = ({ open, setOpen, data, fetchProcheckdetail }) => {
 
     const ivalildCondtiion = useMemo(() => (
         checklistItems?.filter(
-            (item) => item?.ispresent === 2 && item.iscondtion === 0
+            (item) => item?.ispresent === 2 && item?.iscondtion === 0
         )
     ), [checklistItems]);
 
@@ -79,6 +80,7 @@ const ProBedlistModal = ({ open, setOpen, data, fetchProcheckdetail }) => {
             };
         });
     }, [allroomchecklist, proCheckListDetail]);
+
 
     useEffect(() => {
         if (items?.length > 0) {
@@ -140,17 +142,18 @@ const ProBedlistModal = ({ open, setOpen, data, fetchProcheckdetail }) => {
 
 
     return (
-        <Box>
+        <Box >
             <Modal
                 aria-labelledby="modal-title"
                 aria-describedby="modal-desc"
                 open={open}
-                sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+            >
                 <ModalDialog sx={{
-                    width: '90%',
+                    width: '100%',
                     borderRadius: 'md',
                     px: 1,
-                    py: 1,
+                    py: 0,
                     minHeight: 250,
                     maxHeight: "95%",
                     boxShadow: "none",
@@ -163,77 +166,7 @@ const ProBedlistModal = ({ open, setOpen, data, fetchProcheckdetail }) => {
                     },
                     scrollbarWidth: 'none',
                 }}>
-                    <ModalClose onClick={HanldeModalClose} />
-                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingRight:5,pb:0.3 }}
-                        className="border-b-[0.2rem] border-iconprimary p-0 cursor-pointer" >
-                        <Box sx={{ display: 'flex', alignItems: 'center',pb:0.3 }}>
-                            <EngineeringTwoToneIcon
-                                className='hoverClass'
-                                sx={{ width: 30, height: 30, color: 'rgba(var(--icon-primary))', }}
-                            />
-                            <Typography
-                                level='body-sm'
-                                fontWeight={'md'}
-                                sx={{
-                                    fontFamily: 'var(--font-varient)',
-                                    color: 'rgba(var(--font-primary-white))',
-                                    fontSize: 18,
-                                    fontWeight: 700,
-                                    mt: 1
-                                }}>
-                                PRO CHECKLIST
-                            </Typography>
-                        </Box>
-                        <Box sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                        }}>
-                            <Box sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                flexDirection: "column",
-                                fontSize: 10,
-                                lineHeight: 1,  // Ensures text is tightly packed
-                                border: 0.03,
-                                borderColor: "rgba(var(--border-primary))",
-                                bgcolor: 'rgba(213, 82, 154, 0.8)',
-                                fontFamily: 'var(--font-varient)',
-                                color: 'White',
-                                px: 0.5,
-                                fontWeight: 800,
-                                py: 0.17
-                            }}>
-                                <Box sx={{ p: 0, m: 0, lineHeight: 1 }}>B</Box>
-                                <Box sx={{ p: 0, m: 0, lineHeight: 1 }}>E</Box>
-                                <Box sx={{ p: 0, m: 0, lineHeight: 1 }}>D</Box>
-                            </Box>
-                            <Box sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                flexDirection: "row",
-                                fontSize: 13,
-                                border: 0.03,
-                                borderColor: "rgba(var(--border-primary))",
-                                px: 0.5,
-                                py: 2,
-                                fontWeight: 800,
-                                fontFamily: 'var(--font-varient)',
-                                color: 'rgba(213, 82, 154, 0.8)',
-                                height: 30
-                            }}>
-                                {data?.fb_bdc_no && data?.fb_bdc_no.split('')
-                                    ?.filter(char => !['/', '(', ')', '\\']?.includes(char))
-                                    ?.map((char, index) => (
-                                        <Box key={index} sx={{ p: 0, m: 0, lineHeight: 1 }}>
-                                            {char}
-                                        </Box>
-                                    ))}
-                            </Box>
-                        </Box>
-                    </Box>
+                    <ModalHeader name={'PRO CHECKLIST'} data={data} HanldeModalClose={HanldeModalClose} />
                     <Box
                         sx={{
                             display: 'flex',
@@ -243,47 +176,48 @@ const ProBedlistModal = ({ open, setOpen, data, fetchProcheckdetail }) => {
                             borderRadius: 5,
                             px: 2
                         }}>
-                        <Box sx={{ width: '30%', display: 'flex', alignItems: 'center' }} >
+                        <Box sx={{ width: '30%', display: { xs: 'none', sm: 'flex' }, alignItems: 'center', }} >
                             <Typography
                                 level='body-sm'
                                 fontWeight={'md'}
                                 sx={{
                                     fontFamily: 'var(--font-varient)',
                                     color: 'rgba(var(--font-primary-white))',
-                                    fontSize: 17,
+                                    fontSize: { xs: 10.5, sm: 17 },
                                     fontWeight: 700,
                                 }}>
                                 ITEMS
                             </Typography>
                         </Box>
-                        <Box sx={{ width: '30%', display: 'flex', alignItems: 'center' }} >
+                        <Box sx={{ width: '30%', display: { xs: 'none', sm: 'flex' }, alignItems: 'center' }} >
                             <Typography
                                 level='body-sm'
                                 fontWeight={'md'}
                                 sx={{
                                     fontFamily: 'var(--font-varient)',
                                     color: 'rgba(var(--font-primary-white))',
-                                    fontSize: 17,
+                                    fontSize: { xs: 10.5, sm: 17 },
                                     fontWeight: 700,
                                     mt: 1
                                 }}>
                                 INITIAL CHECKLIST
                             </Typography>
                         </Box>
-                        <Box sx={{ width: '30%', display: 'flex', alignItems: 'center' }} >
+                        <Box sx={{ width: '30%', display: { xs: 'none', sm: 'flex' }, alignItems: 'center' }} >
                             <Typography
                                 level='body-sm'
                                 fontWeight={'md'}
                                 sx={{
                                     fontFamily: 'var(--font-varient)',
                                     color: 'rgba(var(--font-primary-white))',
-                                    fontSize: 17,
+                                    fontSize: { xs: 10.5, sm: 17 },
                                     fontWeight: 700,
                                     mt: 1
                                 }}>
                                 FINAL CHECKLIST
                             </Typography>
                         </Box>
+
                     </Box>
                     <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
                         <ProBedListCard
@@ -324,8 +258,6 @@ const ProBedlistModal = ({ open, setOpen, data, fetchProcheckdetail }) => {
                                 overallremarks={overallremarks} />
                         </Suspense>
                     }
-
-
                     <Box sx={{
                         px: 1,
                         width: '100%',
@@ -340,7 +272,7 @@ const ProBedlistModal = ({ open, setOpen, data, fetchProcheckdetail }) => {
                             onClick={HandleBedDetailRequest}
                             variant="outlined"
                             sx={{
-                                fontSize: 16,
+                                fontSize: { xs: 13, sm: 16 },
                                 height: 45,
                                 border: '1px solid rgb(216, 75, 154, 1)',
                                 color: 'rgb(216, 75, 154, 1)',
@@ -363,4 +295,4 @@ const ProBedlistModal = ({ open, setOpen, data, fetchProcheckdetail }) => {
     )
 }
 
-export default ProBedlistModal
+export default memo(ProBedlistModal)

@@ -126,7 +126,7 @@ const ComplaintCard = ({
                                                 height: 30,
                                                 display: 'flex',
                                                 alignItems: 'center',
-                                                px: 2,
+                                                px: { xs: 0, sm: 2 },
                                                 justifyContent: 'space-between',
                                             }}
                                         >
@@ -134,7 +134,7 @@ const ComplaintCard = ({
                                                 fontFamily: 'var(--font-varient)',
                                                 color: 'rgba(var(--font-primary-white))',
                                                 fontWeight: 500,
-                                                fontSize: 13,
+                                                fontSize: { xs: 10, sm: 13 },
                                             }}>
                                                 {IsExist && filteredAssets?.length === 0
                                                     ? `${index + 1}. ${item?.complaint_desc?.toUpperCase()} (${item?.complaint_dept_name})`
@@ -153,7 +153,7 @@ const ComplaintCard = ({
                 <Box sx={{ display: 'flex', alignItems: 'start', justifyContent: 'end', width: '40%', }}>
                     <Box sx={{
                         px: 1,
-                        width: '90%',
+                        width: {xs:'100%',sm:'90%'},
                         height: 35,
                         my: 1,
                         display: 'flex',
@@ -165,7 +165,7 @@ const ComplaintCard = ({
                             onClick={handlecomplaintRegistrarion}
                             variant="outlined"
                             sx={{
-                                fontSize: 11,
+                                fontSize: {xs:8,sm:11},
                                 fontWeight: 900,
                                 height: 35,
                                 border: '1px solid rgb(216, 75, 154, 1)',

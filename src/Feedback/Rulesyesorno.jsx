@@ -157,7 +157,7 @@ const Rulesyesorno = ({
                             value={TextValue}
                             placeholder='Reason(കാരണം)'
                             minRows={2} sx={{
-                                mt: 1, minHeight: 120, mb: 1, width: '100%',
+                                mt: 1, minHeight: 90, mb: 1, width: '100%',
 
                                 border: '1px solid #CC488F',
                                 '&:focus': {

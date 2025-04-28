@@ -67,6 +67,7 @@ const Feedback = () => {
                     borderBottomLeftRadius: 0,
                     borderBottomRightRadius: 0,
                     minWidth: '15%',
+                    fontSize: { xs: 10, sm: 14 },
                     '&.Mui-selected': {
                       color: 'rgba(var(--color-white))',
                       bgcolor: 'rgba(var(--tab-color))',
@@ -106,16 +107,16 @@ const Feedback = () => {
                           alignItems: 'center'
                         }}>
                           <FormatAlignJustifyIcon sx={{
-                            width: 20,
-                            height: 20
+                            width: { xs: 15, sm: 20 },
+                            height: { xs: 15, sm: 20 }
                           }} />
                           <Typography
                             sx={{
                               fontFamily: "var(--font-varient)",
                               color: 'rgba(var(--font-primary-white))',
-                              fontSize: "14px",
                               fontWeight: 600,
-                              ml: 1
+                              ml: 1,
+                              fontSize: { xs: 11, sm: 14 },
                             }}
                           >
                             {item.feedback_name.toUpperCase()}
@@ -128,6 +129,8 @@ const Feedback = () => {
                               cursor: "pointer",
                               transition: "transform 0.3s ease",
                               transform: "translateX(0)",
+                              width: { xs: 20, sm: 25 },
+                              height: { xs: 20, sm: 25 }
                             }} />
                         </Tooltip>
                       </div>

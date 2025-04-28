@@ -4,7 +4,7 @@ import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 
 const StarRating = ({ totalRating, size }) => {
 
-    const fullStars = Math.floor(totalRating); // Number of full stars
+    const fullStars = Math?.floor(totalRating); // Number of full stars
     const decimalPart = totalRating - fullStars; // Decimal part of rating
     // Determine whether to show a half-star
     const halfStar = decimalPart >= 0.1 ? <FaStarHalfAlt key="half" color="#D84B9A" size={size ? size : ''} /> : null;

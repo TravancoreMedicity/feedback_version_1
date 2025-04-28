@@ -22,7 +22,7 @@ const ToggleButton = ({ label, icon, color, clicked }) => {
                 borderRadius: "30px",
                 padding: "2px 10px",
                 boxShadow: "0px 2px 4px rgba(0,0,0,0.2)",
-                width: "120px",
+                width: "140px",
                 justifyContent: "center",
                 border: getBorder(),
                 filter: clicked === 'yes' && label === "Yes" ? `drop-shadow(0px 0px 15px rgba(4, 154, 46, 0.7))` : clicked === 'no' && label === "No" ? `drop-shadow(0px 0px 15px rgba(178, 0, 0, 0.46))` : '',
@@ -32,10 +32,10 @@ const ToggleButton = ({ label, icon, color, clicked }) => {
             < Button
                 sx={{
                     fontSize: 16,
-                    fontWeight: 400,
+                    fontWeight: 600,
                     textTransform: "none",
                     color: color,
-                    fontFamily: "fantasy"
+                    fontFamily: 'sans-serif'
                 }}
             >
                 {label}

@@ -27,7 +27,7 @@ const CustomeChip = (
             < Button
                 onClick={onClick}
                 sx={{
-                    fontSize: 11,
+                    fontSize: {xs:9,sm:11},
                     fontFamily: 'var(--font-varient)',
                     color: 'rgba(var(--font-primary-white))',
                     fontWeight: 600,

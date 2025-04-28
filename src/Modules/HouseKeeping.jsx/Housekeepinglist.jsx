@@ -1,46 +1,48 @@
 import { Box, Typography } from '@mui/joy'
-import React, { memo, useState } from 'react'
-import CampaignTwoToneIcon from '@mui/icons-material/CampaignTwoTone';
-import PauseCircleFilledTwoToneIcon from '@mui/icons-material/PauseCircleFilledTwoTone';
-import HandymanTwoToneIcon from '@mui/icons-material/HandymanTwoTone';
-// import CardAttachment from '../../Components/CardAttachment';
+import React, { lazy, memo, Suspense, useState } from 'react'
+import { useCallback } from 'react';
+import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
+const HouseKeepingBedlistModal = lazy(() => import('./HouseKeepingBedlistModal'));
+
+const Housekeepinglist = ({ data, assingedbed, setAssignedBed }) => {
+
+    const [open, setOpen] = useState(false);
+    const HandleCheckList = useCallback(() => {
+        setOpen(true)
+    }, []);
 
 
-const Housekeepinglist = ({ data }) => {
 
-    const [open, setOpen] = useState(false)
+    const HandleRemoveAssignedBed = useCallback((bed) => {
+        const resultArray = assingedbed?.filter(val => val !== bed);
+        setAssignedBed(resultArray);
+    }, [assingedbed, setAssignedBed]);
+
+
 
 
     return (
         <>
-            {/* <BedListModal
-                getallremarkrefetch={getallremarkrefetch}
-                getallBlokedbedRefetch={getallBlokedbedRefetch}
-                icon={icon}
-                name={name}
-                open={open}
-                bedslno={data?.fb_bed_slno}
-                bedcode={data?.fb_bd_code}
-                bedno={data?.fb_bdc_no}
-                nscode={data?.fb_ns_code}
-                setOpen={setOpen}
-                selectmaintentance={selectmaintentance}
-                setSelectMaintenance={setSelectMaintenance}
-                setinformationtech={setinformationtech}
-                setInformationTech={setInformationTech}
-                setbiomedical={setbiomedical}
-                setBioMedical={setBioMedical}
-            /> */}
+            {
+                open &&
+                <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
+                    <HouseKeepingBedlistModal
+                        open={open}
+                        data={data}
+                        setOpen={setOpen}
+                    />
+                </Suspense>
+            }
             <Box
                 sx={{
                     backgroundColor: 'rgba(var(--bg-card))',
                     fontFamily: 'var(--font-varient)',
                     color: 'rgba(var(--font-primary-white))',
                     my: 2,
-                    position: 'relative'
+                    position: 'relative',
                 }}>
                 <div style={{
-                    height: 120,
+                    height: 80,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: "space-between",
@@ -50,26 +52,28 @@ const Housekeepinglist = ({ data }) => {
                     borderColor: 'rgba(var(--border-primary))',
                     paddingRight: '10px'
                 }}>
-                    <Box sx={{
+                    <Box onDoubleClick={() => HandleRemoveAssignedBed(data?.fb_bdc_no)
+                    } sx={{
                         display: 'flex',
-                        alignItems: 'center'
+                        alignItems: 'center',
+                        cursor: 'pointer'
                     }}>
                         <Box sx={{
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                             flexDirection: "column",
-                            fontSize: 14,
+                            fontSize: { xs: 9, sm: 10 },
                             lineHeight: 1,
                             border: 0.03,
                             borderColor: "rgba(var(--border-primary))",
-                            bgcolor: 'rgba(213, 82, 154, 0.8)',
+                            bgcolor: 'rgba(252, 114, 190, 0.8)',
                             px: 1,
                             py: 0.4,
                             fontFamily: 'var(--font-varient)',
                             color: 'White',
                             fontWeight: 900,
-                            height: 120,
+                            height: 80,
                             borderTopLeftRadius: 5,
                             borderBottomLeftRadius: 5,
                             mr: 1
@@ -88,7 +92,7 @@ const Housekeepinglist = ({ data }) => {
                                 sx={{
                                     fontFamily: 'var(--font-varient)',
                                     color: 'rgba(var(--font-primary-white))',
-                                    fontSize: 14,
+                                    fontSize: { xs: 9, sm: 12 },
                                     fontWeight: 900,
                                     textAlign: 'center',
                                     mt: 1
@@ -99,7 +103,7 @@ const Housekeepinglist = ({ data }) => {
                                 sx={{
                                     fontFamily: 'var(--font-varient)',
                                     color: 'rgba(var(--font-primary-white))',
-                                    fontSize: 10,
+                                    fontSize: { xs: 9, sm: 12 },
                                     fontWeight: 900,
                                     textAlign: 'center',
                                 }} >
@@ -109,7 +113,7 @@ const Housekeepinglist = ({ data }) => {
                                 sx={{
                                     fontFamily: 'var(--font-varient)',
                                     color: 'rgba(var(--font-primary-white))',
-                                    fontSize: 14,
+                                    fontSize: { xs: 9, sm: 12 },
                                     fontWeight: 600,
                                     textAlign: 'center',
                                 }} >
@@ -117,7 +121,7 @@ const Housekeepinglist = ({ data }) => {
                             </Typography>
                         </Box>
                     </Box>
-                    <Box sx={{
+                    {/* <Box sx={{
 
                         display: 'flex',
                         flexDirection: 'column',
@@ -169,13 +173,13 @@ const Housekeepinglist = ({ data }) => {
                                 }} />
                         }
 
-                    </Box>
+                    </Box> */}
                     {/* <CardAttachment /> */}
                     <Box
-                        // onClick={() => HandleCheckList(data?.fb_bdc_no)}
+                        onClick={() => HandleCheckList(data?.fb_bdc_no)}
                         sx={{
-                            width: 130,
-                            height: 40,
+                            width: { xs: 90, sm: 130 },
+                            height: { xs: 30, sm: 40 },
                             borderRadius: 5,
                             display: 'flex',
                             alignItems: 'center',
@@ -183,10 +187,11 @@ const Housekeepinglist = ({ data }) => {
                             bgcolor: 'red',
                             backgroundColor: 'rgba(var(--bg-common))',
                             fontFamily: 'var(--font-varient)',
-                            borderWidth: 1,
-                            borderColor: 'rgba(var(--border-primary))',
+                            borderWidth: 0.2,
+                            borderColor: 'rgba(252, 114, 190, 0.8)',
                             cursor: 'pointer',
                             fontWeight: 600,
+                            fontSize: { xs: 12, sm: 14 },
                             ':hover': {
                                 transition: 'none',
                                 backgroundColor: 'rgba(var(--input-hover-bg-color))',

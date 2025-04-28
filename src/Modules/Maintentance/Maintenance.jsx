@@ -2,9 +2,8 @@ import React, { lazy, memo, Suspense, useMemo } from 'react'
 import { Box } from '@mui/joy'
 import { useQuery } from '@tanstack/react-query'
 import EngineeringTwoToneIcon from '@mui/icons-material/EngineeringTwoTone';
-import { getAllBlockedBed, getBedRemarkStatus } from '../../Function/CommonFunction'
+import { getAllBlockedBed, getBedRemarkStatus, getProcheckCompletedBedDetail } from '../../Function/CommonFunction'
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
-
 
 const BedList = lazy(() => import('./BedList'));
 const ChecklistHeaders = lazy(() => import('../../Components/ChecklistHeaders'));
@@ -14,7 +13,12 @@ const Maintenance = () => {
     const { data: getllBlockedBed, refetch: getallBlokedbedRefetch } = useQuery({
         queryKey: ["getallblockedbed"],
         queryFn: () => getAllBlockedBed()
-    })
+    });
+
+    // const { data: getProcheckcompleteBed, refetch: fetchProCheckCompleteBed } = useQuery({
+    //     queryKey: ['getProcheckBed'],
+    //     queryFn: () => getProcheckCompletedBedDetail(),
+    // });
 
     //get bed status based on the remarks and verification
     const { data: getallremarkstatus, refetch: getallremarkrefetch } = useQuery({

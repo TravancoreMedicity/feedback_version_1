@@ -8,7 +8,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import Chip from '@mui/material/Chip';
 import { timeFilters } from '../../Constant/Data';
 
-const DurationModel = ({ setOpen, open, setCurrentFeed, currentfeed, setFetchDate }) => {
+const DurationModel = ({ setOpen, open, setCurrentFeed, currentfeed, setFetchDate, size }) => {
 
     const buttonRef = useRef(null); // Reference to the custom button
 
@@ -16,11 +16,11 @@ const DurationModel = ({ setOpen, open, setCurrentFeed, currentfeed, setFetchDat
         <>
             {/* Custom Button to Open Dropdown */}
             <Box
-                ref={buttonRef} // Attach the reference
+                ref={buttonRef}
                 onClick={() => setOpen((prev) => !prev)}
                 sx={{
-                    minWidth: 100,
-                    height: 40,
+                    minWidth: { xs: '100%', sm: "30%" },
+                    height: { xs: 20, sm: 35 },
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -31,15 +31,15 @@ const DurationModel = ({ setOpen, open, setCurrentFeed, currentfeed, setFetchDat
                     fontFamily: 'var(--font-varient)',
                     color: 'rgba(var(--font-primary-white))',
                     borderRadius: 15,
-                    px: 2
+                    px: { xs: 0, sm: 2 }
                 }}>
-                <BrightStar style={{ color: 'rgba(var(--icon-primary))', fontSize: 13 }} />
+                <BrightStar fontSize={size ? 13 : 7} style={{ color: 'rgba(var(--icon-primary))' }} />
                 <Typography sx={{
                     ml: 1,
                     fontWeight: 'bold',
                     fontFamily: 'var(--font-varient)',
                     color: 'rgba(var(--font-primary-white))',
-                    fontSize: 12
+                    fontSize: { xs: 5, sm: 10 }
                 }}>{currentfeed}</Typography>
             </Box>
 

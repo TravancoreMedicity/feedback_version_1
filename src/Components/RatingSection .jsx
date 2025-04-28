@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Box, Typography } from '@mui/material';
 import CustomInputWithLabel from './CustomInputWithLabel';
 import { Grid } from '@mui/joy';
@@ -47,4 +47,4 @@ const RatingSection = ({ onInputChange, icon, ratingCount, answers }) => {
   );
 };
 
-export default RatingSection;
+export default memo(RatingSection);

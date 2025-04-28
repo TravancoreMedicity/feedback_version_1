@@ -6,7 +6,7 @@ import { format } from 'date-fns';
 const PatinetCard = ({ inpatientDetail }) => {
     // Render a single patient card
     return (
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, px: 1 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, px: 1, mb: { xs: 1, sm: 0 } }}>
             {[
                 { label: 'Patient Name', value: inpatientDetail?.fb_ptc_name || 'Not Available', icon: <UserBadgeCheck fontSize={12} style={{ color: 'rgba(var(--font-primary-white))', cursor: 'pointer' }} /> },
                 { label: 'Patient Ip', value: `${inpatientDetail?.fb_ip_no ?? "IP N/A"} / ${inpatientDetail?.fb_pt_no ?? 'PT N/A'}`, icon: <IpAddressTag fontSize={12} style={{ color: 'rgba(var(--font-primary-white))', cursor: 'pointer' }} /> },
@@ -43,14 +43,14 @@ const PatinetCard = ({ inpatientDetail }) => {
                         </Box>
                     </Box>
                     <Box sx={{
-                        width: '90%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'
+                        width: { xs: '100%', sm: '90%' }, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'
                     }}>
                         <Typography
                             sx={{
                                 fontFamily: 'var(--font-varient)',
                                 color: 'rgba(var(--font-primary-white))',
                                 fontWeight: 600,
-                                fontSize: 15,
+                                fontSize: { xs: 10, sm: 15 },
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
                                 whiteSpace: 'nowrap',

@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/joy';
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect, memo, useCallback } from 'react';
 
 
 const successAnimation = require('../assets/successanimation.gif');
@@ -13,6 +13,18 @@ const SuccessPage = ({ setIsSubmit }) => {
         }, 2200); // Adjust based on your GIF duration
         return () => clearTimeout(timer);
     }, []);
+
+
+
+    const handleDone = useCallback(() => {
+        // Open the new URL in a new tab
+        window.open("https://travancoremedicity.com/wellness-executive-health-care-center/", "_blank");
+        setIsSubmit(false);
+        // Try closing the current tab (works only if it was opened via window.open)
+        window.close();
+    }, [setIsSubmit]);
+
+
 
     return (
         <Box sx={{
@@ -98,7 +110,7 @@ const SuccessPage = ({ setIsSubmit }) => {
                         color: "rgba(8, 8, 8, 0.64)",
                         fontFamily: "Bahnschrift",
                         cursor: 'pointer'
-                    }} onClick={() => setIsSubmit(false)}>
+                    }} onClick={handleDone}>
                     Done
                 </Box>
             }

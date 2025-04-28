@@ -20,6 +20,7 @@ const PateintRoomDetail = ({ beddetail, nsname, view, setView, nscode }) => {
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false)
 
+
     //GROUP BED DETAIL BASED ON THE ROOM CATEGORIES
     const groupedBeds = beddetail?.reduce((acc, bed) => {
         const key = bed.fb_rtc_desc; // Grouping based only on RTC_DESC
@@ -41,15 +42,14 @@ const PateintRoomDetail = ({ beddetail, nsname, view, setView, nscode }) => {
             fb_ip_num: inpatientDetail[0]?.fb_ip_no,
         }
         try {
-            const response = await axiosApi.post('/feedback/getpatientfeedback', searchdata)
+            const response = await axiosApi.post('/feedback/getpatientfeedback', searchdata);
             const { success, data } = response?.data;
-            if (success === 1) return warningNofity("Error in Fetching data")
+            if (success === 1) return warningNofity("Error in Fetching data");
             setPatientFeedBackData(data ? data : [])
         } catch (error) {
-            warningNofity("Error in Fetching Data")
+            warningNofity("Error in Fetching Data");
         }
     }, [])
-
 
     //Fetching Patient Detail From the Melior
     const GetPatientDetailFromMeliora = useCallback(async (bdcode) => {
@@ -114,7 +114,7 @@ const PateintRoomDetail = ({ beddetail, nsname, view, setView, nscode }) => {
                                 height: "calc(100% - 50px)",
                                 cursor: 'pointer',
                             }}>
-                            {Object.entries(groupedBeds).map(([floorName, beddetail]) => (
+                            {Object.entries(groupedBeds)?.map(([floorName, beddetail]) => (
                                 <Box
                                     key={floorName}
                                     className="flex flex-col rounded-xl p-1 w-full"
@@ -142,7 +142,7 @@ const PateintRoomDetail = ({ beddetail, nsname, view, setView, nscode }) => {
                                                     sx={{
                                                         fontFamily: 'var(--font-varient)',
                                                         color: 'rgba(var(--font-primary-white))',
-                                                        fontSize: 17,
+                                                        fontSize: { xs: 14, sm: 17 },
                                                         fontWeight: 600,
                                                         my: 1
                                                     }}>
@@ -154,9 +154,9 @@ const PateintRoomDetail = ({ beddetail, nsname, view, setView, nscode }) => {
                                             <Box sx={{ width: '98%' }}>
                                                 <Grid container spacing={1}>
                                                     {beddetail?.map((item, index) => {
-                                                        const result = getallremarkstatus?.find((val) => val.fb_bd_code === Number(item.fb_bd_code))
+                                                        const result = getallremarkstatus?.find((val) => val?.fb_bd_code === Number(item?.fb_bd_code))
                                                         return (
-                                                            <Grid xs={12} sm={3} lg={2} xl={1.5} key={index}>
+                                                            <Grid xs={6} sm={3} lg={2} xl={1.5} key={index} >
                                                                 <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
                                                                     <RoomComponent
                                                                         remarkstatus={result}

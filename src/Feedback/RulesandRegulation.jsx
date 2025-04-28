@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from 'react';
+import React, { lazy, memo, Suspense } from 'react';
 import QuestionBoxSkeleton from './Commoncomponents/QuestionBoxSkeleton';
 import { Box, Textarea } from '@mui/joy';
 
@@ -208,4 +208,4 @@ const RulesandRegulation = ({ selected, setSelected, setRemarks, remarks }) => {
     );
 };
 
-export default RulesandRegulation;
+export default memo(RulesandRegulation);

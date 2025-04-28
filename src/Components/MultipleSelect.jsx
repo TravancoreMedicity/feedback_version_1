@@ -17,10 +17,12 @@ const MultipleSelect = ({ data, onchange, value }) => {
                         // Ensure selectedOption is an object and you're rendering the label or another string property
                         return (
                             <Chip
+                            sx={{
+                                fontSize:{xs:10,sm:14}
+                            }}
                                 key={selectedOption.value} // Use a unique identifier (e.g., `value`) as the key
                                 variant="soft"
-                                color="primary"
-                            >
+                                color="primary">
                                 {selectedOption.label || selectedOption.value || selectedOption} {/* Render the label or value */}
                             </Chip>
                         );
@@ -30,11 +32,11 @@ const MultipleSelect = ({ data, onchange, value }) => {
             sx={{
                 fontFamily: 'var(--font-varient)',
                 color: 'rgba(var(--font-primary-white))',
-                fontSize: 15,
+                fontSize: { xs: 12, sm: 15 },
                 transition: 'none',
                 width: '100%',
                 boxShadow: 'none',
-                borderWidth: '1.8px',
+                borderWidth: '2.8px',
                 '&.MuiSelect-root': {
                     "--Select-focusedHighlight": 'none',
                     "--Select-focusedThickness": '1.1px',
@@ -70,7 +72,7 @@ const MultipleSelect = ({ data, onchange, value }) => {
             startDecorator={<PageEdit color='rgba(var(--font-primary-white))' />} // Adding the icon here
         >
             {data?.map((item, index) => (
-                <Option key={index} value={item.em_id}>
+                <Option key={index} value={item.em_id} sx={{ fontSize: { xs: 12, sm: 15 } }}>
                     {item.em_name}
                 </Option>
             ))}

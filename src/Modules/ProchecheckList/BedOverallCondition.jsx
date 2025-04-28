@@ -35,7 +35,7 @@ const BedOverallCondition = ({ setTotalDetail, ovarallconditon, overallremarks }
             }}>
                 <VerifiedUserTwoToneIcon sx={{
                     color: 'rgba(var(--icon-primary))',
-                    fontSize: 26,
+                    fontSize: { xs: 20, sm: 26 },
                     fontWeight: 700
                 }} />
                 <Typography
@@ -44,7 +44,7 @@ const BedOverallCondition = ({ setTotalDetail, ovarallconditon, overallremarks }
                     sx={{
                         fontFamily: 'var(--font-varient)',
                         color: 'rgba(var(--font-primary-white))',
-                        fontSize: 18,
+                        fontSize: { xs: 14, sm: 18 },
                         fontWeight: 700
                     }}>
                     OVERALL CONDITIONS
@@ -63,28 +63,31 @@ const BedOverallCondition = ({ setTotalDetail, ovarallconditon, overallremarks }
                 <Button
                     variant="outlined"
                     sx={{
-                        width: '48%',
+                        width: '32%',
                         border: '1px solid rgba(var(--border-primary))',
                         color: getIconColor("1"),
-                        bgcolor: ovarallconditon === '1' ? '#fae0e4' : ''
+                        bgcolor: ovarallconditon === '1' ? '#fae0e4' : '',
+                        fontSize: { xs: 10, sm: 14 }
                     }}
                     onClick={() => handleButtonClick("1")}>POOR</Button>
                 <Button
                     variant="outlined"
                     sx={{
-                        width: '48%',
+                        width: '32%',
                         border: '1px solid rgba(var(--border-primary))',
                         color: getIconColor("2"),
-                        bgcolor: ovarallconditon === '2' ? '#fae0e4' : ''
+                        bgcolor: ovarallconditon === '2' ? '#fae0e4' : '',
+                        fontSize: { xs: 10, sm: 14 }
                     }}
                     onClick={() => handleButtonClick("2")}>GOOD</Button>
                 <Button
                     variant="outlined"
                     sx={{
-                        width: '48%',
+                        width: '32%',
                         border: '1px solid rgba(var(--border-primary))',
                         color: getIconColor("3"),
                         bgcolor: ovarallconditon === '3' ? '#fae0e4' : '',
+                        fontSize: { xs: 10, sm: 14 }
                     }}
                     onClick={() => handleButtonClick("3")}>EXCELLENT</Button>
             </Box>

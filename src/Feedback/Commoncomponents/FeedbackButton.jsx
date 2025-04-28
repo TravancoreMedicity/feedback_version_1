@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { memo, useCallback } from "react";
 import { Box, Typography } from "@mui/joy";
 
 import { iconMap } from "./Commondetal";
@@ -75,4 +75,4 @@ const FeedbackButton = ({ average, handlesubmit }) => {
     );
 };
 
-export default FeedbackButton;
+export default memo(FeedbackButton);

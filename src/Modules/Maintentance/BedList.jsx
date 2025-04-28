@@ -11,6 +11,7 @@ import { getAllComplaintDetail, getallRoomAssetData, getBedRemarkDetails } from 
 
 const BedList = ({ data, name, icon, matchdata, getallremarkrefetch, getallBlokedbedRefetch }) => {
 
+
     const [open, setOpen] = useState(false)
     const [condition, setCondtion] = useState({})
     const [isinitalchecked, setIsInitialChecked] = useState(false)
@@ -19,8 +20,7 @@ const BedList = ({ data, name, icon, matchdata, getallremarkrefetch, getallBloke
         activeButton: null,
         remarks: "",
         overallremarks: ""
-    })
-
+    });
 
     const { data: getroomassetData } = useQuery({
         queryKey: ["roomassetdata", data?.fb_rm_room_slno],
@@ -28,7 +28,6 @@ const BedList = ({ data, name, icon, matchdata, getallremarkrefetch, getallBloke
         enabled: !!open,
         staleTime: Infinity
     });
-
 
     //STATIC ASSET DATA
     const groupedByDepid = getroomassetData?.reduce((acc, item) => {
@@ -65,8 +64,8 @@ const BedList = ({ data, name, icon, matchdata, getallremarkrefetch, getallBloke
 
     //FETCHING BEDREMARKS TO DYNAMICALLY UPDATEIJNG CHECKLIST
     const { data: bedremarks, refetch: getbedremarkRefetch } = useQuery({
-        queryKey: ['fetchbedremarkdetail', data?.fb_bd_code],
-        queryFn: () => getBedRemarkDetails(data?.fb_bd_code),
+        queryKey: ['fetchbedremarkdetail', data?.fb_bed_slno],
+        queryFn: () => getBedRemarkDetails(data?.fb_bed_slno),
         enabled: !!open,
     });
 
@@ -141,7 +140,7 @@ const BedList = ({ data, name, icon, matchdata, getallremarkrefetch, getallBloke
                     position: 'relative'
                 }}>
                 <div style={{
-                    height: 120,
+                    height: { xs: 80, sm: 120 },
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: "space-between",
@@ -152,6 +151,7 @@ const BedList = ({ data, name, icon, matchdata, getallremarkrefetch, getallBloke
                     borderColor: 'rgba(var(--border-primary))',
                 }}>
                     <Box sx={{
+                        height: '100%',
                         display: 'flex',
                         alignItems: 'center'
                     }}>
@@ -160,7 +160,7 @@ const BedList = ({ data, name, icon, matchdata, getallremarkrefetch, getallBloke
                             alignItems: 'center',
                             justifyContent: 'center',
                             flexDirection: "column",
-                            fontSize: 14,
+                            fontSize: { xs: 10, sm: 14 },
                             lineHeight: 1,
                             border: 0.03,
                             borderColor: "rgba(var(--border-primary))",
@@ -171,7 +171,7 @@ const BedList = ({ data, name, icon, matchdata, getallremarkrefetch, getallBloke
                             fontFamily: 'var(--font-varient)',
                             color: 'White',
                             fontWeight: 900,
-                            height: 120,
+                            height: { xs: 80, sm: 120 },
                             borderTopLeftRadius: 5,
                             borderBottomLeftRadius: 5,
                             mr: 1
@@ -183,14 +183,14 @@ const BedList = ({ data, name, icon, matchdata, getallremarkrefetch, getallBloke
                             ))}
                         </Box>
                         <Box sx={{
-                            width: 150,
+                            width: { xs: 80, sm: 150 },
                             borderRadius: 5
                         }}>
                             <Typography level='body-sm' fontWeight={'md'}
                                 sx={{
                                     fontFamily: 'var(--font-varient)',
                                     color: 'rgba(var(--font-primary-white))',
-                                    fontSize: 14,
+                                    fontSize: { xs: 9, sm: 14 },
                                     fontWeight: 900,
                                     textAlign: 'center',
                                     mt: 1
@@ -201,7 +201,8 @@ const BedList = ({ data, name, icon, matchdata, getallremarkrefetch, getallBloke
                                 sx={{
                                     fontFamily: 'var(--font-varient)',
                                     color: 'rgba(var(--font-primary-white))',
-                                    fontSize: 10,
+                                    fontSize: { xs: 9, sm: 14 },
+
                                     fontWeight: 900,
                                     textAlign: 'center',
                                 }} >
@@ -211,7 +212,8 @@ const BedList = ({ data, name, icon, matchdata, getallremarkrefetch, getallBloke
                                 sx={{
                                     fontFamily: 'var(--font-varient)',
                                     color: 'rgba(var(--font-primary-white))',
-                                    fontSize: 14,
+                                    fontSize: { xs: 9, sm: 14 },
+
                                     fontWeight: 600,
                                     textAlign: 'center',
                                 }} >
@@ -226,16 +228,16 @@ const BedList = ({ data, name, icon, matchdata, getallremarkrefetch, getallBloke
                     }}>{
                             matchdata?.fb_bed_service_status === 2 ?
                                 <HandymanTwoToneIcon sx={{
-                                    width: 30, height: 30,
+                                    width: { xs: 20, sm: 30 }, height: { xs: 20, sm: 30 },
                                     color: "#ff4d6d",
                                 }}
                                 /> : matchdata?.fb_bed_service_status === 1 ? <PauseCircleFilledTwoToneIcon sx={{
-                                    width: 30, height: 30,
+                                    width: { xs: 20, sm: 30 }, height: { xs: 20, sm: 30 },
                                     color: "#ff4d6d",
 
                                 }} /> : <CampaignTwoToneIcon
                                     sx={{
-                                        width: 30, height: 30,
+                                        width: { xs: 20, sm: 30 }, height: { xs: 20, sm: 30 },
                                         color: "#ef3c2d",
                                     }}
                                 />
@@ -244,7 +246,7 @@ const BedList = ({ data, name, icon, matchdata, getallremarkrefetch, getallBloke
                             fontFamily: 'var(--font-varient)',
                             color: 'rgba(var(--font-primary-white))',
                             fontWeight: 700,
-                            fontSize: 14
+                            fontSize: { xs: 9, sm: 14 },
                         }}>
                             {matchdata && matchdata !== undefined ? (matchdata?.fb_bed_service_status === 2 ? "RENOVATION" : matchdata?.fb_bed_service_status === 1 ? 'ONHOLD' : "NOT READY") : data?.fb_bdc_occup === "N" ? "NOT READY" : ""}
                         </Typography>
@@ -258,8 +260,8 @@ const BedList = ({ data, name, icon, matchdata, getallremarkrefetch, getallBloke
                     <Box
                         onClick={handleChecklistClick}
                         sx={{
-                            width: 130,
-                            height: 40,
+                            width: { xs: 90, sm: 130 },
+                            height: { xs: 30, sm: 40 },
                             borderRadius: 5,
                             display: 'flex',
                             alignItems: 'center',
@@ -270,6 +272,7 @@ const BedList = ({ data, name, icon, matchdata, getallremarkrefetch, getallBloke
                             borderColor: matchdata?.fb_bed_service_status === 2 ? "#c42348" : matchdata?.fb_bed_service_status === 1 ? '#ff4d6d' : "#ef3c2d",
                             cursor: 'pointer',
                             fontWeight: 600,
+                            fontSize: { xs: 10, sm: 14 },
                             ':hover': {
                                 transition: 'none',
                                 backgroundColor: 'rgba(var(--input-hover-bg-color))',
@@ -290,8 +293,6 @@ const BedList = ({ data, name, icon, matchdata, getallremarkrefetch, getallBloke
                     </Box>
                 </div>
             </Box >
-
-
         </>
     )
 }

@@ -29,8 +29,6 @@ export default function SelectBoxComponent({ setCategoryName, category, setCateg
                 }}
                 onChange={(event, newValue) => {
                     if (newValue) {
-                        console.log(newValue, "value");
-
                         setCategoryName(newValue);
                         setCategoryId(newValue.fb_category_slno)
                     }

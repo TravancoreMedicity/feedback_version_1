@@ -9,7 +9,6 @@ import { Box, Typography } from '@mui/joy';
 
 
 const PatientRemarks = ({ inpatientDetail }) => {
-
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, px: 1 }}>
             {[

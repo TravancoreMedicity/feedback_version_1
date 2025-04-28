@@ -2,6 +2,7 @@ import { getYear, format } from 'date-fns'
 import { axiosApi, axiosellider } from '../Axios/Axios';
 import { warningNofity } from '../Constant/Constant';
 
+
 /**
  * Pads a given number with leading zeros until it reaches the given total length.
  * @param {number} num The number to pad
@@ -26,8 +27,6 @@ export const customDocNumber = (number) => {
     const day = format(new Date(), 'M')
     return `DOC-${year}-${day}-${addLeadingZeros(number, 6)}`
 }
-
-
 
 
 export const getallFeedbackCategory = async () => {
@@ -93,6 +92,12 @@ export const getProcheckedbedDetail = async () => {
 }
 
 
+export const getProcheckCompletedBedDetail = async () => {
+    const result = await axiosApi.get("/feedback/getprocheckcompletebed");
+    const { data, success } = result.data;
+    if (success === 1) return warningNofity("Error in fetching Data");
+    return data ? data : [];
+}
 
 //NOT USING check later 
 export const getallHouseKeepingBed = async () => {
@@ -101,8 +106,6 @@ export const getallHouseKeepingBed = async () => {
     if (success === 1) return warningNofity("Error in fetching Data");
     return data ? data : [];
 }
-
-
 
 //not using 
 export const getLoggedEmpDetail = async (id) => {
@@ -113,15 +116,14 @@ export const getLoggedEmpDetail = async (id) => {
 }
 
 
+//NOT USING THIS
 
-
-
-export const getAllBedRemarks = async () => {
-    const result = await axiosApi.get("/feedback/getllbedremarks");
-    const { data, success } = result.data;
-    if (success === 0) return warningNofity("Error in fetching Data");
-    return data ? data : [];
-}
+// export const getAllBedRemarks = async () => {
+//     const result = await axiosApi.get("/feedback/getllbedremarks");
+//     const { data, success } = result.data;
+//     if (success === 0) return warningNofity("Error in fetching Data");
+//     return data ? data : [];
+// }
 
 
 export const getallmoudleMaster = async () => {
@@ -130,6 +132,14 @@ export const getallmoudleMaster = async () => {
     if (success === 1) return warningNofity("Error in fetching Data");
     return data ? data : [];
 }
+
+export const getallHkEmployeeDetail = async () => {
+    const result = await axiosApi.get("/feedback/getallhkempdtl");
+    const { data, success } = result.data;
+    if (success === 1) return warningNofity("Error in fetching Data");
+    return data ? data : [];
+}
+
 
 
 export const getassetItemMaster = async () => {
@@ -145,6 +155,22 @@ export const getallroomchecklist = async () => {
     if (success === 1) return warningNofity("Error in fetching Data");
     return data ? data : [];
 }
+export const getllhkroomChecklist = async () => {
+    const result = await axiosApi.get("/feedback/getallhkactiveitem");
+    const { data, success } = result.data;
+    if (success === 1) return warningNofity("Error in fetching Data");
+    return data ? data : [];
+}
+
+
+
+export const getallhkroomitems = async () => {
+    const result = await axiosApi.get("/feedback/getallhkitem");
+    const { data, success } = result.data;
+    if (success === 1) return warningNofity("Error in fetching Data");
+    return data ? data : [];
+}
+
 
 
 
@@ -258,9 +284,6 @@ export const getfeedbacksubcategory = async (id) => {
     })
 }
 
-
-
-
 export const getallfeedbackDetail = async () => {
     return axiosApi.get('/feedback/getallfeedbackDetail').then((res) => {
         const { success, data } = res.data;
@@ -310,6 +333,16 @@ export const getalluserfeedbackAnswers = async (date) => {
         }
     })
 }
+
+export const getallFeedBackCount = async (id) => {
+    return axiosApi.get(`/feedback/getfeedbackcount`).then((res) => {
+        const { success, data } = res.data;
+        if (success === 2) {
+            return data ? data : []
+        }
+    })
+}
+
 
 ///
 

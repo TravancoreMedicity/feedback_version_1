@@ -1,6 +1,6 @@
 // @ts-nocheck
 import Axios from "axios";
-import { API_URL, ELLIDER_API_URL, RETURN_URL } from "../Constant/Static";
+import { API_URL, ELLIDER_API_URL } from "../Constant/Static";
 import { toast } from "react-toastify";
 
 export const axiosApi = Axios.create({

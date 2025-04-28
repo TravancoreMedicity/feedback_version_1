@@ -1,6 +1,6 @@
 import { Box, Typography } from '@mui/joy';
 import React, { memo, useCallback, useState } from 'react';
-import { Popover } from '@mui/material';
+import { Popover, useMediaQuery } from '@mui/material';
 import FeedbackCategoryProgress from './FeedbackCategoryProgress';
 import StarRendering from './StarRendering';
 
@@ -9,7 +9,7 @@ const FeedBackFormComponent = ({ name, totalMark, len, progress, totalForm, form
 
     const rating = Math.min(5, totalMark / len);
     const FeedBackRating = Math.min(5, formMark / totalForm);
-
+    const isMdUp = useMediaQuery('(min-width: 760px)');
     const [anchorEl, setAnchorEl] = useState(null);
     const handleMouseEnter = useCallback((event) => {
         setAnchorEl(event.currentTarget);
@@ -88,13 +88,13 @@ const FeedBackFormComponent = ({ name, totalMark, len, progress, totalForm, form
                 sx={{
                     pointerEvents: 'none', // Prevents clicking issues
                     mt: 1,
-                    ml: 2, // Positioning the modal to the side
+                    ml: { xs: 0, sm: 2 }, // Positioning the modal to the side
                 }}
                 disableEnforceFocus={true}
             >
                 <Box sx={{
                     p: 2,
-                    width: 650,
+                    width: { xs: 300, sm: 650 },
                     borderRadius: 2,
                     boxShadow: 3,
                     backgroundColor: "rgba(var(--bg-card))",
@@ -106,16 +106,19 @@ const FeedBackFormComponent = ({ name, totalMark, len, progress, totalForm, form
                     <Typography sx={{
                         fontFamily: 'var(--font-varient)',
                         color: 'rgba(var(--font-primary-white))'
-                    }} fontWeight={600} fontSize={16}>{name}'s Feedback Details</Typography>
+                    }} fontWeight={600} fontSize={{ xs: 12, sm: 16 }}>{name}'s Feedback Details</Typography>
                     <Typography sx={{
                         fontFamily: 'var(--font-varient)',
                         color: 'rgba(var(--font-primary-white))',
                         mb: 1
-                    }} fontSize={14}>More detailed feedback summary here...</Typography>
-                    <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', height: '87%' }}>
+                    }} fontSize={{ xs: 12, sm: 14 }}>More detailed feedback summary here...</Typography>
+                    <Box sx={{
+                        width: '100%', display: 'flex', justifyContent: 'space-between', height: '87%',
+                        flexDirection: { xs: 'column', sm: 'row', bgcolor: 'red' }
+                    }}>
 
                         <Box sx={{
-                            width: '20%',
+                            width: { xs: '100%', sm: '20%' },
                             display: 'flex',
                             alignItems: 'center',
                             flexDirection: "column",
@@ -128,19 +131,20 @@ const FeedBackFormComponent = ({ name, totalMark, len, progress, totalForm, form
                                 flexDirection: "column",
                             }}>
                                 <Typography sx={{
-                                    fontSize: 53,
+                                    fontSize: { xs: 23, sm: 53 },
                                     fontWeight: 600,
                                     mr: 1,
                                     fontFamily: 'var(--font-varient)',
                                     color: 'rgba(var(--font-primary-white))'
                                 }}>{FeedBackRating && !isNaN(FeedBackRating) ? FeedBackRating?.toFixed(1) : 0}</Typography>
                                 <Box sx={{ display: 'flex', alignItems: 'start', justifyContent: "start" }}>
-                                    <StarRendering totalRating={FeedBackRating?.toFixed(1)} />
+                                    <StarRendering totalRating={FeedBackRating?.toFixed(1)} size={isMdUp ? 22 : 16} />
                                 </Box>
                             </Box>
                         </Box>
                         <Box sx={{
-                            width: '80%', px: 1, height: '100%',
+                            width: { xs: '100%', sm: '80%' },
+                            px: 1, height: '100%',
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
@@ -155,14 +159,15 @@ const FeedBackFormComponent = ({ name, totalMark, len, progress, totalForm, form
                                             alignItems: 'center',
                                             justifyContent: 'space-between',
                                             mb: 0.3,
+                                            flexDirection: { xs: 'column', sm: 'row' }
                                         }}>
-                                            <Box sx={{ width: '45%' }}>
+                                            <Box sx={{ width: { xs: '100%', sm: '45%' } }}>
                                                 <Typography sx={{
                                                     fontFamily: 'var(--font-varient)',
                                                     color: 'rgba(var(--font-primary-white))'
                                                 }} fontSize={12}>{item?.fb_category_name}</Typography>
                                             </Box>
-                                            <Box sx={{ width: '60%' }}>
+                                            <Box sx={{ width: { xs: '100%', sm: '60%' } }}>
                                                 <FeedbackCategoryProgress count={item?.totalFeed} mark={item?.totalMark} />
                                             </Box>
                                         </Box>

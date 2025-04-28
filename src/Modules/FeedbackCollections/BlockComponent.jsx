@@ -5,6 +5,7 @@ import { faUserNurse } from '@fortawesome/free-solid-svg-icons';
 import { axiosApi, axiosellider } from '../../Axios/Axios';
 import { errorNofity, warningNofity } from '../../Constant/Constant';
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
+import { format } from 'date-fns';
 
 const BlockComponent = ({
     stationname,
@@ -18,6 +19,10 @@ const BlockComponent = ({
     loading
 }) => {
 
+
+    const today = new Date();
+    const formattedDate = format(today, 'dd/MM/yyyy');
+
     const InsertPatientDetailMeliora = useCallback(async (data) => {
         const insertData = {
             ptdetail: data
@@ -25,7 +30,7 @@ const BlockComponent = ({
         try {
             setLoading(true)
             const response = await axiosApi.post("/feedback/insertptdetailmlora", insertData);
-            const { success } = response.data;
+            const { success } = response?.data;
             if (success !== 2) return warningNofity("Error in inserting Patinet Details");
             setLoading(false)
         } catch (error) {
@@ -35,23 +40,37 @@ const BlockComponent = ({
     }, [setLoading]);
 
 
+
+    const getUniqueByIP_NO = (data = []) => {
+        return data?.reduce((unique, item) => {
+            return unique?.some(u => u.IP_NO === item.IP_NO)
+                ? unique
+                : [...unique, item];
+        }, []);
+    };
+
+
     const GetallPatientDetail = useCallback(async () => {
         try {
-            // setAllPatientDetail([]);
             setLoading(true)
             const response = await axiosellider.post('/melioraEllider/ip', {
                 NS_CODE: code,
+                TO_DATE: formattedDate
             })
-            const { success, data } = response.data;
+            const { success, data } = response?.data;
             if (success === 0) return errorNofity("Error in fetching Data");
-            // setAllPatientDetail(data ? data : [])
-            await InsertPatientDetailMeliora(data ? data : [])
+            const uniqueData = getUniqueByIP_NO(data);
+            if (uniqueData && uniqueData?.length > 0) {
+                await InsertPatientDetailMeliora(uniqueData);
+            }
+            // await InsertPatientDetailMeliora(data ? uniqueData : [])
             setLoading(false)
         } catch (error) {
             setLoading(false)
             warningNofity("Error in Fetching Data...?")
         }
-    }, [code, InsertPatientDetailMeliora, setLoading])
+    }, [code, setLoading, InsertPatientDetailMeliora, formattedDate]);
+
 
     const InsertBedDetailMeliora = useCallback(async (data) => {
         const insertData = {
@@ -60,14 +79,14 @@ const BlockComponent = ({
         try {
             setLoading(true)
             const response = await axiosApi.post("/feedback/insertbddetail", insertData);
-            const { success } = response.data;
+            const { success } = response?.data;
             if (success !== 2) return warningNofity("Error in inserting Bed Details");
             setLoading(false)
         } catch (error) {
             warningNofity("Error in inserting Bed infromation");
             setLoading(false)
         }
-    }, [setLoading])
+    }, [setLoading]);
 
     const HandleBedFetchFromMeliora = useCallback(async () => {
         const insertData = {
@@ -76,7 +95,7 @@ const BlockComponent = ({
         try {
             setLoading(true)
             const response = await axiosApi.post('/feedback/getbed', insertData)
-            const { success, data } = response.data;
+            const { success, data } = response?.data;
             if (success === 1) return warningNofity("No Bed Available")
             if (success !== 2) return warningNofity("Error in fetching In Paient Detail :)")
             setBedDetail(data ? data : {})
@@ -97,7 +116,7 @@ const BlockComponent = ({
         try {
             setLoading(true)
             const response = await axiosellider.post('/melioraEllider/getbed', insertData)
-            const { success, data } = response.data;
+            const { success, data } = response?.data;
             if (success === 1) return warningNofity("No Bed Available")
             if (success !== 2) return warningNofity("Error in fetching In Paient Detail :)")
             await InsertBedDetailMeliora(data ? data : [])
@@ -127,7 +146,7 @@ const BlockComponent = ({
             {loading ? <CustomBackDropWithOutState message={"Loading..."} /> : null}
             <Box
                 sx={{
-                    width: '100%',
+                    width: { xs: '70%', sm: '100%' },
                     height: 90,
                     backgroundColor: "rgba(var(--bg-card))",
                     border: 0.03,
@@ -138,15 +157,14 @@ const BlockComponent = ({
                     "&:hover": {
                         filter: ispresent === "N" ? `drop-shadow(0px 0px 15px rgba(252, 138, 191, 0.46))` : '',
                     },
-
                 }}>
                 <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', flexDirection: 'column' }}>
-                    <FontAwesomeIcon icon={faUserNurse} style={{ fontSize: 26, color: 'rgba(var(--icon-primary))' }} />
+                    <FontAwesomeIcon icon={faUserNurse} style={{ fontSize: { xs: 22, sm: 26 }, color: 'rgba(var(--icon-primary))' }} />
                     <Typography level='body-sm' fontWeight={'md'}
                         sx={{
                             fontFamily: 'var(--font-varient)',
                             color: 'rgba(var(--font-primary-white))',
-                            fontSize: 11,
+                            fontSize: { xs: 8, sm: 11 },
                             fontWeight: 900,
                             textAlign: 'center',
                             mt: 1
@@ -154,7 +172,6 @@ const BlockComponent = ({
                         {stationname}
                     </Typography>
                 </Box>
-
             </Box>
         </Box >
     )

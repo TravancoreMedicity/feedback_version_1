@@ -8,12 +8,10 @@ import { getfeedbacksubcategory } from '../Function/CommonFunction'
 const SelectSubCategoryMaster = ({ handleChange, value, label, categoryid }) => {
 
 
-    console.log(categoryid, "categoryid");
-
     const { isLoading, data, error } = useQuery({
         queryKey: ['getsubcategory', categoryid],
         queryFn: () => getfeedbacksubcategory(categoryid),
-        enabled: categoryid != 0
+        enabled: categoryid !== 0
     })
 
     const formattedData = data ?

@@ -4,7 +4,8 @@ import { LogOut } from 'iconoir-react'
 import { useNavigate } from 'react-router-dom'
 import { useMediaQuery } from '@mui/material'
 
-const ChecklistHeaders = ({ name, icon }) => {
+const ChecklistHeaders = ({ name, icon, value }) => {
+
     const isMdUp = useMediaQuery('(min-width: 960px)');
     const navigate = useNavigate()
     return (
@@ -16,14 +17,14 @@ const ChecklistHeaders = ({ name, icon }) => {
                 sx={{
                     fontFamily: 'var(--font-varient)',
                     color: 'rgba(var(--font-primary-white))',
-                    fontSize: 22,
+                    fontSize: { xs: 17, sm: 22 },
                     fontWeight: 700,
                     mt: 2
                 }}>
                 {name}
             </Typography>
             {
-                !isMdUp && <Box sx={{ mt: 2, position: "absolute", right: 0 }} onClick={() => navigate(-1)} >
+                value !== 1 && !isMdUp && <Box sx={{ mt: 2, position: "absolute", right: 0 }} onClick={() => navigate(-1)} >
                     <LogOut className='text-iconprimary cursor-pointer mr-3' /></Box>
             }
 

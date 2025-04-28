@@ -33,15 +33,15 @@ const FloatingDrawer = ({ anchorEl, handlepopoveClose }) => {
 
     const drawerMenu = useMemo(() => {
         return [
-            { modslno: 1, menu: "Dashboard", text: "/Home/Dashboard", icon: <DashboardTwoToneIcon className='hoverClass' sx={{ width: 30, height: 30, color: "#fb8500" }} /> },
-            { modslno: 2, menu: "FeedBack Links", text: "/Home/Feedbackdetail", icon: <ChatTwoToneIcon className='hoverClass' sx={{ width: 30, height: 30, color: "#d90429" }} /> },
-            { modslno: 3, menu: "FeedBackCollection", text: "/Home/collectiondetail", icon: <CollectionsBookmarkTwoToneIcon className='hoverClass' sx={{ width: 30, height: 30, color: "blue" }} /> },
-            { modslno: 4, menu: "Settings", text: "/Home/Settings", icon: <SettingsSuggestTwoToneIcon className='hoverClass' sx={{ width: 30, height: 30, color: "#ffbe0b" }} /> },
-            { modslno: 5, menu: "PRO CheckList", text: "/Home/prochecklist", icon: <HowToRegTwoToneIcon className='hoverClass' sx={{ width: 30, height: 30, color: "#548c2f" }} /> },
-            { modslno: 6, menu: "InformationTechnology", text: "/Home/it", icon: <LaptopMacTwoToneIcon className='hoverClass' sx={{ width: 30, height: 30, color: "#4ad66d" }} /> },
-            { modslno: 7, menu: "BioMedical", text: "/Home/biomedical", icon: <BiotechTwoToneIcon className='hoverClass' sx={{ width: 30, height: 30, color: "#4cc9f0" }} /> },
-            { modslno: 8, menu: "HouseKeeping", text: "/Home/housekeeping", icon: <CleaningServicesTwoToneIcon className='hoverClass' sx={{ width: 30, height: 30, color: "#8a5a44" }} /> },
-            { modslno: 9, menu: "CheckList", text: "/Home/Maintenace", icon: <EngineeringTwoToneIcon className='hoverClass' sx={{ width: 30, height: 30, color: "#fb6f92" }} /> },
+            { modslno: 1, menu: "Dashboard", text: "/Home/Dashboard", icon: <DashboardTwoToneIcon className='hoverClass' sx={{ width: { xs: 20, sm: 30 }, height: { xs: 20, sm: 30 }, color: "#fb8500" }} /> },
+            { modslno: 2, menu: "FeedBack Link", text: "/Home/Feedbackdetail", icon: <ChatTwoToneIcon className='hoverClass' sx={{ width: { xs: 20, sm: 30 }, height: { xs: 20, sm: 30 }, color: "#d90429" }} /> },
+            { modslno: 3, menu: "FeedBackCollection", text: "/Home/collectiondetail", icon: <CollectionsBookmarkTwoToneIcon className='hoverClass' sx={{ width: { xs: 20, sm: 30 }, height: { xs: 20, sm: 30 }, color: "blue" }} /> },
+            { modslno: 4, menu: "Settings", text: "/Home/Settings", icon: <SettingsSuggestTwoToneIcon className='hoverClass' sx={{ width: { xs: 20, sm: 30 }, height: { xs: 20, sm: 30 }, color: "#ffbe0b" }} /> },
+            { modslno: 5, menu: "PRO CheckList", text: "/Home/prochecklist", icon: <HowToRegTwoToneIcon className='hoverClass' sx={{ width: { xs: 20, sm: 30 }, height: { xs: 20, sm: 30 }, color: "#548c2f" }} /> },
+            { modslno: 6, menu: "InformationTechnology", text: "/Home/it", icon: <LaptopMacTwoToneIcon className='hoverClass' sx={{ width: { xs: 20, sm: 30 }, height: { xs: 20, sm: 30 }, color: "#4ad66d" }} /> },
+            { modslno: 7, menu: "BioMedical", text: "/Home/biomedical", icon: <BiotechTwoToneIcon className='hoverClass' sx={{ width: { xs: 20, sm: 30 }, height: { xs: 20, sm: 30 }, color: "#4cc9f0" }} /> },
+            { modslno: 8, menu: "HouseKeeping", text: "/Home/housekeeping", icon: <CleaningServicesTwoToneIcon className='hoverClass' sx={{ width: { xs: 20, sm: 30 }, height: { xs: 20, sm: 30 }, color: "#8a5a44" }} /> },
+            { modslno: 9, menu: "CheckList", text: "/Home/Maintenace", icon: <EngineeringTwoToneIcon className='hoverClass' sx={{ width: { xs: 20, sm: 30 }, height: { xs: 20, sm: 30 }, color: "#fb6f92" }} /> },
 
         ]
     }, []);
@@ -62,8 +62,8 @@ const FloatingDrawer = ({ anchorEl, handlepopoveClose }) => {
             anchorEl={anchorEl}
             onClose={handlepopoveClose}
             sx={{
-                mt: 4,
-                ml: 5
+                mt: 5,
+                ml: { xs: 0, sm: 5 }
             }}
             disableEnforceFocus={true}
             anchorOrigin={{
@@ -76,14 +76,14 @@ const FloatingDrawer = ({ anchorEl, handlepopoveClose }) => {
             }}
         >
             <Box sx={{
-                p: 2,
-                width: 500,
+                pr: 2,
+                width: { xs: 350, sm: 500 },
                 borderRadius: 2,
                 boxShadow: 3,
                 backgroundColor: "rgba(var(--bg-card))",
                 border: 0.03,
                 borderColor: "rgba(var(--border-primary))",
-                minHeight: 300
+                minHeight: { xs: 200, sm: 300 }
 
             }}>
                 <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
@@ -96,15 +96,15 @@ const FloatingDrawer = ({ anchorEl, handlepopoveClose }) => {
                             mt: 2,
                             width: '100%'
                         }}>
-                        <Box sx={{ p: 2 }}>
-                            <Grid container spacing={4}>
+                        <Box>
+                            <Grid container spacing={2}>
                                 {arr?.map((val, idx) => (
                                     <Grid xs={3} key={idx} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                                         <Box
                                             onClick={(e) => handleListItemClick(e, idx, val.text)}
                                             sx={{
-                                                width: 80,
-                                                height: 80,
+                                                width: { xs: 60, sm: 80 },
+                                                height: { xs: 60, sm: 80 },
                                                 borderRadius: 3,
                                                 display: 'flex',
                                                 alignItems: 'center',
@@ -121,7 +121,7 @@ const FloatingDrawer = ({ anchorEl, handlepopoveClose }) => {
                                         </Box>
                                         <Typography
                                             fontWeight={600}
-                                            fontSize={10}
+                                            fontSize={{ xs: 6, sm: 10 }}
                                             sx={{
                                                 fontFamily: 'var(--font-varient)',
                                                 color: 'rgba(var(--font-primary-white))',

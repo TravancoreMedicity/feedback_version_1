@@ -1,6 +1,6 @@
 // @ts-nocheck
 import { useEffect, useState } from "react";
-import {axiosApi} from "../Axios/Axios";
+import { axiosApi } from "../Axios/Axios";
 import { warningNofity } from "../Constant/Constant";
 
 const useValidateToken = () => {

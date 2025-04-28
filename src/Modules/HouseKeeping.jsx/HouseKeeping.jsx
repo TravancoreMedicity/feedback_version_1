@@ -1,68 +1,82 @@
-import React, { memo } from 'react'
-import { Box } from '@mui/joy'
-import ChecklistHeaders from '../../Components/ChecklistHeaders';
-import { useQuery } from '@tanstack/react-query';
-import { getallHouseKeepingBed } from '../../Function/CommonFunction';
+import React, { lazy, memo, Suspense } from 'react';
+import { Box, Grid, Typography } from '@mui/joy';
 import CleaningServicesTwoToneIcon from '@mui/icons-material/CleaningServicesTwoTone';
+import MeetingRoomTwoToneIcon from '@mui/icons-material/MeetingRoomTwoTone';
+import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
 
-const HouseKeeping = () => {
+const HkRoomComponent = lazy(() => import('./HkRoomComponent'));
+const ChecklistHeaders = lazy(() => import('../../Components/ChecklistHeaders'));
 
-    const { data: housekeepingbeds = [] } = useQuery({
-        queryKey: ["getallhousekeepingbed"],
-        queryFn: () => getallHouseKeepingBed()
-    });
-
-    
+const HouseKeeping = ({ groupedBeds, setAssignedBed }) => {
     return (
-        <Box sx={{ minHeight: '100vh' }}>
-            <Box
-                className="flex flex-col rounded-xl p-1 w-full"
-                sx={{
-                    backgroundColor: "rgba(var(--bg-card))",
-                    height: "calc(100% - 50px)",
-                    cursor: 'pointer'
-                }}>
-                <Box sx={{
-                    mb: 2,
-                    p: 1,
-                    backgroundColor: "rgba(var(--bg-card))",
-                    border: 0.03,
-                    borderColor: "rgba(var(--border-primary))",
-                    borderRadius: 5
-                }}>
-                    <ChecklistHeaders icon={<CleaningServicesTwoToneIcon sx={{
-                        color: 'rgba(var(--font-primary-white))',
-                        fontSize: 28,
-                        fontWeight: 700,
-                        mt: 2
-                    }} />} name={'HOUSE KEEPING'} />
-                    <Box
-                        sx={{
-                            gap: 3,
-                            px: 1,
-                            width: "100%",
-                            mt: 1,
-                        }}>
-                        {
-                            housekeepingbeds?.map((item, index) => {
-                                // const matchdata = filterbedwithremarks?.find((remark) => remark.fb_bdc_no === item.fb_bdc_no)
-                                // return <Box key={index}>
-                                //     <BedList
-                                //         getallremarkrefetch={getallremarkrefetch}
-                                //         getallBlokedbedRefetch={getallBlokedbedRefetch}
-                                //         matchdata={matchdata}
-                                //         data={item}
-                                //         name={"INFROMATION TECHNOLOGY"}
-                                //         icon={<ComputerTwoToneIcon className='hoverClass' sx={{ width: 30, height: 30, color: 'rgba(var(--icon-primary))', }} />} />
-                                // </Box>
-                            })}
+        <Box sx={{ p: 0.5, width: '100%' }}>
+            <Box sx={{ mb: 2, p: 1, backgroundColor: 'rgba(var(--bg-card))' }}>
+                <Box
+                    className="flex flex-col rounded-xl p-1 w-full"
+                    sx={{ backgroundColor: 'rgba(var(--bg-card))', height: 'calc(100% - 50px)', cursor: 'pointer' }}
+                >
+                    <Suspense fallback={<CustomBackDropWithOutState message="Loading..." />}>
+                        <ChecklistHeaders
+                            icon={
+                                <CleaningServicesTwoToneIcon
+                                    sx={{
+                                        color: 'rgba(var(--font-primary-white))',
+                                        fontSize: {xs:24,sm:28},
+                                        fontWeight: 700,
+                                        mt: 2
+                                    }}
+                                />
+                            }
+                            name={`PENDING BED`}
+                            value={1}
+                        />
+                    </Suspense>
 
+                    {Object.entries(groupedBeds)?.map(([floorName, beddetail]) => (
+                        <Box
+                            key={floorName}
+                            className="flex flex-col rounded-xl p-1 mt-2 w-full"
+                            sx={{ backgroundColor: 'rgba(var(--bg-card))' }}
+                        >
+                            <Box sx={{ px: 2.5, display: 'flex', alignItems: 'center', borderBottom: 2, borderColor: 'divider' }}>
+                                <MeetingRoomTwoToneIcon
+                                    sx={{
+                                        color: 'rgba(var(--font-primary-white))',
+                                        fontSize: {xs:17,sm:20},
+                                        fontWeight: 900
+                                    }}
+                                />
+                                <Typography
+                                    level="body-sm"
+                                    sx={{
+                                        fontFamily: 'var(--font-varient)',
+                                        color: 'rgba(var(--font-primary-white))',
+                                        ontSize: {xs:13,sm:17},
+                                        fontWeight: 600,
+                                        ml: 1
+                                    }}
+                                >
+                                    {floorName}
+                                </Typography>
+                            </Box>
 
-                    </Box>
+                            <Box sx={{ width: '98%', mx: 'auto', mt: 1 }}>
+                                <Grid container spacing={1}>
+                                    {beddetail?.map((item, index) => (
+                                        <Grid xs={6} sm={3} lg={2} xl={1.5} key={item?.fb_bdc_no || index}>
+                                            <Suspense fallback={<CustomBackDropWithOutState message="Loading..." />}>
+                                                <HkRoomComponent setAssignedBed={setAssignedBed} roomnumber={item?.fb_bdc_no} />
+                                            </Suspense>
+                                        </Grid>
+                                    ))}
+                                </Grid>
+                            </Box>
+                        </Box>
+                    ))}
                 </Box>
             </Box>
-        </Box >
-    )
-}
+        </Box>
+    );
+};
 
-export default memo(HouseKeeping)
+export default memo(HouseKeeping);

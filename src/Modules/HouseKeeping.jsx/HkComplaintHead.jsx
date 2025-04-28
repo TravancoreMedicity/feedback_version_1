@@ -4,21 +4,10 @@ import ReceiptLongTwoToneIcon from '@mui/icons-material/ReceiptLongTwoTone';
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
 
 
-const ComplaintCard = lazy(() => import('./ComplaintCard'))
 
-const AssetComplaint = ({
-    name,
-    data,
-    bedslno,
-    checkcomplaint,
-    fetchBedComplaints,
-    selectemp,
-    department,
-    AssetInsert,
-    isinitalchecked,
-    Beddata
-}) => {
+const HkComplaintCard = lazy(() => import("./HkComplaintCard"))
 
+const HkComplaintHead = ({ name, items }) => {
     return (
         <Box sx={{
             p: 1,
@@ -48,27 +37,19 @@ const AssetComplaint = ({
                     sx={{
                         fontFamily: 'var(--font-varient)',
                         color: 'rgba(var(--font-primary-white))',
-                        fontSize: { xs: 14, sm: 18 },
+                        fontSize: { xs: 13, sm: 18 },
                         fontWeight: 700
                     }}>
                     {name}
                 </Typography>
             </Box>
             <Suspense fallback={<CustomBackDropWithOutState message={"Loading"} />}>
-                <ComplaintCard
-                    assets={data}
-                    bedslno={bedslno}
-                    checkcomplaint={checkcomplaint}
-                    fetchBedComplaints={fetchBedComplaints}
-                    selectemp={selectemp}
-                    department={department}
-                    AssetInsert={AssetInsert}
-                    isinitalchecked={isinitalchecked}
-                    Beddata={Beddata}
+                <HkComplaintCard
+                    items={items}
                 />
             </Suspense>
         </Box>
     )
 }
 
-export default memo(AssetComplaint)
+export default memo(HkComplaintHead)

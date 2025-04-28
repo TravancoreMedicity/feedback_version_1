@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { Paper } from '@mui/material';
 
@@ -11,4 +11,4 @@ const Scanner = () => {
   );
 };
 
-export default Scanner;
+export default memo(Scanner);

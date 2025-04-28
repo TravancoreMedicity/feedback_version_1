@@ -6,7 +6,6 @@ const ErrorElement = () => {
 
     const error = useRouteError()
     const { status, statusText, data } = error
-    console.log(status, statusText, data)
     return (
         <div
             style={{

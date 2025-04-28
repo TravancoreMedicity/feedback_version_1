@@ -14,7 +14,7 @@ const RadiologyCheckBox = ({ value, questionid, hanldeuseranswers }) => {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        width: '100vw',
+        width: '100vw'
       }}
     >
       <Box
@@ -22,6 +22,7 @@ const RadiologyCheckBox = ({ value, questionid, hanldeuseranswers }) => {
           px: { xs: 2, sm: 1 },
           width: { xs: '90%', sm: '80%' },
           borderRadius: '10px',
+
         }}
       >
         <RadioGroup>
@@ -29,8 +30,7 @@ const RadiologyCheckBox = ({ value, questionid, hanldeuseranswers }) => {
             sx={{
               display: 'flex',
               flexDirection: 'column',
-              gap: 1,
-              // mt: 2,
+              gap: 1
             }}
           >
             {
@@ -41,16 +41,22 @@ const RadiologyCheckBox = ({ value, questionid, hanldeuseranswers }) => {
                   value={description}
                   control={<Radio sx={{ color: '#CC488F', '&.Mui-checked': { color: '#512A7D' } }} />}
                   label={description}
+                  componentsProps={{
+                    typography: {
+                      sx: {
+                        fontSize: { xs: 11, sm: 14, md: 16 }, // Smaller text size
+                        fontWeight: 500,
+                        fontFamily: 'Bahnschrift',
+                        color: "rgba(65, 68, 68, 0.64)"
+                      }
+                    }
+                  }}
                   sx={{
                     border: '1px solid #CC488F',
                     borderRadius: '12px',
                     p: 1,
-                    fontSize: { xs: 16, sm: 22, md: 22, lg: 24 },
-                    fontWeight: { xs: 400 },
-                    color: " rgba(65, 68, 68, 0.64)",
-                    fontFamily: "Bahnschrift",
                     width: "100%",
-                    height: { xs: 45, sm: '' }
+                    height: { xs: 45, sm: '' },
                   }}
                 />
               )

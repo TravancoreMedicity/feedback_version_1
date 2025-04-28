@@ -5,10 +5,12 @@ import Grid from '@mui/material/Grid2'
 import DurationModel from "./DurationModel";
 import FeedBackGridComponent from "./FeedBackGridComponent";
 import { useQuery } from "@tanstack/react-query";
-import { getallfeedbackMaster, getalluserfeedbackAnswers } from "../../Function/CommonFunction";
+import { getallFeedBackCount, getallfeedbackMaster, getalluserfeedbackAnswers } from "../../Function/CommonFunction";
 import FeedBackFormComponent from "./FeedBackFormComponent";
 import StarRendering from "./StarRendering";
 import { format, startOfMonth, subMonths } from "date-fns";
+import { useMediaQuery } from "@mui/material";
+import { predefinedCategories } from "../../Constant/Data";
 
 const logo = require("../../assets/logo2.png")
 
@@ -16,24 +18,25 @@ const Dashboard = () => {
 
   const [open, setOpen] = useState(false);
   const [currentfeed, setCurrentFeed] = useState("Last Month");
-  const [fetchdate, setFetchDate] = useState(format(startOfMonth(subMonths(new Date(), 1)), "yyyy-MM-dd"))
-
-  // const [totalcount, setTotalCount] = useState(0)
-  // const { data: allfeedbackcategory, refetch: allcategoriesrefetch } = useQuery({
-  //   queryKey: ['allfeedbackcategory'],
-  //   queryFn: () => getallFeedbackCategory(),
-  // });
-
+  const [fetchdate, setFetchDate] = useState(format(startOfMonth(subMonths(new Date(), 1)), "yyyy-MM-dd"));
+  const isMdUp = useMediaQuery('(min-width: 760px)');
 
   const { data: allfeedbackNames } = useQuery({
     queryKey: ['allfeedbackname'],
     queryFn: () => getallfeedbackMaster(),
-  })
+  });
 
-  const { data: getalluserfeedback } = useQuery({
+  const { data: getalluserfeedback = [] } = useQuery({
     queryKey: ['getalluserfeedback', fetchdate],
     queryFn: () => getalluserfeedbackAnswers(fetchdate),
   });
+
+
+  const { data: getfeedbackCount = [] } = useQuery({
+    queryKey: ['gettotalfeedbackcount'],
+    queryFn: () => getallFeedBackCount(),
+  });
+
 
 
   //THis reduce method is used to group the incomming data on the basis of Category and further into feedback
@@ -62,33 +65,32 @@ const Dashboard = () => {
 
 
 
-
-
   // Convert object structure to arrays 
-  const formattedGroupedFeedback = Object.values(groupedFeedback)?.map(category => {
-    const feedbackArray = Object.values(category.feedbacks || {}); // Ensure it is  an array to avoid reduce error
-    // Calculate total marks and total feedback count
-    const totalMarks = feedbackArray.reduce((sum, feedback) => sum + (feedback.total_fd_mark || 0), 0);
-    //Calculating the total Feedback Forms
-    const totalFeedbackCount = feedbackArray.reduce((count, feedback) => count + (feedback.feedbacks?.length || 0), 0);
-    // Compute category rating (ensure it's within 0-5 range)
-    const categoryRating = totalFeedbackCount > 0 ? Math.min(5, totalMarks / totalFeedbackCount) : 0;
-    return {
-      ...category,
-      feedbacks: feedbackArray,
-      categoryRating: Number(categoryRating.toFixed(1)),
-      totalFeed: totalFeedbackCount,
-      totalMark: totalMarks
-    }
-  });
+  const formattedGroupedFeedback = (Object.values(groupedFeedback || {})?.length > 0
+    ? Object.values(groupedFeedback)
+    : predefinedCategories)?.map(category => {
+      const feedbackArray = Object.values(category.feedbacks || {}); // Ensure it is  an array to avoid reduce error
+      // Calculate total marks and total feedback count
+      const totalMarks = feedbackArray.reduce((sum, feedback) => sum + (feedback.total_fd_mark || 0), 0);
+      //Calculating the total Feedback Forms
+      const totalFeedbackCount = feedbackArray.reduce((count, feedback) => count + (feedback?.feedbacks?.length || 0), 0);
+      // Compute category rating (ensure it's within 0-5 range)
+      const categoryRating = totalFeedbackCount > 0 ? Math.min(5, totalMarks / totalFeedbackCount) : 0;
+      return {
+        ...category,
+        feedbacks: feedbackArray,
+        categoryRating: Number(categoryRating.toFixed(1)),
+        totalFeed: totalFeedbackCount,
+        totalMark: totalMarks
+      }
+    });
 
 
 
-  const totalFeedbackSum = useMemo(() => {
-    return formattedGroupedFeedback?.reduce((sum, category) => sum + category?.totalFeed, 0)
-  }, [formattedGroupedFeedback]);
-
-
+  //This is currently not using
+  // const totalFeedbackSum = useMemo(() => {
+  //   return formattedGroupedFeedback?.reduce((sum, category) => sum + category?.totalFeed, 0)
+  // }, [formattedGroupedFeedback]);
 
 
   const totalRating = useMemo(() => {
@@ -120,7 +122,11 @@ const Dashboard = () => {
 
 
   return (
-    <Box onClick={() => setOpen(false)} className="flex flex-col  items-center rounded-xl p-2 pb-2 overflow-scroll w-full bg-bgcommon h-screen">
+    <Box
+      onClick={() => setOpen(false)}
+      className="flex flex-col  items-center rounded-xl p-2 pb-2 overflow-scroll w-full bg-bgcommon h-screen"
+      sx={{ width: '100%' }}
+    >
       <Box sx={{
         width: '95%',
         height: 150,
@@ -134,9 +140,9 @@ const Dashboard = () => {
         borderColor: "rgba(var(--border-primary))",
         justifyContent: 'space-between',
       }}>
-        <Box sx={{ width: { sm: '70%', md: '70%', lg: '60%' }, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'end' }}>
+        <Box sx={{ width: { xs: '100%', sm: '70%', md: '70%', lg: '60%' }, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'end' }}>
           <Box sx={{
-            width: 400,
+            width: { xs: '100%', sm: 400, md: 400, lg: 400 },
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -156,7 +162,7 @@ const Dashboard = () => {
                   sx={{
                     fontFamily: 'var(--font-varient)',
                     color: 'rgba(var(--font-primary-white))',
-                    fontSize: 27,
+                    fontSize: { xs: 18, sm: 27 },
                     fontWeight: 600,
                     mb: 0,
                     mt: 1,
@@ -169,39 +175,63 @@ const Dashboard = () => {
                   sx={{
                     fontFamily: 'var(--font-varient)',
                     color: 'rgba(var(--font-primary-white))',
-                    fontSize: 12,
+                    fontSize: { xs: 8, sm: 12 },
                     fontWeight: 400,
                     position: 'absolute',
-                    bottom: 0,
+                    bottom: { xs: 10, sm: 0 },
                     left: 35
                   }}>What Our Customers Say ?</Typography>
               </Box>
             </Box>
-            <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: "center", px: 5 }}>
+            <Box
+              sx={{
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: { xs: "end", sm: 'center' },
+                pr: { xs: 3, sm: 0 },
+              }}>
               <Typography sx={{
-                fontSize: 24,
+                fontSize: { xs: 16, sm: 24 },
                 fontWeight: 600,
-                mr: 1,
                 fontFamily: 'var(--font-varient)',
                 color: 'rgba(var(--font-primary-white))'
               }}>{HospitalRating?.toFixed(1)}</Typography>
-              <StarRendering totalRating={HospitalRating?.toFixed(1)} size={28} />
+              <StarRendering totalRating={HospitalRating?.toFixed(1)} size={isMdUp ? 28 : 20} />
             </Box>
             <Typography sx={{
               ml: 0.3,
               fontSize: 12,
               fontWeight: 400,
               fontFamily: 'var(--font-varient)',
-              color: 'rgba(var(--font-primary-white))'
-            }}>({totalFeedbackSum})</Typography>
+              color: 'rgba(var(--font-primary-white))',
+              ml: { xs: 5, sm: 0 }
+            }}>({getfeedbackCount?.[0]?.total_rows})</Typography>
           </Box>
         </Box>
         <Box onClick={(e) => e.stopPropagation()} sx={{ width: '30%', height: '100%', display: 'flex', alignItems: 'start', justifyContent: 'end' }}>
-          <DurationModel setOpen={setOpen} open={open} currentfeed={currentfeed} setCurrentFeed={setCurrentFeed} setFetchDate={setFetchDate} />
+          <DurationModel size={isMdUp} setOpen={setOpen} open={open} currentfeed={currentfeed} setCurrentFeed={setCurrentFeed} setFetchDate={setFetchDate} />
         </Box>
       </Box>
-      <Box sx={{ width: '98%', minHeight: 100, mt: 2, display: 'flex', alignItems: 'start', p: 2, borderRadius: 12, flexDirection: "column" }}>
-        <Divider sx={{ width: '97%', mx: 3, backgroundColor: 'rgba(213,82,155,0.5)', mb: 2, height: 2 }} />
+      <Box
+        sx={{
+          width: '98%',
+          minHeight: 100,
+          mt: 2,
+          display: 'flex',
+          alignItems: 'start',
+          p: 2,
+          borderRadius: 12,
+          flexDirection: "column",
+        }}>
+        <Divider
+          sx={{
+            width: '98%',
+            mx: { xs: 0, sm: 3 },
+            backgroundColor: 'rgba(213,82,155,0.5)',
+            mb: 2,
+            height: 2
+          }} />
         <Grid container spacing={1} sx={{ flexGrow: 0, px: 1, width: "100%" }}>
           {
             formattedGroupedFeedback?.map((item, index) => {

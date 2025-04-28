@@ -1,5 +1,5 @@
 import { Box, Typography } from '@mui/joy'
-import React from 'react'
+import React, { memo } from 'react'
 import ReceiptLongTwoToneIcon from '@mui/icons-material/ReceiptLongTwoTone';
 
 const OverallDetailCard = ({ name, employee, condition, remark }) => {
@@ -20,7 +20,7 @@ const OverallDetailCard = ({ name, employee, condition, remark }) => {
             }}>
                 <ReceiptLongTwoToneIcon sx={{
                     color: 'rgba(var(--icon-primary))',
-                    fontSize: 26,
+                    fontSize: { xs: 20, sm: 26 },
                     fontWeight: 700
                 }} />
                 <Typography
@@ -29,7 +29,7 @@ const OverallDetailCard = ({ name, employee, condition, remark }) => {
                     sx={{
                         fontFamily: 'var(--font-varient)',
                         color: 'rgba(var(--font-primary-white))',
-                        fontSize: 17,
+                        fontSize: { xs: 13, sm: 17 },
                         fontWeight: 700,
                     }}>{name}</Typography>
             </Box>
@@ -41,44 +41,44 @@ const OverallDetailCard = ({ name, employee, condition, remark }) => {
                     sx={{
                         fontFamily: 'var(--font-varient)',
                         color: 'rgba(var(--font-primary-white))',
-                        fontWeight: 400
+                        fontWeight: 400,
+                        fontSize: { xs: 12, sm: 15 }
                     }}><span style={{
                         display: 'inline-block',
                         width: '25%',
-                        fontSize: '15px',
                         fontWeight: '600',
                         color: 'rgba(var(--font-primary-white))',
-                    }}>Employee Checked </span>: {employee}</Typography>
+                    }}>Employee </span>: {employee}</Typography>
                 <Typography
                     level='body-sm'
                     sx={{
                         fontFamily: 'var(--font-varient)',
                         color: 'rgba(var(--font-primary-white))',
-                        fontWeight: 400
+                        fontWeight: 400,
+                        fontSize: { xs: 12, sm: 15 }
                     }}><span style={{
                         display: 'inline-block',
                         width: '25%',
-                        fontSize: '15px',
+                        // fontSize: '15px',
                         fontWeight: '600',
                         color: 'rgba(var(--font-primary-white))',
-                    }}>Overall Condition </span>: {condition === 3 ? "Excellent" : condition === 2 ? "Good" : "Poor"} Condition</Typography>
+                    }}> Condition </span>: {condition === 3 ? "Excellent" : condition === 2 ? "Good" : "Poor"} Condition</Typography>
                 <Box
                     sx={{
                         fontFamily: 'var(--font-varient)',
                         color: 'rgba(var(--font-primary-white))',
-                        display: 'flex'
+                        display: 'flex',
+                        fontSize: { xs: 12, sm: 15 }
                     }}><span style={{
                         display: 'inline-block',
                         width: '25%',
-                        fontSize: '15px',
                         fontWeight: '600',
                         color: 'rgba(var(--font-primary-white))',
-                    }}>Overall Remark </span>:<span style={{
+                    }}> Remark </span>:<span style={{
                         display: 'inline-block',
                         width: '75%',
                         fontFamily: 'var(--font-varient)',
                         color: 'rgba(var(--font-primary-white))',
-                        fontSize: '15px',
                         fontWeight: '400'
                     }}>{remark}</span></Box>
             </Box>
@@ -86,4 +86,4 @@ const OverallDetailCard = ({ name, employee, condition, remark }) => {
     )
 }
 
-export default OverallDetailCard
+export default memo(OverallDetailCard)

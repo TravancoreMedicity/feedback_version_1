@@ -1,11 +1,11 @@
-import React from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { memo } from 'react'
-import { errorNofity } from '../Constant/Constant'
-import CustomSelectWithLabel from './CustomSelectWithLabel'
-import { getallNurseStation } from '../Function/CommonFunction'
+import React from 'react';
+import { memo } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { errorNofity } from '../Constant/Constant';
+import CustomSelectWithLabel from './CustomSelectWithLabel';
+import { getallNurseStation } from '../Function/CommonFunction';
 
-const SelectNursingStation = ({ handleChange, value, label }) => {
+const SelectHouskeepingSupervisor = ({ handleChange, value, label }) => {
 
     const { isLoading, data, error } = useQuery({
         queryKey: ['allnursestation'],
@@ -32,4 +32,4 @@ const SelectNursingStation = ({ handleChange, value, label }) => {
     )
 }
 
-export default memo(SelectNursingStation) 
+export default memo(SelectHouskeepingSupervisor) 

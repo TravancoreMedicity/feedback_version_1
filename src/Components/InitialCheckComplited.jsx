@@ -7,7 +7,7 @@ const InitialCheckComplited = ({ color }) => {
         <Box
             sx={{
                 width: 180,
-                height: 20,
+                height: {xs:15,sm:20},
                 backgroundColor: 'rgba(var(--bg-common))',
                 position: 'absolute',
                 right: 10,
@@ -64,7 +64,7 @@ const InitialCheckComplited = ({ color }) => {
                 fontFamily: 'var(--font-varient)',
                 color: 'rgba(var(--font-primary-white))',
                 fontWeight: 700,
-                fontSize: 10
+                fontSize: { xs: 8, sm: 10 }
             }}>Intitial Checklist completed</Typography>
         </Box>
     )

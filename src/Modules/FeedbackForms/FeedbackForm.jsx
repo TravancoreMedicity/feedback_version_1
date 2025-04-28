@@ -79,7 +79,6 @@ const FeedbackForm = () => {
     }, []);
 
 
-
     const hanldecomponent = useCallback((question, component) => {
         setIsNoClicked((prevValues) => {
             const updatedAnswers = { ...prevValues }
@@ -91,6 +90,7 @@ const FeedbackForm = () => {
             return updatedAnswers;
         });
     }, []);
+
 
 
     //Getting all required fields for the user Transaction to insert......!!!!!
@@ -159,19 +159,23 @@ const FeedbackForm = () => {
 
 
     const handlesubmit = useCallback(async () => {
+
         const answerlength = Object.keys(useranswer)?.length;
         const clickedNoComplenth = Object.keys(isnoclicked)?.length;
+        const isClickedNotMobileInput = Object.values(isnoclicked)?.includes("MobileInputBox")
 
         if ((feedbackDtlDisplay?.length + IsComponentPresent?.length) !== (answerlength + clickedNoComplenth)) {
             warningNofity("Please Answer all Questions?")
             return
         }
-        if (ComponentName?.includes("MobileInputBox") && mobilenumber?.length < 10) {
-            setMobileValidation("Enter a valid Mobile Numbe")
+
+        // && clickedNoComplenth === 0 this condition is for using if the current senario is not working
+        if (ComponentName?.includes("MobileInputBox") && mobilenumber?.length < 10 && !isClickedNotMobileInput) {
+            setMobileValidation("Enter a valid Mobile Number")
             return
         }
         if (ComponentName?.includes("MobileInputBox") && mobilevalidation !== "") {
-            warningNofity("Mobile validation error");
+            warningNofity("Please check your Mobile Number");
             return
         }
         try {
@@ -209,6 +213,34 @@ const FeedbackForm = () => {
                         p: 0
                     }}>
                         <FeedBackLog />
+                        {
+                            PatientName && <Box sx={{
+                                width: '86%',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                p: 1,
+                                //    ? border: '0.1px solid rgba(var(--font-primary-white))',
+                                borderRadius: 5,
+                                bgcolor: '#e3f2fd'
+                            }}>
+                                {/* <Box> */}
+                                <Typography sx={{
+                                    fontFamily: 'var(--font-varient)',
+                                    color: 'rgba(var(--font-primary-white))',
+                                }} fontWeight={600} fontSize={{ xs: 8, sm: 12, md: 12, lg: 14, xl: 15 }}>PT NAME :{PatientName}</Typography>
+                                <Typography sx={{
+                                    fontFamily: 'var(--font-varient)',
+                                    color: 'rgba(var(--font-primary-white))',
+                                }} fontWeight={600} fontSize={{ xs: 8, sm: 12, md: 12, lg: 14, xl: 15 }}>IP NO :{inpatientNumber}</Typography>
+                                <Typography sx={{
+                                    fontFamily: 'var(--font-varient)',
+                                    color: 'rgba(var(--font-primary-white))',
+                                }} fontWeight={600} fontSize={{ xs: 8, sm: 12, md: 12, lg: 14, xl: 15 }}>MRD NO :{patientNo}</Typography>
+
+                                {/* </Box> */}
+                            </Box>
+                        }
+
                         <Box sx={{
                             width: '90%',
                             minHeight: '60vh',

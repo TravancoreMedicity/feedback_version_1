@@ -8,7 +8,7 @@ const FeedBackGridComponent = ({ name, totalRating, count }) => {
         <Box
             sx={{
                 width: '100%',
-                minHeight: 180,
+                height: { xs: 160, sm: 180 },
                 backgroundColor: "rgba(var(--bg-card))",
                 border: 0.03,
                 borderColor: "rgba(var(--border-primary))",
@@ -40,7 +40,7 @@ const FeedBackGridComponent = ({ name, totalRating, count }) => {
                 mt: 1
             }}>
                 <Typography sx={{
-                    fontSize: 27,
+                    fontSize: { xs: 20, sm: 27 },
                     fontWeight: 600,
                     mr: 1,
                     fontFamily: 'var(--font-varient)',

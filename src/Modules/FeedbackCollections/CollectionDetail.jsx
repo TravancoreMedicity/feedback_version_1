@@ -27,8 +27,6 @@ const CollectionDetail = ({
             })) || []
     );
 
-
-
     const groupedData = filteredData?.reduce((acc, item) => {
         return {
             ...acc,
@@ -40,9 +38,7 @@ const CollectionDetail = ({
     }, {});
 
 
-
     return (
-
         <Box
             className="flex flex-col rounded-xl p-1 w-full"
             sx={{
@@ -65,7 +61,7 @@ const CollectionDetail = ({
                             className="border-b-[0.2rem] border-iconprimary p-0 cursor-pointer" >
                             <ApartmentIcon sx={{
                                 color: 'rgba(var(--font-primary-white))',
-                                fontSize: 28,
+                                fontSize: { xs: 20, sm: 28 },
                                 fontWeight: 700,
                                 mt: 2
                             }} />
@@ -75,7 +71,7 @@ const CollectionDetail = ({
                                 sx={{
                                     fontFamily: 'var(--font-varient)',
                                     color: 'rgba(var(--font-primary-white))',
-                                    fontSize: 22,
+                                    fontSize: { xs: 18, sm: 22 },
                                     fontWeight: 700,
                                     mt: 2
                                 }}>
@@ -98,7 +94,7 @@ const CollectionDetail = ({
                                         <Box sx={{ border: 0, borderBottom: 1.5, borderColor: "rgba(var(--tab-border-color))", borderBottomColor: 'divider', borderWidth: 2, display: 'flex', alignItems: 'center', width: '100%' }} >
                                             <ViewStructureDown style={{
                                                 color: 'rgba(var(--font-primary-white))',
-                                                fontSize: 14,
+                                                fontSize: { xs: 10, sm: 14 },
                                                 fontWeight: 900,
                                                 mt: 2,
                                                 marginRight: 4
@@ -110,7 +106,7 @@ const CollectionDetail = ({
                                                 sx={{
                                                     fontFamily: 'var(--font-varient)',
                                                     color: 'rgba(var(--font-primary-white))',
-                                                    fontSize: 17,
+                                                    fontSize: { xs: 12, sm: 17 },
                                                     fontWeight: 600,
                                                     my: 1
                                                 }}>
@@ -137,7 +133,6 @@ const CollectionDetail = ({
                                                             setNsCode={setNsCode}
                                                             setLoading={setLoading}
                                                             loading={loading}
-                                                        // setAllPatientDetail={setAllPatientDetail}
                                                         />
                                                     </Suspense>
                                                 </Grid>

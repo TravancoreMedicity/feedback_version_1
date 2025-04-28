@@ -29,7 +29,7 @@ const BedListOtherDep = ({ name, setCondtion, condition, assets, checkcomplaint,
             }}>
                 <VerifiedUserTwoToneIcon sx={{
                     color: 'rgba(var(--icon-primary))',
-                    fontSize: 26,
+                    fontSize: { xs: 20, sm: 26 },
                     fontWeight: 700
                 }} />
                 <Typography
@@ -38,7 +38,7 @@ const BedListOtherDep = ({ name, setCondtion, condition, assets, checkcomplaint,
                     sx={{
                         fontFamily: 'var(--font-varient)',
                         color: 'rgba(var(--font-primary-white))',
-                        fontSize: 18,
+                        fontSize: { xs: 12, sm: 18 },
                         fontWeight: 700
                     }}>
                     {name} CHECKLIST

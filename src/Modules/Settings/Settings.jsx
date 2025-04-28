@@ -21,9 +21,6 @@ const Settings = () => {
   });
 
 
-
-
-
   const menuName = [
     { menuSlno: 1, menuName: 'FeedBack  Master', menuCodeName: 'feedback' },
     { menuSlno: 2, menuName: 'FeedBack Category Master', menuCodeName: 'catgMaster' },
@@ -40,15 +37,15 @@ const Settings = () => {
     { menuSlno: 14, menuName: 'Room Master', menuCodeName: 'roommaster' },
     { menuSlno: 15, menuName: 'Asset Item Master', menuCodeName: 'assetitem' },
     { menuSlno: 16, menuName: 'Asset Map Master', menuCodeName: 'assetmapping' },
-    { menuSlno: 16, menuName: 'Room CheckList Master', menuCodeName: 'roomchecklist' },
+    { menuSlno: 17, menuName: 'Room CheckList Master', menuCodeName: 'roomchecklist' },
+    { menuSlno: 18, menuName: 'Discharge Room Cleaning Master', menuCodeName: 'dischargeroomcleaning' },
+    { menuSlno: 19, menuName: 'Housekeeping Employee Master', menuCodeName: 'houskeepingempmaster' },
   ]
-
 
   //The .some() method is used to check if at least one element in an array satisfies a given condition
   const employeemenu = menuName?.filter(menu =>
     allmenuitems?.some(item => item.fb_menu_slno === menu.menuSlno)
   );
-
 
 
   return (

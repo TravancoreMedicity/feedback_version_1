@@ -31,7 +31,7 @@ const CustomeCheckBox = ({
                 border: '1px solid rgba(var(--border-primary))',
                 borderRadius: '6px',
                 p: 0.6,
-                fontSize: '0.955rem'
+                fontSize: '0.955rem',
             }}
             checked={Boolean(values)}
             onChange={handleChangeChecked}

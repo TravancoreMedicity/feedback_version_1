@@ -4,7 +4,7 @@ import Button from '@mui/joy/Button';
 import PauseCircleFilledTwoToneIcon from '@mui/icons-material/PauseCircleFilledTwoTone';
 import FiberNewTwoToneIcon from '@mui/icons-material/FiberNewTwoTone';
 
-const MaintenanceRemarkButton = ({
+const HkCurrentBedStatusButton = ({
     remarks,
     activeButton,
     setTotalDetail
@@ -32,7 +32,7 @@ const MaintenanceRemarkButton = ({
                     display: 'flex',
                     justifyContent: 'space-between',
                     gap: 2,
-                    mb: 2
+
                 }}>
                 <Button
                     variant="outlined"
@@ -40,7 +40,7 @@ const MaintenanceRemarkButton = ({
                         width: '48%',
                         border: '1px solid rgba(var(--border-primary))',
                         color: 'rgba(var(--font-primary-white))',
-                        fontSize: { xs: 10, sm: 14 },
+                        fontSize: { xs: 9, sm: 12 },
                         '&:hover': {
                             backgroundColor: 'transparent',
                             boxShadow: 'none',
@@ -50,12 +50,9 @@ const MaintenanceRemarkButton = ({
                             outline: 'none', // Remove focus outline
                         }
                     }}
-                    startDecorator={<PauseCircleFilledTwoToneIcon sx={{
-                        color: getIconColor("OnHold"),
-                        fontSize: { xs: 20, sm: 26 }
-                    }} />}
-                    onClick={() => handleButtonClick("OnHold")}>
-                    On Hold
+                    startDecorator={<PauseCircleFilledTwoToneIcon sx={{ color: getIconColor("Cleaning Started"), fontSize: { xs: 20, sm: 25 } }} />}
+                    onClick={() => handleButtonClick("Cleaning Started")}>
+                    Cleaning Started
                 </Button>
                 <Button
                     variant="outlined"
@@ -63,7 +60,7 @@ const MaintenanceRemarkButton = ({
                         width: '48%',
                         border: '1px solid rgba(var(--border-primary))',
                         color: 'rgba(var(--font-primary-white))',
-                        fontSize: { xs: 10, sm: 14 },
+                        fontSize: { xs: 9, sm: 12 },
                         '&:hover': {
                             backgroundColor: 'transparent',
                             boxShadow: 'none',
@@ -73,17 +70,15 @@ const MaintenanceRemarkButton = ({
                             outline: 'none', // Remove focus outline
                         }
                     }}
-                    startDecorator={<FiberNewTwoToneIcon sx={{ fontSize: { xs: 20, sm: 26 }, color: getIconColor("Renovation") }} />}
-                    onClick={() => handleButtonClick("Renovation")}
-                >
-                    Renovation
+                    startDecorator={<FiberNewTwoToneIcon sx={{ color: getIconColor("Cleaned") ,fontSize: { xs: 20, sm: 25 }}} />}
+                    onClick={() => handleButtonClick("Cleaned")}>
+                    Cleaned
                 </Button>
             </Box>
             {
                 activeButton !== null &&
                 <Box sx={{
                     px: 1,
-                    mt: 1
                 }}>
                     <textarea
                         onChange={(e) =>
@@ -121,4 +116,4 @@ const MaintenanceRemarkButton = ({
     );
 }
 
-export default memo(MaintenanceRemarkButton);
+export default memo(HkCurrentBedStatusButton);

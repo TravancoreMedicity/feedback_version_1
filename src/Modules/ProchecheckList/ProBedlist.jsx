@@ -4,10 +4,9 @@ import ProBedlistModal from './ProBedlistModal'
 import InitialCheckComplited from '../../Components/InitialCheckComplited';
 
 
-const ProBedlist = ({ data, name, icon, matchdata, fetchProcheckdetail, getallBlokedbedRefetch }) => {
+const ProBedlist = ({ data, matchdata, fetchProcheckdetail }) => {
 
-
-    const [open, setOpen] = useState(false)
+    const [open, setOpen] = useState(false);
 
     const handleChecklistClick = useCallback(() => {
         setOpen(true)
@@ -15,7 +14,7 @@ const ProBedlist = ({ data, name, icon, matchdata, fetchProcheckdetail, getallBl
 
 
     return (
-        <>
+        <Box sx={{ bgcolor: 'red', width: "100%" }}>
             {open && (
                 <ProBedlistModal
                     open={open}
@@ -27,6 +26,7 @@ const ProBedlist = ({ data, name, icon, matchdata, fetchProcheckdetail, getallBl
 
             <Box
                 sx={{
+                    width: '100%',
                     backgroundColor: 'rgba(var(--bg-card))',
                     fontFamily: 'var(--font-varient)',
                     color: 'rgba(var(--font-primary-white))',
@@ -34,7 +34,7 @@ const ProBedlist = ({ data, name, icon, matchdata, fetchProcheckdetail, getallBl
                     position: 'relative'
                 }}>
                 <div style={{
-                    height: 120,
+                    height: { xs: 100, sm: 120 },
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: "space-between",
@@ -53,7 +53,7 @@ const ProBedlist = ({ data, name, icon, matchdata, fetchProcheckdetail, getallBl
                             alignItems: 'center',
                             justifyContent: 'center',
                             flexDirection: "column",
-                            fontSize: 14,
+                            fontSize: { xs: 12, sm: 14 },
                             lineHeight: 1,
                             border: 0.03,
                             borderColor: "rgba(var(--border-primary))",
@@ -63,13 +63,13 @@ const ProBedlist = ({ data, name, icon, matchdata, fetchProcheckdetail, getallBl
                             fontFamily: 'var(--font-varient)',
                             color: 'White',
                             fontWeight: 900,
-                            height: 120,
+                            height: { xs: 100, sm: 120 },
                             borderTopLeftRadius: 5,
                             borderBottomLeftRadius: 5,
                             mr: 1
                         }}>
                             {data?.fb_bdc_no && data?.fb_bdc_no.split('')
-                                ?.filter(char => !['/', '(', ')', '\\'].includes(char))
+                                ?.filter(char => !['/', '(', ')', '\\']?.includes(char))
                                 ?.map((char, index) => (
                                     <Box key={index} sx={{ p: 0, m: 0, lineHeight: 1 }}>
                                         {char}
@@ -77,14 +77,14 @@ const ProBedlist = ({ data, name, icon, matchdata, fetchProcheckdetail, getallBl
                                 ))}
                         </Box>
                         <Box sx={{
-                            width: 150,
+                            width: { xs: 80, sm: 150 },
                             borderRadius: 5
                         }}>
                             <Typography level='body-sm' fontWeight={'md'}
                                 sx={{
                                     fontFamily: 'var(--font-varient)',
                                     color: 'rgba(var(--font-primary-white))',
-                                    fontSize: 14,
+                                    fontSize: { xs: 9, sm: 14 },
                                     fontWeight: 900,
                                     textAlign: 'center',
                                     mt: 1
@@ -95,7 +95,7 @@ const ProBedlist = ({ data, name, icon, matchdata, fetchProcheckdetail, getallBl
                                 sx={{
                                     fontFamily: 'var(--font-varient)',
                                     color: 'rgba(var(--font-primary-white))',
-                                    fontSize: 10,
+                                    fontSize: { xs: 9, sm: 14 },
                                     fontWeight: 900,
                                     textAlign: 'center',
                                 }} >
@@ -105,7 +105,7 @@ const ProBedlist = ({ data, name, icon, matchdata, fetchProcheckdetail, getallBl
                                 sx={{
                                     fontFamily: 'var(--font-varient)',
                                     color: 'rgba(var(--font-primary-white))',
-                                    fontSize: 14,
+                                    fontSize: { xs: 9, sm: 14 },
                                     fontWeight: 600,
                                     textAlign: 'center',
                                 }} >
@@ -122,10 +122,10 @@ const ProBedlist = ({ data, name, icon, matchdata, fetchProcheckdetail, getallBl
                             fontFamily: 'var(--font-varient)',
                             color: 'rgba(var(--font-primary-white))',
                             fontWeight: 700,
-                            fontSize: 14
+                            fontSize: { xs: 8, sm: 14 },
                         }}>
                             {
-                                matchdata?.fb_final_check === 1 ? "CHECKLIST COMPLETED" : "DISCHARGED"
+                                matchdata?.fb_final_check === 1 ? " COMPLETED" : "DISCHARGED"
                             }
 
                         </Typography>
@@ -138,8 +138,8 @@ const ProBedlist = ({ data, name, icon, matchdata, fetchProcheckdetail, getallBl
                     <Box
                         onClick={handleChecklistClick}
                         sx={{
-                            width: 130,
-                            height: 40,
+                            width: { xs: 90, sm: 130 },
+                            height: { xs: 30, sm: 40 },
                             borderRadius: 5,
                             display: 'flex',
                             alignItems: 'center',
@@ -149,6 +149,7 @@ const ProBedlist = ({ data, name, icon, matchdata, fetchProcheckdetail, getallBl
                             borderWidth: 1.8,
                             cursor: 'pointer',
                             fontWeight: 600,
+                            fontSize: { xs: 10, sm: 14 },
                             ':hover': {
                                 transition: 'none',
                                 backgroundColor: 'rgba(var(--input-hover-bg-color))',
@@ -171,7 +172,7 @@ const ProBedlist = ({ data, name, icon, matchdata, fetchProcheckdetail, getallBl
             </Box >
 
 
-        </>
+        </Box>
     )
 }
 

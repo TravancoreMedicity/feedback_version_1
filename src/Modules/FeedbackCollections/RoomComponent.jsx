@@ -47,6 +47,7 @@ const RoomComponent = ({
     });
 
 
+
     const remarkDetails = useCallback((bdcode) => {
         const result = getallremarkstatus?.find((item) => item?.fb_bd_code === Number(bdcode))
         setRoomStatus(result)
@@ -150,12 +151,12 @@ const RoomComponent = ({
                         <Box sx={{ p: 0, m: 0, lineHeight: 1 }}>D</Box>
                     </Box>
                     <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', position: 'relative' }}>
-                        <HotelOutlinedIcon style={{ fontSize: 27, color: 'rgba(var(--font-primary-white))', }} />
+                        <HotelOutlinedIcon style={{ fontSize: { xs: 20, sm: 27 }, color: 'rgba(var(--font-primary-white))', }} />
                         <Typography level='body-sm' fontWeight={'md'}
                             sx={{
                                 fontFamily: 'var(--font-varient)',
                                 color: 'rgba(var(--font-primary-white))',
-                                fontSize: 12,
+                                fontSize: { xs: 10, sm: 12 },
                                 fontWeight: 900,
                                 ml: 1
                             }} >

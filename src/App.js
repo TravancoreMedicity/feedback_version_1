@@ -13,8 +13,7 @@ import CommonFinalFeedSkeleton from './Feedback/Commoncomponents/commonFinalFeed
 
 // import { socket } from "./ws/socket";
 import Scanner from "./Components/Scanner.jsx";
-
-
+import HkContainer from "./Modules/HouseKeeping.jsx/HkContainer.jsx";
 
 
 // Main Modules
@@ -25,6 +24,8 @@ const Settings = lazy(() => import("./Modules/Settings/Settings.jsx"));
 //all components
 
 const RootLayoutSkeleton = lazy(() => import("./Components/RootLayoutSkeleton.jsx"));
+const HkEmployeeDetailMaster = lazy(() => import("./Masters/HkEmployeeDetailMaster.jsx"));
+const DischargeRoomCleaningMaster = lazy(() => import("./Masters/DischargeRoomCleaningMaster.jsx"));
 const Qrscan = lazy(() => import("./Pages/Qrscan.jsx"));
 const FeedBackSubCategoryMaster = lazy(() => import("./Modules/Settings/FeedBackSubCategoryMaster/FeedBackSubCategoryMaster"));
 const FeedBackCategoryMaster = lazy(() => import("./Modules/Settings/FeedBackCategoryMaster/FeedBackCategoryMaster.jsx"));
@@ -50,7 +51,6 @@ const AssetIemMaster = lazy(() => import("./Masters/AssetIemMaster.jsx"));
 const AssetMapMaster = lazy(() => import("./Masters/AssetMapMaster.jsx"));
 const RoomChecklistMaster = lazy(() => import("./Masters/RoomChecklistMaster.jsx"));
 const Prochecklist = lazy(() => import("./Modules/ProchecheckList/Prochecklist.jsx"));
-
 
 //Feedback
 // const ChooseFeedbacks = lazy(() => import("./Feedback/ChooseFeedbacks.jsx"));
@@ -229,7 +229,8 @@ const routes = createBrowserRouter([
           {
             path: "housekeeping", element:
               <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
-                <HouseKeeping />
+                {/* <HouseKeeping /> */}
+                <HkContainer/>
               </Suspense>, errorElement: <ErrorElement />
           },
           {
@@ -252,6 +253,19 @@ const routes = createBrowserRouter([
             path: "prochecklist", element:
               <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
                 <Prochecklist />
+              </Suspense>, errorElement: <ErrorElement />
+          },
+          {
+            path: "dischargeroomcleaning", element:
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
+                <DischargeRoomCleaningMaster />
+              </Suspense>, errorElement: <ErrorElement />
+          }
+          ,
+          {
+            path: "houskeepingempmaster", element:
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
+                <HkEmployeeDetailMaster />
               </Suspense>, errorElement: <ErrorElement />
           }
         ],

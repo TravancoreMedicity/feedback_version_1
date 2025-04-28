@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, memo } from 'react';
 import List from '@mui/joy/List';
 import ListItem from '@mui/joy/ListItem';
 import Checkbox from '@mui/joy/Checkbox';
@@ -21,8 +21,8 @@ const GoodBadToggle = ({ handleChangeChecked, completed, isexist, value = 0 }) =
     }, [selected, completed, isexist, handleChangeChecked]);
 
     const icon = selected === 2
-        ? <CheckCircleOutlineOutlinedIcon sx={{ width: 15, height: 15 }} color="success" />
-        : <CancelOutlinedIcon sx={{ width: 15, height: 15 }} color={selected === 1 ? 'error' : 'rgba(var(--icon-primary))'} />;
+        ? <CheckCircleOutlineOutlinedIcon sx={{ width:  {xs:12,sm:15}, height:  {xs:12,sm:15} }} color="success" />
+        : <CancelOutlinedIcon sx={{ width:  {xs:12,sm:15}, height:  {xs:12,sm:15} }} color={selected === 1 ? 'error' : 'rgba(var(--icon-primary))'} />;
 
     const label = selected === 2 ? "Good" : "Damaged";
 
@@ -40,10 +40,10 @@ const GoodBadToggle = ({ handleChangeChecked, completed, isexist, value = 0 }) =
             }}>
             <ListItem sx={{
                 width: '100%',
-                display:'flex',
-                alignItems:'center',
-                justifyContent:'center',
-                pb:1
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                pb: 1,
             }}>
                 <Checkbox
                     checked={selected !== null}
@@ -58,7 +58,7 @@ const GoodBadToggle = ({ handleChangeChecked, completed, isexist, value = 0 }) =
                             <Typography sx={{
                                 fontFamily: 'var(--font-varient)',
                                 color: '#495057',
-                                fontSize: 10,
+                                fontSize: { xs: 7, sm: 10 },
                                 fontWeight: 600,
                             }}>{label}</Typography>
                         </Box>
@@ -80,4 +80,4 @@ const GoodBadToggle = ({ handleChangeChecked, completed, isexist, value = 0 }) =
     );
 };
 
-export default GoodBadToggle;
+export default memo(GoodBadToggle);

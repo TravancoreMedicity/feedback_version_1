@@ -64,7 +64,6 @@ const UserGroupRightMaster = () => {
     }, [setMenuItems, usrgrpid, moduleid])
 
     const HanldeUserInsetion = useCallback(async (rowData) => {
-        console.log("inserting");
         const { fb_menu_slno } = rowData;
         if (fb_menu_slno === 0) return warningNofity("Error in Selecting Menu")
         const insert_data = {
@@ -90,7 +89,6 @@ const UserGroupRightMaster = () => {
     );
 
     const HandleUserUpdation = useCallback(async (rowData) => {
-        console.log("updating");
         const updation_data = {
             fb_usr_right_slno: rowData.fb_usr_right_slno,
             fb_menu_view: 0,

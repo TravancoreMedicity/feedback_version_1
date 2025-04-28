@@ -65,8 +65,7 @@ const ModuleMaster = () => {
             fb_module_status: !status ? 0 : 1,
             edit_user: employeeID()
         }
-        console.log(UpdateinsertingData, "data");
-
+       
         if (updateflag === 0) {
             try {
                 const result = await axiosApi.post("/feedback/insertmodulemaster", insertData);

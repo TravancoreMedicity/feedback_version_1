@@ -14,7 +14,6 @@ import LogoutMoidal from "./LogoutMoidal";
 import IdleTimer from "./IdleTimer";
 import WidgetsTwoToneIcon from '@mui/icons-material/WidgetsTwoTone';
 
-
 import FloatingDrawer from "./FloatingDrawer";
 
 const Header = ({ handleDrawerToggle, drawerWidth, dark, handleChangeDarkMode, isMdUp, anchorEl, handlepopoveClose, handleindicator }) => {
@@ -66,13 +65,18 @@ const Header = ({ handleDrawerToggle, drawerWidth, dark, handleChangeDarkMode, i
                             noWrap
                             component="div"
                             className="text-navheadercolor"
+                            sx={{ fontSize: { xs: 14, sm: 20 } }}
                         >
                             Travancore Medicity
                         </Typography>
+                        {/* commenting this part */}
+                        {
+                            isMdUp && 
                         <ScreenCheck />
+                        }
                     </Box>
                     <Box className="flex flex-row items-center gap-3">
-                        <IdleTimer />
+                        {isMdUp && <IdleTimer />}
                         <Switch
                             checked={dark}
                             // onChange={() => setDark(!dark)}

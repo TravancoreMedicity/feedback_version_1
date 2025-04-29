@@ -13,7 +13,7 @@ const CustomInputWithLabel = ({
     type,
     values,
     handleInputChange
-}) => {
+}) => { 
     return (
         <Box className="flex flex-1 flex-col" >
             <Typography sx={{

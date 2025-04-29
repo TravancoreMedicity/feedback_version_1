@@ -10,24 +10,28 @@ const CustomeCheckBox = ({
     color,
     values, // 1 for true and 0 for false
     variant,
-    handleChangeChecked
+    handleChangeChecked,
+    present,// user later
 }) => {
+
+
     return (
         <Checkbox
-            label={lable || 'Checkbox'}
+            label={lable} //|| 'Checkbox'
             variant={variant || 'outlined'}
             size={size || 'md'}
             color={color || 'primary'}
-            uncheckedIcon={<Close />}
+            uncheckedIcon={present === 0 ? '' : <Close />} // if default status needed
+            // uncheckedIcon={<Close />}
             sx={{
-                flexGrow: 1,
+                // flexGrow: 1,
                 color: 'rgba(0,0,0,0.8)',
                 bgcolor: 'rgba(var(--input-bg-color))',
                 fontFamily: 'var(--font-varient)',
                 border: '1px solid rgba(var(--border-primary))',
                 borderRadius: '6px',
                 p: 0.6,
-                fontSize: '0.955rem'
+                fontSize: '0.955rem',
             }}
             checked={Boolean(values)}
             onChange={handleChangeChecked}

@@ -1,3 +1,7 @@
+import { format, subMonths, subYears, startOfMonth } from "date-fns";
+
+
+
 export const loginType = [
     { value: 1, label: 'Admin' },
     { value: 2, label: 'Super Admin' },
@@ -81,3 +85,136 @@ export const commonStatus = [
     { value: 1, label: 'Active' },
     { value: 2, label: 'Inactive' }
 ]
+
+
+
+
+export const timeFilters = [
+    {
+        label: "Last Month",
+        value: format(startOfMonth(subMonths(new Date(), 1)), "yyyy-MM-dd"),
+        duration: "1 MONTH"
+    },
+    {
+        label: "Last 3 Months",
+        value: format(subMonths(new Date(), 3), "yyyy-MM-dd"),
+        duration: "3 MONTHS"
+    },
+    {
+        label: "Last 6 Months",
+        value: format(subMonths(new Date(), 6), "yyyy-MM-dd"),
+        duration: "6 MONTHS"
+    },
+    {
+        label: "Last 9 Months",
+        value: format(subMonths(new Date(), 9), "yyyy-MM-dd"),
+        duration: "9 MONTHS"
+    },
+    {
+        label: "One Year",
+        value: format(subYears(new Date(), 1), "yyyy-MM-dd"),
+        duration: "1 YEAR"
+    },
+    {
+        label: "Past Two Years",
+        value: format(subYears(new Date(), 2), "yyyy-MM-dd"),
+        duration: "2 YEARS"
+    },
+];
+
+export const rooms = [
+    { roomNumber: "AB101P", present: "Y" },
+    { roomNumber: "AB102P", present: "N" },
+    { roomNumber: "AB103P", present: "Y" },
+    { roomNumber: "AB104P", present: "N" },
+    { roomNumber: "AB105P", present: "Y" },
+    { roomNumber: "AB106P", present: "N" },
+    { roomNumber: "AB107P", present: "Y" },
+    { roomNumber: "AB108P", present: "N" },
+    { roomNumber: "AB109P", present: "Y" },
+    { roomNumber: "AB110P", present: "N" },
+    { roomNumber: "AB111P", present: "Y" },
+    { roomNumber: "AB112P", present: "N" },
+    { roomNumber: "AB113P", present: "Y" },
+    { roomNumber: "AB114P", present: "N" },
+    { roomNumber: "AB115P", present: "Y" }
+];
+
+
+
+export const blockSet1 = [
+    { id: 1, name: "A Block" },
+    { id: 2, name: "B Block" },
+    { id: 3, name: "C Block" },
+    { id: 4, name: "D Block" },
+    { id: 5, name: "E Block" },
+    { id: 6, name: "F Block" }
+];
+
+export const blockSet2 = [
+    { id: 7, name: "H Block" },
+    { id: 8, name: "I Block" },
+    { id: 9, name: "J Block" }
+];
+
+export const blockSet3 = [
+    { id: 10, name: "K Block" },
+    { id: 11, name: "Female Medical" },
+    { id: 12, name: "Male Medical" },
+    { id: 13, name: "Pediatric Ward" },
+    { id: 14, name: "ICU" }
+];
+
+
+export const ItdepId = 1;
+export const MtdepId = 17;
+export const BmdepId = 36;
+
+// export const departments = [
+//     { dep_id: 1, name: 'IT',custodian_id:3 },
+//     { dep_id: 17, name: 'MAINTENACE',custodian_id:3 },
+//     { dep_id: 36, name: 'BIOMEDICAL',custodian_id:3 },
+//     { dep_id: 43, name: 'OPERATIONS',custodian_id:3 },
+//     { dep_id: 19, name: 'HOUSE KEEPING' ,custodian_id:3},
+// ]
+
+
+export const Indicator = [
+    { name: "Occupied", color: "rgba(19, 112, 241, 0.68)" }, // Blue
+    { name: "Multiple Occupancy", color: "rgba(207, 118, 133, 0.96)" }, // Pink
+    { name: "Discharged", color: "rgb(239, 131, 15)" }, // Yellow
+    { name: "Not Ready", color: "rgba(235, 18, 18, 0.84)" }, // Red
+    { name: "On Hold", color: "rgb(72, 54, 134)" }, // White
+    { name: "Fumigation", color: "rgb(53, 170, 193)" }, // Brown
+    { name: "Renovation", color: "rgb(40, 185, 234)" }, // Pale Blue
+    { name: "Available", color: "#8FD14F" }, // Green
+    { name: "Bystander", color: "rgb(253, 65, 185)" },
+    { name: "Blocked", color: "rgba(200, 0, 180, 0.8)" }, // LightWhite (Close to White Smoke)
+];
+
+
+
+// export const assetData = [
+//     { slno: 61, asset: "AIR CONDITIONER", assetno: 'TM/MT/38382', depid: 17, bed_no: 'C8H3IH2', departmentName: 'MAINTENANCE', item_asset_no: 'TM/MT', item_assent_no_only: 36 },
+//     { slno: 62, asset: "TELEVISION", assetno: 'TM/MT/38383', depid: 17, bed_no: 'C8H3IH2', departmentName: 'MAINTENANCE', item_asset_no: 'TM/MT', item_assent_no_only: 37 },
+//     { slno: 63, asset: "FAN", assetno: 'TM/MT/38384', depid: 17, bed_no: 'C8H3IH2', departmentName: 'MAINTENANCE', item_asset_no: 'TM/MT', item_assent_no_only: 38 },
+//     { slno: 64, asset: "BULB", assetno: 'TM/MT/38385', depid: 17, bed_no: 'C8H3IH2', departmentName: 'MAINTENANCE', item_asset_no: 'TM/MT', item_assent_no_only: 39 },
+//     { slno: 65, asset: "TELEPHONE", assetno: 'TM/IT/38386', depid: 1, bed_no: 'C8H3IH2', departmentName: 'IT', item_asset_no: 'TM/IT', item_assent_no_only: 40 },
+//     { slno: 66, asset: "WIFI", assetno: 'TM/IT/38387', depid: 1, bed_no: 'C8H3IH2', departmentName: 'IT', item_asset_no: 'TM/IT', item_assent_no_only: 41 },
+//     { slno: 67, asset: "ECG MACHINE", assetno: 'TM/BM/38388', depid: 36, bed_no: 'C8H3IH2', departmentName: 'BIOMEDICAL', item_asset_no: 'TM/BM', item_assent_no_only: 42 },
+//     { slno: 68, asset: "THERMOMETER", assetno: 'TM/BM/38389', depid: 36, bed_no: 'C8H3IH2', departmentName: 'BIOMEDICAL', item_asset_no: 'TM/BM', item_assent_no_only: 43 },
+//     { slno: 69, asset: "BED SHEET", assetno: 'TM/HK/38390', depid: 19, bed_no: 'C8H3IH2', departmentName: 'HOUSEKEEEPING', item_asset_no: 'TM/HK', item_assent_no_only: 44 },
+//     { slno: 40, asset: "FURNITURE", assetno: 'TM/HK/38391', depid: 19, bed_no: 'C8H3IH2', departmentName: 'HOUSEKEEEPING', item_asset_no: 'TM/HK', item_assent_no_only: 45 },
+//     { slno: 41, asset: "CLOCK", assetno: 'TM/OP/383892', depid: 43, bed_no: 'C8H3IH2', departmentName: 'OPERATIONS', item_asset_no: 'TM/OP', item_assent_no_only: 46 },
+//     { slno: 42, asset: "WHITE BOARD", assetno: 'TM/OP/383893', depid: 43, bed_no: 'C8H3IH2', departmentName: 'OPERATIONS', item_asset_no: 'TM/OP', item_assent_no_only: 47 },
+// ]
+
+
+export const predefinedCategories = [
+    { fb_category_name: 'CONTENTMENT-OVERALL RATING', fb_category_slno: 1 },
+    { fb_category_name: 'RESPONSIVENESS', fb_category_slno: 2 },
+    { fb_category_name: 'TIMELINESS', fb_category_slno: 3 },
+    { fb_category_name: 'FACILITY ( ENVIRONMENT )', fb_category_slno: 4 },
+    { fb_category_name: 'CLEANLINESS ( ENVIRONMENT )', fb_category_slno: 5 },
+    { fb_category_name: 'RECOMMENDATION', fb_category_slno: 6 },
+];

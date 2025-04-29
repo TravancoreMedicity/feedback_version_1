@@ -1,16 +1,11 @@
 // @ts-nocheck
-import React from 'react'
+import React, { memo } from 'react'
 import { useRouteError } from 'react-router-dom'
 
 const ErrorElement = () => {
 
     const error = useRouteError()
-
-    console.log(error)
-
     const { status, statusText, data } = error
-
-    console.log(status, statusText, data)
     return (
         <div
             style={{
@@ -50,4 +45,4 @@ const ErrorElement = () => {
     )
 }
 
-export default ErrorElement
+export default memo(ErrorElement)

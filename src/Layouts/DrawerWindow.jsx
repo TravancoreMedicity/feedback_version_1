@@ -1,5 +1,5 @@
 // @ts-nocheck
-import React, { memo } from "react";
+import React, { memo, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
@@ -12,38 +12,68 @@ import Typography from "@mui/material/Typography";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { ListSubheader } from "@mui/material";
-import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import { NavArrowRight } from 'iconoir-react'
 import { useCallback } from "react";
 import { useMemo } from "react";
 import {
     HomeAltSlimHoriz,
-    ShieldUpload,
-    PageSearch,
     Settings,
-    DocMagnifyingGlass
+    MessageText,
+    Computer,
+    TaskList,
+    Microscope,
+    HospitalCircle,
+    BookStack,
+    UserBadgeCheck
 } from 'iconoir-react'
+import { EmpauthId } from "../Constant/Constant";
+import { getUserModules } from "../Function/CommonFunction";
+import { useQuery } from "@tanstack/react-query";
 
 const DrawerWindow = memo(({ drawerWidth, handleDrawerClose }) => {
 
     const navigation = useNavigate()
 
     const [selectedIndex, setSelectedIndex] = useState(null);
-
+    const [arr, setarr] = useState([])
     const handleListItemClick = useCallback((event, index, route) => {
         setSelectedIndex(index);
         navigation(route);
-    }, []);
+    }, [navigation]);
+
+
+    const id = EmpauthId();
+    const { data: allmoduleitem = [] } = useQuery({
+        queryKey: ['getallmoduleitem', id],
+        queryFn: () => getUserModules(id),
+        enabled: !!id
+    });
 
     const drawerMenu = useMemo(() => {
         return [
-            { menu: "Dashboard", text: "/Home/Dashboard", icon: <HomeAltSlimHoriz height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
-            { menu: "File Upload", text: "/Home/FileUpload", icon: <ShieldUpload height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
-            { menu: "File Search", text: "/Home/FileSearch", icon: <DocMagnifyingGlass height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
-            { menu: "Advance Search", text: "/Home/AdvancedSearch", icon: <PageSearch height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
-            { menu: "Settings", text: "/Home/Settings", icon: <Settings height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
+            { modslno: 1, menu: "Dashboard", text: "/Home/Dashboard", icon: <HomeAltSlimHoriz height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
+            { modslno: 2, menu: "FeedBack Links", text: "/Home/Feedbackdetail", icon: <MessageText height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
+            { modslno: 3, menu: "FeedBackCollection", text: "/Home/collectiondetail", icon: <BookStack height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
+            { modslno: 4, menu: "Settings", text: "/Home/Settings", icon: <Settings height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
+            { modslno: 5, menu: "CheckList", text: "/Home/Maintenace", icon: <TaskList height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
+            { modslno: 6, menu: "InformationTech", text: "/Home/it", icon: <Computer height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
+            { modslno: 7, menu: "BioMedical", text: "/Home/biomedical", icon: <Microscope height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
+            { modslno: 8, menu: "HouseKeeping", text: "/Home/housekeeping", icon: <HospitalCircle height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
+            { modslno: 9, menu: "PRO CheckList", text: "/Home/prochecklist", icon: <UserBadgeCheck height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
         ]
-    }, [])
+    }, []);
+
+
+    useEffect(() => {
+        if (allmoduleitem?.length) {
+            const filteredItems = drawerMenu?.filter((menuItem) =>
+                allmoduleitem?.some((module) => menuItem?.modslno === module?.fb_module_slno)
+            );
+            setarr(filteredItems);
+        }
+    }, [allmoduleitem, drawerMenu]);
+
+
 
     const drawer = useMemo(() => (
         <div>
@@ -63,15 +93,15 @@ const DrawerWindow = memo(({ drawerWidth, handleDrawerClose }) => {
                     >
                         Menu Selections
                     </ListSubheader>
-                }
-            >
-                {drawerMenu?.map((val, index) => (
+                }>
+                {arr?.map((val, index) => (
                     <ListItem
                         key={index}
                         disablePadding
-                        sx={{ display: "flex", }}
+                        sx={{ display: "flex" }}
                         secondaryAction={
-                            <NavArrowRight height={20} width={20} color="rgba(var(--drawer-font-color))" className={selectedIndex === index ? "bouncing-element" : ''} />
+                            <NavArrowRight height={20} width={20} color="rgba(var(--drawer-font-color))"
+                                className={selectedIndex === index ? "bouncing-element" : ''} />
                         }
                     >
                         <ListItemButton
@@ -126,7 +156,7 @@ const DrawerWindow = memo(({ drawerWidth, handleDrawerClose }) => {
                                     transform: "translateX(0)",
                                 }}
                             >
-                                {val.menu}
+                                {val?.menu}
                             </Typography>
                         </ListItemButton>
                     </ListItem>
@@ -134,15 +164,14 @@ const DrawerWindow = memo(({ drawerWidth, handleDrawerClose }) => {
             </List>
             <Divider />
         </div>
-    ), [selectedIndex, handleListItemClick])
+    ), [selectedIndex, handleListItemClick, arr])
 
     return (
         <Box
             component="nav"
             sx={{
                 width: { sm: drawerWidth },
-                transition: "width 0.5s",
-                // flexShrink: { sm: 0 }
+                transition: "width 0.2s",
             }}
             aria-label="mailbox folders"
         >
@@ -154,16 +183,13 @@ const DrawerWindow = memo(({ drawerWidth, handleDrawerClose }) => {
                         width: drawerWidth,
                         transition: "width 0.5s",
                         backgroundColor: "rgba(var(--bg-drawer))",
-                        // backgroundColor: "rgba(var(--color-blue))",
                     },
                 }}
-                onClose={handleDrawerClose}
-            // open={mobileOpen}
-            >
+                onClose={handleDrawerClose}>
                 {drawer}
             </Drawer>
         </Box>
     )
 })
 
-export default DrawerWindow
+export default memo(DrawerWindow)

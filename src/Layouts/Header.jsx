@@ -12,8 +12,11 @@ import BedtimeOutlinedIcon from "@mui/icons-material/BedtimeOutlined";
 import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
 import LogoutMoidal from "./LogoutMoidal";
 import IdleTimer from "./IdleTimer";
+import WidgetsTwoToneIcon from '@mui/icons-material/WidgetsTwoTone';
 
-const Header = ({ handleDrawerToggle, drawerWidth, dark, handleChangeDarkMode }) => {
+import FloatingDrawer from "./FloatingDrawer";
+
+const Header = ({ handleDrawerToggle, drawerWidth, dark, handleChangeDarkMode, isMdUp, anchorEl, handlepopoveClose, handleindicator }) => {
     return (
         <AppBar
             position="fixed"
@@ -28,30 +31,52 @@ const Header = ({ handleDrawerToggle, drawerWidth, dark, handleChangeDarkMode })
             <Box >
                 <Toolbar variant="dense" className="flex flex-row justify-between">
                     <Box className="flex flex-row items-center">
-                        <IconButton
-                            aria-label="open drawer"
-                            edge="start"
-                            onClick={handleDrawerToggle}
-                            sx={{
-                                mr: 2,
-                                display: { sm: "flex" },
-                                color: "rgba(var(--color-white))",
-                            }}
-                        >
-                            <MenuIcon />
-                        </IconButton>
+                        {
+                            isMdUp ? <IconButton
+                                aria-label="open drawer"
+                                edge="start"
+                                onClick={handleDrawerToggle}
+                                sx={{
+                                    mr: 2,
+                                    display: { sm: "flex" },
+                                    color: "rgba(var(--color-white))",
+                                }}
+                            >
+                                <MenuIcon />
+                            </IconButton> : <IconButton
+                                aria-label="open drawer"
+                                edge="start"
+                                onClick={handleindicator}
+                                sx={{
+                                    mr: 1,
+                                    display: { sm: "flex" },
+                                    color: !anchorEl ? "rgba(var(--color-white))" : 'rgba(216, 75, 154, 1)',
+                                }}
+                            >
+                                <WidgetsTwoToneIcon />
+                            </IconButton>
+                        }
+                        {
+                            !isMdUp && <FloatingDrawer anchorEl={anchorEl} handlepopoveClose={handlepopoveClose} />
+                        }
+
                         <Typography
                             variant="h6"
                             noWrap
                             component="div"
                             className="text-navheadercolor"
+                            sx={{ fontSize: { xs: 14, sm: 20 } }}
                         >
                             Travancore Medicity
                         </Typography>
+                        {/* commenting this part */}
+                        {
+                            isMdUp && 
                         <ScreenCheck />
+                        }
                     </Box>
                     <Box className="flex flex-row items-center gap-3">
-                        <IdleTimer />
+                        {isMdUp && <IdleTimer />}
                         <Switch
                             checked={dark}
                             // onChange={() => setDark(!dark)}

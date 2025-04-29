@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useState } from 'react'
 import CustomSelectWithLabel from './CustomSelectWithLabel'
-import axiosApi from '../Axios/Axios'
+import {axiosApi} from '../Axios/Axios'
 
 const SelectCmpDocumentMainType = ({ handleChange, value }) => {
     const [docMainType, setDocMainType] = useState([])

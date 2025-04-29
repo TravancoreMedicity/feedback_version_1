@@ -6,6 +6,7 @@ const AuthContext = createContext({});
 export const AuthProvider = memo(({ children }) => {
 
     const [auth, setAuth] = useState({ accessToken: null, userInfo: null });
+ 
 
     return (
         <AuthContext.Provider value={{ auth, setAuth }}>

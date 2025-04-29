@@ -1,15 +1,11 @@
 // @ts-nocheck
-import React, { useCallback } from 'react'
+import React, { memo, useCallback } from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
 import useValidateToken from '../hooks/useValidateToken'
 import { Backdrop } from '@mui/material'
 
 const ProtectedRoute = () => {
-
-    const isValid = true;
-    let isLoading;
-    // const { isValid, isLoading } = useValidateToken()
-
+    const { isValid, isLoading } = useValidateToken()
     const handleReturnHome = useCallback(() => {
         localStorage.removeItem("app_auth");
         window.location.href = "/";
@@ -46,4 +42,4 @@ const ProtectedRoute = () => {
     return isValid === true ? <Outlet /> : <Navigate to="/" replace />
 }
 
-export default ProtectedRoute
+export default memo(ProtectedRoute)

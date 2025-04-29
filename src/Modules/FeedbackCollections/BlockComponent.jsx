@@ -59,7 +59,7 @@ const BlockComponent = ({
             })
             const { success, data } = response?.data;
             if (success === 0) return errorNofity("Error in fetching Data");
-            
+
             const uniqueData = getUniqueByIP_NO(data);
             console.log(uniqueData);
             if (uniqueData && uniqueData?.length > 0) {

@@ -129,7 +129,7 @@ const Dashboard = () => {
     >
       <Box sx={{
         width: '95%',
-        height: 150,
+        height: 165,
         mt: 2,
         display: 'flex',
         alignItems: 'center',
@@ -140,13 +140,15 @@ const Dashboard = () => {
         borderColor: "rgba(var(--border-primary))",
         justifyContent: 'space-between',
       }}>
-        <Box sx={{ width: { xs: '100%', sm: '70%', md: '70%', lg: '60%' }, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'end' }}>
+        <Box sx={{ width: { xs: '100%', sm: '90%', md: '80%', lg: '70%', xl: '60%' }, 
+        height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'end'}}>
           <Box sx={{
             width: { xs: '100%', sm: 400, md: 400, lg: 400 },
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            flexDirection: 'column'
+            flexDirection: 'column',
+
           }}>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: "center" }}>
               <img src={logo} style={{ height: 60 }} alt="logo" />
@@ -185,19 +187,21 @@ const Dashboard = () => {
             </Box>
             <Box
               sx={{
-                width: '100%',
+                width: '60%',
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: { xs: "end", sm: 'center' },
-                pr: { xs: 3, sm: 0 },
+                justifyContent: { xs: 'end', sm: 'center' },
+                flexDirection: 'column',
+                pl: { xs: 2, sm: 2 },
+                ml: { xs: 4, sm: 0 }
               }}>
+              <StarRendering totalRating={HospitalRating?.toFixed(1)} size={isMdUp ? 28 : 20} />
               <Typography sx={{
                 fontSize: { xs: 16, sm: 24 },
                 fontWeight: 600,
                 fontFamily: 'var(--font-varient)',
                 color: 'rgba(var(--font-primary-white))'
               }}>{HospitalRating?.toFixed(1)}</Typography>
-              <StarRendering totalRating={HospitalRating?.toFixed(1)} size={isMdUp ? 28 : 20} />
             </Box>
             <Typography sx={{
               ml: 0.3,
@@ -205,8 +209,8 @@ const Dashboard = () => {
               fontWeight: 400,
               fontFamily: 'var(--font-varient)',
               color: 'rgba(var(--font-primary-white))',
-              ml: { xs: 5, sm: 0 }
-            }}>({getfeedbackCount?.[0]?.total_rows})</Typography>
+              ml: { xs: 5, sm: 2 }
+            }}>Total of ({getfeedbackCount?.[0]?.total_rows})</Typography>
           </Box>
         </Box>
         <Box onClick={(e) => e.stopPropagation()} sx={{ width: '30%', height: '100%', display: 'flex', alignItems: 'start', justifyContent: 'end' }}>

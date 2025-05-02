@@ -5,6 +5,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import CancelIcon from "@mui/icons-material/Cancel";
 import HighlightOffRoundedIcon from '@mui/icons-material/HighlightOffRounded';
 import CheckCircleOutlineRoundedIcon from '@mui/icons-material/CheckCircleOutlineRounded';
+import { removeEmojis } from '../Constant/Constant';
 
 const Rulesyesorno = ({
     questionid,
@@ -25,6 +26,8 @@ const Rulesyesorno = ({
         usermobilenumber: ''
     })
     const { TextValue, inputvalue, usermobilenumber } = extradetail;
+
+
     const handleImageClick = useCallback((item, questionid, value) => {
         if (item === "no") {
             hanldecomponent(questionid, component != null ? component : '')
@@ -61,7 +64,8 @@ const Rulesyesorno = ({
             hanldeuseranswers(`${questionid}_mobile`, value)
             setMobileNumber(value)
         } else {
-            hanldeuseranswers(`${questionid}_suggest`, value)
+            const sanitizedValue = removeEmojis(value)
+            hanldeuseranswers(`${questionid}_suggest`, sanitizedValue)
         }
     }, [questionid, setMobileValidation, hanldeuseranswers, extradetail, setMobileNumber]);
 

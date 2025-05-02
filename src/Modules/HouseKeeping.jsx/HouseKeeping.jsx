@@ -7,7 +7,7 @@ import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutSt
 const HkRoomComponent = lazy(() => import('./HkRoomComponent'));
 const ChecklistHeaders = lazy(() => import('../../Components/ChecklistHeaders'));
 
-const HouseKeeping = ({ groupedBeds, setAssignedBed }) => {
+const HouseKeeping = ({ groupedBeds, setAssignedBed, HandleBedAssign }) => {
     return (
         <Box sx={{ p: 0.5, width: '100%' }}>
             <Box sx={{ mb: 2, p: 1, backgroundColor: 'rgba(var(--bg-card))' }}>
@@ -21,7 +21,7 @@ const HouseKeeping = ({ groupedBeds, setAssignedBed }) => {
                                 <CleaningServicesTwoToneIcon
                                     sx={{
                                         color: 'rgba(var(--font-primary-white))',
-                                        fontSize: {xs:24,sm:28},
+                                        fontSize: { xs: 24, sm: 28 },
                                         fontWeight: 700,
                                         mt: 2
                                     }}
@@ -42,7 +42,7 @@ const HouseKeeping = ({ groupedBeds, setAssignedBed }) => {
                                 <MeetingRoomTwoToneIcon
                                     sx={{
                                         color: 'rgba(var(--font-primary-white))',
-                                        fontSize: {xs:17,sm:20},
+                                        fontSize: { xs: 17, sm: 20 },
                                         fontWeight: 900
                                     }}
                                 />
@@ -51,7 +51,7 @@ const HouseKeeping = ({ groupedBeds, setAssignedBed }) => {
                                     sx={{
                                         fontFamily: 'var(--font-varient)',
                                         color: 'rgba(var(--font-primary-white))',
-                                        ontSize: {xs:13,sm:17},
+                                        ontSize: { xs: 13, sm: 17 },
                                         fontWeight: 600,
                                         ml: 1
                                     }}
@@ -65,7 +65,12 @@ const HouseKeeping = ({ groupedBeds, setAssignedBed }) => {
                                     {beddetail?.map((item, index) => (
                                         <Grid xs={6} sm={3} lg={2} xl={1.5} key={item?.fb_bdc_no || index}>
                                             <Suspense fallback={<CustomBackDropWithOutState message="Loading..." />}>
-                                                <HkRoomComponent setAssignedBed={setAssignedBed} roomnumber={item?.fb_bdc_no} />
+                                                <HkRoomComponent
+                                                    data={item}
+                                                    setAssignedBed={setAssignedBed}
+                                                    roomnumber={item?.fb_bdc_no}
+                                                    HandleBedAssign={HandleBedAssign}
+                                                />
                                             </Suspense>
                                         </Grid>
                                     ))}

@@ -1,20 +1,19 @@
 import React, { lazy, memo, Suspense, useMemo } from 'react'
 import { Box } from '@mui/joy'
-import ChecklistHeaders from '../../Components/ChecklistHeaders';
 import { useQuery } from '@tanstack/react-query';
 import { getDischargeEntryBed, getProcheckedbedDetail } from '../../Function/CommonFunction';
 import BookTwoToneIcon from '@mui/icons-material/BookTwoTone';
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
 
-
-const ProBedlist = lazy(() => import('./ProBedlist'))
+const ProBedlist = lazy(() => import('./ProBedlist'));
+const ChecklistHeaders = lazy(() => import('../../Components/ChecklistHeaders'));
 
 const Prochecklist = () => {
 
     const { data: getdischargeentrybed } = useQuery({
         queryKey: ['getdischargebed'],
         queryFn: () => getDischargeEntryBed(),
-    })
+    });
 
     const UniqueDischargeBed = useMemo(() => {
         return getdischargeentrybed?.filter(
@@ -24,15 +23,13 @@ const Prochecklist = () => {
     }, [getdischargeentrybed]);
 
 
-    console.log(UniqueDischargeBed,"UniqueDischargeBed");
-    
-
     const { data: getproCheckBed, refetch: fetchProcheckdetail } = useQuery({
         queryKey: ['getprocheckbed'],
         queryFn: () => getProcheckedbedDetail(),
     })
 
 
+    // console.log(UniqueDischargeBed, "UniqueDischargeBed");
 
     return (
         <Box sx={{ minHeight: '100vh', width: '100%' }}>

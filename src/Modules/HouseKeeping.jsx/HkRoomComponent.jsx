@@ -1,13 +1,14 @@
 import { Box, Typography } from '@mui/joy';
-import React, { memo, useRef } from 'react';
+import React, { memo, useCallback, useRef } from 'react';
 import HotelOutlinedIcon from '@mui/icons-material/HotelOutlined';
 
-const HkRoomComponent = ({ roomnumber, setAssignedBed }) => {
+const HkRoomComponent = ({ roomnumber, setAssignedBed, data, HandleBedAssign }) => {
     const boxRef = useRef(null);
 
     const rand = (min, max) => Math.floor(Math.random() * (max - min) + min);
 
-    const handleClick = () => {
+    const handleClick = useCallback(() => {
+        HandleBedAssign(data)
         const div = boxRef.current;
         if (!div) return;
 
@@ -70,7 +71,7 @@ const HkRoomComponent = ({ roomnumber, setAssignedBed }) => {
             setAssignedBed?.(prev => [...(prev || []), roomnumber]);
 
         });
-    };
+    }, [data]);
 
 
     return (

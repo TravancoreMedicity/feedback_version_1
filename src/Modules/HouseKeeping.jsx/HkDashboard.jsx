@@ -10,7 +10,7 @@ import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 const HkDashboardCards = lazy(() => import('./HkDashboardCards'));
 const HouseKeeping = lazy(() => import('./HouseKeeping'));
 
-const HkDashboard = ({ getllBlockedBed, setAssignedBed, assingedbed }) => {
+const HkDashboard = ({ getllBlockedBed, setAssignedBed, assingedbed,HandleBedAssign }) => {
     const groupedBeds = useMemo(() => {
         if (!getllBlockedBed) return {};
         // Filter out beds that are already assigned
@@ -25,6 +25,8 @@ const HkDashboard = ({ getllBlockedBed, setAssignedBed, assingedbed }) => {
         }, {});
     }, [getllBlockedBed, assingedbed]);
 
+    const AllBeds = useMemo(() => getllBlockedBed?.length, [getllBlockedBed]);
+
 
     return (
         <Box
@@ -36,7 +38,7 @@ const HkDashboard = ({ getllBlockedBed, setAssignedBed, assingedbed }) => {
             }}>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', width: '100%' }}>
                 {[
-                    { name: 'ALL', code: 100, icon: <ReceiptLongIcon className='hoverClass' sx={{ width: 30, height: 30, color: 'rgba(var(--icon-primary))', }} /> },
+                    { name: 'ALL', code: AllBeds, icon: <ReceiptLongIcon className='hoverClass' sx={{ width: 30, height: 30, color: 'rgba(var(--icon-primary))', }} /> },
                     { name: 'PENDING', code: 25, icon: <PendingActionsIcon className='hoverClass' sx={{ width: 30, height: 30, color: 'rgba(var(--icon-primary))', }} /> },
                     { name: 'COMPLETED', code: 35, icon: <AssignmentTurnedInIcon className='hoverClass' sx={{ width: 30, height: 30, color: 'rgba(var(--icon-primary))', }} /> },
                     { name: 'PROCESSING', code: 40, icon: <PlaylistAddIcon className='hoverClass' sx={{ width: 30, height: 30, color: 'rgba(var(--icon-primary))', }} /> },
@@ -52,6 +54,7 @@ const HkDashboard = ({ getllBlockedBed, setAssignedBed, assingedbed }) => {
                 <HouseKeeping
                     setAssignedBed={setAssignedBed}
                     groupedBeds={groupedBeds}
+                    HandleBedAssign={HandleBedAssign}
                 />
             </Box>
         </Box>

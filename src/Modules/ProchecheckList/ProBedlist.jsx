@@ -34,7 +34,7 @@ const ProBedlist = ({ data, matchdata, fetchProcheckdetail }) => {
                     position: 'relative'
                 }}>
                 <div style={{
-                    height: { xs: 100, sm: 120 },
+                    height: { xs: 90, sm: 120 },
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: "space-between",
@@ -63,7 +63,7 @@ const ProBedlist = ({ data, matchdata, fetchProcheckdetail }) => {
                             fontFamily: 'var(--font-varient)',
                             color: 'White',
                             fontWeight: 900,
-                            height: { xs: 100, sm: 120 },
+                            height: { xs: 90, sm: 120 },
                             borderTopLeftRadius: 5,
                             borderBottomLeftRadius: 5,
                             mr: 1

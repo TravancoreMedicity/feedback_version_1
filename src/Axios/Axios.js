@@ -35,7 +35,7 @@ axiosApi.interceptors.response.use(
                 await axiosApi.get(`/user/getRefershToken/${userSlno}`, { withCredentials: true });
                 return axiosApi(originalRequest);
             } catch (refreshError) {
-                console.log("Failed to refresh token:", refreshError);
+                // console.log("Failed to refresh token:", refreshError);
                 localStorage.removeItem("app_auth");
                 // Handle logout or redirection to login page
                 toast.error(

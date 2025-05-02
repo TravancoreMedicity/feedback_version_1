@@ -12,9 +12,8 @@ import CustomBackDropWithOutState from "./Components/CustomBackDropWithOutState"
 import CommonFinalFeedSkeleton from './Feedback/Commoncomponents/commonFinalFeedSkeleton';
 
 // import { socket } from "./ws/socket";
-import Scanner from "./Components/Scanner.jsx";
+// import Scanner from "./Components/Scanner.jsx";
 import HkContainer from "./Modules/HouseKeeping.jsx/HkContainer.jsx";
-
 
 // Main Modules
 const Dashboard = lazy(() => import("./Modules/Dashboard/Dashboard.jsx"));
@@ -45,7 +44,7 @@ const NurstationMaster = lazy(() => import("./Masters/NurstationMaster.jsx"));
 const Maintenance = lazy(() => import("./Modules/Maintentance/Maintenance.jsx"));
 const InfromationTechnology = lazy(() => import("./Modules/IT/InfromationTechnology.jsx"));
 const Biomedical = lazy(() => import("./Modules/Biomedical/Biomedical.jsx"));
-const HouseKeeping = lazy(() => import("./Modules/HouseKeeping.jsx/HouseKeeping.jsx"));
+// const HouseKeeping = lazy(() => import("./Modules/HouseKeeping.jsx/HouseKeeping.jsx"));
 const RoomMaster = lazy(() => import("./Masters/RoomMaster.jsx"));
 const AssetIemMaster = lazy(() => import("./Masters/AssetIemMaster.jsx"));
 const AssetMapMaster = lazy(() => import("./Masters/AssetMapMaster.jsx"));

@@ -96,8 +96,8 @@ const FloatingDrawer = ({ anchorEl, handlepopoveClose }) => {
                             mt: 2,
                             width: '100%'
                         }}>
-                        <Box>
-                            <Grid container spacing={2}>
+                        <Box sx={{ width: '100%' }}>
+                            <Grid container spacing={2} >
                                 {arr?.map((val, idx) => (
                                     <Grid xs={3} key={idx} sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                                         <Box
@@ -126,8 +126,7 @@ const FloatingDrawer = ({ anchorEl, handlepopoveClose }) => {
                                                 fontFamily: 'var(--font-varient)',
                                                 color: 'rgba(var(--font-primary-white))',
                                                 mt: 1
-                                            }}
-                                        >
+                                            }}>
                                             {val?.menu}
                                         </Typography>
                                     </Grid>

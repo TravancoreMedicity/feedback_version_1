@@ -10,13 +10,20 @@ import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 const HkDashboardCards = lazy(() => import('./HkDashboardCards'));
 const HouseKeeping = lazy(() => import('./HouseKeeping'));
 
-const HkDashboard = ({ getllBlockedBed, setAssignedBed, assingedbed }) => {
+const HkDashboard = ({ getllBlockedBed, setAssignedBed, assingedbed, HandleBedAssign }) => {
+
+
     const groupedBeds = useMemo(() => {
         if (!getllBlockedBed) return {};
         // Filter out beds that are already assigned
+        const assignedBedIds = assingedbed?.map(item => item.fb_bed_slno);
+
         const filteredBeds = getllBlockedBed?.filter(
-            bed => !assingedbed?.includes(bed?.fb_bdc_no)
+            bed => !assignedBedIds?.includes(bed?.fb_bed_slno)
         );
+
+        console.log(filteredBeds, "filteredBeds");
+
         // Group the remaining beds by fb_ns_name
         return filteredBeds?.reduce((acc, bed) => {
             const key = bed?.fb_ns_name || 'Unknown';
@@ -24,6 +31,8 @@ const HkDashboard = ({ getllBlockedBed, setAssignedBed, assingedbed }) => {
             return acc;
         }, {});
     }, [getllBlockedBed, assingedbed]);
+
+    const AllBeds = useMemo(() => getllBlockedBed?.length, [getllBlockedBed]);
 
 
     return (
@@ -36,7 +45,7 @@ const HkDashboard = ({ getllBlockedBed, setAssignedBed, assingedbed }) => {
             }}>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', width: '100%' }}>
                 {[
-                    { name: 'ALL', code: 100, icon: <ReceiptLongIcon className='hoverClass' sx={{ width: 30, height: 30, color: 'rgba(var(--icon-primary))', }} /> },
+                    { name: 'ALL', code: AllBeds, icon: <ReceiptLongIcon className='hoverClass' sx={{ width: 30, height: 30, color: 'rgba(var(--icon-primary))', }} /> },
                     { name: 'PENDING', code: 25, icon: <PendingActionsIcon className='hoverClass' sx={{ width: 30, height: 30, color: 'rgba(var(--icon-primary))', }} /> },
                     { name: 'COMPLETED', code: 35, icon: <AssignmentTurnedInIcon className='hoverClass' sx={{ width: 30, height: 30, color: 'rgba(var(--icon-primary))', }} /> },
                     { name: 'PROCESSING', code: 40, icon: <PlaylistAddIcon className='hoverClass' sx={{ width: 30, height: 30, color: 'rgba(var(--icon-primary))', }} /> },
@@ -52,6 +61,7 @@ const HkDashboard = ({ getllBlockedBed, setAssignedBed, assingedbed }) => {
                 <HouseKeeping
                     setAssignedBed={setAssignedBed}
                     groupedBeds={groupedBeds}
+                    HandleBedAssign={HandleBedAssign}
                 />
             </Box>
         </Box>

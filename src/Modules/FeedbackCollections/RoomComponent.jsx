@@ -25,13 +25,10 @@ const RoomComponent = ({
 }) => {
 
 
-
     const [currentIndex, setCurrentIndex] = useState(0);
     const [modalopen, setModalOpen] = useState(false);
     const [roomstatus, setRoomStatus] = useState({})
     const [entering, setEntering] = useState(0)
-
-
 
     const { data: allfeedbackNames } = useQuery({
         queryKey: ['allfeedbackname'],
@@ -45,8 +42,6 @@ const RoomComponent = ({
         staleTime: Infinity,
         enabled: !!bdcode
     });
-
-
 
     const remarkDetails = useCallback((bdcode) => {
         const result = getallremarkstatus?.find((item) => item?.fb_bd_code === Number(bdcode))
@@ -166,26 +161,29 @@ const RoomComponent = ({
                     {/* Popover */}
                 </Box>
             </Box >
-            <Suspense fallback={<CustomBackDropWithOutState message={'loading...!'} />}>
-                <PatientModal
-                    open={modalopen}
-                    setOpen={setModalOpen}
-                    allfeedbackNames={allfeedbackNames}
-                    inpatientDetail={inpatientDetail?.length > 0 ? inpatientDetail : roomstatus ? roomstatus : []}
-                    feedbackedexit={feedbackedexit}
-                    roomnumber={roomnumber}
-                    currentIndex={currentIndex}
-                    handlebuttonClick={handlebuttonClick}
-                    loading={loading}
-                    nextPatient={nextPatient}
-                    prevPatient={prevPatient}
-                    ispresent={ispresent}
-                    multiple={multiple}
-                    setRoomStatus={setRoomStatus}
-                    roomstatus={roomstatus}
-                    entering={entering}
-                />
-            </Suspense>
+            {
+                Object.keys(inpatientDetail)?.length !== 0 && <Suspense fallback={<CustomBackDropWithOutState message={'loading...!'} />}>
+                    <PatientModal
+                        open={modalopen}
+                        setOpen={setModalOpen}
+                        allfeedbackNames={allfeedbackNames}
+                        inpatientDetail={inpatientDetail?.length > 0 ? inpatientDetail : roomstatus ? roomstatus : []}
+                        feedbackedexit={feedbackedexit}
+                        roomnumber={roomnumber}
+                        currentIndex={currentIndex}
+                        handlebuttonClick={handlebuttonClick}
+                        loading={loading}
+                        nextPatient={nextPatient}
+                        prevPatient={prevPatient}
+                        ispresent={ispresent}
+                        multiple={multiple}
+                        setRoomStatus={setRoomStatus}
+                        roomstatus={roomstatus}
+                        entering={entering}
+                    />
+                </Suspense>
+            }
+
         </>
     )
 }

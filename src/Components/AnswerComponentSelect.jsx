@@ -1,6 +1,7 @@
 import React, { lazy, memo, Suspense, useCallback, useState } from 'react';
 import { Box, Textarea } from '@mui/joy';
 import EmojiSkeleton from '../Feedback/Commoncomponents/ChooseEmogjiSkeleton';
+import { removeEmojis } from '../Constant/Constant';
 
 
 const ChooseEmoji = lazy(() => import('../Feedback/ChooseEmoji'))
@@ -23,7 +24,9 @@ const AnswerComponentSelect = ({
 
     const handleDescription = useCallback((e) => {
         setTextAreaValue(e.target.value)
-        hanldeuseranswers(questionid, e.target.value)
+        const sanitizedValue = removeEmojis(e.target.value)
+        //changed e.target.value to sanitizedValue
+        hanldeuseranswers(questionid, sanitizedValue)
     }, [hanldeuseranswers, questionid]);
 
 

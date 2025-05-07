@@ -52,7 +52,6 @@ const FeedbackButton = ({ average, handlesubmit, loading }) => {
                     width: { xs: 50, sm: 70 },
                     height: { xs: 50, sm: 70 },
                     borderRadius: "50%",
-                    bgcolor: 'white',
                     position: 'absolute',
                     left: -10,
                     top: -5,

@@ -37,7 +37,7 @@ const PatientRemarks = ({ inpatientDetail }) => {
 
             ]?.map((item, index) => (
                 <Box key={index} sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                    <Box sx={{ width: '40%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    <Box sx={{ width:{xs:'50%',sm:'40%'}, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                             {item?.icon}
                             <Typography
@@ -45,32 +45,30 @@ const PatientRemarks = ({ inpatientDetail }) => {
                                     fontFamily: 'var(--font-varient)',
                                     color: 'rgba(var(--font-primary-white))',
                                     fontWeight: 600,
-                                    fontSize: 15,
+                                    fontSize: { xs: 12, sm: 15 },
                                     overflow: 'hidden',
                                     textOverflow: 'ellipsis',
                                     whiteSpace: 'nowrap',
                                     textWrap: 'wrap'
-                                }}
-                            >
+                                }}>
                                 {item?.label}
                             </Typography>
                         </Box>
                     </Box>
                     <Box sx={{
-                        width: '60%',
+                        width:{xs:'50%',sm:'60%'},
                         overflow: 'hidden',
                         textOverflow: 'ellipsis',
                         whiteSpace: 'nowrap',
                         display: 'flex',
                         gap: 1,
-                        justifyContent: 'space-between'
                     }}>
                         <Typography
                             sx={{
                                 fontFamily: 'var(--font-varient)',
                                 color: 'rgba(var(--font-primary-white))',
                                 fontWeight: 600,
-                                fontSize: 15,
+                                fontSize: { xs: 12, sm: 15 },
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
                                 whiteSpace: 'nowrap',

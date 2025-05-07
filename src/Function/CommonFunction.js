@@ -65,14 +65,14 @@ export const getallfeedbackMaster = async () => {
 export const getAllBlockedBed = async () => {
     const result = await axiosApi.get("/feedback/getallblockedbed");
     const { data, success } = result.data;
-    if (success === 1) return warningNofity("Error in fetching Data");
+    if (success === 0) return warningNofity("Error in fetching Data");
     return data ? data : [];
 }
 
 export const getBedRemarkStatus = async () => {
     const result = await axiosApi.get("/feedback/getberremarkstatus");
     const { data, success } = result.data;
-    if (success === 1) return warningNofity("Error in fetching Data");
+    if (success === 0) return warningNofity("Error in fetching Data");
     return data ? data : [];
 }
 
@@ -80,7 +80,7 @@ export const getBedRemarkStatus = async () => {
 export const getDischargeEntryBed = async () => {
     const result = await axiosApi.get("/feedback/getdischargeentrybed");
     const { data, success } = result.data;
-    if (success === 1) return warningNofity("Error in fetching Data");
+    if (success === 0) return warningNofity("Error in fetching Data");
     return data ? data : [];
 }
 
@@ -114,8 +114,6 @@ export const getLoggedEmpDetail = async (id) => {
     if (success === 1) return warningNofity("Error in fetching Data");
     return data ? data : [];
 }
-
-
 //NOT USING THIS
 
 // export const getAllBedRemarks = async () => {
@@ -139,7 +137,6 @@ export const getallHkEmployeeDetail = async () => {
     if (success === 1) return warningNofity("Error in fetching Data");
     return data ? data : [];
 }
-
 
 
 export const getassetItemMaster = async () => {
@@ -350,6 +347,16 @@ export const getDepartmentSection = async (id) => {
     return axiosApi.get(`/feedback/deparmentsec/${id}`).then((res) => {
         const { success, data } = res.data;
         if (success === 1) {
+            return data ? data : []
+        }
+    })
+}
+
+
+export const getAllhkAssignedBed = async (id) => {
+    return axiosApi.get(`/feedback/getallassignedbed/${id}`).then((res) => {
+        const { success, data } = res.data;
+        if (success === 2) {
             return data ? data : []
         }
     })

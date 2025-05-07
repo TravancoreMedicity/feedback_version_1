@@ -11,6 +11,7 @@ const FeedBackFormComponent = ({ name, totalMark, len, progress, totalForm, form
     const FeedBackRating = Math.min(5, formMark / totalForm);
     const isMdUp = useMediaQuery('(min-width: 760px)');
     const [anchorEl, setAnchorEl] = useState(null);
+    
     const handleMouseEnter = useCallback((event) => {
         setAnchorEl(event.currentTarget);
     }, []);
@@ -18,7 +19,6 @@ const FeedBackFormComponent = ({ name, totalMark, len, progress, totalForm, form
     const handleMouseLeave = useCallback(() => {
         setAnchorEl(null);
     }, []);
-
 
     return (
         <>
@@ -91,6 +91,8 @@ const FeedBackFormComponent = ({ name, totalMark, len, progress, totalForm, form
                     ml: { xs: 0, sm: 2 }, // Positioning the modal to the side
                 }}
                 disableEnforceFocus={true}
+                disableAutoFocus
+                disableRestoreFocus
             >
                 <Box sx={{
                     p: 2,
@@ -138,7 +140,7 @@ const FeedBackFormComponent = ({ name, totalMark, len, progress, totalForm, form
                                     color: 'rgba(var(--font-primary-white))'
                                 }}>{FeedBackRating && !isNaN(FeedBackRating) ? FeedBackRating?.toFixed(1) : 0}</Typography>
                                 <Box sx={{ display: 'flex', alignItems: 'start', justifyContent: "start" }}>
-                                    <StarRendering totalRating={FeedBackRating?.toFixed(1)} size={isMdUp ? 22 : 16} />
+                                    <StarRendering totalRating={FeedBackRating && !isNaN(FeedBackRating) ? FeedBackRating?.toFixed(1) : 0} size={isMdUp ? 22 : 16} />
                                 </Box>
                             </Box>
                         </Box>

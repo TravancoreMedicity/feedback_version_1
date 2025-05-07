@@ -1,11 +1,14 @@
 import { Box, Typography } from '@mui/joy';
 import React, { useState, useEffect, memo, useCallback } from 'react';
+import { FEEDBACK_PORT } from '../Constant/Static';
 
 
 const successAnimation = require('../assets/successanimation.gif');
 const successStatic = require('../assets/succespic.png');
 
-const SuccessPage = ({ setIsSubmit }) => {
+const SuccessPage = ({ setIsSubmit, feedbackId }) => {
+    console.log(typeof (feedbackId));
+
     const [showGif, setShowGif] = useState(true);
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -15,15 +18,25 @@ const SuccessPage = ({ setIsSubmit }) => {
     }, []);
 
 
+    /* NOTE OF window.opener.postMessage
+     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     window.opener.postMessage() lets a child window communicate with its parent, useful for same-origin, real-time data sharing. It only works with windows opened via window.open(), can't cross domains easily, and requires proper cleanup to avoid memory leaks.*/
+
 
     const handleDone = useCallback(() => {
         // Open the new URL in a new tab
-        window.open("https://travancoremedicity.com/wellness-executive-health-care-center/", "_blank");
-        setIsSubmit(false);
-        // Try closing the current tab (works only if it was opened via window.open)
-        window.close();
-    }, [setIsSubmit]);
+        if (feedbackId ==="17" && window.opener) {
+            console.log("Enteirng");
 
+            window.opener.postMessage({ type: 'TRIGGER_DISCHARGE_FETCH' }, "*"); // Send message to original tab
+            window.location.href = `${FEEDBACK_PORT}/Home/dischargepatient`;// Redirect to the tab
+        } else {
+            window.open("https://travancoremedicity.com/wellness-executive-health-care-center/", "_blank");
+        }
+        setIsSubmit(false);
+        // Try closing the current tab 
+        window.close();
+    }, [setIsSubmit, feedbackId]);
 
 
     return (

@@ -59,12 +59,10 @@ const BlockComponent = ({
             })
             const { success, data } = response?.data;
             if (success === 0) return errorNofity("Error in fetching Data");
-
             const uniqueData = getUniqueByIP_NO(data);
             if (uniqueData && uniqueData?.length > 0) {
                 await InsertPatientDetailMeliora(uniqueData);
             }
-            // await InsertPatientDetailMeliora(data ? uniqueData : [])
             setLoading(false)
         } catch (error) {
             setLoading(false)
@@ -118,6 +116,7 @@ const BlockComponent = ({
             setLoading(true)
             const response = await axiosellider.post('/melioraEllider/getbed', insertData)
             const { success, data } = response?.data;
+            // console.log(data, "data");
             if (success === 1) return warningNofity("No Bed Available")
             if (success !== 2) return warningNofity("Error in fetching In Paient Detail :)")
             await InsertBedDetailMeliora(data ? data : [])

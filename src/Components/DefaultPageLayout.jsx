@@ -49,24 +49,24 @@ const DefaultPageLayout = ({ label, children, view, setView }) => {
                     disableRestoreFocus
                     sx={{
                         mt: 4,
-                        mr: 5
+                        mr: 5,
+                        width: '100%'
                     }}
                     disableEnforceFocus={true}
                 >
                     <Box sx={{
                         p: 2,
-                        width: 550,
+                        width: { xs: 350, sm: 550 },
                         borderRadius: 2,
                         boxShadow: 3,
                         backgroundColor: "rgba(var(--bg-card))",
                         border: 0.03,
                         borderColor: "rgba(var(--border-primary))",
-                        minHeight: 200
-
+                        minHeight: 200,
                     }}>
                         <Box
                             className="border-b-[0.2rem] border-iconprimary p-0 cursor-pointer " >
-                            <Typography level='body-sm' fontWeight={600} fontSize={16} sx={{ fontFamily: 'var(--font-varient)', color: 'rgba(var(--font-primary-white))' }} >
+                            <Typography level='body-sm' fontWeight={600} fontSize={{ xs: 14, sm: 16 }} sx={{ fontFamily: 'var(--font-varient)', color: 'rgba(var(--font-primary-white))' }} >
                                 BED DETAILS
                             </Typography>
                         </Box>
@@ -101,7 +101,7 @@ const DefaultPageLayout = ({ label, children, view, setView }) => {
                                         {val.icon}
                                         <Typography
                                             fontWeight={600}
-                                            fontSize={10}
+                                            fontSize={{ xs: 6, sm: 10 }}
                                             sx={{ fontFamily: 'var(--font-varient)', color: 'white' }}
                                         >
                                             {val.name}

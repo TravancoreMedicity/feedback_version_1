@@ -3,8 +3,34 @@ import { Phone, Calendar, IpAddressTag, UserBadgeCheck, DatabaseScriptPlus, Male
 import { Box, Tooltip, Typography } from '@mui/joy';
 import { format } from 'date-fns';
 
-const PatinetCard = ({ inpatientDetail }) => {
+const PatinetCard = ({ inpatientDetail, ispresent }) => {
     // Render a single patient card
+
+    const isDataEmpty = !inpatientDetail || Object.keys(inpatientDetail).length === 0;
+    if (ispresent === "T" && isDataEmpty) {
+        return (
+            <Box sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: { xs: '100%', sm: 530 },
+                minHeight: 150,
+                flexDirection: 'column'
+            }}>
+                <Typography
+                    level="body-md"
+                    sx={{ fontWeight: 600, color: 'rgba(var(--font-primary-white))', fontSize: { xs: 13, sm: 16 } }}>
+                    The patient has checked out.
+                </Typography>
+                <Typography
+                    level="body-md"
+                    sx={{ fontWeight: 600, color: 'rgba(var(--font-primary-white))', fontSize: { xs: 12, sm: 16 } }}>
+                    The other details will update soon.
+                </Typography>
+            </Box>
+        );
+    }
+
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, px: 1, mb: { xs: 1, sm: 0 } }}>
             {[

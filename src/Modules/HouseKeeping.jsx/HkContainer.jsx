@@ -27,27 +27,27 @@ const HkContainer = () => {
         queryFn: () => getAllBlockedBed()
     });
 
-
-    //working on it
-    // const { data: getallhkassignedbed } = useQuery({
-    //     queryKey: ["getallblockedbed", id],
-    //     queryFn: () => getAllhkAssignedBed(id),
-    //     enabled: !!id
-    // });
-
-
-    // console.log(getallhkassignedbed,"getallhkassignedbed");
+    const { data: getallhkassignedbed = [], refetch: getallAssignedBed } = useQuery({
+        queryKey: ["getallassignedbed", id],
+        queryFn: () => getAllhkAssignedBed(id),
+        enabled: !!id
+    });
 
 
     const handleChange = useCallback((event, newValue) => {
         setValue(newValue);
     }, []);
 
-    const filterAssignedBed = useMemo(() => (
-        getllBlockedBed?.filter(item =>
-            assingedbed?.includes(item?.fb_bdc_no)
-        )
-    ), [getllBlockedBed, assingedbed]);
+    const filterAssignedBed = useMemo(() => {
+        if (!getllBlockedBed || !getallhkassignedbed) return [];
+        const assignedBedIds = getallhkassignedbed?.map(item => item.fb_hk_bed_slno);
+        return getllBlockedBed?.filter(item =>
+            assignedBedIds?.includes(item.fb_bed_slno)
+        );
+    }, [getllBlockedBed, getallhkassignedbed]);
+
+
+
 
 
 
@@ -60,13 +60,14 @@ const HkContainer = () => {
         }
         try {
             const response = await axiosApi.post('/feedback/inserthkbedassign', insertdata)
-            const { success, status } = response?.data;
+            const { success } = response?.data;
             if (success === 1) return errorNofity("Error in Assigning Bed Detail")
             succesNofity("SucessFully Assigned Bed")
+            getallAssignedBed()
         } catch (error) {
             warningNofity(error)
         }
-    }, [])
+    }, [getallAssignedBed, id])
 
 
     return (
@@ -154,7 +155,7 @@ const HkContainer = () => {
                             getllBlockedBed &&
                             <HkDashboard
                                 getllBlockedBed={getllBlockedBed}
-                                assingedbed={assingedbed}
+                                assingedbed={filterAssignedBed}
                                 setAssignedBed={setAssignedBed}
                                 HandleBedAssign={HandleBedAssign}
                             />

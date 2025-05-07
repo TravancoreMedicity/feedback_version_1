@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { memo } from 'react'
 import Menu from '@mui/joy/Menu';
 import MenuItem from '@mui/joy/MenuItem';
@@ -13,9 +13,30 @@ import { useNavigate } from 'react-router-dom';
 import { PeopleTag } from 'iconoir-react'
 import { axiosApi } from '../Axios/Axios';
 import { toast } from 'react-toastify';
+import { EmpauthId } from '../Constant/Constant';
+import { getLoggedEmpDetail } from '../Function/CommonFunction';
+import { useQuery } from '@tanstack/react-query';
 // import { socket } from '../ws/socket';
 
 const LogoutMoidal = () => {
+
+    const id = EmpauthId()
+    const { data: getlogempdetail } = useQuery({
+        queryKey: ['loggedempdetail', id],
+        queryFn: () => getLoggedEmpDetail(id),
+        enabled: !!id,
+        staleTime: Infinity,
+    });
+
+    const { desg_name, em_name } = useMemo(() => {
+        const detail = getlogempdetail?.[0] || {};
+        return {
+            desg_name: detail.desg_name,
+            em_name: detail.em_name,
+        };
+    }, [getlogempdetail]);
+
+
 
     const navigate = useNavigate()
     const handleLogout = useCallback(async () => {
@@ -113,10 +134,19 @@ const LogoutMoidal = () => {
                         <Box>
                             <Typography level='body-md' noWrap
                                 sx={{ width: 300, fontWeight: 500, fontFamily: 'var(--font-varient)', color: 'rgba(var(--font-primary-white))' }}
-                            >Name Of Person</Typography>
+                            >
+                                {
+                                    getlogempdetail ? em_name : " Name Of Person"
+
+                                }
+                            </Typography>
                             <Typography level='body-xs' sx={{
                                 fontFamily: 'var(--font-varient)', color: 'rgba(var(--font-primary-white))'
-                            }} >Manager IT</Typography>
+                            }} >
+                                {
+                                    getlogempdetail ? desg_name : "Manager IT"
+                                }
+                            </Typography>
                         </Box>
                     </Box>
                 </MenuItem>

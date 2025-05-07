@@ -55,7 +55,7 @@ const PateintRoomDetail = ({ beddetail, nsname, view, setView, nscode }) => {
     const GetPatientDetailFromMeliora = useCallback(async (bdcode) => {
         const insertData = {
             fb_ns_code: nscode,
-            fb_bd_code: Number(bdcode)
+            fb_bd_code: parseInt(bdcode)
         }
         try {
             setLoading(true)
@@ -69,7 +69,7 @@ const PateintRoomDetail = ({ beddetail, nsname, view, setView, nscode }) => {
                 return;
             }
             if (success !== 2) {
-                warningNofity("Error in fetching In Patient Detail sdfsdfsdfsd :)");
+                warningNofity("Error in fetching In Patient Detail  :)");
                 setInpatientDetailFromMeliora({})
                 setLoading(false)
                 return;

@@ -114,8 +114,6 @@ export const getLoggedEmpDetail = async (id) => {
     if (success === 1) return warningNofity("Error in fetching Data");
     return data ? data : [];
 }
-
-
 //NOT USING THIS
 
 // export const getAllBedRemarks = async () => {
@@ -139,7 +137,6 @@ export const getallHkEmployeeDetail = async () => {
     if (success === 1) return warningNofity("Error in fetching Data");
     return data ? data : [];
 }
-
 
 
 export const getassetItemMaster = async () => {

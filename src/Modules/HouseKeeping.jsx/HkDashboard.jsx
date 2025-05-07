@@ -10,13 +10,20 @@ import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 const HkDashboardCards = lazy(() => import('./HkDashboardCards'));
 const HouseKeeping = lazy(() => import('./HouseKeeping'));
 
-const HkDashboard = ({ getllBlockedBed, setAssignedBed, assingedbed,HandleBedAssign }) => {
+const HkDashboard = ({ getllBlockedBed, setAssignedBed, assingedbed, HandleBedAssign }) => {
+
+
     const groupedBeds = useMemo(() => {
         if (!getllBlockedBed) return {};
         // Filter out beds that are already assigned
+        const assignedBedIds = assingedbed?.map(item => item.fb_bed_slno);
+
         const filteredBeds = getllBlockedBed?.filter(
-            bed => !assingedbed?.includes(bed?.fb_bdc_no)
+            bed => !assignedBedIds?.includes(bed?.fb_bed_slno)
         );
+
+        console.log(filteredBeds, "filteredBeds");
+
         // Group the remaining beds by fb_ns_name
         return filteredBeds?.reduce((acc, bed) => {
             const key = bed?.fb_ns_name || 'Unknown';

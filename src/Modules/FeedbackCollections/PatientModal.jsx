@@ -60,7 +60,6 @@ const PatientModal = ({
           alignItems: 'center'
         }}>
         <ModalDialog sx={{
-          // minWidth: 620,
           width: { xs: '100%', sm: 620 },
           borderRadius: 'md',
           p: 1,
@@ -81,7 +80,7 @@ const PatientModal = ({
                   borderRadius: 2,
                   boxShadow: 3,
                   backgroundColor: "rgba(var(--bg-card))",
-                  minHeight: 250
+                  minHeight: 200,
                 }}>
                 <Box sx={{ backgroundColor: "rgba(var(--bg-card))" }}>
                   <Suspense fallback={<CustomBackDropWithOutState message={'loading...!'} />}>
@@ -90,7 +89,7 @@ const PatientModal = ({
                   <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' } }}>
                     <Box sx={{ width: { xs: '100%', sm: '60%' }, display: 'flex', flexDirection: 'column', gap: 1, px: 2 }}>
                       <Suspense fallback={<CustomBackDropWithOutState message={'loading...!'} />}>
-                        <PatinetCard inpatientDetail={inpatientDetail[currentIndex]} />
+                        <PatinetCard inpatientDetail={inpatientDetail[currentIndex]} ispresent={ispresent} />
                       </Suspense>
                     </Box>
                     {
@@ -181,11 +180,11 @@ const PatientModal = ({
                 sx={{
                   px: 1,
                   py: 2,
-                  width: 600,
+                  width: '100%',
                   borderRadius: 2,
                   boxShadow: 3,
                   backgroundColor: "rgba(var(--bg-card))",
-                  minHeight: 250,
+                  minHeight: 200,
                 }}>
                 <Box sx={{ backgroundColor: "rgba(var(--bg-card))" }}>
                   <Suspense fallback={<CustomBackDropWithOutState message={'loading...!'} />}>

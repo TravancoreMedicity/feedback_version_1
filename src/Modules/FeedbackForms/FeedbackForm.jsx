@@ -94,7 +94,6 @@ const FeedbackForm = () => {
     }, []);
 
 
-
     //Getting all required fields for the user Transaction to insert......!!!!!
     // ***************************************************************************
     const combinedFeedbackData = feedbackDtlDisplay?.map(item => {
@@ -168,16 +167,19 @@ const FeedbackForm = () => {
 
         if ((feedbackDtlDisplay?.length + IsComponentPresent?.length) !== (answerlength + clickedNoComplenth)) {
             warningNofity("Please Answer all Questions?")
+            setLoading(false)
             return
         }
 
         // && clickedNoComplenth === 0 this condition is for using if the current senario is not working
         if (ComponentName?.includes("MobileInputBox") && mobilenumber?.length < 10 && !isClickedNotMobileInput) {
             setMobileValidation("Enter a valid Mobile Number")
+            setLoading(false)
             return
         }
         if (ComponentName?.includes("MobileInputBox") && mobilevalidation !== "") {
             warningNofity("Please check your Mobile Number");
+            setLoading(false)
             return
         }
         try {
@@ -200,7 +202,7 @@ const FeedbackForm = () => {
                 issubmit ? (
                     <>
                         <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
-                            <SuccessPage setIsSubmit={setIsSubmit} />
+                            <SuccessPage setIsSubmit={setIsSubmit} feedbackId={feedbackId} />
                         </Suspense>
                     </>
                 ) : (

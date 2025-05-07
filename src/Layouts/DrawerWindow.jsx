@@ -33,7 +33,6 @@ import { useQuery } from "@tanstack/react-query";
 const DrawerWindow = memo(({ drawerWidth, handleDrawerClose }) => {
 
     const navigation = useNavigate()
-
     const [selectedIndex, setSelectedIndex] = useState(null);
     const [arr, setarr] = useState([])
     const handleListItemClick = useCallback((event, index, route) => {
@@ -60,6 +59,7 @@ const DrawerWindow = memo(({ drawerWidth, handleDrawerClose }) => {
             { modslno: 7, menu: "BioMedical", text: "/Home/biomedical", icon: <Microscope height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
             { modslno: 8, menu: "HouseKeeping", text: "/Home/housekeeping", icon: <HospitalCircle height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
             { modslno: 9, menu: "PRO CheckList", text: "/Home/prochecklist", icon: <UserBadgeCheck height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
+            { modslno: 9, menu: "Discharge IP", text: "/Home/dischargepatient", icon: <UserBadgeCheck height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
         ]
     }, []);
 

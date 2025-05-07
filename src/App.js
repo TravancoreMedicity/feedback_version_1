@@ -13,7 +13,8 @@ import CommonFinalFeedSkeleton from './Feedback/Commoncomponents/commonFinalFeed
 
 // import { socket } from "./ws/socket";
 // import Scanner from "./Components/Scanner.jsx";
-import HkContainer from "./Modules/HouseKeeping.jsx/HkContainer.jsx";
+// import HkContainer from "./Modules/HouseKeeping.jsx/HkContainer.jsx";
+// import DischargePatient from "./Modules/DischargePatientFeedback/DischargePatient.jsx";
 
 // Main Modules
 const Dashboard = lazy(() => import("./Modules/Dashboard/Dashboard.jsx"));
@@ -50,6 +51,11 @@ const AssetIemMaster = lazy(() => import("./Masters/AssetIemMaster.jsx"));
 const AssetMapMaster = lazy(() => import("./Masters/AssetMapMaster.jsx"));
 const RoomChecklistMaster = lazy(() => import("./Masters/RoomChecklistMaster.jsx"));
 const Prochecklist = lazy(() => import("./Modules/ProchecheckList/Prochecklist.jsx"));
+const HkContainer = lazy(() => import("./Modules/HouseKeeping.jsx/HkContainer.jsx"));
+const DischargePatient = lazy(() => import("./Modules/DischargePatientFeedback/DischargePatient.jsx"));
+
+
+
 
 //Feedback
 // const ChooseFeedbacks = lazy(() => import("./Feedback/ChooseFeedbacks.jsx"));
@@ -229,7 +235,7 @@ const routes = createBrowserRouter([
             path: "housekeeping", element:
               <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
                 {/* <HouseKeeping /> */}
-                <HkContainer/>
+                <HkContainer />
               </Suspense>, errorElement: <ErrorElement />
           },
           {
@@ -259,12 +265,17 @@ const routes = createBrowserRouter([
               <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
                 <DischargeRoomCleaningMaster />
               </Suspense>, errorElement: <ErrorElement />
-          }
-          ,
+          },
           {
             path: "houskeepingempmaster", element:
               <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
                 <HkEmployeeDetailMaster />
+              </Suspense>, errorElement: <ErrorElement />
+          },
+          {
+            path: "dischargepatient", element:
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
+                <DischargePatient />
               </Suspense>, errorElement: <ErrorElement />
           }
         ],

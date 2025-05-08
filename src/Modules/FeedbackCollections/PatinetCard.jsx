@@ -1,9 +1,13 @@
 import React, { memo } from 'react';
-import { Phone, Calendar, IpAddressTag, UserBadgeCheck, DatabaseScriptPlus, Male } from 'iconoir-react';
+import { Phone, Calendar, IpAddressTag, UserBadgeCheck, DatabaseScriptPlus, Male, PharmacyCrossTag } from 'iconoir-react';
 import { Box, Tooltip, Typography } from '@mui/joy';
 import { format } from 'date-fns';
 
 const PatinetCard = ({ inpatientDetail, ispresent }) => {
+
+
+
+
     // Render a single patient card
 
     const isDataEmpty = !inpatientDetail || Object.keys(inpatientDetail).length === 0;
@@ -34,18 +38,62 @@ const PatinetCard = ({ inpatientDetail, ispresent }) => {
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, px: 1, mb: { xs: 1, sm: 0 } }}>
             {[
-                { label: 'Patient Name', value: inpatientDetail?.fb_ptc_name || 'Not Available', icon: <UserBadgeCheck fontSize={12} style={{ color: 'rgba(var(--font-primary-white))', cursor: 'pointer' }} /> },
-                { label: 'Patient Ip', value: `${inpatientDetail?.fb_ip_no ?? "IP N/A"} / ${inpatientDetail?.fb_pt_no ?? 'PT N/A'}`, icon: <IpAddressTag fontSize={12} style={{ color: 'rgba(var(--font-primary-white))', cursor: 'pointer' }} /> },
-                { label: 'Mobile No', value: inpatientDetail?.fb_ptc_mobile || 'Not Available', icon: <Phone fontSize={12} style={{ color: 'rgba(var(--font-primary-white))', cursor: 'pointer' }} /> },
+                {
+                    label: 'Patient Name',
+                    value: inpatientDetail?.fb_ptc_name || 'Not Available',
+                    icon: <UserBadgeCheck fontSize={14}
+                        style={{
+                            color: 'rgba(var(--font-primary-white))',
+                            cursor: 'pointer'
+                        }} />
+                },
+                {
+                    label: 'Patient Ip',
+                    value: `${inpatientDetail?.fb_ip_no ?? "IP N/A"} / ${inpatientDetail?.fb_pt_no ?? 'PT N/A'}`,
+                    icon: <IpAddressTag fontSize={12}
+                        style={{
+                            color: 'rgba(var(--font-primary-white))',
+                            cursor: 'pointer'
+                        }}
+                    />
+                },
+                {
+                    label: 'Mobile No',
+                    value: inpatientDetail?.fb_ptc_mobile || 'Not Available',
+                    icon: <Phone fontSize={12}
+                        style={{
+                            color: 'rgba(var(--font-primary-white))',
+                            cursor: 'pointer'
+                        }} />
+                },
                 {
                     label: 'Gender/Age',
                     value: `${inpatientDetail?.fb_ptc_sex === 'F' ? 'F' : 'M'} / ${inpatientDetail?.fb_ptn_yearage ?? 'Unknown'} year`,
-                    icon: <Male fontSize={12} style={{ color: 'rgba(var(--font-primary-white))', cursor: 'pointer' }} />
+                    icon: <Male fontSize={12}
+                        style={{
+                            color: 'rgba(var(--font-primary-white))',
+                            cursor: 'pointer'
+                        }} />
                 },
                 {
-                    label: 'Admit Date', value: inpatientDetail?.fb_ipd_date
+                    label: 'Doctor Name',
+                    value: inpatientDetail?.fb_doc_name || 'Not Available',
+                    icon: <PharmacyCrossTag fontSize={12}
+                        style={{
+                            color: 'rgba(var(--font-primary-white))',
+                            cursor: 'pointer'
+                        }} />
+                },
+                {
+                    label: 'Admit Date',
+                    value: inpatientDetail?.fb_ipd_date
                         ? format(new Date(inpatientDetail.fb_ipd_date), "dd-MM-yyyy hh:mm a")
-                        : 'Not Available', icon: <Calendar fontSize={12} style={{ color: 'rgba(var(--font-primary-white))', cursor: 'pointer' }} />
+                        : 'Not Available',
+                    icon: <Calendar fontSize={12}
+                        style={{
+                            color: 'rgba(var(--font-primary-white))',
+                            cursor: 'pointer'
+                        }} />
                 },
                 {
                     label: 'Address',
@@ -57,9 +105,13 @@ const PatinetCard = ({ inpatientDetail, ispresent }) => {
                             (inpatientDetail?.fb_ptc_loadd2 || '') +
                             (inpatientDetail?.fb_ptc_loadd3 || '')
                             : 'Address is not found',
-                    icon: <DatabaseScriptPlus fontSize={12} style={{ color: 'rgba(var(--font-primary-white))', cursor: 'pointer' }} />
+                    icon: <DatabaseScriptPlus fontSize={12}
+                        style={{
+                            color: 'rgba(var(--font-primary-white))',
+                            cursor: 'pointer'
+                        }} />
                 },
-            ].map((item, index) => (
+            ]?.map((item, index) => (
                 <Box key={index} sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
                     <Box sx={{ width: '10%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                         <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -75,8 +127,8 @@ const PatinetCard = ({ inpatientDetail, ispresent }) => {
                             sx={{
                                 fontFamily: 'var(--font-varient)',
                                 color: 'rgba(var(--font-primary-white))',
-                                fontWeight: 600,
-                                fontSize: { xs: 10, sm: 15 },
+                                fontWeight: { xs: 800, sm: 600 },
+                                fontSize: { xs: 11, sm: 15 },
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
                                 whiteSpace: 'nowrap',

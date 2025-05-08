@@ -7,7 +7,7 @@ import { employeeID, errorNofity, succesNofity, warningNofity } from '../../Cons
 const HouseKeepingBedlistModal = lazy(() => import('./HouseKeepingBedlistModal'));
 
 const Housekeepinglist = ({ data, assingedbed }) => {
-
+   
     const [open, setOpen] = useState(false);
     const HandleCheckList = useCallback(() => {
         setOpen(true)
@@ -15,7 +15,6 @@ const Housekeepinglist = ({ data, assingedbed }) => {
 
 
     const HandleRemoveAssignedBed = useCallback(async (bed) => {
-        // console.log(bed);
         // const insertdata = {
         //     fb_hk_bed_slno: bed,
         //     edit_user: Number(employeeID()),

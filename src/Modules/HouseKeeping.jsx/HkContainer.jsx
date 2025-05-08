@@ -58,7 +58,6 @@ const HkContainer = () => {
             const { success } = response?.data;
             if (success === 1) return errorNofity("Error in Assigning Bed Detail")
             succesNofity("SucessFully Assigned Bed")
-            // await getallAssignedBed()
         } catch (error) {
             warningNofity(error)
         }

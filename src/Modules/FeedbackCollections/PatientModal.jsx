@@ -94,7 +94,8 @@ const PatientModal = ({
                     </Box>
                     {
                       inpatientDetail[currentIndex] !== undefined &&
-                      < Divider orientation={!isMdUp ? "horizontal" : "vertical"}
+                      < Divider
+                        orientation={!isMdUp ? "horizontal" : "vertical"}
                         sx={{
                           bgcolor: 'rgba(213, 82, 154, 0.8)',
                           width: { xs: '100%', sm: 2 },
@@ -132,13 +133,15 @@ const PatientModal = ({
                                     <Box
                                       onClick={() => handleQrcode(item)}
                                       sx={{
-                                        width: { xs: '20%', sm: '28%' },
+                                        width: { xs: 60, sm: '38%' },
                                         objectFit: 'contain',
                                         p: 1,
                                         borderRadius: 5,
                                         cursor: 'pointer',
                                         '&:hover':
-                                          { background: 'linear-gradient(to right, rgba(33, 150, 243, 0.4), rgba(233, 30, 99, 0.4))' }
+                                        {
+                                          background: 'linear-gradient(to right, rgba(33, 150, 243, 0.4), rgba(233, 30, 99, 0.4))'
+                                        }
                                       }}>
                                       <QRCodeSVG value={'sdflkjdjh'} style={{ width: '100%', height: '100%', borderRadius: 3 }} />
                                     </Box>
@@ -146,8 +149,6 @@ const PatientModal = ({
                                 ))
                             }
                           </Box>
-
-
                           {
                             openqr && (
                               <Suspense fallback={<CustomBackDropWithOutState message={'loading...!'} />}>

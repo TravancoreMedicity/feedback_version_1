@@ -11,7 +11,7 @@ const FeedbackItem = ({ index, item, feedbackedexit, currentIndex, inpatientDeta
         <Box
             key={index}
             sx={{
-                width: { xs: '30%', sm: '48%' },
+                width: { xs: 100, sm: '48%' },
                 height: { xs: 100, sm: '100%' },
                 display: 'flex',
                 justifyContent: 'center',

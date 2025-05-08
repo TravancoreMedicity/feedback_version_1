@@ -2,9 +2,11 @@ import { Box, Typography } from '@mui/joy'
 import React, { lazy, memo, Suspense, useState } from 'react'
 import { useCallback } from 'react';
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
+import { axiosApi } from '../../Axios/Axios';
+import { employeeID, errorNofity, succesNofity, warningNofity } from '../../Constant/Constant';
 const HouseKeepingBedlistModal = lazy(() => import('./HouseKeepingBedlistModal'));
 
-const Housekeepinglist = ({ data, assingedbed, setAssignedBed }) => {
+const Housekeepinglist = ({ data, assingedbed }) => {
 
     const [open, setOpen] = useState(false);
     const HandleCheckList = useCallback(() => {
@@ -12,11 +14,22 @@ const Housekeepinglist = ({ data, assingedbed, setAssignedBed }) => {
     }, []);
 
 
-
-    const HandleRemoveAssignedBed = useCallback((bed) => {
-        const resultArray = assingedbed?.filter(val => val !== bed);
-        setAssignedBed(resultArray);
-    }, [assingedbed, setAssignedBed]);
+    const HandleRemoveAssignedBed = useCallback(async (bed) => {
+        // console.log(bed);
+        // const insertdata = {
+        //     fb_hk_bed_slno: bed,
+        //     edit_user: Number(employeeID()),
+        //     fb_hk_status: 0
+        // }
+        // try {
+        //     const response = await axiosApi.post('/feedback/removeassign', insertdata)
+        //     const { success } = response?.data;
+        //     if (success === 1) return errorNofity("Error in Removing Bed Assign")
+        //     succesNofity("Removed Assigned Bed")
+        // } catch (error) {
+        //     warningNofity(error)
+        // }
+    }, [employeeID]);
 
 
 
@@ -52,7 +65,7 @@ const Housekeepinglist = ({ data, assingedbed, setAssignedBed }) => {
                     borderColor: 'rgba(var(--border-primary))',
                     paddingRight: '10px'
                 }}>
-                    <Box onDoubleClick={() => HandleRemoveAssignedBed(data?.fb_bdc_no)
+                    <Box onDoubleClick={() => HandleRemoveAssignedBed(data?.fb_bed_slno)
                     } sx={{
                         display: 'flex',
                         alignItems: 'center',

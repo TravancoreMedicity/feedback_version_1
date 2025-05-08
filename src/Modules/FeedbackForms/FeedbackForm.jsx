@@ -225,7 +225,6 @@ const FeedbackForm = () => {
                                 display: 'flex',
                                 justifyContent: 'space-between',
                                 p: 1,
-                                //    ? border: '0.1px solid rgba(var(--font-primary-white))',
                                 borderRadius: 5,
                                 bgcolor: '#e3f2fd'
                             }}>

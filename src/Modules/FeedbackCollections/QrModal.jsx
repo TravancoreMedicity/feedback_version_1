@@ -6,9 +6,6 @@ import { Box, ModalDialog, Typography } from '@mui/joy';
 import { COMMON_FEEDBACK_LINK_URL, OUTLINK_FEEDBACK } from '../../Constant/Static';
 const QrModal = ({ open, setOpen, item, inpatientDetail, currentIndex, feedbackedexit }) => {
 
-
-    console.log(item);
-
     const isFeedbackGiven = feedbackedexit?.some(fb =>
         fb?.fdmast_slno === item?.fdmast_slno && fb?.fb_patient_name === inpatientDetail[currentIndex]?.fb_ptc_name
     );

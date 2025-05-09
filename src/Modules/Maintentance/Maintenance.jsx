@@ -1,4 +1,4 @@
-import React, { lazy, memo, Suspense, useMemo } from 'react'
+import React, { lazy, memo, Suspense, useMemo, useState } from 'react'
 import { Box } from '@mui/joy'
 import { useQuery } from '@tanstack/react-query'
 import EngineeringTwoToneIcon from '@mui/icons-material/EngineeringTwoTone';
@@ -9,6 +9,7 @@ const BedList = lazy(() => import('./BedList'));
 const ChecklistHeaders = lazy(() => import('../../Components/ChecklistHeaders'));
 
 const Maintenance = () => {
+    const [searchQuery, setSearchQuery] = useState('');
 
     const { data: getllBlockedBed, refetch: getallBlokedbedRefetch } = useQuery({
         queryKey: ["getallblockedbed"],
@@ -42,6 +43,17 @@ const Maintenance = () => {
     }, [getllBlockedBed, getallremarkstatus]);
 
 
+
+    const FilterBedSearch = useMemo(() => {
+        if (!searchQuery) return filteredBlockedBeds;
+        return filteredBlockedBeds?.filter(bed =>
+            bed?.fb_bdc_no?.includes(searchQuery)
+        )
+    }, [searchQuery, filteredBlockedBeds]);
+
+
+
+
     return (
         <>
             <Box sx={{ minHeight: '100vh' }}>
@@ -50,7 +62,8 @@ const Maintenance = () => {
                     sx={{
                         backgroundColor: "rgba(var(--bg-card))",
                         height: "calc(100% - 50px)",
-                        cursor: 'pointer'
+                        cursor: 'pointer',
+                        minHeight: '90vh'
                     }}>
                     <Box sx={{
                         mb: 2,
@@ -67,7 +80,12 @@ const Maintenance = () => {
                                     fontSize: 28,
                                     fontWeight: 700,
                                     mt: 2
-                                }} />} name={'MAINTENACE'} />
+                                }} />}
+                                setValue={setSearchQuery}
+                                searchvalue={searchQuery}
+                                value={2}
+                                name={'MAINTENACE'}
+                            />
                         </Suspense>
                         <Box
                             sx={{
@@ -77,7 +95,7 @@ const Maintenance = () => {
                                 mt: 1,
                             }}>
                             {
-                                filteredBlockedBeds?.map((item, index) => {
+                                FilterBedSearch?.map((item, index) => {
                                     const matchdata = filterbedwithremarks?.find((remark) => remark?.fb_bdc_no === item?.fb_bdc_no)
                                     return <Box key={index}>
                                         <Suspense fallback={<CustomBackDropWithOutState message={"loading"} />}>

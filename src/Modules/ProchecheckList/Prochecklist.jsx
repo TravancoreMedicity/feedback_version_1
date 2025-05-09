@@ -1,4 +1,4 @@
-import React, { lazy, memo, Suspense, useMemo } from 'react'
+import React, { lazy, memo, Suspense, useMemo, useState } from 'react'
 import { Box } from '@mui/joy'
 import { useQuery } from '@tanstack/react-query';
 import { getDischargeEntryBed, getProcheckedbedDetail } from '../../Function/CommonFunction';
@@ -9,6 +9,7 @@ const ProBedlist = lazy(() => import('./ProBedlist'));
 const ChecklistHeaders = lazy(() => import('../../Components/ChecklistHeaders'));
 
 const Prochecklist = () => {
+    const [searchQuery, setSearchQuery] = useState('');
 
     const { data: getdischargeentrybed } = useQuery({
         queryKey: ['getdischargebed'],
@@ -22,14 +23,18 @@ const Prochecklist = () => {
         );
     }, [getdischargeentrybed]);
 
-
     const { data: getproCheckBed, refetch: fetchProcheckdetail } = useQuery({
         queryKey: ['getprocheckbed'],
         queryFn: () => getProcheckedbedDetail(),
     })
 
+    const FilteredBeds = useMemo(() => {
+        if (!searchQuery) return UniqueDischargeBed;
+        return UniqueDischargeBed?.filter(bed => bed?.fb_bdc_no?.includes(searchQuery)
+        );
+    }, [searchQuery, UniqueDischargeBed]);
 
-    // console.log(UniqueDischargeBed, "UniqueDischargeBed");
+
 
     return (
         <Box sx={{ minHeight: '100vh', width: '100%' }}>
@@ -39,7 +44,8 @@ const Prochecklist = () => {
                     width: '100%',
                     backgroundColor: "rgba(var(--bg-card))",
                     height: "calc(100% - 50px)",
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    minHeight: '90vh'
                 }}>
                 <Box sx={{
                     mb: 2,
@@ -50,12 +56,18 @@ const Prochecklist = () => {
                     borderRadius: 5,
                     width: '100%',
                 }}>
-                    <ChecklistHeaders icon={<BookTwoToneIcon sx={{
-                        color: 'rgba(var(--font-primary-white))',
-                        fontSize: { xs: 22, sm: 28 },
-                        fontWeight: 700,
-                        mt: 2
-                    }} />} name={'PRO CHECKLIST'} />
+                    <ChecklistHeaders
+                        icon={<BookTwoToneIcon sx={{
+                            color: 'rgba(var(--font-primary-white))',
+                            fontSize: { xs: 22, sm: 28 },
+                            fontWeight: 700,
+                            mt: 2
+                        }} />}
+                        setValue={setSearchQuery}
+                        searchvalue={searchQuery}
+                        value={2}
+                        name={'PRO CHECKLIST'}
+                    />
                     <Box
                         sx={{
                             gap: 3,
@@ -64,7 +76,7 @@ const Prochecklist = () => {
                             mt: 1,
                         }}>
                         {
-                            UniqueDischargeBed?.map((item, index) => {
+                            FilteredBeds?.map((item, index) => {
                                 const matchdata = getproCheckBed?.find((bed) => bed?.fb_bdc_no === item?.fb_bdc_no)
                                 return <Box key={index} >
                                     <Suspense fallback={<CustomBackDropWithOutState message={'loading...!'} />}>

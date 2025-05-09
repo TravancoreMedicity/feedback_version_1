@@ -59,8 +59,7 @@ const DischargePatient = () => {
         } catch (error) {
             warningNofity("Error in Fetching Data...?")
         }
-    }, [formattedFromDate, formattedToDate,getDischagreFeedbackFrom]);
-
+    }, [formattedFromDate, formattedToDate, getDischagreFeedbackFrom]);
 
     //Automatically checking that the form has sumbitted
     useEffect(() => {
@@ -84,10 +83,10 @@ const DischargePatient = () => {
         window.open(externalUrl, '_blank');
     }, []);
 
-
     const hanldeDischargeFeedback = useCallback((data) => {
         openFeedbackForm(data)
-    }, [openFeedbackForm])
+    }, [openFeedbackForm]);
+
 
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -140,8 +139,7 @@ const DischargePatient = () => {
                                     alignItems: 'center',
                                     justifyContent: { xs: 'flex-start', sm: 'flex-end' },
                                     mt: { xs: 2, sm: 0 }
-                                }}
-                            >
+                                }}>
                                 <DatePickerComponent label={'From Date'} setValue={setFromDate} value={fromdate} />
                                 <DatePickerComponent label={'To Date'} setValue={setToDate} value={todate} />
                                 <IconButton variant="soft" onClick={getDischargedPatientDetails}>
@@ -149,11 +147,12 @@ const DischargePatient = () => {
                                 </IconButton>
                             </Box>
                         </Paper>
-                        <Box sx={{
-                            width: '100%',
-                            mt: 1,
-                            backgroundColor: "rgba(var(--bg-card))"
-                        }}>
+                        <Box
+                            sx={{
+                                width: '100%',
+                                mt: 1,
+                                backgroundColor: "rgba(var(--bg-card))"
+                            }}>
                             <AccessibleTable
                                 DischargeForms={dischargepatientforms}
                                 dischargepatients={dischargepatients}

@@ -202,6 +202,7 @@ const HkContainer = () => {
                                         return <Box key={index}>
                                             <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
                                                 <Housekeepinglist
+                                                    refetch={getallAssignedBed}
                                                     data={item}
                                                     assingedbed={filterAssignedBed}
                                                     name={"INFROMATION TECHNOLOGY"}

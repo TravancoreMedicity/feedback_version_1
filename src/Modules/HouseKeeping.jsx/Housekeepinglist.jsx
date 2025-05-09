@@ -6,8 +6,8 @@ import { axiosApi } from '../../Axios/Axios';
 import { employeeID, errorNofity, succesNofity, warningNofity } from '../../Constant/Constant';
 const HouseKeepingBedlistModal = lazy(() => import('./HouseKeepingBedlistModal'));
 
-const Housekeepinglist = ({ data, assingedbed }) => {
-   
+const Housekeepinglist = ({ data, assingedbed, refetch }) => {
+
     const [open, setOpen] = useState(false);
     const HandleCheckList = useCallback(() => {
         setOpen(true)
@@ -15,19 +15,20 @@ const Housekeepinglist = ({ data, assingedbed }) => {
 
 
     const HandleRemoveAssignedBed = useCallback(async (bed) => {
-        // const insertdata = {
-        //     fb_hk_bed_slno: bed,
-        //     edit_user: Number(employeeID()),
-        //     fb_hk_status: 0
-        // }
-        // try {
-        //     const response = await axiosApi.post('/feedback/removeassign', insertdata)
-        //     const { success } = response?.data;
-        //     if (success === 1) return errorNofity("Error in Removing Bed Assign")
-        //     succesNofity("Removed Assigned Bed")
-        // } catch (error) {
-        //     warningNofity(error)
-        // }
+        const insertdata = {
+            fb_hk_bed_slno: bed,
+            edit_user: Number(employeeID()),
+            fb_hk_status: 0
+        }
+        try {
+            const response = await axiosApi.post('/feedback/removeassign', insertdata)
+            const { success } = response?.data;
+            if (success === 1) return errorNofity("Error in Removing Bed Assign")
+            succesNofity("Removed Assigned Bed")
+            refetch()
+        } catch (error) {
+            warningNofity(error)
+        }
     }, [employeeID]);
 
 

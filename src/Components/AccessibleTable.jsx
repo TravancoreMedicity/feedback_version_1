@@ -7,7 +7,6 @@ import { ValidationModule } from 'ag-grid-enterprise';
 import PersonIcon from '@mui/icons-material/Person';
 import SmsFailedTwoToneIcon from '@mui/icons-material/SmsFailedTwoTone';
 import { Box, Button, CssVarsProvider } from '@mui/joy';
-import { patientData } from '../Constant/Data';
 ModuleRegistry.registerModules([
     ClientSideRowModelModule,
     TextFilterModule,
@@ -95,8 +94,9 @@ const AccessibleTable = ({ hanldeDischargeFeedback, dischargepatients, Discharge
 
     return (
         <CssVarsProvider>
-            <Box sx={{ height: 700, width: '100%', }} >
+            <Box sx={{ height: 700, width: '100%' }} >
                 <AgGridReact
+                    className="custom-age-grid"
                     rowData={updatedPatients}
                     columnDefs={columnDefs}
                     defaultColDef={{
@@ -109,8 +109,9 @@ const AccessibleTable = ({ hanldeDischargeFeedback, dischargepatients, Discharge
                             fontWeight: 600,
                             backgroundColor: 'rgba(var(--bg-card))',
                             // fontFamily: 'var(--font-varient)',
-                        }
+                        },
                     }}
+
                 />
             </Box>
         </CssVarsProvider>

@@ -7,7 +7,6 @@ const successAnimation = require('../assets/successanimation.gif');
 const successStatic = require('../assets/succespic.png');
 
 const SuccessPage = ({ setIsSubmit, feedbackId }) => {
-    console.log(typeof (feedbackId));
 
     const [showGif, setShowGif] = useState(true);
     useEffect(() => {
@@ -26,8 +25,6 @@ const SuccessPage = ({ setIsSubmit, feedbackId }) => {
     const handleDone = useCallback(() => {
         // Open the new URL in a new tab
         if (feedbackId ==="17" && window.opener) {
-            console.log("Enteirng");
-
             window.opener.postMessage({ type: 'TRIGGER_DISCHARGE_FETCH' }, "*"); // Send message to original tab
             window.location.href = `${FEEDBACK_PORT}/Home/dischargepatient`;// Redirect to the tab
         } else {

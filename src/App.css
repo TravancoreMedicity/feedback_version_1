@@ -173,8 +173,8 @@
 }
 
 
-/* In your CSS file */
-.ag-theme-alpine {
-  background-color: "rgba(var(--bg-card))" !important;
-    /* Adding !important ensures it overrides AG Grid's default styles */
+/* age grid table styling */
+.custom-age-grid .ag-root-wrapper {
+  background-color: rgba(var(--bg-card));
+  border-color: rgba(var(--border-primary));
 }

@@ -11,7 +11,7 @@ const FeedbackItem = ({ index, item, feedbackedexit, currentIndex, inpatientDeta
         <Box
             key={index}
             sx={{
-                width: { xs: '30%', sm: '48%' },
+                width: { xs: 100, sm: '48%' },
                 height: { xs: 100, sm: '100%' },
                 display: 'flex',
                 justifyContent: 'center',
@@ -43,6 +43,7 @@ const FeedbackItem = ({ index, item, feedbackedexit, currentIndex, inpatientDeta
             <Typography sx={{
                 fontFamily: 'var(--font-varient)',
                 color: 'rgba(var(--font-primary-white))',
+                
             }} fontWeight={900} fontSize={{ xs: 10, sm: 12 }}>{item?.feedback_name}</Typography>
         </Box>
     )

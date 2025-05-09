@@ -19,7 +19,6 @@ const nobedDetail = require('../../assets/NoBed.png');
 const HkContainer = () => {
 
     const [value, setValue] = useState("1");
-    const [assingedbed, setAssignedBed] = useState([]);
     const id = EmpauthId()
 
     const { data: getllBlockedBed } = useQuery({
@@ -47,10 +46,6 @@ const HkContainer = () => {
     }, [getllBlockedBed, getallhkassignedbed]);
 
 
-
-
-
-
     const HandleBedAssign = useCallback(async (data) => {
         const insertdata = {
             fb_hk_sv_assign: id,
@@ -63,7 +58,6 @@ const HkContainer = () => {
             const { success } = response?.data;
             if (success === 1) return errorNofity("Error in Assigning Bed Detail")
             succesNofity("SucessFully Assigned Bed")
-            getallAssignedBed()
         } catch (error) {
             warningNofity(error)
         }
@@ -156,8 +150,8 @@ const HkContainer = () => {
                             <HkDashboard
                                 getllBlockedBed={getllBlockedBed}
                                 assingedbed={filterAssignedBed}
-                                setAssignedBed={setAssignedBed}
                                 HandleBedAssign={HandleBedAssign}
+                                refetch={getallAssignedBed}
                             />
                         }
 
@@ -208,9 +202,9 @@ const HkContainer = () => {
                                         return <Box key={index}>
                                             <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
                                                 <Housekeepinglist
+                                                    refetch={getallAssignedBed}
                                                     data={item}
-                                                    assingedbed={assingedbed}
-                                                    setAssignedBed={setAssignedBed}
+                                                    assingedbed={filterAssignedBed}
                                                     name={"INFROMATION TECHNOLOGY"}
                                                     icon={<CleaningServicesTwoToneIcon className='hoverClass' sx={{ width: 30, height: 30, color: 'rgba(var(--icon-primary))', }} />} />
                                             </Suspense>

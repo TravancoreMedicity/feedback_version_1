@@ -78,6 +78,7 @@ const PateintRoomDetail = ({ beddetail, nsname, view, setView, nscode }) => {
                 ...prev,
                 [bdcode]: data || {}  // Store null if no data
             }));
+
             await FetchPatientFeedback(data)
             setLoading(false)
         } catch (error) {

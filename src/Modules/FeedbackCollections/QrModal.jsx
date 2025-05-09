@@ -20,6 +20,9 @@ const QrModal = ({ open, setOpen, item, inpatientDetail, currentIndex, feedbacke
     const encodemobile = btoa(inpatientDetail[currentIndex]?.fb_ptc_mobile)
     const encodeipnum = btoa(inpatientDetail[currentIndex]?.fb_ip_no)
     const redirectToUrlIp = `${OUTLINK_FEEDBACK}/${encodedId}?name=${encodedName}&pid=${encodepatientid}&mbno=${encodemobile}&ipnum=${encodeipnum}`;
+
+    console.log(redirectToUrlIp);
+
     const redirectToUrlCommon = COMMON_FEEDBACK_LINK_URL;
 
     return (
@@ -50,7 +53,7 @@ const QrModal = ({ open, setOpen, item, inpatientDetail, currentIndex, feedbacke
                     {
                         !isFeedbackGiven ? <>
                             <Box sx={{ width: 180, height: 180, objectFit: 'contain', p: 1, background: 'linear-gradient(to right, rgba(33, 150, 243, 0.4), rgba(233, 30, 99, 0.4))', borderRadius: 5 }}>
-                                <QRCodeSVG value={item?.fdmast_slno === 23 ? redirectToUrlIp : redirectToUrlCommon} style={{ width: '100%', height: '100%', borderRadius: 3 }} />
+                                <QRCodeSVG value={item?.feedback_name === "ip" ? redirectToUrlIp : redirectToUrlCommon} style={{ width: '100%', height: '100%', borderRadius: 3 }} />
                             </Box>
                             <Typography sx={{
                                 fontFamily: 'var(--font-varient)',

@@ -19,7 +19,6 @@ const BlockComponent = ({
     loading
 }) => {
 
-
     const today = new Date();
     const formattedDate = format(today, 'dd/MM/yyyy');
 
@@ -40,7 +39,6 @@ const BlockComponent = ({
     }, [setLoading]);
 
 
-
     const getUniqueByIP_NO = (data = []) => {
         return data?.reduce((unique, item) => {
             return unique?.some(u => u.IP_NO === item.IP_NO)
@@ -56,10 +54,14 @@ const BlockComponent = ({
             const response = await axiosellider.post('/melioraEllider/ip', {
                 NS_CODE: code,
                 TO_DATE: formattedDate
-            })
+            });
+
+            // console.log("FORMAT:",formattedDate);
+            // console.log("NSCODE:",code);
+
             const { success, data } = response?.data;
             if (success === 0) return errorNofity("Error in fetching Data");
-            const uniqueData = getUniqueByIP_NO(data); 
+            const uniqueData = getUniqueByIP_NO(data);
             if (uniqueData && uniqueData?.length > 0) {
                 await InsertPatientDetailMeliora(uniqueData);
             }
@@ -129,7 +131,8 @@ const BlockComponent = ({
             setView(0)
             setLoading(false)
         }
-    }, [setNsName, setNsCode, setView, stationname, GetallPatientDetail, InsertBedDetailMeliora, HandleBedFetchFromMeliora, setLoading]);
+    }, [setNsName, setNsCode, setView, stationname, GetallPatientDetail,
+        InsertBedDetailMeliora, HandleBedFetchFromMeliora, setLoading]);
 
 
     return (

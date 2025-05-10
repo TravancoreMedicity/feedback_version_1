@@ -1,7 +1,8 @@
 import { Box } from '@mui/joy'
 import React, { memo } from 'react'
-import newicon from '../assets/logo.png'
 import { Skeleton } from '@mui/material';
+
+import newicon from '../assets/logo.png'
 
 const LoginlogoHeader = () => {
     return (

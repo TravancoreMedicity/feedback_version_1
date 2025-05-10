@@ -1,6 +1,6 @@
 import DOMPurify from "dompurify";
 import 'react-toastify/dist/ReactToastify.css';
-import { Flip, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 export const screenHeight = window.innerHeight;
 export const screenWidth = window.innerWidth;
@@ -155,4 +155,21 @@ export const EmpauthId = () => {
     const localData = localStorage.getItem("app_auth");
     const EmpauthId = atob(JSON.parse(localData)?.authId);
     return EmpauthId;
+};
+
+
+export const CleanHtmlString = (htmlString) => {
+    // First, decode HTML entities (e.g., &lt; becomes <)
+    const tempElement = document.createElement('div');
+    tempElement.innerHTML = htmlString;
+    const decodedString = tempElement.textContent || tempElement.innerText || '';
+
+    // Remove HTML tags
+    let cleaned = decodedString.replace(/<[^>]*>/g, '');
+    // Replace &nbsp; (non-breaking spaces) with regular spaces
+    cleaned = cleaned.replace(/&nbsp;/g, ' ');
+    // Replace multiple spaces with a single space
+    cleaned = cleaned.replace(/\s+/g, ' ').trim();
+
+    return cleaned;
 };

@@ -10,15 +10,22 @@ import AccessibleTable from '../../Components/AccessibleTable';
 import { OUTLINK_FEEDBACK } from '../../Constant/Static';
 import { endOfDay, format, startOfDay } from 'date-fns';
 import { axiosApi, axiosellider } from '../../Axios/Axios';
-import { errorNofity, infoNofity, warningNofity } from '../../Constant/Constant';
+import { CleanHtmlString, errorNofity, infoNofity, warningNofity } from '../../Constant/Constant';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
+import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
 
 
 
 const DischargePatient = () => {
 
+
+    const [openreviewmodal, setOpenReviewModal] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [dischargepatients, setDischargePatients] = useState([]);
+    const [ipdetail, setIpDetail] = useState({});
+    const [ipfollowupreview, setIpFollowUpReviewe] = useState('');
     const [dischargepatientforms, setDischargePatientForm] = useState([]);
+    const [reviewdate, setReviewDate] = useState(startOfDay(new Date()));
     const [fromdate, setFromDate] = useState(startOfDay(new Date()));
     const [todate, setToDate] = useState(endOfDay(new Date()));
     const formattedFromDate = format(fromdate, 'dd/MM/yyyy HH:mm:ss');
@@ -27,6 +34,9 @@ const DischargePatient = () => {
     const dischargetodate = format(todate, 'yyyy/MM/dd HH:mm:ss');
 
 
+
+    // console.log(reviewdate,"reviewdate");
+    
     //Get DischargeForms
     const getDischagreFeedbackFrom = useCallback(async () => {
         const insertData = {
@@ -46,18 +56,26 @@ const DischargePatient = () => {
 
 
     const getDischargedPatientDetails = useCallback(async () => {
+        setLoading(true)
         try {
             const response = await axiosellider.post('/melioraEllider/getdischargepatient', {
                 FROM_DATE: formattedFromDate,
                 TO_DATE: formattedToDate
             })
             const { success, data } = response?.data;
-            if (success === 0) return errorNofity("Error in fetching Data");
-            setDischargePatients(data ? data : [])
-            await getDischagreFeedbackFrom()
-            if (data?.length === 0) return infoNofity("No Discharge patients")
+            if (success === 0) {
+                errorNofity("Error in fetching Data");
+            } else if (success === 1) {
+                infoNofity("No Discharge patients");
+            } else {
+                setDischargePatients(data || []);
+                await getDischagreFeedbackFrom();
+            }
         } catch (error) {
-            warningNofity("Error in Fetching Data...?")
+            warningNofity("Error in Fetching Data...?");
+        }
+        finally {
+            setLoading(false)
         }
     }, [formattedFromDate, formattedToDate, getDischagreFeedbackFrom]);
 
@@ -86,6 +104,28 @@ const DischargePatient = () => {
     const hanldeDischargeFeedback = useCallback((data) => {
         openFeedbackForm(data)
     }, [openFeedbackForm]);
+
+
+    const handleFollowUpReview = useCallback(async (data, ipdetail) => {
+        setIpDetail(ipdetail)
+        const insertdata = {
+            IP_NO: data
+        }
+        try {
+            const result = await axiosellider.post("/melioraEllider/getipfollowup", insertdata);
+            const { data, success } = result.data;
+            if (success === 0) return warningNofity("Error in fetching Data");
+            if (success === 1) return infoNofity("No Follow Up date Present")
+            setOpenReviewModal(true)
+            const cleanData = await CleanHtmlString(data?.[0]?.DSC_DESCRIPTION)
+            setIpFollowUpReviewe(data ? cleanData : '')
+        } catch (error) {
+            warningNofity("Error in fetching Data")
+        }
+    }, [setOpenReviewModal, setIpFollowUpReviewe])
+
+
+
 
 
     return (
@@ -153,10 +193,23 @@ const DischargePatient = () => {
                                 mt: 1,
                                 backgroundColor: "rgba(var(--bg-card))"
                             }}>
-                            <AccessibleTable
-                                DischargeForms={dischargepatientforms}
-                                dischargepatients={dischargepatients}
-                                hanldeDischargeFeedback={hanldeDischargeFeedback} />
+                            {
+                                loading ? <CustomBackDropWithOutState message={"Fetching Data...!"} /> :
+                                    <AccessibleTable
+                                        ReviewDetail={ipfollowupreview}
+                                        DischargeForms={dischargepatientforms}
+                                        dischargepatients={dischargepatients}
+                                        hanldeDischargeFeedback={hanldeDischargeFeedback}
+                                        handleFollowUpReview={handleFollowUpReview}
+                                        open={openreviewmodal}
+                                        setOpen={setOpenReviewModal}
+                                        InPatientDetail={ipdetail}
+                                        setValue={setReviewDate}
+                                        value={reviewdate}
+
+                                    />
+                            }
+
                         </Box>
                     </Box>
                 </Box>

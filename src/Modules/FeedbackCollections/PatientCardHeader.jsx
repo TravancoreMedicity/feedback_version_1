@@ -28,41 +28,41 @@ const PatientCardHeader = ({ roomnumber, name }) => {
                     color: 'rgba(var(--font-primary-white))',
                 }} fontWeight={600} fontSize={{ xs: 14, sm: 17 }}>{name}</Typography>
             </Box>
-            <Box sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                mb: 1,
-            }}>
                 <Box sx={{
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    flexDirection: "column",
-                    fontSize: 10,
-                    lineHeight: 1,
-                    border: 0.03,
-                    borderColor: "rgba(var(--border-primary))",
-                    bgcolor: 'rgba(213, 82, 154, 0.8)',
-                    px: 0.5,
-                    fontFamily: 'var(--font-varient)',
-                    color: 'White',
-                    fontWeight: 700,
-                    py: 0.1
+                    mb: 1,
                 }}>
-                    <Box sx={{ p: 0, m: 0, lineHeight: 1 }}>B</Box>
-                    <Box sx={{ p: 0, m: 0, lineHeight: 1 }}>E</Box>
-                    <Box sx={{ p: 0, m: 0, lineHeight: 1 }}>D</Box>
-                </Box>
-                <Box sx={{ borderColor: 'rgba(var(--border-primary))' }}>
-                    <Typography sx={{
-                        fontFamily: 'var(--font-varient)',
-                        color: 'rgba(213, 82, 154, 0.8)',
+                    <Box sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexDirection: "column",
+                        fontSize: 10,
+                        lineHeight: 1,
                         border: 0.03,
-                        p: 0.4
-                    }} fontWeight={600} fontSize={16}>{roomnumber}</Typography>
+                        borderColor: "rgba(var(--border-primary))",
+                        bgcolor: 'rgba(213, 82, 154, 0.8)',
+                        px: 0.5,
+                        fontFamily: 'var(--font-varient)',
+                        color: 'White',
+                        fontWeight: 700,
+                        py: 0.1
+                    }}>
+                        <Box sx={{ p: 0, m: 0, lineHeight: 1 }}>B</Box>
+                        <Box sx={{ p: 0, m: 0, lineHeight: 1 }}>E</Box>
+                        <Box sx={{ p: 0, m: 0, lineHeight: 1 }}>D</Box>
+                    </Box>
+                    <Box sx={{ borderColor: 'rgba(var(--border-primary))' }}>
+                        <Typography sx={{
+                            fontFamily: 'var(--font-varient)',
+                            color: 'rgba(213, 82, 154, 0.8)',
+                            border: 0.03,
+                            p: 0.4
+                        }} fontWeight={600} fontSize={16}>{roomnumber}</Typography>
+                    </Box>
                 </Box>
-            </Box>
         </Box>
     )
 }

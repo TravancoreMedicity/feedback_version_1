@@ -6,7 +6,9 @@ import { CellStyleModule } from 'ag-grid-enterprise';
 import { ValidationModule } from 'ag-grid-enterprise';
 import PersonIcon from '@mui/icons-material/Person';
 import SmsFailedTwoToneIcon from '@mui/icons-material/SmsFailedTwoTone';
+import CalendarMonthTwoToneIcon from '@mui/icons-material/CalendarMonthTwoTone';
 import { Box, Button, CssVarsProvider } from '@mui/joy';
+import DischargeFollowupModal from '../Modules/DischargePatientFeedback/DischargeFollowupModal';
 ModuleRegistry.registerModules([
     ClientSideRowModelModule,
     TextFilterModule,
@@ -14,7 +16,18 @@ ModuleRegistry.registerModules([
     CellStyleModule,
 ]);
 
-const AccessibleTable = ({ hanldeDischargeFeedback, dischargepatients, DischargeForms }) => {
+const AccessibleTable = ({
+    hanldeDischargeFeedback,
+    dischargepatients,
+    DischargeForms,
+    handleFollowUpReview,
+    open,
+    setOpen,
+    InPatientDetail,
+    ReviewDetail,
+    setValue,
+    value
+}) => {
 
     const updatedPatients = dischargepatients?.map(patient => ({
         ...patient,
@@ -57,6 +70,37 @@ const AccessibleTable = ({ hanldeDischargeFeedback, dischargepatients, Discharge
             }
         },
         {
+            headerName: 'FollowUp',
+            field: 'Patient_No#',
+            width: 80,
+            maxWidth: 100,
+            minWidth: 40,
+            suppressSizeToFit: true,
+            cellRenderer: (params) => {
+                return (
+                    <Button
+                        variant="outlined"
+                        color="neutral"
+                        size="sm"
+                        onClick={() => handleFollowUpReview(params.data['Admn. Number'], params.data)}
+                        sx={{
+                            fontSize: 12,
+                            color: 'rgba(var(--font-primary-white))',
+                            fontWeight: 600,
+                        }}
+                    >
+                        <CalendarMonthTwoToneIcon
+                            sx={{
+                                fontSize: 13,
+                                mr: 0.2,
+                                color: 'red'
+                            }}
+                        />
+                    </Button>
+                );
+            }
+        },
+        {
             headerName: 'Patient Name',
             field: 'Patient_Name',
             cellRenderer: (params) => {
@@ -90,31 +134,44 @@ const AccessibleTable = ({ hanldeDischargeFeedback, dischargepatients, Discharge
             },
         },
 
-    ], [hanldeDischargeFeedback]);
+    ], [hanldeDischargeFeedback,handleFollowUpReview]);
 
     return (
-        <CssVarsProvider>
-            <Box sx={{ height: 700, width: '100%' }} >
-                <AgGridReact
-                    className="custom-age-grid"
-                    rowData={updatedPatients}
-                    columnDefs={columnDefs}
-                    defaultColDef={{
-                        flex: 1,
-                        sortable: true,
-                        resizable: true,
-                        filter: true,
-                        cellStyle: {
-                            fontSize: '13px', color: 'rgba(var(--font-primary-white))',
-                            fontWeight: 600,
-                            backgroundColor: 'rgba(var(--bg-card))',
-                            // fontFamily: 'var(--font-varient)',
-                        },
-                    }}
-
+        <>
+            {
+                open && <DischargeFollowupModal
+                    ReviewDetail={ReviewDetail}
+                    InPatientDetail={InPatientDetail}
+                    open={open}
+                    setOpen={setOpen}
+                    setValue={setValue}
+                    value={value}
                 />
-            </Box>
-        </CssVarsProvider>
+            }
+            <CssVarsProvider>
+                <Box sx={{ height: 700, width: '100%' }} >
+                    <AgGridReact
+                        className="custom-age-grid"
+                        rowData={updatedPatients}
+                        columnDefs={columnDefs}
+                        defaultColDef={{
+                            flex: 1,
+                            sortable: true,
+                            resizable: true,
+                            filter: true,
+                            cellStyle: {
+                                fontSize: '13px', color: 'rgba(var(--font-primary-white))',
+                                fontWeight: 600,
+                                backgroundColor: 'rgba(var(--bg-card))',
+                                // fontFamily: 'var(--font-varient)',
+                            },
+                        }}
+
+                    />
+                </Box>
+            </CssVarsProvider>
+        </>
+
     );
 };
 

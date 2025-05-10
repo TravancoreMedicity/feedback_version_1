@@ -1,6 +1,6 @@
 import { Box, Typography } from '@mui/joy';
 import React, { useState, useEffect, memo, useCallback } from 'react';
-import { FEEDBACK_PORT } from '../Constant/Static';
+
 
 
 const successAnimation = require('../assets/successanimation.gif');
@@ -17,23 +17,21 @@ const SuccessPage = ({ setIsSubmit, feedbackId }) => {
     }, []);
 
 
-    /* NOTE OF window.opener.postMessage
-     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-     window.opener.postMessage() lets a child window communicate with its parent, useful for same-origin, real-time data sharing. It only works with windows opened via window.open(), can't cross domains easily, and requires proper cleanup to avoid memory leaks.*/
+
 
 
     const handleDone = useCallback(() => {
         // Open the new URL in a new tab
-        if (feedbackId ==="17" && window.opener) {
-            window.opener.postMessage({ type: 'TRIGGER_DISCHARGE_FETCH' }, "*"); // Send message to original tab
-            window.location.href = `${FEEDBACK_PORT}/Home/dischargepatient`;// Redirect to the tab
-        } else {
-            window.open("https://travancoremedicity.com/wellness-executive-health-care-center/", "_blank");
-        }
+        // if (feedbackId === "17" && window.opener) {
+        //     window.opener.postMessage({ type: 'TRIGGER_DISCHARGE_FETCH' }, "*"); // Send message to original tab
+        //     window.location.href = `http://192.168.22.8:3000/Home/dischargepatient`;// Redirect to the tab
+        // } else {
+        // }
+        window.open("https://travancoremedicity.com/wellness-executive-health-care-center/", "_blank");
         setIsSubmit(false);
         // Try closing the current tab 
         window.close();
-    }, [setIsSubmit, feedbackId]);
+    }, [setIsSubmit]);
 
 
     return (

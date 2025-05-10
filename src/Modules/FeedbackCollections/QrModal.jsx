@@ -20,9 +20,6 @@ const QrModal = ({ open, setOpen, item, inpatientDetail, currentIndex, feedbacke
     const encodemobile = btoa(inpatientDetail[currentIndex]?.fb_ptc_mobile)
     const encodeipnum = btoa(inpatientDetail[currentIndex]?.fb_ip_no)
     const redirectToUrlIp = `${OUTLINK_FEEDBACK}/${encodedId}?name=${encodedName}&pid=${encodepatientid}&mbno=${encodemobile}&ipnum=${encodeipnum}`;
-
-    console.log(redirectToUrlIp);
-
     const redirectToUrlCommon = COMMON_FEEDBACK_LINK_URL;
 
     return (

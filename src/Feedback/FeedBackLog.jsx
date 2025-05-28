@@ -32,7 +32,7 @@ const FeedBackLog = () => {
                 alignItems: 'center',
                 justifyContent: 'center',
                 py: 1,
-                bgcolor: 'white',
+                bgcolor:"rgba(var(--bg-card))",
                 padding: scrolled ? '10px 0' : '20px 0',
                 transition: 'all 0.3s ease',
             }}

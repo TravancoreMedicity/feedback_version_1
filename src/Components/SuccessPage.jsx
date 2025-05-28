@@ -6,7 +6,7 @@ import React, { useState, useEffect, memo, useCallback } from 'react';
 const successAnimation = require('../assets/successanimation.gif');
 const successStatic = require('../assets/succespic.png');
 
-const SuccessPage = ({ setIsSubmit, feedbackId }) => {
+const SuccessPage = ({ setIsSubmit, feedbackId, setOpen, getFeedbackData }) => {
 
     const [showGif, setShowGif] = useState(true);
     useEffect(() => {
@@ -17,32 +17,31 @@ const SuccessPage = ({ setIsSubmit, feedbackId }) => {
     }, []);
 
 
-
-
-
     const handleDone = useCallback(() => {
         // Open the new URL in a new tab
-        // if (feedbackId === "17" && window.opener) {
-        //     window.opener.postMessage({ type: 'TRIGGER_DISCHARGE_FETCH' }, "*"); // Send message to original tab
-        //     window.location.href = `http://192.168.22.8:3000/Home/dischargepatient`;// Redirect to the tab
-        // } else {
-        // }
-        window.open("https://travancoremedicity.com/wellness-executive-health-care-center/", "_blank");
+        if (feedbackId === "26") {
+            setOpen(false)
+            getFeedbackData()
+        } else {
+            window.open("https://travancoremedicity.com/wellness-executive-health-care-center/", "_blank");
+        }
         setIsSubmit(false);
         // Try closing the current tab 
         window.close();
-    }, [setIsSubmit]);
+    }, [setIsSubmit, setOpen, getFeedbackData, feedbackId]);
 
 
     return (
         <Box sx={{
-            width: '100vw',
+            width: feedbackId === "26" ? '100%' : '100vw',
             height: '100vh',
-            bgcolor: '#e9ecef',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            flexDirection: 'column'
+            flexDirection: 'column',
+            backgroundColor: feedbackId === "26" ? "rgba(var(--bg-card))" : '#e9ecef',
+            // bgcolor: '#e9ecef',
+            // color: 'rgba(var(--font-primary-white))',
         }}>
             <style>
                 {`
@@ -84,7 +83,8 @@ const SuccessPage = ({ setIsSubmit, feedbackId }) => {
                     <Typography sx={{
                         fontSize: { xs: 14, sm: 14, md: 15, lg: 17 },
                         fontWeight: { xs: 500, sm: 500 },
-                        color: "rgba(11, 12, 12, 0.64)",
+                        // color: "rgba(11, 12, 12, 0.64)",
+                        color: 'rgba(var(--font-primary-white))',
                         fontFamily: "Bahnschrift",
                         mt: 2,
                         mb: 0
@@ -94,7 +94,8 @@ const SuccessPage = ({ setIsSubmit, feedbackId }) => {
                     <Typography sx={{
                         fontSize: 11,
                         fontWeight: { xs: 500, sm: 500 },
-                        color: "rgba(8, 8, 8, 0.64)",
+                        // color: "rgba(8, 8, 8, 0.64)",
+                        color: 'rgba(var(--font-primary-white))',
                         fontFamily: "Bahnschrift",
                     }}>
                         Travancore Medicity
@@ -115,7 +116,8 @@ const SuccessPage = ({ setIsSubmit, feedbackId }) => {
                         borderColor: '#E4166B',
                         fontSize: { xs: 12, sm: 14, md: 15, lg: 17 },
                         fontWeight: { xs: 500, sm: 500 },
-                        color: "rgba(8, 8, 8, 0.64)",
+                        // color: "rgba(8, 8, 8, 0.64)",
+                        color: 'rgba(var(--font-primary-white))',
                         fontFamily: "Bahnschrift",
                         cursor: 'pointer'
                     }} onClick={handleDone}>

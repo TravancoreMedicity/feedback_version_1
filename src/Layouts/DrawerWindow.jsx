@@ -24,7 +24,9 @@ import {
     Microscope,
     HospitalCircle,
     BookStack,
-    UserBadgeCheck
+    UserBadgeCheck,
+    MicrophoneSpeaking,
+    PcFirewall
 } from 'iconoir-react'
 import { EmpauthId } from "../Constant/Constant";
 import { getUserModules } from "../Function/CommonFunction";
@@ -59,7 +61,8 @@ const DrawerWindow = memo(({ drawerWidth, handleDrawerClose }) => {
             { modslno: 7, menu: "BioMedical", text: "/Home/biomedical", icon: <Microscope height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
             { modslno: 8, menu: "HouseKeeping", text: "/Home/housekeeping", icon: <HospitalCircle height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
             { modslno: 9, menu: "PRO CheckList", text: "/Home/prochecklist", icon: <UserBadgeCheck height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
-            { modslno: 9, menu: "Discharge IP", text: "/Home/dischargepatient", icon: <UserBadgeCheck height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
+            { modslno: 10, menu: "Call Center", text: "/Home/dischargepatient", icon: <MicrophoneSpeaking height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
+            { modslno: 11, menu: "PRO Followup", text: "/Home/followupratient", icon: <PcFirewall height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
         ]
     }, []);
 

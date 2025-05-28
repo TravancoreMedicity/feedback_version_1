@@ -17,7 +17,8 @@ const AnswerComponentSelect = ({
     setMobileValidation,
     mobilevalidation,
     setMobileNumber,
-    hanldecomponent
+    hanldecomponent,
+    fbencodedId
 }) => {
 
     const [textareavalue, setTextAreaValue] = useState("");
@@ -37,6 +38,7 @@ const AnswerComponentSelect = ({
                 type && type === "Yes/No" ? (
                     <Suspense fallback={<EmojiSkeleton />}>
                         <Rulesyesorno
+                            fbencodedId={fbencodedId}
                             questionid={questionid}
                             value={answer}
                             hanldeuseranswers={hanldeuseranswers}
@@ -59,7 +61,7 @@ const AnswerComponentSelect = ({
                             justifyContent: 'center',
                         }}>
                             <Box sx={{
-                                width: { xs: "80%", sm: '85%' },
+                                width: fbencodedId !== undefined ? '70%' : { xs: "80%", sm: '85% ' },
                                 minHeight: 100,
                                 borderRadius: '12px',
                             }}>
@@ -68,9 +70,12 @@ const AnswerComponentSelect = ({
                                     placeholder='Suggestions...!'
                                     onChange={handleDescription}
                                     value={textareavalue}
-                                    minRows={2} sx={{
+                                    minRows={2}
+                                    sx={{
                                         width: '100%',
                                         minHeight: 100,
+                                        backgroundColor: "rgba(var(--bg-card))",
+                                         color: 'rgba(var(--font-primary-white))',
                                         mb: 1,
                                         border: '1px solid #CC488F',
                                         '&:focus': {

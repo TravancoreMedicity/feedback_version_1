@@ -3,8 +3,6 @@ import ReviewsTwoToneIcon from '@mui/icons-material/ReviewsTwoTone';
 import { Box, Typography } from '@mui/joy';
 
 
-
-
 const InpatientModalCard = ({ name, ipno }) => {
     return (
         <Box
@@ -31,42 +29,45 @@ const InpatientModalCard = ({ name, ipno }) => {
                     color: 'rgba(var(--font-primary-white))',
                 }} fontWeight={600} fontSize={{ xs: 14, sm: 17 }}>{name}</Typography>
             </Box>
-            <Box sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                mb: 1,
-            }}>
-                <Box sx={{
+            {
+                ipno && <Box sx={{
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    flexDirection: "column",
-                    fontSize: 9,
-                    lineHeight: 1,
-                    border: 0.03,
-                    borderColor: "rgba(var(--border-primary))",
-                    bgcolor: 'rgba(213, 82, 154, 0.8)',
-                    px: 0.5,
-                    fontFamily: 'var(--font-varient)',
-                    color: 'White',
-                    fontWeight: 700,
-                    py: 0.1
+                    mb: 1,
                 }}>
-                    <Box sx={{ p: 0, m: 0, lineHeight: 1 }}>I</Box>
-                    <Box sx={{ p: 0, m: 0, lineHeight: 1 }}>P</Box>
-                    <Box sx={{ p: 0, m: 0, lineHeight: 1 }}>N</Box>
-                    <Box sx={{ p: 0, m: 0, lineHeight: 1 }}>0</Box>
-                </Box>
-                <Box sx={{ borderColor: 'rgba(var(--border-primary))' }}>
-                    <Typography sx={{
-                        fontFamily: 'var(--font-varient)',
-                        color: 'rgba(213, 82, 154, 0.8)',
+                    <Box sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexDirection: "column",
+                        fontSize: 9,
+                        lineHeight: 1,
                         border: 0.03,
-                        p: 1.2
-                    }} fontWeight={800} fontSize={12}>{ipno}</Typography>
+                        borderColor: "rgba(var(--border-primary))",
+                        bgcolor: 'rgba(213, 82, 154, 0.8)',
+                        px: 0.5,
+                        fontFamily: 'var(--font-varient)',
+                        color: 'White',
+                        fontWeight: 700,
+                        py: 0.1
+                    }}>
+                        <Box sx={{ p: 0, m: 0, lineHeight: 1 }}>A</Box>
+                        <Box sx={{ p: 0, m: 0, lineHeight: 1 }}>M</Box>
+                        <Box sx={{ p: 0, m: 0, lineHeight: 1 }}>N</Box>
+                        <Box sx={{ p: 0, m: 0, lineHeight: 1 }}>0</Box>
+                    </Box>
+                    <Box sx={{ borderColor: 'rgba(var(--border-primary))' }}>
+                        <Typography sx={{
+                            fontFamily: 'var(--font-varient)',
+                            color: 'rgba(213, 82, 154, 0.8)',
+                            border: 0.03,
+                            p: 1.2
+                        }} fontWeight={800} fontSize={12}>{ipno}</Typography>
+                    </Box>
                 </Box>
-            </Box>
+            }
+
         </Box>
     )
 }

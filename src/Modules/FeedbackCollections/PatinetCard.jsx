@@ -5,11 +5,8 @@ import { format } from 'date-fns';
 
 const PatinetCard = ({ inpatientDetail, ispresent }) => {
 
-
-
-
     // Render a single patient card
-
+    
     const isDataEmpty = !inpatientDetail || Object.keys(inpatientDetail).length === 0;
     if (ispresent === "T" && isDataEmpty) {
         return (
@@ -128,7 +125,7 @@ const PatinetCard = ({ inpatientDetail, ispresent }) => {
                                 fontFamily: 'var(--font-varient)',
                                 color: 'rgba(var(--font-primary-white))',
                                 fontWeight: { xs: 800, sm: 600 },
-                                fontSize: { xs: 11, sm: 15 },
+                                fontSize: { xs: 13, sm: 15 },
                                 overflow: 'hidden',
                                 textOverflow: 'ellipsis',
                                 whiteSpace: 'nowrap',

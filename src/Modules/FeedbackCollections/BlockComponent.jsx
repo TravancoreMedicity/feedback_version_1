@@ -22,74 +22,81 @@ const BlockComponent = ({
     const today = new Date();
     const formattedDate = format(today, 'dd/MM/yyyy');
 
-    const InsertPatientDetailMeliora = useCallback(async (data) => {
-        const insertData = {
-            ptdetail: data
-        };
-        try {
-            setLoading(true)
-            const response = await axiosApi.post("/feedback/insertptdetailmlora", insertData);
-            const { success } = response?.data;
-            if (success !== 2) return warningNofity("Error in inserting Patinet Details");
-            setLoading(false)
-        } catch (error) {
-            setLoading(false)
-            warningNofity("Error in inserting Patinet infromation");
-        }
-    }, [setLoading]);
 
 
-    const getUniqueByIP_NO = (data = []) => {
-        return data?.reduce((unique, item) => {
-            return unique?.some(u => u.IP_NO === item.IP_NO)
-                ? unique
-                : [...unique, item];
-        }, []);
-    };
+    // this is not using inserting patient detail using node-cron auto sync --------- check later
+    // const InsertPatientDetailMeliora = useCallback(async (data) => {
+    //     const insertData = {
+    //         ptdetail: data
+    //     };
+    //     try {
+    //         setLoading(true)
+    //         const response = await axiosApi.post("/feedback/insertptdetailmlora", insertData);
+    //         const { success } = response?.data;
+    //         if (success !== 2) return warningNofity("Error in inserting Patinet Details");
+    //         setLoading(false)
+    //     } catch (error) {
+    //         setLoading(false)
+    //         warningNofity("Error in inserting Patinet infromation");
+    //     }
+    // }, [setLoading]);
 
 
-    const GetallPatientDetail = useCallback(async () => {
-        try {
-            setLoading(true)
-            const response = await axiosellider.post('/melioraEllider/ip', {
-                NS_CODE: code,
-                TO_DATE: formattedDate
-            });
 
-            // console.log("FORMAT:",formattedDate);
-            // console.log("NSCODE:",code);
+    // FUNCTION TO REMOVE DUPLICATE FROM THE QUERY
+    // const getUniqueByIP_NO = (data = []) => {
+    //     return data?.reduce((unique, item) => {
+    //         return unique?.some(u => u.IP_NO === item.IP_NO)
+    //             ? unique
+    //             : [...unique, item];
+    //     }, []);
+    // };
 
-            const { success, data } = response?.data;
-            if (success === 0) return errorNofity("Error in fetching Data");
-            const uniqueData = getUniqueByIP_NO(data);
-            if (uniqueData && uniqueData?.length > 0) {
-                await InsertPatientDetailMeliora(uniqueData);
-            }
-            setLoading(false)
-        } catch (error) {
-            setLoading(false)
-            warningNofity("Error in Fetching Data...?")
-        }
-    }, [code, setLoading, InsertPatientDetailMeliora, formattedDate]);
+    // not using this from now own
+    // const GetallPatientDetail = useCallback(async () => {
+    //     try {
+    //         setLoading(true)
+    //         const response = await axiosellider.post('/melioraEllider/ip', {
+    //             NS_CODE: code,
+    //             TO_DATE: formattedDate
+    //         });
+
+    //         // console.log("FORMAT:",formattedDate);
+    //         // console.log("NSCODE:",code);
+
+    //         const { success, data } = response?.data;
+    //         if (success === 0) return errorNofity("Error in fetching Data");
+    //         const uniqueData = getUniqueByIP_NO(data);
+    //         if (uniqueData && uniqueData?.length > 0) {
+    //             await InsertPatientDetailMeliora(uniqueData);
+    //         }
+    //         setLoading(false)
+    //     } catch (error) {
+    //         setLoading(false)
+    //         warningNofity("Error in Fetching Data...?")
+    //     }
+    // }, [code, setLoading, InsertPatientDetailMeliora, formattedDate]);
 
 
-    const InsertBedDetailMeliora = useCallback(async (data) => {
-        const insertData = {
-            bedinfo: data
-        };
-        try {
-            setLoading(true)
-            const response = await axiosApi.post("/feedback/insertbddetail", insertData);
-            const { success } = response?.data;
-            if (success !== 2) return warningNofity("Error in inserting Bed Details");
-            setLoading(false)
-        } catch (error) {
-            warningNofity("Error in inserting Bed infromation");
-            setLoading(false)
-        }
-    }, [setLoading]);
 
-    const HandleBedFetchFromMeliora = useCallback(async () => {
+    //THIS PART IS COMMENTING BECAUSE OF AUTOMATICE INSERTION THROUGH THE AUTO-SYNC
+    // const InsertBedDetailMeliora = useCallback(async (data) => {
+    //     const insertData = {
+    //         bedinfo: data
+    //     };
+    //     try {
+    //         setLoading(true)
+    //         const response = await axiosApi.post("/feedback/insertbddetail", insertData);
+    //         const { success } = response?.data;
+    //         if (success !== 2) return warningNofity("Error in inserting Bed Details");
+    //         setLoading(false)
+    //     } catch (error) {
+    //         warningNofity("Error in inserting Bed infromation");
+    //         setLoading(false)
+    //     }
+    // }, [setLoading]);
+
+    const HandleBedFetchFromMeliora = useCallback(async (code) => {
         const insertData = {
             NS_CODE: code
         }
@@ -99,45 +106,51 @@ const BlockComponent = ({
             const { success, data } = response?.data;
             if (success === 1) return warningNofity("No Bed Available")
             if (success !== 2) return warningNofity("Error in fetching In Paient Detail :)")
+            setNsCode(code)
+            setNsName(stationname)
             setBedDetail(data ? data : {})
             setView(1)
-            setLoading(false)
+            // setLoading(false)
         } catch (error) {
             warningNofity("Error in Api")
             setView(0)
+        } finally {
             setLoading(false)
         }
-    }, [code, setBedDetail, setLoading, setView]);
+    }, [code, setBedDetail, setLoading, setView, setNsCode, stationname]);
 
-    const HandlebedFetching = useCallback(async (code) => {
-        GetallPatientDetail()//fetching all inpatient detail in the Nursing Station
-        const insertData = {
-            NS_CODE: code
-        }
-        try {
-            setLoading(true)
-            const response = await axiosellider.post('/melioraEllider/getbed', insertData)
-            const { success, data } = response?.data;
-            // console.log(data, "data");
-            if (success === 1) return warningNofity("No Bed Available")
-            if (success !== 2) return warningNofity("Error in fetching In Paient Detail :)")
-            await InsertBedDetailMeliora(data ? data : [])
-            await HandleBedFetchFromMeliora()
-            setNsName(stationname)
-            setNsCode(code)
-            setLoading(false)
-        } catch (error) {
-            warningNofity("Error in Api")
-            setView(0)
-            setLoading(false)
-        }
-    }, [setNsName, setNsCode, setView, stationname, GetallPatientDetail,
-        InsertBedDetailMeliora, HandleBedFetchFromMeliora, setLoading]);
+
+
+    // not using commenting beacuse of the node-cron trigger
+    // const HandlebedFetching = useCallback(async (code) => {
+    //     GetallPatientDetail()//fetching all inpatient detail in the Nursing Station
+    //     const insertData = {
+    //         NS_CODE: code
+    //     }
+    //     try {
+    //         setLoading(true)
+    //         const response = await axiosellider.post('/melioraEllider/getbed', insertData)
+    //         const { success, data } = response?.data;
+    //         console.log(data, "data");
+    //         if (success === 1) return warningNofity("No Bed Available")
+    //         if (success !== 2) return warningNofity("Error in fetching In Paient Detail :)")
+    //         await InsertBedDetailMeliora(data ? data : [])
+    //         await HandleBedFetchFromMeliora()
+    //         setNsName(stationname)
+    //         setNsCode(code)
+    //         setLoading(false)
+    //     } catch (error) {
+    //         warningNofity("Error in Api")
+    //         setView(0)
+    //         setLoading(false)
+    //     }
+    // }, [setNsName, setNsCode, setView, stationname, GetallPatientDetail,
+    //     InsertBedDetailMeliora, HandleBedFetchFromMeliora, setLoading]);
 
 
     return (
         <Box
-            onClick={() => HandlebedFetching(code)}
+            onClick={() => HandleBedFetchFromMeliora(code)}
             sx={{
                 width: 190,
                 display: 'flex',

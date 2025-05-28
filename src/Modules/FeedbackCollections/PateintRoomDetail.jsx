@@ -2,7 +2,7 @@ import { Box, Grid, Typography } from '@mui/joy'
 import React, { lazy, memo, Suspense, useCallback, useState } from 'react'
 import DefaultPageLayout from '../../Components/DefaultPageLayout'
 import { axiosApi } from '../../Axios/Axios';
-import { warningNofity } from '../../Constant/Constant';
+import { infoNofity, warningNofity } from '../../Constant/Constant';
 import MeetingRoomTwoToneIcon from '@mui/icons-material/MeetingRoomTwoTone';
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
 import { getBedRemarkStatus } from '../../Function/CommonFunction';
@@ -57,13 +57,16 @@ const PateintRoomDetail = ({ beddetail, nsname, view, setView, nscode }) => {
             fb_ns_code: nscode,
             fb_bd_code: parseInt(bdcode)
         }
+
         try {
             setLoading(true)
             setInpatientDetailFromMeliora({});
             const response = await axiosApi.post('/feedback/inpatientdetil', insertData)
             const { success, data } = response?.data;
+
             if (success === 1) {
                 setOpen(true)
+                // infoNofity("No patient Detail")
                 setInpatientDetailFromMeliora({})
                 setLoading(false)
                 return;

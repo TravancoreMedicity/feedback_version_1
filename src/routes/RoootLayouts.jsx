@@ -172,55 +172,55 @@ const RoootLayouts = () => {
               fontSize: { xs: 12, sm: 16 },
               fontWeight: { xs: 100, sm: 400 },
             }}>Welcome Back, Please Log In!</Typography>
-            <TextField
-              sx={{
-                width: { xs: '100%', sm: '90%' },
-                marginTop: { xs: 3, sm: 2 }, height: 30, marginBottom: errors?.empidError ? 5 : 2,
-                fontFamily: "var(--font-varient)",
+            <form onSubmit={(e) => {
+              e.preventDefault();
+            }}>
+              <TextField
+                sx={{
+                  width: { xs: '100%', sm: '90%' },
+                  marginTop: { xs: 3, sm: 2 }, height: 30, marginBottom: errors?.empidError ? 5 : 2,
+                  fontFamily: "var(--font-varient)",
+                }}
+                id="outlined-emloyee-input"
+                label="Enter username"
+                type="text"
+                size='small'
+                name='empid'
+                autoComplete="current-password"
+                onChange={handleChange}
+                error={!!errors?.empidError}
+                helperText={errors?.empidError}
+                value={userInput?.empid}
+              />
+              <TextField
+                sx={{
+                  width: { xs: '100%', sm: '90%' }, marginTop: { xs: 3, sm: 2 }, height: 30,
+                  marginBottom: errors?.passwordError ? 5 : 2,
+                  fontFamily: "var(--font-varient)",
+                }}
+                id="outlined-password-input"
+                label="Enter Password"
+                type="password"
+                size='small'
+                name='password'
+                autoComplete="current-password"
+                onChange={handleChange}
+                error={!!errors?.passwordError}
+                helperText={errors?.passwordError}
+                value={userInput?.password}
+              />
+              <Button sx={{
+                marginTop: { xs: 4, sm: 2 },
+                width: { xs: '99%', sm: '90%' },
+                height: { lg: 40, sm: 40, xs: 40 },
+                fontWeight: { xs: 200, sm: 400 },
+                borderRadius: { xs: 10, sm: 3 }
               }}
-              id="outlined-emloyee-input"
-              label="Enter username"
-              type="text"
-              size='small'
-              name='empid'
-              autoComplete="current-password"
-              onChange={handleChange}
-              error={!!errors?.empidError}
-              helperText={errors?.empidError}
-              value={userInput?.empid}
-            />
-            <TextField
-              sx={{
-                width: { xs: '100%', sm: '90%' }, marginTop: { xs: 3, sm: 2 }, height: 30,
-                marginBottom: errors?.passwordError ? 5 : 2,
-                fontFamily: "var(--font-varient)",
-              }}
-              id="outlined-password-input"
-              label="Enter Password"
-              type="password"
-              size='small'
-              name='password'
-              autoComplete="current-password"
-              onChange={handleChange}
-              error={!!errors?.passwordError}
-              helperText={errors?.passwordError}
-              value={userInput?.password}
-            />
-            <Button sx={{
-              marginTop: { xs: 4, sm: 2 },
-              width: { xs: '99%', sm: '90%' },
-              height: { lg: 40, sm: 40, xs: 40 },
-              fontWeight: { xs: 200, sm: 400 },
-              borderRadius: { xs: 10, sm: 3 }
-            }}
-              variant="contained"
-              onClick={handleloginform}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  handleloginform()
-                }
-              }}
-            >LogIn Here</Button>
+                type="submit"
+                variant="contained"
+                onClick={handleloginform}
+              >LogIn Here</Button>
+            </form>
             <Typography
               sx={{
                 display: { xs: 'block', sm: 'block' },

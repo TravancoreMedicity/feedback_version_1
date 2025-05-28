@@ -2,14 +2,15 @@ import { Box, Typography } from '@mui/joy'
 import React, { memo } from 'react'
 import { DatePicker } from '@mui/x-date-pickers';
 
-const DatePickerComponent = ({ label, setValue, value }) => {
+const DatePickerComponent = ({ label, setValue, value, size, minDate, maxDate, readOnly }) => {
     return (
         <Box sx={{
             display: 'flex',
             alignItems: 'center',
             gap: 1,
             flexWrap: 'wrap',
-            width: { xs: '100%', sm: 'auto' }
+            width: { xs: '100%', sm: 'auto' },
+            mt:1
         }}>
             <Typography sx={{
                 fontSize: 16,
@@ -19,13 +20,16 @@ const DatePickerComponent = ({ label, setValue, value }) => {
                 whiteSpace: 'nowrap'
             }}>{label} :</Typography>
             <DatePicker
+                readOnly={readOnly}
                 value={value}
                 onChange={(newValue) => setValue(newValue)}
+                minDate={minDate}
+                maxDate={maxDate}
                 slotProps={{
                     textField: {
                         size: 'small',
                         sx: {
-                            width: { xs: '100%', sm: 160 },
+                            width: { xs: '100%', sm: size ? size : 160},
                             '& .MuiInputBase-input': {
                                 color: 'rgba(var(--font-primary-white))',
                             },
@@ -41,6 +45,7 @@ const DatePickerComponent = ({ label, setValue, value }) => {
                         },
                     },
                 }}
+                format="dd/MM/yyyy"
             />
         </Box>
     )

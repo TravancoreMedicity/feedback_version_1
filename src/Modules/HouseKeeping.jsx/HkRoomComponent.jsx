@@ -68,7 +68,6 @@ const HkRoomComponent = ({ roomnumber, data, HandleBedAssign, refetch }) => {
             div.remove();
             poof.remove();
 
-
             //Refeching data after the animation completes
             refetch()
 

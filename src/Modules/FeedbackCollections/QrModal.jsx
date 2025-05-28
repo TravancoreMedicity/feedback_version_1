@@ -22,6 +22,7 @@ const QrModal = ({ open, setOpen, item, inpatientDetail, currentIndex, feedbacke
     const redirectToUrlIp = `${OUTLINK_FEEDBACK}/${encodedId}?name=${encodedName}&pid=${encodepatientid}&mbno=${encodemobile}&ipnum=${encodeipnum}`;
     const redirectToUrlCommon = COMMON_FEEDBACK_LINK_URL;
 
+
     return (
         <Box>
             <Modal

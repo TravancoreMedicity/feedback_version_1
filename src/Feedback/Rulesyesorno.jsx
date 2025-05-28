@@ -16,7 +16,8 @@ const Rulesyesorno = ({
     setMobileValidation,
     mobilevalidation,
     setMobileNumber,
-    hanldecomponent
+    hanldecomponent,
+    fbencodedId
 }) => {
 
     const [clicked, setClicked] = useState(null);
@@ -107,7 +108,7 @@ const Rulesyesorno = ({
                             alignItems: 'center',
                             justifyContent: 'center',
                             cursor: 'pointer',
-                            bgcolor: ' rgba(255, 255, 255, 0.8)'
+                            backgroundColor: "rgba(var(--bg-card))",
                         }}
                         onClick={() => handleImageClick("yes", questionid, Yes)} alt=""
                     >
@@ -127,7 +128,7 @@ const Rulesyesorno = ({
                             alignItems: 'center',
                             justifyContent: 'center',
                             cursor: 'pointer',
-                            bgcolor: ' rgba(255, 255, 255, 0.8)'
+                            backgroundColor: "rgba(var(--bg-card))",
                         }}
                         onClick={() => handleImageClick("no", questionid, No)}
                     >
@@ -139,7 +140,6 @@ const Rulesyesorno = ({
                     </Box>
                 </Box>
             </Box>
-
             <Box
                 sx={{
                     width: '90%',
@@ -151,7 +151,7 @@ const Rulesyesorno = ({
                     clicked === "yes" && component === "TextArea" && type === "Yes/No" &&
                     <Box
                         sx={{
-                            width: '100%',
+                            width: fbencodedId !== undefined ? '80%' : '100%',
                             mt: 5,
                             px: 2
                         }}
@@ -161,8 +161,12 @@ const Rulesyesorno = ({
                             value={TextValue}
                             placeholder='Reason(കാരണം)'
                             minRows={2} sx={{
-                                mt: 1, minHeight: 90, mb: 1, width: '100%',
-
+                                mt: 1,
+                                minHeight: 90,
+                                mb: 1,
+                                width: '100%',
+                                backgroundColor: "rgba(var(--bg-card))",
+                                color: 'rgba(var(--font-primary-white))',
                                 border: '1px solid #CC488F',
                                 '&:focus': {
                                     outline: 'none',
@@ -229,6 +233,8 @@ const Rulesyesorno = ({
                                 height: 55,
                                 width: { xs: '80%', sm: '70%' },
                                 borderRadius: 11,
+                                backgroundColor: "rgba(var(--bg-card))",
+                                color: 'rgba(var(--font-primary-white))',
                                 // mt: 3,
                                 border: '1px solid #CC488F',
                                 '&:focus': {

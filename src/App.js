@@ -53,8 +53,7 @@ const RoomChecklistMaster = lazy(() => import("./Masters/RoomChecklistMaster.jsx
 const Prochecklist = lazy(() => import("./Modules/ProchecheckList/Prochecklist.jsx"));
 const HkContainer = lazy(() => import("./Modules/HouseKeeping.jsx/HkContainer.jsx"));
 const DischargePatient = lazy(() => import("./Modules/DischargePatientFeedback/DischargePatient.jsx"));
-
-
+const FollowupPatient = lazy(() => import("./Modules/ProFollowup/FollowupPatient.jsx"));
 
 
 //Feedback
@@ -276,6 +275,12 @@ const routes = createBrowserRouter([
             path: "dischargepatient", element:
               <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
                 <DischargePatient />
+              </Suspense>, errorElement: <ErrorElement />
+          },
+          {
+            path: "followupratient", element:
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
+                <FollowupPatient />
               </Suspense>, errorElement: <ErrorElement />
           }
         ],

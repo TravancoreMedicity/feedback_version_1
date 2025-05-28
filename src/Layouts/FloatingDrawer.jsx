@@ -14,6 +14,8 @@ import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import SettingsSuggestTwoToneIcon from '@mui/icons-material/SettingsSuggestTwoTone';
 import CleaningServicesTwoToneIcon from '@mui/icons-material/CleaningServicesTwoTone';
 import CollectionsBookmarkTwoToneIcon from '@mui/icons-material/CollectionsBookmarkTwoTone';
+import HeadsetMicTwoToneIcon from '@mui/icons-material/HeadsetMicTwoTone';
+import KeyboardHideTwoToneIcon from '@mui/icons-material/KeyboardHideTwoTone';
 
 const FloatingDrawer = ({ anchorEl, handlepopoveClose }) => {
 
@@ -42,7 +44,8 @@ const FloatingDrawer = ({ anchorEl, handlepopoveClose }) => {
             { modslno: 7, menu: "BioMedical", text: "/Home/biomedical", icon: <BiotechTwoToneIcon className='hoverClass' sx={{ width: { xs: 20, sm: 30 }, height: { xs: 20, sm: 30 }, color: "#4cc9f0" }} /> },
             { modslno: 8, menu: "HouseKeeping", text: "/Home/housekeeping", icon: <CleaningServicesTwoToneIcon className='hoverClass' sx={{ width: { xs: 20, sm: 30 }, height: { xs: 20, sm: 30 }, color: "#8a5a44" }} /> },
             { modslno: 9, menu: "CheckList", text: "/Home/Maintenace", icon: <EngineeringTwoToneIcon className='hoverClass' sx={{ width: { xs: 20, sm: 30 }, height: { xs: 20, sm: 30 }, color: "#fb6f92" }} /> },
-
+            { modslno: 10, menu: "Call Center", text: "/Home/dischargepatient", icon: <HeadsetMicTwoToneIcon className='hoverClass' sx={{ width: { xs: 20, sm: 30 }, height: { xs: 20, sm: 30 }, color: "#ff006e" }} /> },
+            { modslno: 11, menu: "PRO Followup", text: "/Home/followupratient", icon: <KeyboardHideTwoToneIcon className='hoverClass' sx={{ width: { xs: 20, sm: 30 }, height: { xs: 20, sm: 30 }, color: "#00a8e8" }} /> },
         ]
     }, []);
 

@@ -89,7 +89,9 @@
 
   --modal-bg-color: 255, 255, 255;
 
-  --arrow-bg-color: 255, 224, 233
+  --arrow-bg-color: 255, 224, 233;
+
+  --qustion-box: 166, 219, 229, 0.2
 }
 
 .dark {
@@ -169,8 +171,11 @@
 
   --modal-bg-color: 19, 21, 22;
 
-  --arrow-bg-color: 52, 58, 64
+  --arrow-bg-color: 52, 58, 64;
+
+  --qustion-box: 192, 196, 197, 0.2
 }
+
 
 
 /* age grid table styling */
@@ -178,3 +183,5 @@
   background-color: rgba(var(--bg-card));
   border-color: rgba(var(--border-primary));
 }
+
+

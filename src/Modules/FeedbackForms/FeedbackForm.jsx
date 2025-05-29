@@ -1,30 +1,33 @@
-import { useLocation, useParams } from 'react-router-dom';
 import { Box, Typography } from '@mui/joy'
 import { axiosApi } from '../../Axios/Axios';
 import { useQuery } from '@tanstack/react-query';
+import { useLocation, useParams } from 'react-router-dom';
 import { errorNofity, warningNofity } from '../../Constant/Constant';
 import { FeedbackDetailForDisplay } from '../../Function/CommonFunction';
 import EmojiSkeleton from '../../Feedback/Commoncomponents/ChooseEmogjiSkeleton';
-import QuestionBoxSkeleton from '../../Feedback/Commoncomponents/QuestionBoxSkeleton';
-import React, { memo, lazy, useState, useCallback, useEffect, useMemo, Suspense } from 'react'
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
+import QuestionBoxSkeleton from '../../Feedback/Commoncomponents/QuestionBoxSkeleton';
+import React, { memo, lazy, useState, useCallback, useEffect, useMemo, Suspense } from 'react';
 
 
-const TextComponent = lazy(() => import('../../Feedback/Commoncomponents/TextComponent'))
-const SuccessPage = lazy(() => import('../../Components/SuccessPage'))
-const FeedBackLog = lazy(() => import('../../Feedback/FeedBackLog'))
-const QuestionBox = lazy(() => import('../../Feedback/QuestionBox'))
-const FeedbackButton = lazy(() => import('../../Feedback/Commoncomponents/FeedbackButton'))
-const AnswerComponentSelect = lazy(() => import('../../Components/AnswerComponentSelect'))
+
+const FeedBackLog = lazy(() => import('../../Feedback/FeedBackLog'));
+const QuestionBox = lazy(() => import('../../Feedback/QuestionBox'));
+const SuccessPage = lazy(() => import('../../Components/SuccessPage'));
+const TextComponent = lazy(() => import('../../Feedback/Commoncomponents/TextComponent'));
+const FeedbackButton = lazy(() => import('../../Feedback/Commoncomponents/FeedbackButton'));
+const DischargeFeedback = lazy(() => import('../../Feedback/DischargeFeedback'));
+const AnswerComponentSelect = lazy(() => import('../../Components/AnswerComponentSelect'));
 
 
-const FeedbackForm = () => {
+const FeedbackForm = ({ fbencodedId, fbencodedName, fbencodepatientid, fbencodemobile, fbencodeipnum, setOpen, getFeedbackData }) => {
     const [useranswer, setUserAnswer] = useState({});
     const [issubmit, setIsSubmit] = useState(false);
     const [mobilevalidation, setMobileValidation] = useState("");
     const [mobilenumber, setMobileNumber] = useState("");
     const [isnoclicked, setIsNoClicked] = useState({})
     const [loading, setLoading] = useState(false)
+    const [defaultimpression, setDefaultImpression] = useState({}); // default question
     const [formData, setFormData] = useState({
         PatientName: "",
         feedbackId: 0,
@@ -35,7 +38,12 @@ const FeedbackForm = () => {
     const location = useLocation();
     const { PatientName, feedbackId, inpatientNumber, patientNo } = formData;
 
+
+
+
+
     useEffect(() => {
+        if (fbencodedId !== undefined) return;
         try {
             // Decode the Base64 encoded ID to get the original feedbackId
             const feedbackId = atob(encodedId);  // Decode Base64 to get feedbackId
@@ -53,9 +61,33 @@ const FeedbackForm = () => {
                 inpatientNumber: InpatientNumber,
             });
         } catch (error) {
-            warningNofity("Error decoding Base64:", error);
+            warningNofity("Error decoding Data", error);
         }
-    }, [encodedId, location.search])
+    }, [encodedId, location.search, fbencodedId])
+
+
+
+    //new Changes here
+    useEffect(() => {
+        if (fbencodedId === undefined) return;
+        try {
+            const feedbackId = atob(fbencodedId);
+            const patientName = atob(fbencodedName || "");
+            const patienId = atob(fbencodepatientid || "")
+            const patientMob = atob(fbencodemobile || "")
+            const InpatientNumber = atob(fbencodeipnum || "")
+
+            setMobileNumber(patientMob)
+            setFormData({
+                PatientName: patientName,
+                feedbackId: feedbackId,
+                patientNo: patienId,
+                inpatientNumber: InpatientNumber,
+            });
+        } catch (error) {
+            warningNofity("Error decoding Datassss");
+        }
+    }, [fbencodedId, fbencodedName, fbencodepatientid, fbencodemobile, fbencodeipnum]);
 
     const { data: feedbackDtlDisplay } = useQuery({
         queryKey: ['fetchfbdtldispay', feedbackId],
@@ -153,9 +185,10 @@ const FeedbackForm = () => {
         fb_patient_name: PatientName ? PatientName : null,
         fb_patient_mob: mobilenumber ? mobilenumber : null,
         fb_answers: combinedFeedbackData,
+        fb_default_quest: defaultimpression ? defaultimpression : [],
         // create_user: Number(feedbackId) === 18 ? 1 : Number(employeeID()) //confusion in this part check later
         create_user: 1 //confusion in this part check later
-    }), [patientNo, PatientName, mobilenumber, combinedFeedbackData, feedbackId, inpatientNumber])
+    }), [patientNo, PatientName, mobilenumber, combinedFeedbackData, feedbackId, inpatientNumber, defaultimpression])
 
 
 
@@ -164,6 +197,8 @@ const FeedbackForm = () => {
         const answerlength = Object.keys(useranswer)?.length;
         const clickedNoComplenth = Object.keys(isnoclicked)?.length;
         const isClickedNotMobileInput = Object.values(isnoclicked)?.includes("MobileInputBox")
+
+        // if(feedbackId === "26" && (Object.keys(defaultimpression)?.length === 0)) use later if  the default questions are mantetary
 
         if ((feedbackDtlDisplay?.length + IsComponentPresent?.length) !== (answerlength + clickedNoComplenth)) {
             warningNofity("Please Answer all Questions?")
@@ -202,7 +237,12 @@ const FeedbackForm = () => {
                 issubmit ? (
                     <>
                         <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
-                            <SuccessPage setIsSubmit={setIsSubmit} feedbackId={feedbackId} />
+                            <SuccessPage
+                                setOpen={setOpen}
+                                setIsSubmit={setIsSubmit}
+                                feedbackId={feedbackId}
+                                getFeedbackData={getFeedbackData}
+                            />
                         </Suspense>
                     </>
                 ) : (
@@ -226,7 +266,7 @@ const FeedbackForm = () => {
                                 justifyContent: 'space-between',
                                 p: 1,
                                 borderRadius: 5,
-                                bgcolor: '#e3f2fd'
+                                bgcolor: `rgba(var(--qustion-box))`,
                             }}>
                                 {/* <Box> */}
                                 <Typography sx={{
@@ -245,7 +285,6 @@ const FeedbackForm = () => {
                                 {/* </Box> */}
                             </Box>
                         }
-
                         <Box sx={{
                             width: '90%',
                             minHeight: '60vh',
@@ -287,6 +326,7 @@ const FeedbackForm = () => {
                                             }
                                             <Suspense fallback={<EmojiSkeleton />}>
                                                 <AnswerComponentSelect
+                                                    fbencodedId={fbencodedId}
                                                     type={item?.fb_rateing_name}
                                                     answer={item?.fb_mast_qakey_data}
                                                     questionid={item?.fddet_slno}
@@ -303,6 +343,23 @@ const FeedbackForm = () => {
                                 })
                             }
                         </Box>
+                        {/* this part is only for discharge feedback */}
+                        {
+                            feedbackId === "8" && <Box sx={{
+                                width: '100%',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}>
+                                <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
+                                    <DischargeFeedback
+                                        defaultimpression={defaultimpression}
+                                        setDefaultImpression={setDefaultImpression}
+                                    />
+                                </Suspense>
+                            </Box>
+                        }
+                        {/* the part ends here */}
                         <Box sx={{
                             width: { xs: "90%", sm: '85%' },
                             minHeight: 60,
@@ -326,7 +383,8 @@ const FeedbackForm = () => {
                                 textAlign: 'center',
                                 mt: 5,
                                 fontSize: 8,
-                                color: " rgba(65, 68, 68, 0.64)",
+                                // color: " rgba(65, 68, 68, 0.64)",
+                                color: 'rgba(var(--font-primary-white))',
                                 fontFamily: "Bahnschrift",
                             }}>Copyright © 2025 Travancore Medicity</Typography>
                         </Box>

@@ -140,8 +140,10 @@ const Dashboard = () => {
         borderColor: "rgba(var(--border-primary))",
         justifyContent: 'space-between',
       }}>
-        <Box sx={{ width: { xs: '100%', sm: '90%', md: '80%', lg: '70%', xl: '60%' }, 
-        height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'end'}}>
+        <Box sx={{
+          width: { xs: '100%', sm: '90%', md: '80%', lg: '70%', xl: '60%' },
+          height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'end'
+        }}>
           <Box sx={{
             width: { xs: '100%', sm: 400, md: 400, lg: 400 },
             display: 'flex',
@@ -204,7 +206,6 @@ const Dashboard = () => {
               }}>{HospitalRating?.toFixed(1)}</Typography>
             </Box>
             <Typography sx={{
-              ml: 0.3,
               fontSize: 12,
               fontWeight: 400,
               fontFamily: 'var(--font-varient)',

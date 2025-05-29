@@ -336,6 +336,8 @@ export const getallFeedBackCount = async (id) => {
         const { success, data } = res.data;
         if (success === 2) {
             return data ? data : []
+        } else {
+            return []
         }
     })
 }
@@ -403,6 +405,7 @@ export const getallOutlets = async () => {
 export const getallNurseStationMaster = async () => {
     return axiosApi.get('/feedback/getallnursestation').then((res) => {
         const { success, data } = res.data;
+        if (success === 0) return []
         if (success === 2) {
             return data ? data : []
         }

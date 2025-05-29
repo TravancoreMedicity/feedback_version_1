@@ -1,4 +1,4 @@
-import React, { lazy, memo, Suspense, useCallback, useMemo, useState } from 'react';
+import React, { lazy, memo, Suspense, useCallback, useState } from 'react'
 import BookTwoToneIcon from '@mui/icons-material/BookTwoTone';
 import { Box, IconButton } from '@mui/joy';
 import { Paper } from '@mui/material';
@@ -6,49 +6,45 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { endOfDay, format, startOfDay } from 'date-fns';
 import { axiosApi, axiosellider } from '../../Axios/Axios';
-import { CleanHtmlString, errorNofity, infoNofity, warningNofity } from '../../Constant/Constant';
+import { CleanHtmlString, employeeID, errorNofity, infoNofity, succesNofity, warningNofity } from '../../Constant/Constant';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
 
 
 
 const ChecklistHeaders = lazy(() => import('../../Components/ChecklistHeaders'));
-const AccessibleTable = lazy(() => import('../../Components/AccessibleTable'));
+const CallcenterTable = lazy(() => import('../../Components/CallcenterTable'));
 const DatePickerComponent = lazy(() => import('../../Components/DatePickerComponent'));
 
-const DischargePatient = () => {
+const FollowupPatient = () => {
 
     const [openreviewmodal, setOpenReviewModal] = useState(false);
-    const [openfeedbackmodal, setOpenFeedbackModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const [followuploading, setFollowupLoading] = useState(false);
     const [dischargepatients, setDischargePatients] = useState([]);
-    const [dischargepatientforms, setDischargePatientForm] = useState([]);
-    const [feedbackdata, setFeedbackData] = useState({});
-    const [ipdetail, setIpDetail] = useState({});
     const [ipfollowupreview, setIpFollowUpReviewe] = useState('');
-    const [elliderdischargepatient, setElliderDischargePatient] = useState([]);
+    const [ipdetail, setIpDetail] = useState({});
+    const [ipscheduledate, setIpScheduleDate] = useState([])
+    const [dischargepatientforms, setDischargePatientForm] = useState([]);
 
+
+    const [reviewdate, setReviewDate] = useState(startOfDay(new Date()));
     const [fromdate, setFromDate] = useState(startOfDay(new Date()));
     const [todate, setToDate] = useState(endOfDay(new Date()));
-    const dischargefromdate = format(fromdate, 'yyyy/MM/dd HH:mm:ss');
-    const dischargetodate = format(todate, 'yyyy/MM/dd HH:mm:ss');
-    const formattedFromDate = format(fromdate, 'yyyy-MM-dd HH:mm:ss');
-    const formattedToDate = format(todate, 'yyyy-MM-dd HH:mm:ss');
 
-
-
-    // const formattedFromDateEllider = format(fromdate, 'dd/MM/yyyy HH:mm:ss');
-    // const formattedToDateEllider = format(todate, 'dd/MM/yyyy HH:mm:ss');
-
-
+    const formattedreviewdate = format(reviewdate, 'yyyy-MM-dd');
+    const formattedFromDateMeliora = format(fromdate, 'yyyy-MM-dd HH:mm:ss');
+    const formattedToDateMeliora = format(todate, 'yyyy-MM-dd HH:mm:ss');
+    
+    // const formattedFromDate = format(fromdate, 'dd/MM/yyyy HH:mm:ss');
+    // const formattedToDate = format(todate, 'dd/MM/yyyy HH:mm:ss');
 
     //Get DischargeForms
     const getDischagreFeedbackFrom = useCallback(async () => {
         const insertData = {
             feedbackId: 26,
-            FROM_DATE: dischargefromdate,
-            TO_DATE: dischargetodate
+            FROM_DATE: formattedFromDateMeliora,
+            TO_DATE: formattedToDateMeliora
         }
         try {
             const result = await axiosApi.post("/feedback/getalldischargeform", insertData);
@@ -58,19 +54,15 @@ const DischargePatient = () => {
         } catch (error) {
             warningNofity("Error in fetching Data")
         }
-    }, [dischargefromdate, dischargetodate]);
+    }, [formattedFromDateMeliora, formattedToDateMeliora]);
 
-    const getDischargedPatientDetailsFromMeliora = useCallback(async () => {
+
+    const getInpatientScheduleDate = useCallback(async () => {
         setLoading(true)
-        if (fromdate > todate) {
-            warningNofity("Please Select Valid From Date")
-            setLoading(false)
-            return
-        }
         try {
             const response = await axiosApi.post('/feedback/getallipfollowup', {
-                FROM_DATE: formattedFromDate,
-                TO_DATE: formattedToDate
+                FROM_DATE: formattedFromDateMeliora,
+                TO_DATE: formattedToDateMeliora
             })
             const { success, data } = response?.data;
             if (success === 0) {
@@ -78,8 +70,7 @@ const DischargePatient = () => {
             } else if (success === 1) {
                 infoNofity("No Discharge patients");
             } else {
-                setElliderDischargePatient(data || []);
-                await getDischagreFeedbackFrom();
+                setIpScheduleDate(data || []);
             }
         } catch (error) {
             warningNofity("Error in Fetching Data...?");
@@ -87,11 +78,12 @@ const DischargePatient = () => {
         finally {
             setLoading(false)
         }
-    }, [formattedFromDate, formattedToDate, getDischagreFeedbackFrom, fromdate, todate]);
+    }, [formattedFromDateMeliora, formattedToDateMeliora]);
 
 
 
-    // NOT USING NOW OWNWARD
+
+
     // const getDischargedPatientDetails = useCallback(async () => {
     //     setLoading(true)
     //     if (fromdate > todate) {
@@ -101,8 +93,8 @@ const DischargePatient = () => {
     //     }
     //     try {
     //         const response = await axiosellider.post('/melioraEllider/getdischargepatient', {
-    //             FROM_DATE: formattedFromDateEllider,
-    //             TO_DATE: formattedToDateEllider
+    //             FROM_DATE: formattedFromDate,
+    //             TO_DATE: formattedToDate
     //         })
     //         const { success, data } = response?.data;
     //         if (success === 0) {
@@ -111,7 +103,8 @@ const DischargePatient = () => {
     //             infoNofity("No Discharge patients");
     //         } else {
     //             setDischargePatients(data || []);
-    //             await getDischargedPatientDetailsFromMeliora()
+    //             await getInpatientScheduleDate();
+    //             await getDischagreFeedbackFrom();
     //         }
     //     } catch (error) {
     //         warningNofity("Error in Fetching Data...?");
@@ -119,10 +112,12 @@ const DischargePatient = () => {
     //     finally {
     //         setLoading(false)
     //     }
-    // }, [formattedFromDateEllider, formattedToDateEllider, getDischargedPatientDetailsFromMeliora, fromdate, todate]);
+    // }, [formattedFromDate, formattedToDate, getInpatientScheduleDate, getDischagreFeedbackFrom, fromdate, todate]);
 
 
     // GET DISHCARGE PATIENT FROM fb_ipadmiss
+
+
     const getDishcargePatientDetail = useCallback(async () => {
         setLoading(true)
         if (fromdate > todate) {
@@ -132,17 +127,19 @@ const DischargePatient = () => {
         }
         try {
             const response = await axiosApi.post('/feedback/getdischargepatient', {
-                FROM_DATE: formattedFromDate,
-                TO_DATE: formattedToDate
+                FROM_DATE: formattedFromDateMeliora,
+                TO_DATE: formattedToDateMeliora
             })
             const { success, data } = response?.data;
+
             if (success === 0) {
                 errorNofity("Error in fetching Data");
             } else if (success === 1) {
                 infoNofity("No Discharge patients");
             } else {
                 setDischargePatients(data || []);
-                await getDischargedPatientDetailsFromMeliora()
+                await getInpatientScheduleDate();
+                await getDischagreFeedbackFrom();
             }
         } catch (error) {
             warningNofity("Error in Fetching Data...?");
@@ -150,44 +147,62 @@ const DischargePatient = () => {
         finally {
             setLoading(false)
         }
-    }, [fromdate, todate, formattedFromDate, formattedToDate, getDischargedPatientDetailsFromMeliora]);
+    }, [fromdate, todate, formattedFromDateMeliora, formattedToDateMeliora,getInpatientScheduleDate,getDischagreFeedbackFrom])
 
 
-
-
-
-    const hanldeDischargeFeedback = useCallback((data) => {
-        setOpenFeedbackModal(true)
-        setFeedbackData(data)
-    }, [setOpenFeedbackModal, setFeedbackData]);
-
-
-    const hanldOpenFollowupModal = useCallback(async (ip, data) => {
-        setIpDetail(data)
-        setOpenReviewModal(true)
+    const handleFollowUpReview = useCallback(async (data, ipdetail) => {
         setFollowupLoading(true)
+        setOpenReviewModal(true)
+        setIpDetail(ipdetail)
         const insertdata = {
-            IP_NO: ip
+            IP_NO: data
         }
         try {
             const result = await axiosellider.post("/melioraEllider/getipfollowup", insertdata);
             const { data, success } = result.data;
             if (success === 0) return warningNofity("Error in fetching Data");
+            // if (success === 1) return infoNofity("No Follow Up date Present")
             const cleanData = await CleanHtmlString(data?.[0]?.DSC_DESCRIPTION)
             setIpFollowUpReviewe(data?.length > 0 ? cleanData : 'NO PREVIOUS PRVIEW FOR THIS PARTICULAR PATIENT')
         } catch (error) {
             warningNofity("Error in fetching Data")
-        } finally {
+        }
+        finally {
             setFollowupLoading(false)
         }
+    }, [setOpenReviewModal, setIpFollowUpReviewe])
 
-    }, [])
 
 
-    const CombinedData = useMemo(() => ({
-        ...ipdetail,
-        IsOnlyView: true
-    }), [ipdetail])
+    const handleDateScheduling = useCallback(async (data) => {
+        const insertData = {
+            ipdata: data,
+            Schedule_date: formattedreviewdate,
+            create_user: employeeID()
+        }
+
+        const updateData = {
+            slno: data?.ScheduleSlno,
+            Schedule_date: formattedreviewdate,
+            edit_user: employeeID()
+        }
+
+        const IsPresent = data?.isFormSubmitted;
+        const endpoint = IsPresent ? '/feedback/updateipfollowup' : '/feedback/insertipfollowup';
+        const Payload = IsPresent ? updateData : insertData;
+        try {
+            const response = await axiosApi.post(endpoint, Payload)
+            const { success } = response?.data;
+            if (success === 0) return errorNofity("Error in fetching Data");
+            succesNofity(`Schedule Date ${IsPresent ? 'Updated' : 'Inserted'} Successfully!`);
+            getInpatientScheduleDate()
+        } catch (error) {
+            warningNofity("Error in Fetching Data...?");
+        } finally {
+            setOpenReviewModal(false)
+        }
+    }, [formattedreviewdate, getInpatientScheduleDate])
+
 
 
     return (
@@ -209,19 +224,17 @@ const DischargePatient = () => {
                         borderRadius: 5,
                         width: '100%',
                     }}>
-                        <Suspense
-                            fallback={<CustomBackDropWithOutState message={"Loading"} />}>
-                            <ChecklistHeaders
-                                icon={
-                                    <BookTwoToneIcon sx={{
-                                        color: 'rgba(var(--font-primary-white))',
-                                        fontSize: { xs: 22, sm: 28 },
-                                        fontWeight: 700,
-                                        mt: 2
-                                    }} />
-                                }
-                                name={'DISCHARGED IN-PATIENT LIST'}
-                            /></Suspense>
+                        <ChecklistHeaders
+                            icon={
+                                <BookTwoToneIcon sx={{
+                                    color: 'rgba(var(--font-primary-white))',
+                                    fontSize: { xs: 22, sm: 28 },
+                                    fontWeight: 700,
+                                    mt: 2
+                                }} />
+                            }
+                            name={'FOLLOWUP IP LIST'}
+                        />
                         <Paper
                             sx={{
                                 width: '100%',
@@ -276,25 +289,23 @@ const DischargePatient = () => {
                                 loading ? <CustomBackDropWithOutState message={"Fetching Data...!"} /> :
                                     <Suspense
                                         fallback={<CustomBackDropWithOutState message={"Loading"} />}>
-                                        <AccessibleTable
-                                            DischargeForms={dischargepatientforms}
-                                            dischargepatients={dischargepatients}
-                                            ProVerifiedPatient={elliderdischargepatient}
-                                            hanldeDischargeFeedback={hanldeDischargeFeedback}
+                                        <CallcenterTable
                                             ReviewDetail={ipfollowupreview}
-                                            handleFollowUpReview={hanldOpenFollowupModal}
+                                            dischargepatients={dischargepatients}
+                                            handleFollowUpReview={handleFollowUpReview}
                                             open={openreviewmodal}
                                             setOpen={setOpenReviewModal}
-                                            InPatientDetail={CombinedData}
-                                            openfeedback={openfeedbackmodal}
-                                            setFeedback={setOpenFeedbackModal}
-                                            feedbackData={feedbackdata}
-                                            getFeedbackData={getDischagreFeedbackFrom}
-                                             Loading={followuploading}
+                                            InPatientDetail={ipdetail}
+                                            setValue={setReviewDate}
+                                            value={reviewdate}
+                                            handleDateScheduling={handleDateScheduling}
+                                            SheduledPatient={ipscheduledate}
+                                            getInpatientScheduleDate={getInpatientScheduleDate}
+                                            DischargeForm={dischargepatientforms}
+                                            Loading={followuploading}
                                         />
                                     </Suspense>
                             }
-
                         </Box>
                     </Box>
                 </Box>
@@ -303,4 +314,4 @@ const DischargePatient = () => {
     )
 }
 
-export default memo(DischargePatient)
+export default memo(FollowupPatient)

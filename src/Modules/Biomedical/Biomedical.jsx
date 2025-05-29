@@ -1,14 +1,14 @@
 import React, { memo, useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { getAllBlockedBed, getBedRemarkStatus } from '../../Function/CommonFunction'
-import { Box, Typography } from '@mui/joy'
+import { Box } from '@mui/joy'
 import BedList from '../Maintentance/BedList';
 import BiotechTwoToneIcon from '@mui/icons-material/BiotechTwoTone';
 import ChecklistHeaders from '../../Components/ChecklistHeaders';
 
 
 const Biomedical = () => {
-    const { data: getllBlockedBed, refetch: getallBlokedbedRefetch } = useQuery({
+    const { data: getllBlockedBed = [], refetch: getallBlokedbedRefetch } = useQuery({
         queryKey: ["getallblockedbed"],
         queryFn: () => getAllBlockedBed()
     })
@@ -21,7 +21,7 @@ const Biomedical = () => {
 
     const filteredBlockedBeds = useMemo(() => {
         return getllBlockedBed?.filter((blockedBed) => {
-            const remarkStatus = getallremarkstatus?.find((remark) => remark.fb_bdc_no === blockedBed.fb_bdc_no);
+            const remarkStatus = getallremarkstatus?.find((remark) => remark?.fb_bdc_no === blockedBed?.fb_bdc_no);
             return !(remarkStatus && remarkStatus.fb_bed_status === 0);
         });
     }, [getllBlockedBed, getallremarkstatus]);
@@ -29,8 +29,8 @@ const Biomedical = () => {
 
     const filterbedwithremarks = useMemo(() => {
         return getallremarkstatus?.filter((blockedBed) => {
-            const remarkStatus = getllBlockedBed?.find((remark) => remark.fb_bdc_no === blockedBed.fb_bdc_no);
-            return remarkStatus && remarkStatus.fb_bed_status === 1;
+            const remarkStatus = getllBlockedBed?.find((remark) => remark?.fb_bdc_no === blockedBed?.fb_bdc_no);
+            return remarkStatus && remarkStatus?.fb_bed_status === 1;
         });
     }, [getllBlockedBed, getallremarkstatus]);
 

@@ -39,7 +39,7 @@ const HkContainer = () => {
 
     const filterAssignedBed = useMemo(() => {
         if (!getllBlockedBed || !getallhkassignedbed) return [];
-        const assignedBedIds = getallhkassignedbed?.map(item => item.fb_hk_bed_slno);
+        const assignedBedIds = getallhkassignedbed?.map(item => item?.fb_hk_bed_slno);
         return getllBlockedBed?.filter(item =>
             assignedBedIds?.includes(item.fb_bed_slno)
         );
@@ -61,7 +61,7 @@ const HkContainer = () => {
         } catch (error) {
             warningNofity(error)
         }
-    }, [getallAssignedBed, id])
+    }, [id])
 
 
     return (

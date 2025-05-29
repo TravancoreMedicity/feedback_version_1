@@ -16,7 +16,7 @@ const HkDashboard = ({ getllBlockedBed, assingedbed, HandleBedAssign,refetch }) 
     const groupedBeds = useMemo(() => {
         if (!getllBlockedBed) return {};
         // Filter out beds that are already assigned
-        const assignedBedIds = assingedbed?.map(item => item.fb_bed_slno);
+        const assignedBedIds = assingedbed?.map(item => item?.fb_bed_slno);
 
         const filteredBeds = getllBlockedBed?.filter(
             bed => !assignedBedIds?.includes(bed?.fb_bed_slno)

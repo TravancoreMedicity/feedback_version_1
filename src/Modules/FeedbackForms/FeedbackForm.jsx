@@ -345,7 +345,7 @@ const FeedbackForm = ({ fbencodedId, fbencodedName, fbencodepatientid, fbencodem
                         </Box>
                         {/* this part is only for discharge feedback */}
                         {
-                            feedbackId === "26" && <Box sx={{
+                            feedbackId === "8" && <Box sx={{
                                 width: '100%',
                                 display: 'flex',
                                 alignItems: 'center',

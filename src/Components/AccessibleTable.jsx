@@ -2,6 +2,7 @@ import React, { memo, Suspense, useMemo } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { ModuleRegistry } from 'ag-grid-community';
 import { RowStyleModule } from 'ag-grid-community';
+import { NumberFilterModule } from 'ag-grid-community';
 import { ClientSideRowModelModule, TextFilterModule } from 'ag-grid-community';
 import { CellStyleModule } from 'ag-grid-enterprise';
 import { ValidationModule } from 'ag-grid-enterprise';
@@ -23,7 +24,8 @@ ModuleRegistry.registerModules([
     TextFilterModule,
     ValidationModule,
     CellStyleModule,
-    RowStyleModule
+    RowStyleModule,
+    NumberFilterModule
 ]);
 
 
@@ -195,7 +197,7 @@ const AccessibleTable = ({
             },
         },
 
-        { headerName: 'Age', field: 'fb_ptn_yearage' },
+        { headerName: 'Age', field: 'fb_ptn_yearage', filter: 'agNumberColumnFilter' },
         {
             headerName: 'Gender',
             valueGetter: (params) => {

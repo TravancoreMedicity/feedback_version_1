@@ -1,6 +1,7 @@
 import DOMPurify from "dompurify";
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
+import { format } from "date-fns";
 
 export const screenHeight = window.innerHeight;
 export const screenWidth = window.innerWidth;
@@ -141,7 +142,13 @@ export const infoNofity = (message) => toast.info(message, {
     progress: undefined,
 });
 
-
+export const normalizeDate = (dateStr) => {
+    try {
+        return format(new Date(dateStr), 'yyyy-MM-dd');
+    } catch {
+        return '';
+    }
+};
 
 
 export const employeeID = () => {

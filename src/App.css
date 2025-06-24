@@ -91,7 +91,13 @@
 
   --arrow-bg-color: 255, 224, 233;
 
-  --qustion-box: 166, 219, 229, 0.2
+  --qustion-box: 166, 219, 229, 0.2;
+
+  ---kmc-qustion-box: 242, 229, 234;
+
+  ---skeleton-color: 233, 236, 239;
+
+  ---dropdown-box: 248, 249, 250;
 }
 
 .dark {
@@ -173,7 +179,13 @@
 
   --arrow-bg-color: 52, 58, 64;
 
-  --qustion-box: 192, 196, 197, 0.2
+  --qustion-box: 192, 196, 197, 0.2;
+
+  ---kmc-qustion-box: 192, 196, 197, 0.2;
+
+  ---skeleton-color: 89, 89, 89;
+
+  ---dropdown-box: 108, 117, 125, 1;
 }
 
 
@@ -184,4 +196,8 @@
   border-color: rgba(var(--border-primary));
 }
 
-
+.iconStyle {
+  font-size: 12px;
+  color: rgba(var(--font-primary-white));
+  cursor: pointer;
+}

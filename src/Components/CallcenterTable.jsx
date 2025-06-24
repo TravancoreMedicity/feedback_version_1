@@ -36,12 +36,18 @@ const CallcenterTable = ({
     handleDateScheduling,
     SheduledPatient,
     DischargeForm,
-    Loading
+    Loading,
+    setProRemarks,
+    proremarks,
+    SumbittingData
 }) => {
 
 
+    // filtering out day care patient form the discharged patients
+    const FilterDaycarePatient = dischargepatients?.filter(item => item?.fb_doc_name !== "ONCOLOGY DAY CARE") || [];
 
-    const updatedPatients = dischargepatients?.map(patient => {
+    // patient for scheduling  date by pros
+    const updatedPatients = FilterDaycarePatient?.map(patient => {
         const matchingForm = SheduledPatient?.find(
             form => form?.fb_ip_no === patient?.fb_ip_no
         );
@@ -50,7 +56,8 @@ const CallcenterTable = ({
             ScheduleDate: matchingForm?.fb_schedule_date || null,
             ScheduleSlno: matchingForm?.fb_date_schedule_slno || 0,
             isFormSubmitted: !!matchingForm,
-            isFeedbackSumbitted: DischargeForm?.some(form => form?.fb_ip_num === patient?.fb_ip_no)
+            isFeedbackSumbitted: DischargeForm?.some(form => form?.fb_ip_num === patient?.fb_ip_no),
+            proremark: matchingForm?.fb_pro_remark
         };
     });
 
@@ -73,13 +80,12 @@ const CallcenterTable = ({
                         variant="outlined"
                         color="neutral"
                         size="sm"
-                        onClick={() => handleFollowUpReview(params.data['Admn. Number'], params?.data)}
+                        onClick={() => handleFollowUpReview(params.data?.fb_ip_no, params?.data)}
                         sx={{
                             fontSize: 12,
                             color: 'rgba(var(--font-primary-white))',
                             fontWeight: 600,
-                        }}
-                    >
+                        }}>
                         {
                             isFeedbackSubmitted ?
                                 <>
@@ -111,14 +117,18 @@ const CallcenterTable = ({
             field: 'fb_ptc_name',
             cellRenderer: (params) => {
                 return (
-                    <span style={{ fontWeight: 500, fontSize: 13, color: 'rgba(var(--font-primary-white))' }}>
+                    <span style={{ fontWeight: 500, fontSize: 13 }}>
                         <PersonIcon style={{ fontSize: 14, marginRight: 4 }} />
                         {params.value}
                     </span>
                 );
             },
         },
-        { headerName: 'Age', field: 'fb_ptn_yearage', filter: 'agNumberColumnFilter' },
+        {
+            headerName: 'Age',
+            field: 'fb_ptn_yearage',
+            filter: 'agNumberColumnFilter'
+        },
         {
             headerName: 'Gender',
             valueGetter: (params) => {
@@ -128,25 +138,7 @@ const CallcenterTable = ({
         },
         { headerName: 'Patient ID', field: 'fb_pt_no' },
         { headerName: 'Admission Number', field: 'fb_ip_no' },
-        // {
-        //     headerName: 'Admission Date',
-        //     valueGetter: (params) => {
-        //         const addr1 = params.data?.Admission_Date;
-        //         return format(parseISO(addr1), 'dd-MM-yyyy HH:mm:ss')
-        //     }
-
-        // },
-        // {
-        //     headerName: 'Discharge Date',
-        //     valueGetter: (params) => {
-        //         const addr1 = params.data?.Discharge_Date;
-        //         return format(parseISO(addr1), 'dd-MM-yyyy HH:mm:ss')
-        //     }
-
-        // },
-        // { headerName: 'Department', field: 'Department' },
         { headerName: 'Doctor', field: 'fb_doc_name' },
-
         { headerName: 'Contact', field: 'fb_ptc_mobile' },
         {
             headerName: 'Address',
@@ -163,8 +155,7 @@ const CallcenterTable = ({
                 const status = params.data['fb_ipc_status'];
                 return status && status.toLowerCase() === 'r' ? 'Recovered' : status;
             },
-        },
-
+        }
     ], [handleFollowUpReview]);
 
     return (
@@ -181,6 +172,9 @@ const CallcenterTable = ({
                         value={value}
                         handleDateScheduling={handleDateScheduling}
                         Loading={Loading}
+                        proremarks={proremarks}
+                        setProRemarks={setProRemarks}
+                        SumbittingData={SumbittingData}
                     /></Suspense>
             }
             <CssVarsProvider>
@@ -199,7 +193,7 @@ const CallcenterTable = ({
                                 const isFeedbackSubmitted = params.data?.isFeedbackSumbitted;
                                 return {
                                     fontSize: '13px',
-                                    color: 'rgba(var(--font-primary-white))',
+                                    color: isFeedbackSubmitted || isSubmitted ? '#495057' : 'rgba(var(--font-primary-white))',
                                     fontWeight: 600,
                                     backgroundColor: isFeedbackSubmitted ? '#d8f3dc' : isSubmitted ? '#ffe0e9' : 'rgba(var(--bg-card))',
                                     // fontFamily: 'var(--font-varient)',

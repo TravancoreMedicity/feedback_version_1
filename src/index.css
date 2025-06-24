@@ -10,6 +10,7 @@
   @apply transition-colors duration-200;
 }
 
+/* DOUBT IN THIS PART */
 ::-webkit-scrollbar {
   display: none;
 }

@@ -1,16 +1,75 @@
 .bouncing-element {
-  display: inline-block; /* Ensure the element can be animated */
+  display: inline-block;
+  /* Ensure the element can be animated */
   animation: moveX 2s infinite ease-in-out;
 }
+
+.vibrating-element {
+  display: inline-block;
+  animation: pulseVibration 4s ease-in-out infinite;
+}
+
+@keyframes pulseVibration {
+  0%, 10% {
+    transform: translateY(0);
+  }
+
+  15% {
+    transform: translateY(-2px);
+  }
+
+  20% {
+    transform: translateY(2px);
+  }
+
+  25% {
+    transform: translateY(-4px);
+  }
+
+  30% {
+    transform: translateY(4px);
+  }
+
+  35% {
+    transform: translateY(-6px);
+  }
+
+  40% {
+    transform: translateY(6px);
+  }
+
+  45% {
+    transform: translateY(-4px);
+  }
+
+  50% {
+    transform: translateY(4px);
+  }
+
+  55% {
+    transform: translateY(-2px);
+  }
+
+  60% {
+    transform: translateY(2px);
+  }
+
+  65%, 100% {
+    transform: translateY(0);
+  }
+}
+
 
 
 @keyframes moveX {
   0% {
     transform: translateX(0);
   }
+
   50% {
     transform: translateX(5px);
   }
+
   100% {
     transform: translateX(0);
   }

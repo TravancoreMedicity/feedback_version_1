@@ -5,15 +5,15 @@ import { DatePicker } from '@mui/x-date-pickers';
 const DatePickerComponent = ({ label, setValue, value, size, minDate, maxDate, readOnly }) => {
     return (
         <Box sx={{
-            display: 'flex',
+            // display: 'flex', 
             alignItems: 'center',
             gap: 1,
             flexWrap: 'wrap',
             width: { xs: '100%', sm: 'auto' },
-            mt:1
+            mt: 1
         }}>
             <Typography sx={{
-                fontSize: 16,
+                fontSize: 12,
                 fontWeight: 500,
                 color: 'rgba(var(--font-primary-white))',
                 fontFamily: 'Bahnschrift',
@@ -29,7 +29,7 @@ const DatePickerComponent = ({ label, setValue, value, size, minDate, maxDate, r
                     textField: {
                         size: 'small',
                         sx: {
-                            width: { xs: '100%', sm: size ? size : 160},
+                            width: { xs: '100%', sm: size ? size : 160 },
                             '& .MuiInputBase-input': {
                                 color: 'rgba(var(--font-primary-white))',
                             },

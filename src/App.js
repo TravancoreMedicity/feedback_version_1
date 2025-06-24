@@ -289,43 +289,6 @@ const routes = createBrowserRouter([
         path: "/qrscan",
         element: <Qrscan />,
       },
-      // {
-      //   path: "/ChooseFeedback", element:
-      //     <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
-      //       <ChooseFeedbacks />
-      //     </Suspense>,
-      //   errorElement: <ErrorElement />
-      // },
-      // {
-      //   path: "/opFeedback", element:
-      //     <Suspense fallback={<Opskeleton />} >
-      //       <Opfeedback />
-      //     </Suspense>, errorElement: <ErrorElement />
-      // },
-      // {
-      //   path: "/ipFeedback", element:
-      //     <Suspense fallback={<Opskeleton />} >
-      //       <Ipfeedback />
-      //     </Suspense>, errorElement: <ErrorElement />
-      // },
-      // {
-      //   path: "/labFeedback", element:
-      //     <Suspense fallback={<Opskeleton />} >
-      //       <LaboratoryFeedback />
-      //     </Suspense>, errorElement: <ErrorElement />
-      // },
-      // {
-      //   path: "/PharmacyFeedback", element:
-      //     <Suspense fallback={<CommonFinalFeedSkeleton />} >
-      //       <PharmacyFeedback />
-      //     </Suspense>, errorElement: <ErrorElement />
-      // },
-      // {
-      //   path: "/radiologyfeed", element:
-      //     <Suspense fallback={<RadiologyFeedbackSkeleton />} >
-      //       <RadiologyFeedback />
-      //     </Suspense>, errorElement: <ErrorElement />
-      // },
       { path: "/Color", element: <Colors /> },
     ],
     errorElement: <ErrorElement />,

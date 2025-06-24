@@ -15,8 +15,20 @@ import IdleTimer from "./IdleTimer";
 import WidgetsTwoToneIcon from '@mui/icons-material/WidgetsTwoTone';
 
 import FloatingDrawer from "./FloatingDrawer";
+import { fetchCurrentCompany } from "../Function/CommonFunction";
 
-const Header = ({ handleDrawerToggle, drawerWidth, dark, handleChangeDarkMode, isMdUp, anchorEl, handlepopoveClose, handleindicator }) => {
+const Header = ({
+    handleDrawerToggle,
+    drawerWidth,
+    dark,
+    handleChangeDarkMode,
+    isMdUp,
+    anchorEl,
+    handlepopoveClose,
+    handleindicator,
+    CurrentCompany
+}) => {
+
     return (
         <AppBar
             position="fixed"
@@ -65,14 +77,16 @@ const Header = ({ handleDrawerToggle, drawerWidth, dark, handleChangeDarkMode, i
                             noWrap
                             component="div"
                             className="text-navheadercolor"
-                            sx={{ fontSize: { xs: 14, sm: 20 } }}
-                        >
-                            Travancore Medicity
+                            sx={{ fontSize: { xs: 14, sm: 20 } }}>
+                            {
+                                CurrentCompany &&
+                                    CurrentCompany === 1 ?
+                                    "Travancore Medicity" : 'kerala Medical College'
+                            }
                         </Typography>
-                        {/* commenting this part */}
                         {
-                            isMdUp && 
-                        <ScreenCheck />
+                            isMdUp &&
+                            <ScreenCheck />
                         }
                     </Box>
                     <Box className="flex flex-row items-center gap-3">

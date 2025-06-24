@@ -6,7 +6,7 @@ import React, { useState, useEffect, memo, useCallback } from 'react';
 const successAnimation = require('../assets/successanimation.gif');
 const successStatic = require('../assets/succespic.png');
 
-const SuccessPage = ({ setIsSubmit, feedbackId, setOpen, getFeedbackData }) => {
+const SuccessPage = ({ setIsSubmit, feedbackId, setOpen, getFeedbackData, PatientData }) => {
 
     const [showGif, setShowGif] = useState(true);
     useEffect(() => {
@@ -17,9 +17,12 @@ const SuccessPage = ({ setIsSubmit, feedbackId, setOpen, getFeedbackData }) => {
     }, []);
 
 
+
+
+    // the funcition to return to website or go back when the user submit the Done after the feedback is Done
     const handleDone = useCallback(() => {
         // Open the new URL in a new tab
-        if (feedbackId === "8") {
+        if (feedbackId === "26" && PatientData !== undefined) {
             setOpen(false)
             getFeedbackData()
         } else {
@@ -28,18 +31,18 @@ const SuccessPage = ({ setIsSubmit, feedbackId, setOpen, getFeedbackData }) => {
         setIsSubmit(false);
         // Try closing the current tab 
         window.close();
-    }, [setIsSubmit, setOpen, getFeedbackData, feedbackId]);
+    }, [setIsSubmit, setOpen, getFeedbackData, feedbackId, PatientData]);
 
 
     return (
         <Box sx={{
-            width: feedbackId === "8" ? '100%' : '100vw',
+            width: feedbackId === "26" ? '100%' : '100vw',
             height: '100vh',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             flexDirection: 'column',
-            backgroundColor: feedbackId === "8" ? "rgba(var(--bg-card))" : '#e9ecef',
+            backgroundColor: feedbackId === "26" ? "rgba(var(--bg-card))" : '#e9ecef',
             // bgcolor: '#e9ecef',
             // color: 'rgba(var(--font-primary-white))',
         }}>

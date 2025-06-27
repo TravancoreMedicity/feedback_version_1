@@ -1,4 +1,4 @@
-import React, { useState, memo, Suspense, useMemo, useCallback, lazy } from 'react';
+import React, { useState, memo, Suspense, useCallback, lazy } from 'react';
 import { Box, Typography } from "@mui/joy";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
@@ -37,13 +37,19 @@ const HkContainer = () => {
         setValue(newValue);
     }, []);
 
-    const filterAssignedBed = useMemo(() => {
-        if (!getllBlockedBed || !getallhkassignedbed) return [];
-        const assignedBedIds = getallhkassignedbed?.map(item => item?.fb_hk_bed_slno);
-        return getllBlockedBed?.filter(item =>
-            assignedBedIds?.includes(item.fb_bed_slno)
-        );
-    }, [getllBlockedBed, getallhkassignedbed]);
+
+    // const filterAssignedBed = useMemo(() => {
+    //     if (!getllBlockedBed || !getallhkassignedbed) return [];
+    //     const assignedBedIds = getallhkassignedbed?.map(item => item?.fb_hk_bed_slno);
+    //     return getllBlockedBed?.filter(item =>
+    //         assignedBedIds?.includes(item.fb_bed_slno)
+    //     );
+    // }, [getllBlockedBed, getallhkassignedbed]);
+
+
+
+
+    // console.log(filterAssignedBed, "filterAssignedBed");
 
 
     const HandleBedAssign = useCallback(async (data) => {
@@ -149,7 +155,7 @@ const HkContainer = () => {
                             getllBlockedBed &&
                             <HkDashboard
                                 getllBlockedBed={getllBlockedBed}
-                                assingedbed={filterAssignedBed}
+                                assingedbed={getallhkassignedbed}
                                 HandleBedAssign={HandleBedAssign}
                                 refetch={getallAssignedBed}
                             />
@@ -161,8 +167,8 @@ const HkContainer = () => {
                             mb: 2,
                             p: 1,
                             backgroundColor: "rgba(var(--bg-card))",
-                            border: filterAssignedBed?.length > 0 ? 0.03 : 0,
-                            borderColor: filterAssignedBed?.length > 0 ? "rgba(var(--border-primary))" : "none",
+                            border: getallhkassignedbed?.length > 0 ? 0.03 : 0,
+                            borderColor: getallhkassignedbed?.length > 0 ? "rgba(var(--border-primary))" : "none",
                             borderRadius: 5
                         }}>
                             <Box
@@ -173,7 +179,7 @@ const HkContainer = () => {
                                     mt: 1,
                                 }}>
                                 {
-                                    filterAssignedBed?.length === 0 &&
+                                    getallhkassignedbed?.length === 0 &&
                                     <Box sx={{
                                         width: '100%',
                                         height: '60vh',
@@ -198,13 +204,13 @@ const HkContainer = () => {
                                     </Box>
                                 }
                                 {
-                                    filterAssignedBed?.length > 0 && filterAssignedBed?.map((item, index) => {
+                                    getallhkassignedbed?.length > 0 && getallhkassignedbed?.map((item, index) => {
                                         return <Box key={index}>
                                             <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
                                                 <Housekeepinglist
                                                     refetch={getallAssignedBed}
                                                     data={item}
-                                                    assingedbed={filterAssignedBed}
+                                                    assingedbed={getallhkassignedbed}
                                                     name={"INFROMATION TECHNOLOGY"}
                                                     icon={<CleaningServicesTwoToneIcon className='hoverClass' sx={{ width: 30, height: 30, color: 'rgba(var(--icon-primary))', }} />} />
                                             </Suspense>

@@ -4,19 +4,41 @@ import { useCallback } from 'react';
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
 import { axiosApi } from '../../Axios/Axios';
 import { employeeID, errorNofity, succesNofity, warningNofity } from '../../Constant/Constant';
+import InitialCheckComplited from '../../Components/InitialCheckComplited';
+import { gethkcheckbedDetail } from '../../Function/CommonFunction';
+
+
+
 const HouseKeepingBedlistModal = lazy(() => import('./HouseKeepingBedlistModal'));
 
-const Housekeepinglist = ({ data, assingedbed, refetch }) => {
+const Housekeepinglist = ({ data, refetch }) => {
 
     const [open, setOpen] = useState(false);
-    const HandleCheckList = useCallback(() => {
-        setOpen(true)
-    }, []);
+    const [checkeditems, setCheckedItems] = useState([]);
 
 
-    const HandleRemoveAssignedBed = useCallback(async (bed) => {
+
+    // function to Open modal and also fetching the current checklist detail if any 
+    const HandleCheckList = useCallback(async (data) => {
+        const { fb_hk_check_status, fb_hk_slno } = data;
+        try {
+            if (fb_hk_check_status === null) return
+            const result = await gethkcheckbedDetail(fb_hk_slno);
+            setCheckedItems(result)
+        } catch (error) {
+            warningNofity("Error in fetching data")
+        } finally {
+            setOpen(true)
+        }
+    }, [setCheckedItems]);
+
+    // function to undo the assinged bed when double clicking on  the bed
+    const HandleRemoveAssignedBed = useCallback(async (data) => {
+        const HasWorkStarted = data?.fb_hk_check_status;
+        if (HasWorkStarted !== null) return warningNofity("cannot Reassign the bed after Work started");
+
         const insertdata = {
-            fb_hk_bed_slno: bed,
+            fb_hk_bed_slno: data?.fb_bed_slno,
             edit_user: Number(employeeID()),
             fb_hk_status: 0
         }
@@ -29,7 +51,7 @@ const Housekeepinglist = ({ data, assingedbed, refetch }) => {
         } catch (error) {
             warningNofity(error)
         }
-    }, [employeeID]);
+    }, [refetch]);
 
 
 
@@ -43,6 +65,8 @@ const Housekeepinglist = ({ data, assingedbed, refetch }) => {
                         open={open}
                         data={data}
                         setOpen={setOpen}
+                        CheckedItems={checkeditems}
+                        refetch={refetch}
                     />
                 </Suspense>
             }
@@ -65,7 +89,7 @@ const Housekeepinglist = ({ data, assingedbed, refetch }) => {
                     borderColor: 'rgba(var(--border-primary))',
                     paddingRight: '10px'
                 }}>
-                    <Box onDoubleClick={() => HandleRemoveAssignedBed(data?.fb_bed_slno)
+                    <Box onDoubleClick={() => HandleRemoveAssignedBed(data)
                     } sx={{
                         display: 'flex',
                         alignItems: 'center',
@@ -140,7 +164,7 @@ const Housekeepinglist = ({ data, assingedbed, refetch }) => {
                         flexDirection: 'column',
                         alignItems: 'center'
                     }}>{
-                            matchdata?.fb_bed_reason === 1 ?
+                            data?.fb_hk_check_status === 1 ?
                                 <HandymanTwoToneIcon sx={{
                                     width: 30, height: 30,
                                     animation: 'blink 2s infinite',
@@ -155,21 +179,8 @@ const Housekeepinglist = ({ data, assingedbed, refetch }) => {
                                             opacity: 1,
                                         },
                                     },
-                                }} /> : matchdata?.fb_bed_reason === 2 ? <PauseCircleFilledTwoToneIcon sx={{
-                                    width: 30, height: 30,
-                                    animation: 'blink 2s infinite',
-                                    '@keyframes blink': {
-                                        '0%': {
-                                            opacity: 1,
-                                        },
-                                        '50%': {
-                                            opacity: 0,
-                                        },
-                                        '100%': {
-                                            opacity: 1,
-                                        },
-                                    },
-                                }} /> : <CampaignTwoToneIcon sx={{
+                                }} />
+                                : <PauseCircleFilledTwoToneIcon sx={{
                                     width: 30, height: 30,
                                     animation: 'blink 2s infinite',
                                     '@keyframes blink': {
@@ -187,9 +198,31 @@ const Housekeepinglist = ({ data, assingedbed, refetch }) => {
                         }
 
                     </Box> */}
-                    {/* <CardAttachment /> */}
+
+                    <Box sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center'
+                    }}>
+                        <Typography sx={{
+                            fontFamily: 'var(--font-varient)',
+                            color: 'rgba(var(--font-primary-white))',
+                            fontWeight: 700,
+                            fontSize: { xs: 8, sm: 14 },
+                        }}>
+                            {
+                                data?.fb_hk_check_status === 2 ? " CLEANED" : data?.fb_hk_check_status === 1 ? "CLEANING STARTED" : 'NOT STARTED'
+                            }
+
+                        </Typography>
+                        {
+                            data?.fb_hk_check_status === 1 &&
+                            <InitialCheckComplited color={data?.fb_initial_check === 1 ? "rgb(239, 131, 15)" : "#ef3c2d"} />
+                        }
+
+                    </Box>
                     <Box
-                        onClick={() => HandleCheckList(data?.fb_bdc_no)}
+                        onClick={() => HandleCheckList(data)}
                         sx={{
                             width: { xs: 90, sm: 130 },
                             height: { xs: 30, sm: 40 },
@@ -205,6 +238,7 @@ const Housekeepinglist = ({ data, assingedbed, refetch }) => {
                             cursor: 'pointer',
                             fontWeight: 600,
                             fontSize: { xs: 12, sm: 14 },
+                            mt: data?.fb_hk_check_status === 1 ? 2 : 0,
                             ':hover': {
                                 transition: 'none',
                                 backgroundColor: 'rgba(var(--input-hover-bg-color))',

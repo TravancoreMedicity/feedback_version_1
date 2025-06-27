@@ -2,11 +2,11 @@ import React, { lazy, memo, useCallback, useEffect, useMemo, useState } from 're
 import { Suspense } from 'react';
 import Modal from '@mui/joy/Modal';
 import { useQuery } from '@tanstack/react-query';
-import { EmpauthId } from '../../Constant/Constant';
-// import EngineeringTwoToneIcon from '@mui/icons-material/EngineeringTwoTone';
+import { EmpauthId, succesNofity, warningNofity } from '../../Constant/Constant';
 import { Box, Button, ModalDialog, Typography } from '@mui/joy';
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
 import { getDepartmentEmployee, getllhkroomChecklist, getLoggedEmpDetail } from '../../Function/CommonFunction';
+import { axiosApi } from '../../Axios/Axios';
 
 
 const HkChecklistCard = lazy(() => import('./HkChecklistCard'));
@@ -15,11 +15,13 @@ const HkComplaintHead = lazy(() => import('./HkComplaintHead'));
 const MultipleSelect = lazy(() => import('../../Components/MultipleSelect'));
 const ModalHeader = lazy(() => import('../../Components/ModalHeader'));
 
-const HouseKeepingBedlistModal = ({ open, data, setOpen }) => {
+const HouseKeepingBedlistModal = ({ open, data, setOpen, CheckedItems, refetch }) => {
 
     const id = EmpauthId()
     const [checklistItems, setChecklistItems] = useState([]);
     const [empid, setEmpid] = useState([]);
+    const [loading, setLoading] = useState(false);
+
     const [totaldetail, setTotalDetail] = useState({
         activeButton: null,
         remarks: ""
@@ -27,24 +29,24 @@ const HouseKeepingBedlistModal = ({ open, data, setOpen }) => {
 
     const { activeButton, remarks } = totaldetail;
 
+
+    // Modal closing
     const HanldeModalClose = useCallback(() => {
         setOpen(false)
-    }, [setOpen]);
-
-
+        refetch()
+    }, [setOpen, refetch]);
 
     const { data: allhkchecklistitems } = useQuery({
         queryKey: ['roomchecklistitem'],
         queryFn: () => getllhkroomChecklist(),
     });
 
+    // handle assign employeee selection
     const hanldmultiplechange = useCallback((e, val) => {
         setEmpid(val);
     }, [setEmpid]);
 
-
-    //just for testing
-    /* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */
+    // fetching loged employee detail
     const { data: getlogempdetail } = useQuery({
         queryKey: ["loggedempdetail", id],
         queryFn: () => getLoggedEmpDetail(id),
@@ -52,6 +54,10 @@ const HouseKeepingBedlistModal = ({ open, data, setOpen }) => {
         staleTime: Infinity
     });
 
+
+
+
+    // selecting the current employee deparment
     const departmentSection = useMemo(() => getlogempdetail?.[0]?.em_dept_section, [getlogempdetail]);
 
     //fetching departemployee
@@ -61,38 +67,90 @@ const HouseKeepingBedlistModal = ({ open, data, setOpen }) => {
         enabled: !!departmentSection,
     });
 
-    /* %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% */
 
+
+
+    // handle the Good Bad selectors (switch)
     const handleChange = useCallback((id, value, field) => {
         setChecklistItems(prev =>
             prev?.map(item =>
-                item?.fb_hk_rm_cklist_name === id && item[field] !== value
+                item?.fb_hk_rm_cklist_slno === id && item[field] !== value
                     ? { ...item, [field]: value }
                     : item
             )
         );
     }, []);
 
+
+    // tracking if the item is present in  the room or not
     const items = useMemo(() => {
         if (!allhkchecklistitems) return [];
         return allhkchecklistitems?.map(item => {
+            const isItemCheckCompleted = CheckedItems?.find(val => val?.fb_hk_rm_cklist_slno === item?.fb_hk_rm_cklist_slno); // finding the matching slno
             return {
                 ...item,
-                ispresent:
-                    item?.ispresent ?? 0,
+                ispresent: isItemCheckCompleted?.fb_hk_rm_item_condition ?
+                    isItemCheckCompleted?.fb_hk_rm_item_condition : item?.ispresent ?? 0, // check the item check status to perfrom next selection
+                isStatus: data?.fb_hk_check_status ?? 0, // checking the check status
+                isAlreadyChecked: isItemCheckCompleted?.fb_hk_rm_item_condition ?? 0// checking item already checked
             };
         });
-    }, [allhkchecklistitems]);
+    }, [allhkchecklistitems, CheckedItems, data?.fb_hk_check_status]);
 
 
+    // This help to set the use memo item into the state when the component Mounts
     useEffect(() => {
         if (items?.length > 0) {
             setChecklistItems(items);
         }
     }, [items, open]);
 
+
     //The item for complaints
     const isDamagedItemsArray = useMemo(() => checklistItems?.filter(item => item?.ispresent === 1), [checklistItems]);
+
+
+    // filtering the items that not selected for checking if the user not selected anything
+    const CheckAtleastOneSelected = useMemo(() => checklistItems?.filter(item => item?.ispresent === 0), [checklistItems]);
+
+    // To track atleast one item selected before submitting the  Form (Optional)
+    const isNotSelected = CheckAtleastOneSelected?.length === checklistItems?.length;
+
+    // Filtering the item that already submit for reducing reduntency
+    const DataforInsertion = checklistItems?.filter(item => item?.isAlreadyChecked === 0 && item?.ispresent !== 0);
+
+
+
+    // handleing the checklist submission
+    const handleChecklistSumbission = useCallback(async () => {
+        setLoading(true);
+        if (isNotSelected) return warningNofity("Select Befor Sumbitting.");
+        if (activeButton === null) return warningNofity("Please select the Current Bed Status");
+        if (activeButton !== null && remarks === "") return warningNofity("Please Enter the Remarks");
+        if (empid?.length === 0) return warningNofity("Please select Employee")
+
+        const payload = {
+            data: DataforInsertion,
+            fb_bed_slno: data?.fb_bed_slno,
+            fb_hk_bd_status: activeButton === "Cleaned" ? 2 : 1,
+            fb_hk_remark: remarks,
+            fb_hk_emp_assign: empid
+        };
+
+        try {
+            const response = await axiosApi.post('/feedback/inserthkbeddetail', payload);
+            const { success } = response.data;
+            if (success !== 2) return warningNofity("Error in Inserting Data")
+            succesNofity(" CheckList completed");
+            HanldeModalClose()
+        } catch (error) {
+            warningNofity("Error in Inserting Data")
+        } finally {
+            setLoading(false);
+        }
+
+    }, [isNotSelected, activeButton, remarks, empid, DataforInsertion, HanldeModalClose, data]);
+
 
     return (
         <Box>
@@ -121,12 +179,18 @@ const HouseKeepingBedlistModal = ({ open, data, setOpen }) => {
                     <ModalHeader name={'HOUSEKEEPING CHECKLIST'} data={data} HanldeModalClose={HanldeModalClose} />
 
                     <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
-                        <HkChecklistCard item={items} handleChange={handleChange} />
+                        <HkChecklistCard ChecklistItem={checklistItems} handleChange={handleChange} />
                     </Suspense>
                     {
                         isDamagedItemsArray && isDamagedItemsArray?.length > 0 &&
                         <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
-                            <HkComplaintHead name={"DAMAGED ASSETS"} items={isDamagedItemsArray} />
+                            <HkComplaintHead
+                                name={"DAMAGED ASSETS"}
+                                DamagedItem={isDamagedItemsArray}
+                                BedDetail={data}
+                                DepartmentDetail={getlogempdetail}
+                                selectemp={empid}
+                            />
                         </Suspense>
                     }
                     <Box sx={{ px: 1, mt: 0.2 }}>
@@ -166,6 +230,7 @@ const HouseKeepingBedlistModal = ({ open, data, setOpen }) => {
                         }}>Select Status</Typography>
                     <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
                         <HkCurrentBedStatusButton
+                            disable={isDamagedItemsArray?.length > 0}
                             setTotalDetail={setTotalDetail}
                             remarks={remarks}
                             activeButton={activeButton}
@@ -181,8 +246,8 @@ const HouseKeepingBedlistModal = ({ open, data, setOpen }) => {
                         justifyContent: 'center'
                     }}>
                         <Button
-                            // disabled={loading || proCheckListDetail?.[0]?.fb_final_check === 1}
-                            // onClick={HandleBedDetailRequest}
+                            disabled={loading}
+                            onClick={handleChecklistSumbission}
                             variant="outlined"
                             sx={{
                                 fontSize: { xs: 13, sm: 16 },

@@ -397,6 +397,17 @@ export const getAllhkAssignedBed = async (id) => {
 }
 
 
+export const gethkcheckbedDetail = async (slno) => {
+    try {
+        const res = await axiosApi.post('/feedback/gethkcheckdtl', { fb_hk_slno: slno });
+        const { data, success } = res.data;
+        return success === 2 ? data || [] : [];
+    } catch (error) {
+        console.log("Error fetching menu:", error);
+        return []; // Return empty array on error
+    }
+}
+
 export const getdepassetonly = async (id) => {
     return axiosApi.get(`/feedback/getdepassetonly/${id}`).then((res) => {
         const { success, data } = res.data;

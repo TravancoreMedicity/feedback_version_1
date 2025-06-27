@@ -42,6 +42,11 @@ const DischargeFollowupModal = ({
 
     const [opentextarea, setOpenTextArea] = useState(false);
 
+    // console.log();
+
+
+
+
     // modal close
     const handleModalClose = useCallback(() => {
         setOpen(false)

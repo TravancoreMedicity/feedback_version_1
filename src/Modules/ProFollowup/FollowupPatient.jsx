@@ -163,7 +163,8 @@ const FollowupPatient = () => {
 
         //prevent submission if there is no change in the date and remarks
         if (isSameDate && isSameRemarks) {
-            infoNofity("No changes to Commit.");
+            infoNofity("No changes.");
+            setPostLoading(false)
             return
         }
 

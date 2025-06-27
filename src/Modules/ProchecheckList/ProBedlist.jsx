@@ -2,14 +2,18 @@ import React, { memo, useCallback, useState } from 'react'
 import { Box, Typography } from '@mui/joy'
 import ProBedlistModal from './ProBedlistModal'
 import InitialCheckComplited from '../../Components/InitialCheckComplited';
+import { getprobedChecklistDetail } from '../../Function/CommonFunction';
 
 
 const ProBedlist = ({ data, matchdata, fetchProcheckdetail }) => {
 
     const [open, setOpen] = useState(false);
+    const [proCheckListDetail, setProcheckListDetail] = useState([]);
 
-    const handleChecklistClick = useCallback(() => {
+    const handleChecklistClick = useCallback(async (bedslno) => {
         setOpen(true)
+        const Detail = await getprobedChecklistDetail(bedslno);
+        setProcheckListDetail(Detail)
     }, [])
 
 
@@ -21,6 +25,7 @@ const ProBedlist = ({ data, matchdata, fetchProcheckdetail }) => {
                     setOpen={setOpen}
                     data={data}
                     fetchProcheckdetail={fetchProcheckdetail}
+                    proCheckListDetail={proCheckListDetail}
                 />
             )}
 
@@ -136,7 +141,7 @@ const ProBedlist = ({ data, matchdata, fetchProcheckdetail }) => {
 
                     </Box>
                     <Box
-                        onClick={handleChecklistClick}
+                        onClick={() => handleChecklistClick(data?.fb_bed_slno)}
                         sx={{
                             width: { xs: 90, sm: 130 },
                             height: { xs: 30, sm: 40 },

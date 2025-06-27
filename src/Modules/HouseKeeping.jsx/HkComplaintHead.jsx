@@ -7,7 +7,8 @@ import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutSt
 
 const HkComplaintCard = lazy(() => import("./HkComplaintCard"))
 
-const HkComplaintHead = ({ name, items }) => {
+const HkComplaintHead = ({ name, DamagedItem, BedDetail, DepartmentDetail, selectemp }) => {
+
     return (
         <Box sx={{
             p: 1,
@@ -45,7 +46,10 @@ const HkComplaintHead = ({ name, items }) => {
             </Box>
             <Suspense fallback={<CustomBackDropWithOutState message={"Loading"} />}>
                 <HkComplaintCard
-                    items={items}
+                    DamagedItem={DamagedItem}
+                    BedDetail={BedDetail}
+                    DepartmentDetail={DepartmentDetail}
+                    selectemp={selectemp}
                 />
             </Suspense>
         </Box>

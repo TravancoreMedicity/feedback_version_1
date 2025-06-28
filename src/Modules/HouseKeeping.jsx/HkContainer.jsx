@@ -38,20 +38,8 @@ const HkContainer = () => {
     }, []);
 
 
-    // const filterAssignedBed = useMemo(() => {
-    //     if (!getllBlockedBed || !getallhkassignedbed) return [];
-    //     const assignedBedIds = getallhkassignedbed?.map(item => item?.fb_hk_bed_slno);
-    //     return getllBlockedBed?.filter(item =>
-    //         assignedBedIds?.includes(item.fb_bed_slno)
-    //     );
-    // }, [getllBlockedBed, getallhkassignedbed]);
 
-
-
-
-    // console.log(filterAssignedBed, "filterAssignedBed");
-
-
+    // Function to assign beds for the supervisors
     const HandleBedAssign = useCallback(async (data) => {
         const insertdata = {
             fb_hk_sv_assign: id,

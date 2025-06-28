@@ -22,7 +22,7 @@ const SuccessPage = ({ setIsSubmit, feedbackId, setOpen, getFeedbackData, Patien
     // the funcition to return to website or go back when the user submit the Done after the feedback is Done
     const handleDone = useCallback(() => {
         // Open the new URL in a new tab
-        if (feedbackId === "26" && PatientData !== undefined) {
+        if (feedbackId === "8" && PatientData !== undefined) {
             setOpen(false)
             getFeedbackData()
         } else {
@@ -36,13 +36,13 @@ const SuccessPage = ({ setIsSubmit, feedbackId, setOpen, getFeedbackData, Patien
 
     return (
         <Box sx={{
-            width: feedbackId === "26" ? '100%' : '100vw',
+            width: feedbackId === "8" ? '100%' : '100vw',
             height: '100vh',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             flexDirection: 'column',
-            backgroundColor: feedbackId === "26" ? "rgba(var(--bg-card))" : '#e9ecef',
+            backgroundColor: feedbackId === "8" ? "rgba(var(--bg-card))" : '#e9ecef',
             // bgcolor: '#e9ecef',
             // color: 'rgba(var(--font-primary-white))',
         }}>

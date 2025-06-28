@@ -408,6 +408,31 @@ export const gethkcheckbedDetail = async (slno) => {
     }
 }
 
+
+export const gethkBedDetial = async (slno) => {
+    try {
+        const res = await axiosApi.post('/feedback/gethkbeddetail', { fb_hk_slno: slno });
+        const { data, success } = res.data;
+        return success === 2 ? data || [] : [];
+    } catch (error) {
+        console.log("Error fetching menu:", error);
+        return []; // Return empty array on error
+    }
+}
+
+
+// house keeeping complaints
+export const gethkcomplaintdetail = async (slno) => {
+    try {
+        const res = await axiosApi.post('/feedback/gethkcmpdetail', { cm_location: slno });
+        const { data, success } = res.data;
+        return success === 2 ? data || [] : [];
+    } catch (error) {
+        console.log("Error fetching menu:", error);
+        return []; // Return empty array on error
+    }
+}
+
 export const getdepassetonly = async (id) => {
     return axiosApi.get(`/feedback/getdepassetonly/${id}`).then((res) => {
         const { success, data } = res.data;

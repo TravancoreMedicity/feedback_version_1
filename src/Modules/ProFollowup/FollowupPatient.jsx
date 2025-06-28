@@ -53,10 +53,13 @@ const FollowupPatient = () => {
     //Get DischargeForms
     const getDischagreFeedbackFrom = useCallback(async () => {
         const insertData = {
-            feedbackId: 26,
+            feedbackId: 8,
             FROM_DATE: formattedFromDateMeliora,
             TO_DATE: formattedToDateMeliora
         }
+
+    
+        
         try {
             const result = await axiosApi.post("/feedback/getalldischargeform", insertData);
             const { data, success } = result.data;

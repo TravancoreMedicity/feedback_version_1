@@ -37,7 +37,7 @@ const DischargeFeedBackModal = ({
         setPatientImpDetail([])
     }, [setOpen, setPatientImpDetail]);
 
-    const encodedId = btoa(26);
+    const encodedId = btoa(8);
     const encodedName = btoa(feedbackData?.fb_ptc_name || "");
     const encodepatientid = btoa(feedbackData?.fb_pt_no || "");
     const encodemobile = btoa(feedbackData?.fb_ptc_mobile || "");

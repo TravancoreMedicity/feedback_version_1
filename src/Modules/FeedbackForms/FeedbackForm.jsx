@@ -86,6 +86,7 @@ const FeedbackForm = ({
 
 
 
+
     //getting data through  props and update in the feedback
     useEffect(() => {
         if (fbencodedId === undefined) return;
@@ -159,7 +160,6 @@ const FeedbackForm = ({
     }, []);
 
 
-    // console.log(atob(encodedId));
 
 
     //Getting all required fields for the user Transaction to insert......!!!!!
@@ -223,7 +223,7 @@ const FeedbackForm = ({
         fb_answers: combinedFeedbackData,
         fb_default_quest: defaultimpression ? defaultimpression : [],
         fb_default_reamark: defaultremarks ? defaultremarks : '',
-        create_user: encodedId && atob(encodedId) === "18" ? 1 : Number(EmpauthId())
+        create_user: encodedId && atob(encodedId) === "3" ? 1 : Number(EmpauthId())
     }), [patientNo, PatientName, mobilenumber, combinedFeedbackData, feedbackId, inpatientNumber, defaultimpression, encodedId, defaultremarks])
 
 
@@ -298,7 +298,7 @@ const FeedbackForm = ({
                     }}>
                         <FeedBackLog CurrentCompany={getCurrentCompany?.[0]?.company_slno} />
                         {
-                            PatientName && feedbackId !== "26" &&
+                            PatientName && feedbackId !== "8" &&
                             <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
                                 <PatientInfoHeader
                                     PatientName={PatientName}
@@ -309,7 +309,7 @@ const FeedbackForm = ({
                         }
 
                         {
-                            PatientData && feedbackId === "26" && <Box sx={{
+                            PatientData && feedbackId === "8" && <Box sx={{
                                 width: '100%',
                                 display: 'flex',
                                 alignItems: 'center',
@@ -327,7 +327,7 @@ const FeedbackForm = ({
                             </Box>
                         }
                         {
-                            patientnotResponding && patientnotResponding?.length > 0 && feedbackId === "26" && <Box sx={{
+                            patientnotResponding && patientnotResponding?.length > 0 && feedbackId === "8" && <Box sx={{
                                 width: '100%',
                                 display: 'flex',
                                 alignItems: 'center',
@@ -402,7 +402,7 @@ const FeedbackForm = ({
                         </Box>
                         {/* this part is only for discharge feedback */}
                         {
-                            feedbackId === "26" && <Box sx={{
+                            feedbackId === "8" && <Box sx={{
                                 width: '100%',
                                 display: 'flex',
                                 alignItems: 'center',

@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { EmpauthId, succesNofity, warningNofity } from '../../Constant/Constant';
 import { Box, Button, ModalDialog, Typography } from '@mui/joy';
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
-import { getDepartmentEmployee, getllhkroomChecklist, getLoggedEmpDetail } from '../../Function/CommonFunction';
+import { getDepartmentEmployee, gethkcomplaintdetail, getllhkroomChecklist, getLoggedEmpDetail } from '../../Function/CommonFunction';
 import { axiosApi } from '../../Axios/Axios';
 
 
@@ -14,8 +14,9 @@ const HkCurrentBedStatusButton = lazy(() => import('./HkCurrentBedStatusButton')
 const HkComplaintHead = lazy(() => import('./HkComplaintHead'));
 const MultipleSelect = lazy(() => import('../../Components/MultipleSelect'));
 const ModalHeader = lazy(() => import('../../Components/ModalHeader'));
+const OverallDetailCard = lazy(() => import('../ProchecheckList/OverallDetailCard'));
 
-const HouseKeepingBedlistModal = ({ open, data, setOpen, CheckedItems, refetch }) => {
+const HouseKeepingBedlistModal = ({ open, data, setOpen, CheckedItems, refetch, Complaints, BedDetails }) => {
 
     const id = EmpauthId()
     const [checklistItems, setChecklistItems] = useState([]);
@@ -28,7 +29,6 @@ const HouseKeepingBedlistModal = ({ open, data, setOpen, CheckedItems, refetch }
     });
 
     const { activeButton, remarks } = totaldetail;
-
 
     // Modal closing
     const HanldeModalClose = useCallback(() => {
@@ -55,8 +55,6 @@ const HouseKeepingBedlistModal = ({ open, data, setOpen, CheckedItems, refetch }
     });
 
 
-
-
     // selecting the current employee deparment
     const departmentSection = useMemo(() => getlogempdetail?.[0]?.em_dept_section, [getlogempdetail]);
 
@@ -66,7 +64,6 @@ const HouseKeepingBedlistModal = ({ open, data, setOpen, CheckedItems, refetch }
         queryFn: () => getDepartmentEmployee(departmentSection),
         enabled: !!departmentSection,
     });
-
 
 
 
@@ -109,7 +106,6 @@ const HouseKeepingBedlistModal = ({ open, data, setOpen, CheckedItems, refetch }
     //The item for complaints
     const isDamagedItemsArray = useMemo(() => checklistItems?.filter(item => item?.ispresent === 1), [checklistItems]);
 
-
     // filtering the items that not selected for checking if the user not selected anything
     const CheckAtleastOneSelected = useMemo(() => checklistItems?.filter(item => item?.ispresent === 0), [checklistItems]);
 
@@ -121,23 +117,25 @@ const HouseKeepingBedlistModal = ({ open, data, setOpen, CheckedItems, refetch }
 
 
 
-    // handleing the checklist submission
+    // handleing the checklist submissionz
     const handleChecklistSumbission = useCallback(async () => {
         setLoading(true);
-        if (isNotSelected) return warningNofity("Select Befor Sumbitting.");
-        if (activeButton === null) return warningNofity("Please select the Current Bed Status");
-        if (activeButton !== null && remarks === "") return warningNofity("Please Enter the Remarks");
-        if (empid?.length === 0) return warningNofity("Please select Employee")
-
-        const payload = {
-            data: DataforInsertion,
-            fb_bed_slno: data?.fb_bed_slno,
-            fb_hk_bd_status: activeButton === "Cleaned" ? 2 : 1,
-            fb_hk_remark: remarks,
-            fb_hk_emp_assign: empid
-        };
 
         try {
+
+            if (isNotSelected) return warningNofity("Select Befor Sumbitting.");
+            if (activeButton === null) return warningNofity("Please select the Current Bed Status");
+            if (activeButton !== null && remarks === "") return warningNofity("Please Enter the Remarks");
+            if (empid?.length === 0) return warningNofity("Please select Employee")
+
+            const payload = {
+                data: DataforInsertion,
+                fb_bed_slno: data?.fb_bed_slno,
+                fb_hk_bd_status: activeButton === "Cleaned" ? 2 : 1,
+                fb_hk_remark: remarks,
+                fb_hk_emp_assign: empid
+            };
+
             const response = await axiosApi.post('/feedback/inserthkbeddetail', payload);
             const { success } = response.data;
             if (success !== 2) return warningNofity("Error in Inserting Data")
@@ -147,9 +145,22 @@ const HouseKeepingBedlistModal = ({ open, data, setOpen, CheckedItems, refetch }
             warningNofity("Error in Inserting Data")
         } finally {
             setLoading(false);
+            refetch()
         }
 
-    }, [isNotSelected, activeButton, remarks, empid, DataforInsertion, HanldeModalClose, data]);
+    }, [isNotSelected, activeButton, remarks, empid, DataforInsertion, HanldeModalClose, data,refetch]);
+
+
+
+    // const { data: allhkcmpdtl, refetch: fetchallhkcmpdtl } = useQuery({
+    //     queryKey: ['getallhkcmpdtl'],
+    //     queryFn: () => gethkcomplaintdetail(data?.fb_bed_slno),
+    //     enabled: !!data?.fb_bed_slno
+    // })
+
+
+
+
 
 
     return (
@@ -190,52 +201,74 @@ const HouseKeepingBedlistModal = ({ open, data, setOpen, CheckedItems, refetch }
                                 BedDetail={data}
                                 DepartmentDetail={getlogempdetail}
                                 selectemp={empid}
+                                Complaints={Complaints}
+                                setOpen={setOpen}
                             />
                         </Suspense>
                     }
-                    <Box sx={{ px: 1, mt: 0.2 }}>
-                        <Typography level='body-sm'
-                            sx={{
-                                fontWeight: 600,
-                                fontFamily: "var(--font-varient)",
-                                opacity: 0.8,
-                                paddingLeft: "0.26rem",
-                                lineHeight: "1.0rem",
-                                color: 'rgba(var(--font-primary-white))',
-                                paddingY: "0.26rem",
-                                fontSize: { xs: 10, sm: 14 }
-
-                            }}>Select Employee</Typography>
-                        <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
-                            <MultipleSelect
-                                data={departmentemp ? departmentemp : []}
-                                onchange={hanldmultiplechange}
-                                value={empid}
+                    {
+                        BedDetails && BedDetails?.length > 0 &&
+                        <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
+                            <OverallDetailCard
+                                name={"CHECKLIST DETAIL"}
+                                employee={BedDetails?.[0]?.em_name}
+                                // condition={Number(BedDetails?.[0]?.fb_hk_bed_status) === 2 ? "Cleanded" :"Cleaning Started"}
+                                remark={BedDetails?.[0]?.fb_hk_bed_remark}
                             />
                         </Suspense>
-                    </Box>
+                    }
 
-                    <Typography level='body-sm'
-                        sx={{
-                            fontWeight: 600,
-                            fontFamily: "var(--font-varient)",
-                            opacity: 0.8,
-                            paddingLeft: "0.26rem",
-                            lineHeight: "1.0rem",
-                            color: 'rgba(var(--font-primary-white))',
-                            paddingY: "0.26rem",
-                            mt: 0.2,
-                            ml: 1,
-                            fontSize: { xs: 12, sm: 14 }
-                        }}>Select Status</Typography>
-                    <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
-                        <HkCurrentBedStatusButton
-                            disable={isDamagedItemsArray?.length > 0}
-                            setTotalDetail={setTotalDetail}
-                            remarks={remarks}
-                            activeButton={activeButton}
-                        />
-                    </Suspense>
+                    {
+                        BedDetails?.[0]?.fb_hk_check_status !== 2 &&
+                        <>
+                            <Box sx={{ px: 1, mt: 0.2 }}>
+                                <Typography level='body-sm'
+                                    sx={{
+                                        fontWeight: 600,
+                                        fontFamily: "var(--font-varient)",
+                                        opacity: 0.8,
+                                        paddingLeft: "0.26rem",
+                                        lineHeight: "1.0rem",
+                                        color: 'rgba(var(--font-primary-white))',
+                                        paddingY: "0.26rem",
+                                        fontSize: { xs: 10, sm: 14 }
+
+                                    }}>Select Employee</Typography>
+                                <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
+                                    <MultipleSelect
+                                        data={departmentemp ? departmentemp : []}
+                                        onchange={hanldmultiplechange}
+                                        value={empid}
+                                    />
+                                </Suspense>
+                            </Box>
+
+
+                            <Typography level='body-sm'
+                                sx={{
+                                    fontWeight: 600,
+                                    fontFamily: "var(--font-varient)",
+                                    opacity: 0.8,
+                                    paddingLeft: "0.26rem",
+                                    lineHeight: "1.0rem",
+                                    color: 'rgba(var(--font-primary-white))',
+                                    paddingY: "0.26rem",
+                                    mt: 0.2,
+                                    ml: 1,
+                                    fontSize: { xs: 12, sm: 14 }
+                                }}>Select Status</Typography>
+                            <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
+                                <HkCurrentBedStatusButton
+                                    disable={isDamagedItemsArray?.length > 0}
+                                    setTotalDetail={setTotalDetail}
+                                    remarks={remarks}
+                                    activeButton={activeButton}
+                                />
+                            </Suspense>
+                        </>
+                    }
+
+
                     <Box sx={{
                         px: 1,
                         width: '100%',
@@ -246,7 +279,7 @@ const HouseKeepingBedlistModal = ({ open, data, setOpen, CheckedItems, refetch }
                         justifyContent: 'center'
                     }}>
                         <Button
-                            disabled={loading}
+                            disabled={loading || BedDetails?.[0]?.fb_hk_check_status === 2}
                             onClick={handleChecklistSumbission}
                             variant="outlined"
                             sx={{

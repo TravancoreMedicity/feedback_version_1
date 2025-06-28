@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { Box, Divider, Skeleton, Typography } from "@mui/joy";
+import { Box, Divider, Typography } from "@mui/joy";
 import React, { lazy, memo, Suspense, useMemo, useState } from "react";
 import Grid from '@mui/material/Grid2'
 import DurationModel from "./DurationModel";
@@ -15,10 +15,10 @@ import {
 import { format, startOfMonth, subMonths } from "date-fns";
 import { useMediaQuery } from "@mui/material";
 import { predefinedCategories } from "../../Constant/Data";
-import { PUBLIC_NAS_FOLDER } from "../../Constant/Static";
+// import { PUBLIC_NAS_FOLDER } from "../../Constant/Static";
 import CustomBackDropWithOutState from "../../Components/CustomBackDropWithOutState";
 
-
+import feedbackLogo from '../../assets/FeedbackLogo.png'
 
 const StarRendering = lazy(() => import('./StarRendering'));
 const FeedbackRatings = lazy(() => import('./FeedbackRatings'));
@@ -34,9 +34,9 @@ const Dashboard = () => {
 
 
   //state to track Header image getting 404 for getting Error
-  const [imgLoaded, setImgLoaded] = useState(false);
-  const [imgError, setImgError] = useState(false);
-  const imgSrc = `${PUBLIC_NAS_FOLDER}/logo/FeedbackLogo.png`;
+  // const [imgLoaded, setImgLoaded] = useState(false);
+  // const [imgError, setImgError] = useState(false);
+  // const imgSrc = `${PUBLIC_NAS_FOLDER}/logo/FeedbackLogo.png`;
 
   const { data: allfeedbackNames } = useQuery({
     queryKey: ['allfeedbackname'],
@@ -199,7 +199,7 @@ const Dashboard = () => {
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: "center" }}>
 
 
-              {(!imgLoaded || imgError) && (
+              {/* {(!imgLoaded || imgError) && (
                 <Skeleton
                   variant="circular"
                   width={40}
@@ -211,16 +211,15 @@ const Dashboard = () => {
                     background: 'linear-gradient(45deg, rgba(123, 31, 162, 0.59), rgba(194, 24, 92, 0.6), rgba(25, 118, 210, 0.62))'
                   }}
                 />
-              )}
+              )} */}
 
               <img
-                src={imgSrc}
+                src={feedbackLogo}
                 alt="logo"
-                onLoad={() => setImgLoaded(true)}
-                onError={() => setImgError(true)}
-                style={{ height: 60 }}
+                // onLoad={() => setImgLoaded(true)}
+                // onError={() => setImgError(true)}
                 style={{
-                  display: imgLoaded && !imgError ? 'block' : 'none',
+                  // display: imgLoaded && !imgError ? 'block' : 'none',
                   height: 60
                 }}
               />

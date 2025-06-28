@@ -1,43 +1,85 @@
-import { Box, Button, Typography } from '@mui/joy'
-import React, { memo, useCallback } from 'react'
+import { Box, Button, Chip, Typography } from '@mui/joy'
+import React, { memo, useCallback, useState } from 'react'
 import { employeeID, succesNofity, warningNofity } from '../../Constant/Constant'
 import { format } from 'date-fns';
 import { axiosApi } from '../../Axios/Axios';
+// import { useQuery } from '@tanstack/react-query';
+// import { gethkcomplaintdetail } from '../../Function/CommonFunction';
 
-const HkComplaintCard = ({ DamagedItem, BedDetail, DepartmentDetail, selectemp }) => {
+const HkComplaintCard = ({ DamagedItem, BedDetail, DepartmentDetail, selectemp, Complaints, setOpen }) => {
+
+    const [cmploading, setCmpLoading] = useState(false);
+    const [fetchcomplaint, setFetchComplaint] = useState(false);
+
+    // filtering item to insert if the item selected for complaint don't already Checked
+    const DamageItemtoInsert = DamagedItem?.filter((item) => item?.isAlreadyChecked === 0);
 
 
+    // const isAnyComplaintRectified = Complaints?.filter(val => val?.compalint_status === 2);
+
+
+    // for tracking how many of the Damaged Items are not  Registerd Yet
+    const unmatchedItems = DamagedItem?.filter(item =>
+        !Complaints?.some(val => val?.complaint_desc === item?.fb_hk_rm_cklist_name)
+    );
 
 
     // function for regirstering house keeping complaints
     const handlehousekeepingcomplaintregistration = useCallback(async () => {
-
-        if (selectemp?.length === 0) return warningNofity("Select Employee Before Registering");
-
-        const postdataforcomplaint = {
-            complaint_request_slno: 1,
-            compalint_date: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
-            cm_location: BedDetail?.fb_bed_slno,
-            cm_assets: DamagedItem,
-            complaint_deptslno: DepartmentDetail?.[0]?.em_department,
-            asset_status: 1,
-            complaint_status: 1,
-            assigned_employee: selectemp,
-            create_user: Number(employeeID())
-        };
-
+        setCmpLoading(true)
         try {
+
+            if (unmatchedItems?.length === 0) {
+                warningNofity("Select a complaint to register");
+                return;
+            }
+
+            if (!selectemp?.length) {
+                warningNofity("Select Employee Before Registering");
+                return;
+            };
+            const postdataforcomplaint = {
+                complaint_request_slno: 1,
+                compalint_date: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
+                cm_location: BedDetail?.fb_bed_slno,
+                cm_assets: DamagedItem,
+                complaint_deptslno: DepartmentDetail?.[0]?.em_department,
+                asset_status: 1,
+                complaint_status: 1,
+                assigned_employee: selectemp,
+                create_user: Number(employeeID())
+            };
+
+            const payload = {
+                data: DamageItemtoInsert,
+                fb_bed_slno: BedDetail?.fb_bed_slno,
+                fb_hk_bd_status: (BedDetail?.fb_hk_check_status === null || BedDetail?.fb_hk_check_status === undefined)
+                    ? 1 : BedDetail?.fb_hk_check_status,
+                fb_hk_emp_assign: selectemp
+            };
+
+            if (DamageItemtoInsert?.length > 0) {
+                const response = await axiosApi.post('/feedback/inserthkbeddetail', payload);
+                const { success } = response.data;
+                if (success !== 2) return warningNofity("Error in Inserting Data")
+            };
+
             const complaintResponse = await axiosApi.post('/feedback/hkcmpreg', postdataforcomplaint);
             if (complaintResponse?.data?.success !== 2) {
                 return warningNofity("Error in Inserting Complaint");
-            }
+            };
+
             succesNofity("Complaint Registered Successfully");
+            // setFetchComplaint(true)
         } catch (error) {
             warningNofity("Error in Inserting Data")
-        }
-    }, [DamagedItem, selectemp, BedDetail, DepartmentDetail]);
+        } finally {
+            setCmpLoading(false)
+            // setFetchComplaint(false)
 
-    // complaintregistraion
+        }
+    }, [DamagedItem, selectemp, BedDetail, DepartmentDetail, DamageItemtoInsert, setOpen, unmatchedItems]);
+
 
     return (
         <>
@@ -51,6 +93,7 @@ const HkComplaintCard = ({ DamagedItem, BedDetail, DepartmentDetail, selectemp }
             }}>
                 <Box sx={{ width: '60%' }}>
                     {DamagedItem?.map((val, index) => {
+                        const matcheddata = Complaints?.find(item => item?.complaint_desc === val?.fb_hk_rm_cklist_name);
                         return (
                             <Box key={index} sx={{
                                 minHeight: 20
@@ -77,6 +120,41 @@ const HkComplaintCard = ({ DamagedItem, BedDetail, DepartmentDetail, selectemp }
                                             }}>
                                                 {`${index + 1}. ${val?.fb_hk_rm_cklist_name?.toUpperCase()}`}
                                             </Typography>
+                                            {
+                                                matcheddata?.compalint_status === 2 ?
+                                                    <Chip
+                                                        variant='soft'
+                                                        color='success'
+                                                        size='sm'
+                                                        sx={{
+                                                            // width: 100,
+                                                            // bgcolor: 'rgba(var(--qustion-box))',
+                                                            // color: 'rgba(var(--font-primary-white))',
+                                                        }}>
+                                                        Complaint Rectifed
+                                                    </Chip> : matcheddata?.compalint_status === 1 ?
+                                                        <Chip
+                                                            variant='soft'
+                                                            size='sm'
+                                                            color='warning'
+                                                            sx={{
+                                                                // width: 100,
+                                                                // bgcolor: 'rgba(var(--qustion-box))',
+                                                                // color: 'rgba(var(--font-primary-white))',
+                                                            }}>
+                                                            Complaint Assigned
+                                                        </Chip> : <Chip
+                                                            variant='soft'
+                                                            size='sm'
+                                                            color='danger'
+                                                            sx={{
+                                                                // width: 100,
+                                                                // bgcolor: 'rgba(var(--qustion-box))',
+                                                                // color: 'rgba(var(--font-primary-white))',
+                                                            }}>
+                                                            Not Registered
+                                                        </Chip>
+                                            }
                                         </Box>
                                     </Box>
                                 </Box>
@@ -96,7 +174,7 @@ const HkComplaintCard = ({ DamagedItem, BedDetail, DepartmentDetail, selectemp }
                         justifyContent: 'end',
                     }}>
                         <Button
-                            // disabled={IsExist && filteredAssets?.length === 0}
+                            disabled={cmploading || unmatchedItems?.length === 0}
                             onClick={handlehousekeepingcomplaintregistration}
                             variant="outlined"
                             sx={{

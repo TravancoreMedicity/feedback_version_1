@@ -49,20 +49,23 @@ const OverallDetailCard = ({ name, employee, condition, remark }) => {
                         fontWeight: '600',
                         color: 'rgba(var(--font-primary-white))',
                     }}>Employee </span>: {employee}</Typography>
-                <Typography
-                    level='body-sm'
-                    sx={{
-                        fontFamily: 'var(--font-varient)',
-                        color: 'rgba(var(--font-primary-white))',
-                        fontWeight: 400,
-                        fontSize: { xs: 12, sm: 15 }
-                    }}><span style={{
-                        display: 'inline-block',
-                        width: '25%',
-                        // fontSize: '15px',
-                        fontWeight: '600',
-                        color: 'rgba(var(--font-primary-white))',
-                    }}> Condition </span>: {condition === 3 ? "Excellent" : condition === 2 ? "Good" : "Poor"} Condition</Typography>
+                {
+                    condition &&
+                    <Typography
+                        level='body-sm'
+                        sx={{
+                            fontFamily: 'var(--font-varient)',
+                            color: 'rgba(var(--font-primary-white))',
+                            fontWeight: 400,
+                            fontSize: { xs: 12, sm: 15 }
+                        }}><span style={{
+                            display: 'inline-block',
+                            width: '25%',
+                            // fontSize: '15px',
+                            fontWeight: '600',
+                            color: 'rgba(var(--font-primary-white))',
+                        }}> Condition </span>: {condition === 3 ? "Excellent" : condition === 2 ? "Good" : "Poor"} Condition</Typography>
+                }
                 <Box
                     sx={{
                         fontFamily: 'var(--font-varient)',

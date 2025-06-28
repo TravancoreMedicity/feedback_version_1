@@ -5,7 +5,7 @@ import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutSt
 import { axiosApi } from '../../Axios/Axios';
 import { employeeID, errorNofity, succesNofity, warningNofity } from '../../Constant/Constant';
 import InitialCheckComplited from '../../Components/InitialCheckComplited';
-import { gethkcheckbedDetail } from '../../Function/CommonFunction';
+import { gethkBedDetial, gethkcheckbedDetail, gethkcomplaintdetail } from '../../Function/CommonFunction';
 
 
 
@@ -15,22 +15,27 @@ const Housekeepinglist = ({ data, refetch }) => {
 
     const [open, setOpen] = useState(false);
     const [checkeditems, setCheckedItems] = useState([]);
-
+    const [complaints, setComplaints] = useState([])
+    const [hkbeddetail, setHKBedDetail] = useState([])
 
 
     // function to Open modal and also fetching the current checklist detail if any 
     const HandleCheckList = useCallback(async (data) => {
-        const { fb_hk_check_status, fb_hk_slno } = data;
+        const { fb_hk_check_status, fb_hk_slno, fb_bed_slno } = data;
         try {
             if (fb_hk_check_status === null) return
             const result = await gethkcheckbedDetail(fb_hk_slno);
-            setCheckedItems(result)
+            const complaints = await gethkcomplaintdetail(fb_bed_slno)
+            const beddetail = await gethkBedDetial(fb_bed_slno)
+            setCheckedItems(result ? result : [])
+            setComplaints(complaints ? complaints : [])
+            setHKBedDetail(beddetail ? beddetail : [])
         } catch (error) {
             warningNofity("Error in fetching data")
         } finally {
             setOpen(true)
         }
-    }, [setCheckedItems]);
+    }, [setCheckedItems, setComplaints, setHKBedDetail]);
 
     // function to undo the assinged bed when double clicking on  the bed
     const HandleRemoveAssignedBed = useCallback(async (data) => {
@@ -56,6 +61,8 @@ const Housekeepinglist = ({ data, refetch }) => {
 
 
 
+
+
     return (
         <>
             {
@@ -67,6 +74,8 @@ const Housekeepinglist = ({ data, refetch }) => {
                         setOpen={setOpen}
                         CheckedItems={checkeditems}
                         refetch={refetch}
+                        Complaints={complaints}
+                        BedDetails={hkbeddetail}
                     />
                 </Suspense>
             }

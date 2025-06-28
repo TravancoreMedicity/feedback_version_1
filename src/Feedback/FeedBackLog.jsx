@@ -1,8 +1,10 @@
 import { Box } from '@mui/joy';
 import React, { useState, useEffect } from 'react';
-import { PUBLIC_NAS_FOLDER } from '../Constant/Static';
+// import { PUBLIC_NAS_FOLDER } from '../Constant/Static';
 
-// const logo = require("../../src/assets/medilogo.png");
+
+
+const logo = require("../../src/assets/medilogo.png");
 
 const FeedBackLog = ({ CurrentCompany }) => {
 
@@ -52,7 +54,8 @@ const FeedBackLog = ({ CurrentCompany }) => {
                         transition: 'all 0.3s ease' // Smooth transition for image size
                     }}
                     // src={logo}
-                    src={`${PUBLIC_NAS_FOLDER}/logo/logo.png`}
+                    // src={`${PUBLIC_NAS_FOLDER}/logo/logo.png`}
+                    src={logo}
                     alt="A beautiful landscape."
                 />
             </Box>

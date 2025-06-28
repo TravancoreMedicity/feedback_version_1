@@ -48,7 +48,7 @@ const DischargePatient = () => {
     //Get DischargeForms
     const getDischagreFeedbackFrom = useCallback(async () => {
         const insertData = {
-            feedbackId: 26,
+            feedbackId: 8,
             FROM_DATE: dischargefromdate,
             TO_DATE: dischargetodate
         }

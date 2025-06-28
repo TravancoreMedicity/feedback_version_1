@@ -404,3 +404,12 @@ export const patientData = [
         status: "Recovered"
     }
 ];
+
+
+export const ratings = [
+  { stars: 5, value: 80 },
+  { stars: 4, value: 60 },
+  { stars: 3, value: 40 },
+  { stars: 2, value: 20 },
+  { stars: 1, value: 10 },
+];

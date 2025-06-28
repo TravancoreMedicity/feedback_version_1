@@ -2,8 +2,8 @@ import { Box, Typography } from '@mui/joy';
 import React, { memo, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserNurse } from '@fortawesome/free-solid-svg-icons';
-import { axiosApi, axiosellider } from '../../Axios/Axios';
-import { errorNofity, warningNofity } from '../../Constant/Constant';
+import { axiosApi } from '../../Axios/Axios';
+import { warningNofity } from '../../Constant/Constant';
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
 import { format } from 'date-fns';
 

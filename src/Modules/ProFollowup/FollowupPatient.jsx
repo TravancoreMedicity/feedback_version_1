@@ -6,9 +6,10 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { endOfDay, format, startOfDay } from 'date-fns';
 import { axiosApi, axiosellider } from '../../Axios/Axios';
-import { CleanHtmlString, employeeID, errorNofity, infoNofity, succesNofity, warningNofity } from '../../Constant/Constant';
+import { CleanHtmlString, employeeID, errorNofity, infoNofity, normalizeDate, succesNofity, warningNofity } from '../../Constant/Constant';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
+import SelectMelioraNursingStation from '../../Components/SelectMelioraNursingStation';
 
 
 
@@ -24,9 +25,10 @@ const FollowupPatient = () => {
     const [dischargepatients, setDischargePatients] = useState([]);
     const [ipfollowupreview, setIpFollowUpReviewe] = useState('');
     const [ipdetail, setIpDetail] = useState({});
-    const [ipscheduledate, setIpScheduleDate] = useState([])
+    const [ipscheduledate, setIpScheduleDate] = useState([]);
     const [dischargepatientforms, setDischargePatientForm] = useState([]);
-
+    const [proremarks, setProRemarks] = useState("");
+    const [postloading, setPostLoading] = useState(false); // setting loader when scheduling Date 
 
     const [reviewdate, setReviewDate] = useState(startOfDay(new Date()));
     const [fromdate, setFromDate] = useState(startOfDay(new Date()));
@@ -35,9 +37,18 @@ const FollowupPatient = () => {
     const formattedreviewdate = format(reviewdate, 'yyyy-MM-dd');
     const formattedFromDateMeliora = format(fromdate, 'yyyy-MM-dd HH:mm:ss');
     const formattedToDateMeliora = format(todate, 'yyyy-MM-dd HH:mm:ss');
-    
-    // const formattedFromDate = format(fromdate, 'dd/MM/yyyy HH:mm:ss');
-    // const formattedToDate = format(todate, 'dd/MM/yyyy HH:mm:ss');
+
+
+    const [nursingstation, setNursingStation] = useState({
+        NS_CODE: 0
+    });
+
+    const { NS_CODE } = nursingstation;
+
+    // change state
+    const handleChange = (e) => {
+        setNursingStation({ ...nursingstation, [e.target.name]: e.target.value })
+    };
 
     //Get DischargeForms
     const getDischagreFeedbackFrom = useCallback(async () => {
@@ -57,6 +68,7 @@ const FollowupPatient = () => {
     }, [formattedFromDateMeliora, formattedToDateMeliora]);
 
 
+    // getting Pro schedule date for displaying
     const getInpatientScheduleDate = useCallback(async () => {
         setLoading(true)
         try {
@@ -82,42 +94,7 @@ const FollowupPatient = () => {
 
 
 
-
-
-    // const getDischargedPatientDetails = useCallback(async () => {
-    //     setLoading(true)
-    //     if (fromdate > todate) {
-    //         warningNofity("Please Select Valid From Date")
-    //         setLoading(false)
-    //         return
-    //     }
-    //     try {
-    //         const response = await axiosellider.post('/melioraEllider/getdischargepatient', {
-    //             FROM_DATE: formattedFromDate,
-    //             TO_DATE: formattedToDate
-    //         })
-    //         const { success, data } = response?.data;
-    //         if (success === 0) {
-    //             errorNofity("Error in fetching Data");
-    //         } else if (success === 1) {
-    //             infoNofity("No Discharge patients");
-    //         } else {
-    //             setDischargePatients(data || []);
-    //             await getInpatientScheduleDate();
-    //             await getDischagreFeedbackFrom();
-    //         }
-    //     } catch (error) {
-    //         warningNofity("Error in Fetching Data...?");
-    //     }
-    //     finally {
-    //         setLoading(false)
-    //     }
-    // }, [formattedFromDate, formattedToDate, getInpatientScheduleDate, getDischagreFeedbackFrom, fromdate, todate]);
-
-
     // GET DISHCARGE PATIENT FROM fb_ipadmiss
-
-
     const getDishcargePatientDetail = useCallback(async () => {
         setLoading(true)
         if (fromdate > todate) {
@@ -128,7 +105,8 @@ const FollowupPatient = () => {
         try {
             const response = await axiosApi.post('/feedback/getdischargepatient', {
                 FROM_DATE: formattedFromDateMeliora,
-                TO_DATE: formattedToDateMeliora
+                TO_DATE: formattedToDateMeliora,
+                NS_CODE: NS_CODE
             })
             const { success, data } = response?.data;
 
@@ -136,6 +114,7 @@ const FollowupPatient = () => {
                 errorNofity("Error in fetching Data");
             } else if (success === 1) {
                 infoNofity("No Discharge patients");
+                setDischargePatients([]);
             } else {
                 setDischargePatients(data || []);
                 await getInpatientScheduleDate();
@@ -147,9 +126,10 @@ const FollowupPatient = () => {
         finally {
             setLoading(false)
         }
-    }, [fromdate, todate, formattedFromDateMeliora, formattedToDateMeliora,getInpatientScheduleDate,getDischagreFeedbackFrom])
+    }, [fromdate, todate, formattedFromDateMeliora, formattedToDateMeliora, getInpatientScheduleDate, getDischagreFeedbackFrom, NS_CODE])
 
 
+    // fetching apporiapte patient follow up for Ellider
     const handleFollowUpReview = useCallback(async (data, ipdetail) => {
         setFollowupLoading(true)
         setOpenReviewModal(true)
@@ -174,34 +154,53 @@ const FollowupPatient = () => {
 
 
 
+    // scheduling date for patients
     const handleDateScheduling = useCallback(async (data) => {
+        setPostLoading(true)
+        //checking if there is any changes
+        const isSameDate = normalizeDate(data?.ScheduleDate) === formattedreviewdate;
+        const isSameRemarks = data?.proremark === proremarks;
+
+        //prevent submission if there is no change in the date and remarks
+        if (isSameDate && isSameRemarks) {
+            infoNofity("No changes.");
+            setPostLoading(false)
+            return
+        }
+
+        // data for insertion
         const insertData = {
             ipdata: data,
             Schedule_date: formattedreviewdate,
+            fb_pro_remark: proremarks,
             create_user: employeeID()
         }
 
+        // data for updation
         const updateData = {
             slno: data?.ScheduleSlno,
             Schedule_date: formattedreviewdate,
+            fb_pro_remark: proremarks,
             edit_user: employeeID()
         }
 
-        const IsPresent = data?.isFormSubmitted;
+        const IsPresent = data?.isFormSubmitted; //  checking if form already submitted 
         const endpoint = IsPresent ? '/feedback/updateipfollowup' : '/feedback/insertipfollowup';
         const Payload = IsPresent ? updateData : insertData;
         try {
             const response = await axiosApi.post(endpoint, Payload)
             const { success } = response?.data;
-            if (success === 0) return errorNofity("Error in fetching Data");
+            if (success === 0) return errorNofity("Error in Inserting data Data");
             succesNofity(`Schedule Date ${IsPresent ? 'Updated' : 'Inserted'} Successfully!`);
             getInpatientScheduleDate()
         } catch (error) {
             warningNofity("Error in Fetching Data...?");
         } finally {
             setOpenReviewModal(false)
+            setProRemarks('')
+            setPostLoading(false)
         }
-    }, [formattedreviewdate, getInpatientScheduleDate])
+    }, [formattedreviewdate, getInpatientScheduleDate, proremarks, setPostLoading]);
 
 
 
@@ -254,7 +253,7 @@ const FollowupPatient = () => {
                                     flexWrap: 'wrap',
                                     gap: 2,
                                     alignItems: 'center',
-                                    justifyContent: { xs: 'flex-start', sm: 'flex-end' },
+                                    justifyContent: { xs: 'flex-start' },
                                     mt: { xs: 2, sm: 0 }
                                 }}>
                                 <Suspense
@@ -274,10 +273,18 @@ const FollowupPatient = () => {
                                         value={todate}
                                         maxDate={new Date()}
                                     />  </Suspense>
-                                <IconButton variant="soft" onClick={getDishcargePatientDetail}>
+
+                                <Box sx={{ width: 300, pt: 1 }}>
+                                    <SelectMelioraNursingStation
+                                        label={'Select Nursing Station'}
+                                        value={NS_CODE}
+                                        handleChange={(e, val) => handleChange({ target: { name: 'NS_CODE', value: val } })} />
+                                </Box>
+                                <IconButton sx={{ mt: 4 }} variant="soft" onClick={getDishcargePatientDetail}>
                                     <SearchTwoToneIcon />
                                 </IconButton>
                             </Box>
+
                         </Paper>
                         <Box
                             sx={{
@@ -303,6 +310,9 @@ const FollowupPatient = () => {
                                             getInpatientScheduleDate={getInpatientScheduleDate}
                                             DischargeForm={dischargepatientforms}
                                             Loading={followuploading}
+                                            proremarks={proremarks}
+                                            setProRemarks={setProRemarks}
+                                            SumbittingData={postloading}
                                         />
                                     </Suspense>
                             }

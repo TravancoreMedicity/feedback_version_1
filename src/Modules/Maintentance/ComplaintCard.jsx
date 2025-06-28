@@ -27,7 +27,6 @@ const ComplaintCard = ({
         )
     );
 
-
     const updatedAssets = filteredAssets?.map(asset => {
         if (asset?.fb_dep_id === department) {
             return {
@@ -42,13 +41,12 @@ const ComplaintCard = ({
         };
     });
 
-
-
+    // function to Register Complaints
     const handlecomplaintRegistrarion = useCallback(async (department) => {
 
         if (!assets || assets?.length === 0) return warningNofity("No assets to register complaints");
 
-        const hasAssignedEmployee = updatedAssets?.some(asset => asset.assigned_employee);
+        const hasAssignedEmployee = updatedAssets?.some(asset => asset?.assigned_employee);
         // Only check selectemp if assigned_employee exists in any asset
         if (hasAssignedEmployee && (!selectemp || selectemp.length === 0)) {
             return warningNofity("Please Select Employee");
@@ -153,7 +151,7 @@ const ComplaintCard = ({
                 <Box sx={{ display: 'flex', alignItems: 'start', justifyContent: 'end', width: '40%', }}>
                     <Box sx={{
                         px: 1,
-                        width: {xs:'100%',sm:'90%'},
+                        width: { xs: '100%', sm: '90%' },
                         height: 35,
                         my: 1,
                         display: 'flex',
@@ -165,7 +163,7 @@ const ComplaintCard = ({
                             onClick={handlecomplaintRegistrarion}
                             variant="outlined"
                             sx={{
-                                fontSize: {xs:8,sm:11},
+                                fontSize: { xs: 8, sm: 11 },
                                 fontWeight: 900,
                                 height: 35,
                                 border: '1px solid rgb(216, 75, 154, 1)',

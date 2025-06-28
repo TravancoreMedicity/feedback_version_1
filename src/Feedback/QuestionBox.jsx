@@ -1,14 +1,12 @@
 import { Box, Typography } from '@mui/joy'
 import React from 'react'
 
-const QuestionBox = ({ english, malayalam }) => {
+const QuestionBox = ({ english, malayalam, CurrentCompany }) => {
     return (
         <Box sx={{
             width: { xs: '100%', sm: '95%' },
-            // bgcolor: ` rgba(192, 196, 197, 0.2)`,
-            bgcolor: `rgba(var(--qustion-box))`,
+            bgcolor: CurrentCompany === 1 ? 'rgba(var(--qustion-box))' : 'rgba(var(---kmc-qustion-box))', // kmc or tmc background
             minHeight: 90,
-            mt: 1,
             display: 'flex',
             flexDirection: "column",
             alignItems: 'center',
@@ -21,7 +19,6 @@ const QuestionBox = ({ english, malayalam }) => {
                 fontSize: { xs: 15, sm: 18, md: 22, lg: 24 },
                 textAlign: 'center',
                 fontWeight: { xs: 500, sm: 400 },
-                // color: " rgba(65, 68, 68, 0.64)",
                 color: 'rgba(var(--font-primary-white))',
                 fontFamily: "Bahnschrift"
             }}>{english}</Typography>
@@ -29,7 +26,6 @@ const QuestionBox = ({ english, malayalam }) => {
                 fontSize: { xs: 12, sm: 14, md: 15, lg: 17 },
                 textAlign: 'center',
                 fontWeight: { xs: 500, sm: 500 },
-                // color: " rgba(65, 68, 68, 0.64)",
                 color: 'rgba(var(--font-primary-white))',
                 fontFamily: "Bahnschrift"
             }}>{malayalam}</Typography>

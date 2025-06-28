@@ -3,10 +3,12 @@ import React, { lazy, memo } from 'react';
 
 const GoodBadSelector = lazy(() => import('../../Components/GoodBadSelector'));
 
-const HkChecklistCard = ({ item, handleChange }) => {
+const HkChecklistCard = ({ ChecklistItem, handleChange }) => {
+
+
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, px: 1, }}>
-            {item?.map((item, index) => {
+            {ChecklistItem?.map((item, index) => {
                 return (
                     <Box
                         key={index}
@@ -31,15 +33,18 @@ const HkChecklistCard = ({ item, handleChange }) => {
                                     fontFamily: 'var(--font-varient)',
                                     color: 'rgba(var(--font-primary-white))',
                                     fontWeight: 600,
-                                    fontSize: {xs:10,sm:14}
+                                    fontSize: { xs: 10, sm: 14 }
                                 }}>
                                 {item?.fb_hk_rm_cklist_name?.toUpperCase()}
                             </Typography>
                         </Box>
                         <Box sx={{ width: '50%', display: 'flex', alignItems: 'center', gap: 1, justifyContent: "center" }} >
                             <GoodBadSelector
+                                value={item?.ispresent}
+                                isexist={item?.ispresent === 1 && item?.isAlreadyChecked !== 0}
+                                AlreadyChecked={item?.isStatus && item?.isAlreadyChecked !== 0}
                                 handleChangeChecked={(value) =>
-                                    handleChange(item?.fb_hk_rm_cklist_name, value, 'ispresent')
+                                    handleChange(item?.fb_hk_rm_cklist_slno, value, 'ispresent')
                                 }
                             />
                         </Box>

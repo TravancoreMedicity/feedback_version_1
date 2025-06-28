@@ -6,7 +6,7 @@ import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDiss
 import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
 import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
 
-const ChooseEmoji = ({ questionid, value, hanldeuseranswers }) => {
+const ChooseEmoji = ({ questionid, value, hanldeuseranswers, CurrentCompany }) => {
 
     const [selected, setSelected] = useState('')
     const resultObject = value != null && value !== undefined
@@ -29,13 +29,18 @@ const ChooseEmoji = ({ questionid, value, hanldeuseranswers }) => {
                             key={index}
                             sx={{
                                 cursor: 'pointer',
-                                color: selected === key ? '#512A7D' : '#CC488F'
+                                color: selected === key &&
+                                    CurrentCompany === 1 ? '#512A7D' : selected === key && CurrentCompany === 2
+                                    ? "#1e88e5" : '#CC488F'
                             }}
                             onClick={() => handleEmogjiSelection(key, questionid, description)}
                         >
                             <Tooltip title={description}>
                                 <Box sx={{
-                                    filter: selected === key ? `drop-shadow(0px 0px 15px rgba(156, 215, 255, 0.7))` : '',
+                                    filter: selected === key &&
+                                        CurrentCompany === 1 ?
+                                        `drop-shadow(0px 0px 15px rgba(156, 215, 255, 0.7))` :
+                                        'drop-shadow(0px 0px 15px rgba(76, 147, 255, 0.43))',
                                     bgcolor: selected === key ? 'white' : '',
                                     borderRadius: '50%',
                                     p: { xs: 0.5, sm: 1 },

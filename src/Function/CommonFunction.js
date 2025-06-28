@@ -320,6 +320,16 @@ export const FeedbackDetailForDisplay = async (value) => {
 }
 
 
+export const fetchCurrentCompany = async () => {
+    return axiosApi.get('/feedback/getcurrentCompany').then((res) => {
+        const { success, data } = res.data;
+        if (success === 2) {
+            return data
+        }
+    })
+}
+
+
 export const getalluserfeedbackAnswers = async (date) => {
     return axiosApi.post('/feedback/getalluserfeedback', {
         current_date: date
@@ -343,7 +353,29 @@ export const getallFeedBackCount = async (id) => {
 }
 
 
-///
+export const gettotalstarCount = async (id) => {
+    return axiosApi.get(`/feedback/getstarcount`).then((res) => {
+        const { success, data } = res.data;
+        if (success === 2) {
+            return data ? data : []
+        } else {
+            return []
+        }
+    })
+}
+
+
+export const getCategoryCountDetail = async (id) => {
+    return axiosApi.get(`/feedback/getcategorycount`).then((res) => {
+        const { success, data } = res.data;
+        if (success === 2) {
+            return data ? data : []
+        } else {
+            return []
+        }
+    })
+}
+
 
 export const getDepartmentSection = async (id) => {
     return axiosApi.get(`/feedback/deparmentsec/${id}`).then((res) => {
@@ -365,6 +397,17 @@ export const getAllhkAssignedBed = async (id) => {
 }
 
 
+export const gethkcheckbedDetail = async (slno) => {
+    try {
+        const res = await axiosApi.post('/feedback/gethkcheckdtl', { fb_hk_slno: slno });
+        const { data, success } = res.data;
+        return success === 2 ? data || [] : [];
+    } catch (error) {
+        console.log("Error fetching menu:", error);
+        return []; // Return empty array on error
+    }
+}
+
 export const getdepassetonly = async (id) => {
     return axiosApi.get(`/feedback/getdepassetonly/${id}`).then((res) => {
         const { success, data } = res.data;
@@ -377,6 +420,18 @@ export const getdepassetonly = async (id) => {
 
 export const getallNurseStation = async () => {
     return axiosellider.get('/melioraEllider/nurse').then((res) => {
+        const { success, data } = res.data;
+        if (success === 1) return []
+        if (success === 2) {
+            return data ? data : []
+        }
+    })
+}
+
+
+
+export const getallNurseStationMeliora = async () => {
+    return axiosApi.get('/feedback/nurse').then((res) => {
         const { success, data } = res.data;
         if (success === 1) return []
         if (success === 2) {

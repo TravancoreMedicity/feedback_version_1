@@ -18,7 +18,8 @@ const AnswerComponentSelect = ({
     mobilevalidation,
     setMobileNumber,
     hanldecomponent,
-    fbencodedId
+    fbencodedId,
+    CurrentCompany
 }) => {
 
     const [textareavalue, setTextAreaValue] = useState("");
@@ -75,7 +76,7 @@ const AnswerComponentSelect = ({
                                         width: '100%',
                                         minHeight: 100,
                                         backgroundColor: "rgba(var(--bg-card))",
-                                         color: 'rgba(var(--font-primary-white))',
+                                        color: 'rgba(var(--font-primary-white))',
                                         mb: 1,
                                         border: '1px solid #CC488F',
                                         '&:focus': {
@@ -104,6 +105,7 @@ const AnswerComponentSelect = ({
                     <>
                         <Suspense fallback={<EmojiSkeleton />}>
                             <ChooseEmoji
+                                CurrentCompany={CurrentCompany}
                                 questionid={questionid}
                                 value={answer}
                                 hanldeuseranswers={hanldeuseranswers}

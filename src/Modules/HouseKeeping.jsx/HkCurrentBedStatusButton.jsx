@@ -1,5 +1,5 @@
 import { Box } from '@mui/joy';
-import React, { memo, useCallback } from 'react';
+import React, { memo, useCallback, useEffect } from 'react';
 import Button from '@mui/joy/Button';
 import PauseCircleFilledTwoToneIcon from '@mui/icons-material/PauseCircleFilledTwoTone';
 import FiberNewTwoToneIcon from '@mui/icons-material/FiberNewTwoTone';
@@ -7,8 +7,12 @@ import FiberNewTwoToneIcon from '@mui/icons-material/FiberNewTwoTone';
 const HkCurrentBedStatusButton = ({
     remarks,
     activeButton,
-    setTotalDetail
+    setTotalDetail,
+    disable
 }) => {
+
+
+
 
     const handleButtonClick = useCallback((buttonName) => {
         setTotalDetail((prev) => ({
@@ -22,6 +26,17 @@ const HkCurrentBedStatusButton = ({
     const getIconColor = useCallback((buttonName) => {
         return activeButton === buttonName ? 'rgb(216, 75, 154, 1)' : 'inherit';
     }, [activeButton]);
+
+    // change the active button if their is any thing damaged
+    useEffect(() => {
+        if (disable && activeButton === "Cleaned") {
+            setTotalDetail((prev) => ({
+                ...prev,
+                activeButton: "Cleaning Started",
+                remarks: "" // clear remarks when switching
+            }));
+        }
+    }, [disable, activeButton, setTotalDetail]);
 
     return (
         <>
@@ -55,6 +70,7 @@ const HkCurrentBedStatusButton = ({
                     Cleaning Started
                 </Button>
                 <Button
+                    disabled={disable}
                     variant="outlined"
                     sx={{
                         width: '48%',
@@ -70,7 +86,7 @@ const HkCurrentBedStatusButton = ({
                             outline: 'none', // Remove focus outline
                         }
                     }}
-                    startDecorator={<FiberNewTwoToneIcon sx={{ color: getIconColor("Cleaned") ,fontSize: { xs: 20, sm: 25 }}} />}
+                    startDecorator={<FiberNewTwoToneIcon sx={{ color: getIconColor("Cleaned"), fontSize: { xs: 20, sm: 25 } }} />}
                     onClick={() => handleButtonClick("Cleaned")}>
                     Cleaned
                 </Button>

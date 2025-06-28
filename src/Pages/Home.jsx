@@ -10,6 +10,8 @@ import Header from "../Layouts/Header";
 import DrawerWindow from "../Layouts/DrawerWindow";
 import { useCallback } from "react";
 import { useMediaQuery } from "@mui/material";
+import { fetchCurrentCompany } from "../Function/CommonFunction";
+import { useQuery } from "@tanstack/react-query";
 
 function Home() {
 
@@ -50,7 +52,12 @@ function Home() {
   // };
 
 
-
+  //KMC OR TMC COMPANY NAME SELECTING
+  const { data: getCurrentCompany } = useQuery({
+    queryKey: ['getcurrentcompany'],
+    queryFn: () => fetchCurrentCompany(),
+    staleTime: Infinity
+  });
 
   const handleDrawerToggle = useCallback(() => {
     setDrawerWidth(drawerWidth === 0 ? 240 : 0);
@@ -65,6 +72,7 @@ function Home() {
 
       {/* TOP APPLICATION BAR START HERE  */}
       <Header
+        CurrentCompany={getCurrentCompany?.[0]?.company_slno}
         handlepopoveClose={handlepopoveClose}
         handleindicator={handleindicator}
         anchorEl={anchorEl}

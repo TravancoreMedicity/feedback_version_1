@@ -1,9 +1,8 @@
 import React, { lazy, memo, Suspense, useCallback, useEffect, useMemo, useState } from 'react';
 import Modal from '@mui/joy/Modal';
 import { useQuery } from '@tanstack/react-query';
-import { getallroomchecklist, getprobedChecklistDetail } from '../../Function/CommonFunction';
-import EngineeringTwoToneIcon from '@mui/icons-material/EngineeringTwoTone';
-import { Box, Button, ModalClose, ModalDialog, Typography } from '@mui/joy';
+import { getallroomchecklist } from '../../Function/CommonFunction';
+import { Box, Button, ModalDialog, Typography } from '@mui/joy';
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
 import { EmpauthId, succesNofity, warningNofity } from '../../Constant/Constant';
 import { axiosApi } from '../../Axios/Axios';
@@ -14,7 +13,7 @@ const BedOverallCondition = lazy(() => import('./BedOverallCondition'));
 const ProBedListCard = lazy(() => import('./ProBedListCard'));
 const OverallDetailCard = lazy(() => import('./OverallDetailCard'));
 
-const ProBedlistModal = ({ open, setOpen, data, fetchProcheckdetail }) => {
+const ProBedlistModal = ({ open, setOpen, data, fetchProcheckdetail, proCheckListDetail }) => {
 
     const [checklistItems, setChecklistItems] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -25,23 +24,17 @@ const ProBedlistModal = ({ open, setOpen, data, fetchProcheckdetail }) => {
 
     const { ovarallconditon, overallremarks } = totaldetail;
 
+    // getting housekeeping assets for Checking (eg : Fan ,Remote and Others)
     const { data: allroomchecklist } = useQuery({
         queryKey: ['roomchecklist'],
         queryFn: () => getallroomchecklist(),
     });
 
-    const { data: proCheckListDetail, refetch: fetchProcheckListDetail } = useQuery({
-        queryKey: ['checkllistdetail', data?.fb_bed_slno],
-        queryFn: () => getprobedChecklistDetail(data?.fb_bed_slno),
-        enabled: !!open && !!data?.fb_bed_slno
-    });
-
-
+    // Modal Closing 
     const HanldeModalClose = useCallback(() => {
         setOpen(false)
-        fetchProcheckListDetail()
         fetchProcheckdetail()
-    }, [fetchProcheckListDetail, fetchProcheckdetail, setOpen])
+    }, [fetchProcheckdetail, setOpen])
 
 
     const invalidItems = useMemo(() => (
@@ -82,11 +75,15 @@ const ProBedlistModal = ({ open, setOpen, data, fetchProcheckdetail }) => {
     }, [allroomchecklist, proCheckListDetail]);
 
 
+
+    // This will work initally and set the The Values coresponding to the fetched values
     useEffect(() => {
         if (items?.length > 0) {
             setChecklistItems(items);
         }
     }, [items, open]);
+
+
 
 
     const handleChange = useCallback((id, value, field) => {

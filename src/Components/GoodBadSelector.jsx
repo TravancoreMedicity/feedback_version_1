@@ -5,23 +5,25 @@ import ListItem from '@mui/joy/ListItem';
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import { Box, Typography } from '@mui/joy';
-import { infoNofity } from '../Constant/Constant';
+import { infoNofity, warningNofity } from '../Constant/Constant';
 
-const GoodBadSelector = ({ handleChangeChecked, value, completed, isexist }) => {
+const GoodBadSelector = ({ handleChangeChecked, value, completed, isexist, AlreadyChecked }) => {
 
 
   const [selected, setSelected] = useState(value === 2 ? 'Good' : value === 1 ? 'Damaged' : null);
 
   const handleSelect = useCallback((option) => {
     if (isexist) return infoNofity("Item Initally Damaged")
+    if (AlreadyChecked) return warningNofity("Item already Checked")
     if (completed) return infoNofity("Initial Checklist Completed")
     const newValue = selected === option ? null : option;
     setSelected(newValue);
+
     if (handleChangeChecked) {
       const numericValue = newValue === 'Good' ? 2 : newValue === 'Damaged' ? 1 : 0;
       handleChangeChecked(numericValue); // Pass value 2 (Good), 1 (Bad), or 0 (none)
     }
-  }, [isexist, handleChangeChecked, completed, selected]);
+  }, [isexist, handleChangeChecked, completed, selected, AlreadyChecked]);
 
   return (
     <List

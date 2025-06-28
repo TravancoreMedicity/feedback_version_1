@@ -1,4 +1,4 @@
-import React, { lazy, memo, Suspense, useCallback, useMemo, useState } from 'react';
+import React, { lazy, memo, Suspense, useCallback, useState } from 'react';
 import BookTwoToneIcon from '@mui/icons-material/BookTwoTone';
 import { Box, IconButton } from '@mui/joy';
 import { Paper } from '@mui/material';
@@ -9,7 +9,7 @@ import { axiosApi, axiosellider } from '../../Axios/Axios';
 import { CleanHtmlString, errorNofity, infoNofity, warningNofity } from '../../Constant/Constant';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
-
+import SelectMelioraNursingStation from '../../Components/SelectMelioraNursingStation';
 
 
 const ChecklistHeaders = lazy(() => import('../../Components/ChecklistHeaders'));
@@ -18,14 +18,12 @@ const DatePickerComponent = lazy(() => import('../../Components/DatePickerCompon
 
 const DischargePatient = () => {
 
-    const [openreviewmodal, setOpenReviewModal] = useState(false);
     const [openfeedbackmodal, setOpenFeedbackModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const [followuploading, setFollowupLoading] = useState(false);
     const [dischargepatients, setDischargePatients] = useState([]);
     const [dischargepatientforms, setDischargePatientForm] = useState([]);
     const [feedbackdata, setFeedbackData] = useState({});
-    const [ipdetail, setIpDetail] = useState({});
     const [ipfollowupreview, setIpFollowUpReviewe] = useState('');
     const [elliderdischargepatient, setElliderDischargePatient] = useState([]);
 
@@ -36,12 +34,16 @@ const DischargePatient = () => {
     const formattedFromDate = format(fromdate, 'yyyy-MM-dd HH:mm:ss');
     const formattedToDate = format(todate, 'yyyy-MM-dd HH:mm:ss');
 
+    const [nursingstation, setNursingStation] = useState({
+        NS_CODE: 0
+    });
 
+    const { NS_CODE } = nursingstation;
 
-    // const formattedFromDateEllider = format(fromdate, 'dd/MM/yyyy HH:mm:ss');
-    // const formattedToDateEllider = format(todate, 'dd/MM/yyyy HH:mm:ss');
-
-
+    // change state
+    const handleChange = (e) => {
+        setNursingStation({ ...nursingstation, [e.target.name]: e.target.value })
+    };
 
     //Get DischargeForms
     const getDischagreFeedbackFrom = useCallback(async () => {
@@ -60,6 +62,9 @@ const DischargePatient = () => {
         }
     }, [dischargefromdate, dischargetodate]);
 
+
+
+    //getting patient Followup and Scheduledat from Meliora who has been Discharged
     const getDischargedPatientDetailsFromMeliora = useCallback(async () => {
         setLoading(true)
         if (fromdate > todate) {
@@ -91,37 +96,6 @@ const DischargePatient = () => {
 
 
 
-    // NOT USING NOW OWNWARD
-    // const getDischargedPatientDetails = useCallback(async () => {
-    //     setLoading(true)
-    //     if (fromdate > todate) {
-    //         warningNofity("Please Select Valid From Date")
-    //         setLoading(false)
-    //         return
-    //     }
-    //     try {
-    //         const response = await axiosellider.post('/melioraEllider/getdischargepatient', {
-    //             FROM_DATE: formattedFromDateEllider,
-    //             TO_DATE: formattedToDateEllider
-    //         })
-    //         const { success, data } = response?.data;
-    //         if (success === 0) {
-    //             errorNofity("Error in fetching Data");
-    //         } else if (success === 1) {
-    //             infoNofity("No Discharge patients");
-    //         } else {
-    //             setDischargePatients(data || []);
-    //             await getDischargedPatientDetailsFromMeliora()
-    //         }
-    //     } catch (error) {
-    //         warningNofity("Error in Fetching Data...?");
-    //     }
-    //     finally {
-    //         setLoading(false)
-    //     }
-    // }, [formattedFromDateEllider, formattedToDateEllider, getDischargedPatientDetailsFromMeliora, fromdate, todate]);
-
-
     // GET DISHCARGE PATIENT FROM fb_ipadmiss
     const getDishcargePatientDetail = useCallback(async () => {
         setLoading(true)
@@ -133,13 +107,15 @@ const DischargePatient = () => {
         try {
             const response = await axiosApi.post('/feedback/getdischargepatient', {
                 FROM_DATE: formattedFromDate,
-                TO_DATE: formattedToDate
+                TO_DATE: formattedToDate,
+                NS_CODE: NS_CODE
             })
             const { success, data } = response?.data;
             if (success === 0) {
                 errorNofity("Error in fetching Data");
             } else if (success === 1) {
                 infoNofity("No Discharge patients");
+                setDischargePatients([]);
             } else {
                 setDischargePatients(data || []);
                 await getDischargedPatientDetailsFromMeliora()
@@ -150,22 +126,12 @@ const DischargePatient = () => {
         finally {
             setLoading(false)
         }
-    }, [fromdate, todate, formattedFromDate, formattedToDate, getDischargedPatientDetailsFromMeliora]);
+    }, [fromdate, todate, formattedFromDate, formattedToDate, getDischargedPatientDetailsFromMeliora, NS_CODE]);
 
 
-
-
-
-    const hanldeDischargeFeedback = useCallback((data) => {
-        setOpenFeedbackModal(true)
-        setFeedbackData(data)
-    }, [setOpenFeedbackModal, setFeedbackData]);
-
-
+    //get discharge summary followup from ellider
     const hanldOpenFollowupModal = useCallback(async (ip, data) => {
-        setIpDetail(data)
-        setOpenReviewModal(true)
-        setFollowupLoading(true)
+        setFollowupLoading(true);
         const insertdata = {
             IP_NO: ip
         }
@@ -173,21 +139,20 @@ const DischargePatient = () => {
             const result = await axiosellider.post("/melioraEllider/getipfollowup", insertdata);
             const { data, success } = result.data;
             if (success === 0) return warningNofity("Error in fetching Data");
-            const cleanData = await CleanHtmlString(data?.[0]?.DSC_DESCRIPTION)
-            setIpFollowUpReviewe(data?.length > 0 ? cleanData : 'NO PREVIOUS PRVIEW FOR THIS PARTICULAR PATIENT')
+            const cleanData = await CleanHtmlString(data?.[0]?.DSC_DESCRIPTION);
+            setIpFollowUpReviewe(data?.length > 0 ? cleanData : 'NO PREVIOUS PRVIEW FOR THIS PARTICULAR PATIENT');
         } catch (error) {
-            warningNofity("Error in fetching Data")
+            warningNofity("Error in fetching Data");
         } finally {
-            setFollowupLoading(false)
+            setFollowupLoading(false);
         }
+    }, []);
 
-    }, [])
-
-
-    const CombinedData = useMemo(() => ({
-        ...ipdetail,
-        IsOnlyView: true
-    }), [ipdetail])
+    //discharge feedback modal opening
+    const hanldeDischargeFeedback = useCallback((data) => {
+        setOpenFeedbackModal(true)
+        setFeedbackData(data)
+    }, [setOpenFeedbackModal, setFeedbackData]);
 
 
     return (
@@ -241,7 +206,7 @@ const DischargePatient = () => {
                                     flexWrap: 'wrap',
                                     gap: 2,
                                     alignItems: 'center',
-                                    justifyContent: { xs: 'flex-start', sm: 'flex-end' },
+                                    justifyContent: { xs: 'flex-start' },
                                     mt: { xs: 2, sm: 0 }
                                 }}>
                                 <Suspense
@@ -250,8 +215,7 @@ const DischargePatient = () => {
                                         maxDate={new Date(todate)}
                                         label={'From Date'}
                                         setValue={setFromDate}
-                                        value={fromdate}
-                                    />
+                                        value={fromdate} />
                                 </Suspense>
                                 <Suspense
                                     fallback={<CustomBackDropWithOutState message={"Loading"} />}>
@@ -259,12 +223,20 @@ const DischargePatient = () => {
                                         label={'To Date'}
                                         setValue={setToDate}
                                         value={todate}
-                                        maxDate={new Date()}
-                                    />  </Suspense>
-                                <IconButton variant="soft" onClick={getDishcargePatientDetail}>
+                                        maxDate={new Date()} />
+                                </Suspense>
+                                <Box sx={{ width: 300, pt: 1 }}>
+                                    <SelectMelioraNursingStation
+                                        label={'Select Nursing Station'}
+                                        value={NS_CODE}
+                                        handleChange={(e, val) => handleChange({ target: { name: 'NS_CODE', value: val } })}
+                                    />
+                                </Box>
+                                <IconButton sx={{ mt: 4 }} variant="soft" onClick={getDishcargePatientDetail}>
                                     <SearchTwoToneIcon />
                                 </IconButton>
                             </Box>
+
                         </Paper>
                         <Box
                             sx={{
@@ -273,7 +245,8 @@ const DischargePatient = () => {
                                 backgroundColor: "rgba(var(--bg-card))"
                             }}>
                             {
-                                loading ? <CustomBackDropWithOutState message={"Fetching Data...!"} /> :
+                                loading ?
+                                    <CustomBackDropWithOutState message={"Fetching Data...!"} /> :
                                     <Suspense
                                         fallback={<CustomBackDropWithOutState message={"Loading"} />}>
                                         <AccessibleTable
@@ -283,18 +256,15 @@ const DischargePatient = () => {
                                             hanldeDischargeFeedback={hanldeDischargeFeedback}
                                             ReviewDetail={ipfollowupreview}
                                             handleFollowUpReview={hanldOpenFollowupModal}
-                                            open={openreviewmodal}
-                                            setOpen={setOpenReviewModal}
-                                            InPatientDetail={CombinedData}
                                             openfeedback={openfeedbackmodal}
                                             setFeedback={setOpenFeedbackModal}
                                             feedbackData={feedbackdata}
                                             getFeedbackData={getDischagreFeedbackFrom}
-                                             Loading={followuploading}
+                                            Loading={followuploading}
+                                        // handleFetchPatientImpression={handleFetchPatientImpression}
                                         />
                                     </Suspense>
                             }
-
                         </Box>
                     </Box>
                 </Box>

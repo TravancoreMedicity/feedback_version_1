@@ -2,25 +2,44 @@ import { Box, Typography } from '@mui/joy'
 import { axiosApi } from '../../Axios/Axios';
 import { useQuery } from '@tanstack/react-query';
 import { useLocation, useParams } from 'react-router-dom';
-import { errorNofity, warningNofity } from '../../Constant/Constant';
-import { FeedbackDetailForDisplay } from '../../Function/CommonFunction';
+import { EmpauthId, errorNofity, warningNofity } from '../../Constant/Constant';
+import { FeedbackDetailForDisplay, fetchCurrentCompany } from '../../Function/CommonFunction';
 import EmojiSkeleton from '../../Feedback/Commoncomponents/ChooseEmogjiSkeleton';
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
 import QuestionBoxSkeleton from '../../Feedback/Commoncomponents/QuestionBoxSkeleton';
 import React, { memo, lazy, useState, useCallback, useEffect, useMemo, Suspense } from 'react';
+import TextComponentBox from '../../Components/TextComponentBox';
+import EditNoteTwoToneIcon from '@mui/icons-material/EditNoteTwoTone';
 
 
 
+const PatientInfoHeader = lazy(() => import('./PatientInfoHeader'));
 const FeedBackLog = lazy(() => import('../../Feedback/FeedBackLog'));
 const QuestionBox = lazy(() => import('../../Feedback/QuestionBox'));
 const SuccessPage = lazy(() => import('../../Components/SuccessPage'));
-const TextComponent = lazy(() => import('../../Feedback/Commoncomponents/TextComponent'));
-const FeedbackButton = lazy(() => import('../../Feedback/Commoncomponents/FeedbackButton'));
 const DischargeFeedback = lazy(() => import('../../Feedback/DischargeFeedback'));
+const TextComponent = lazy(() => import('../../Feedback/Commoncomponents/TextComponent'));
 const AnswerComponentSelect = lazy(() => import('../../Components/AnswerComponentSelect'));
+const FeedbackButton = lazy(() => import('../../Feedback/Commoncomponents/FeedbackButton'));
+const DischargeDetailBox = lazy(() => import('../DischargePatientFeedback/DischargeDetailBox'));
+const PatientNotRespondingRemarkCard = lazy(() => import('../DischargePatientFeedback/PatientNotRespondingRemarkCard'));
 
 
-const FeedbackForm = ({ fbencodedId, fbencodedName, fbencodepatientid, fbencodemobile, fbencodeipnum, setOpen, getFeedbackData }) => {
+const FeedbackForm = ({
+    fbencodedId,
+    fbencodedName,
+    fbencodepatientid,
+    fbencodemobile,
+    fbencodeipnum,
+    setOpen,
+    getFeedbackData,
+    PatientData,
+    ReviewDetail,
+    Relatives,
+    Children,
+    patientnotResponding,
+    PatientNotRespondingRemark
+}) => {
     const [useranswer, setUserAnswer] = useState({});
     const [issubmit, setIsSubmit] = useState(false);
     const [mobilevalidation, setMobileValidation] = useState("");
@@ -28,6 +47,7 @@ const FeedbackForm = ({ fbencodedId, fbencodedName, fbencodepatientid, fbencodem
     const [isnoclicked, setIsNoClicked] = useState({})
     const [loading, setLoading] = useState(false)
     const [defaultimpression, setDefaultImpression] = useState({}); // default question
+    const [defaultremarks, setDefaultRemarks] = useState("")
     const [formData, setFormData] = useState({
         PatientName: "",
         feedbackId: 0,
@@ -40,8 +60,7 @@ const FeedbackForm = ({ fbencodedId, fbencodedName, fbencodepatientid, fbencodem
 
 
 
-
-
+    // getting patient detail using url
     useEffect(() => {
         if (fbencodedId !== undefined) return;
         try {
@@ -67,7 +86,7 @@ const FeedbackForm = ({ fbencodedId, fbencodedName, fbencodepatientid, fbencodem
 
 
 
-    //new Changes here
+    //getting data through  props and update in the feedback
     useEffect(() => {
         if (fbencodedId === undefined) return;
         try {
@@ -89,17 +108,30 @@ const FeedbackForm = ({ fbencodedId, fbencodedName, fbencodepatientid, fbencodem
         }
     }, [fbencodedId, fbencodedName, fbencodepatientid, fbencodemobile, fbencodeipnum]);
 
+
+
+    // Based on feedback Id Fetch the Corresponding  Feedback 
     const { data: feedbackDtlDisplay } = useQuery({
         queryKey: ['fetchfbdtldispay', feedbackId],
         queryFn: () => FeedbackDetailForDisplay(feedbackId),
         enabled: feedbackId !== 0
     });
 
+    //KMC OR TMC COMPANY NAME SELECTING
+    const { data: getCurrentCompany } = useQuery({
+        queryKey: ['getcurrentcompany'],
+        queryFn: () => fetchCurrentCompany(),
+        staleTime: Infinity
+    });
+
+
     const IsComponentPresent = feedbackDtlDisplay &&
         feedbackDtlDisplay?.filter(item => item?.fb_answer_component !== null && item?.fb_answer_component !== "");
 
     const ComponentName = IsComponentPresent?.map((item) => item?.fb_answer_component);
 
+
+    // Handling User Selected answers of emogies
     const hanldeuseranswers = useCallback((question, answer) => {
         setUserAnswer((prevValues) => {
             const updatedAnswers = { ...prevValues }
@@ -113,6 +145,7 @@ const FeedbackForm = ({ fbencodedId, fbencodedName, fbencodepatientid, fbencodem
     }, []);
 
 
+    // Handling Yes or No Question Answers
     const hanldecomponent = useCallback((question, component) => {
         setIsNoClicked((prevValues) => {
             const updatedAnswers = { ...prevValues }
@@ -124,6 +157,9 @@ const FeedbackForm = ({ fbencodedId, fbencodedName, fbencodepatientid, fbencodem
             return updatedAnswers;
         });
     }, []);
+
+
+    // console.log(atob(encodedId));
 
 
     //Getting all required fields for the user Transaction to insert......!!!!!
@@ -186,12 +222,13 @@ const FeedbackForm = ({ fbencodedId, fbencodedName, fbencodepatientid, fbencodem
         fb_patient_mob: mobilenumber ? mobilenumber : null,
         fb_answers: combinedFeedbackData,
         fb_default_quest: defaultimpression ? defaultimpression : [],
-        // create_user: Number(feedbackId) === 18 ? 1 : Number(employeeID()) //confusion in this part check later
-        create_user: 1 //confusion in this part check later
-    }), [patientNo, PatientName, mobilenumber, combinedFeedbackData, feedbackId, inpatientNumber, defaultimpression])
+        fb_default_reamark: defaultremarks ? defaultremarks : '',
+        create_user: encodedId && atob(encodedId) === "18" ? 1 : Number(EmpauthId())
+    }), [patientNo, PatientName, mobilenumber, combinedFeedbackData, feedbackId, inpatientNumber, defaultimpression, encodedId, defaultremarks])
 
 
 
+    // Submit Feedback Forms
     const handlesubmit = useCallback(async () => {
         setLoading(true)
         const answerlength = Object.keys(useranswer)?.length;
@@ -242,6 +279,7 @@ const FeedbackForm = ({ fbencodedId, fbencodedName, fbencodepatientid, fbencodem
                                 setIsSubmit={setIsSubmit}
                                 feedbackId={feedbackId}
                                 getFeedbackData={getFeedbackData}
+                                PatientData={PatientData}
                             />
                         </Suspense>
                     </>
@@ -258,31 +296,48 @@ const FeedbackForm = ({ fbencodedId, fbencodedName, fbencodepatientid, fbencodem
                         m: 0,
                         p: 0
                     }}>
-                        <FeedBackLog />
+                        <FeedBackLog CurrentCompany={getCurrentCompany?.[0]?.company_slno} />
                         {
-                            PatientName && <Box sx={{
-                                width: '86%',
-                                display: 'flex',
-                                justifyContent: 'space-between',
-                                p: 1,
-                                borderRadius: 5,
-                                bgcolor: `rgba(var(--qustion-box))`,
-                            }}>
-                                {/* <Box> */}
-                                <Typography sx={{
-                                    fontFamily: 'var(--font-varient)',
-                                    color: 'rgba(var(--font-primary-white))',
-                                }} fontWeight={600} fontSize={{ xs: 8, sm: 12, md: 12, lg: 14, xl: 15 }}>PT NAME :{PatientName}</Typography>
-                                <Typography sx={{
-                                    fontFamily: 'var(--font-varient)',
-                                    color: 'rgba(var(--font-primary-white))',
-                                }} fontWeight={600} fontSize={{ xs: 8, sm: 12, md: 12, lg: 14, xl: 15 }}>IP NO :{inpatientNumber}</Typography>
-                                <Typography sx={{
-                                    fontFamily: 'var(--font-varient)',
-                                    color: 'rgba(var(--font-primary-white))',
-                                }} fontWeight={600} fontSize={{ xs: 8, sm: 12, md: 12, lg: 14, xl: 15 }}>MRD NO :{patientNo}</Typography>
+                            PatientName && feedbackId !== "26" &&
+                            <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
+                                <PatientInfoHeader
+                                    PatientName={PatientName}
+                                    inpatientNumber={inpatientNumber}
+                                    patientNo={patientNo}
+                                    getCurrentCompany={getCurrentCompany} />
+                            </Suspense>
+                        }
 
-                                {/* </Box> */}
+                        {
+                            PatientData && feedbackId === "26" && <Box sx={{
+                                width: '100%',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}>
+                                <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
+                                    <DischargeDetailBox
+                                        PatientNotRespondingRemark={PatientNotRespondingRemark}
+                                        PatientData={PatientData}
+                                        ReviewDetail={ReviewDetail}
+                                        Relatives={Relatives}
+                                        Children={Children}
+                                    />
+                                </Suspense>
+                            </Box>
+                        }
+                        {
+                            patientnotResponding && patientnotResponding?.length > 0 && feedbackId === "26" && <Box sx={{
+                                width: '100%',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}>
+                                <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
+                                    <PatientNotRespondingRemarkCard
+                                        PatientRemark={patientnotResponding}
+                                    />
+                                </Suspense>
                             </Box>
                         }
                         <Box sx={{
@@ -317,6 +372,7 @@ const FeedbackForm = ({ fbencodedId, fbencodedName, fbencodepatientid, fbencodem
                                                     <>
                                                         <Suspense fallback={<QuestionBoxSkeleton />}>
                                                             <QuestionBox
+                                                                CurrentCompany={getCurrentCompany?.[0]?.company_slno}
                                                                 english={item?.fd_qa_eng}
                                                                 malayalam={item?.fd_qa_malay}
                                                             />
@@ -326,6 +382,7 @@ const FeedbackForm = ({ fbencodedId, fbencodedName, fbencodepatientid, fbencodem
                                             }
                                             <Suspense fallback={<EmojiSkeleton />}>
                                                 <AnswerComponentSelect
+                                                    CurrentCompany={getCurrentCompany?.[0]?.company_slno}
                                                     fbencodedId={fbencodedId}
                                                     type={item?.fb_rateing_name}
                                                     answer={item?.fb_mast_qakey_data}
@@ -345,12 +402,44 @@ const FeedbackForm = ({ fbencodedId, fbencodedName, fbencodepatientid, fbencodem
                         </Box>
                         {/* this part is only for discharge feedback */}
                         {
-                            feedbackId === "8" && <Box sx={{
+                            feedbackId === "26" && <Box sx={{
                                 width: '100%',
                                 display: 'flex',
                                 alignItems: 'center',
-                                justifyContent: 'center'
+                                justifyContent: 'center',
+                                flexDirection: 'column'
                             }}>
+                                <Box sx={{ width: '86%', p: 1 }}>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', }}>
+                                        <EditNoteTwoToneIcon sx={{ color: 'rgba(var(--icon-primary))', fontSize: 28 }} />
+                                        <TextComponentBox name={`Enter Remarks`} size={14} />
+                                    </Box>
+                                    <textarea
+                                        onChange={(e) => setDefaultRemarks(e.target.value)}
+                                        value={defaultremarks}
+                                        placeholder={`Patient Remarks`}
+                                        style={{
+                                            backgroundColor: "rgba(var(--bg-card))",
+                                            width: '100%',
+                                            minHeight: '70px',
+                                            fontFamily: "var(--font-varient)",
+                                            color: 'rgba(var(--font-primary-white))',
+                                            fontSize: "14px",
+                                            borderWidth: 1,
+                                            borderRadius: 5,
+                                            borderColor: 'rgba(var(--border-primary))',
+                                            padding: '4px',
+                                            outline: 'none'
+                                        }}
+                                        onFocus={(e) => {
+                                            e.target.style.borderColor = 'rgba(var(--border-primary))';
+                                            e.target.style.outline = 'none';
+                                        }}
+                                        onBlur={(e) => {
+                                            e.target.style.borderColor = 'rgba(var(--border-primary))';
+                                        }}
+                                    />
+                                </Box>
                                 <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
                                     <DischargeFeedback
                                         defaultimpression={defaultimpression}

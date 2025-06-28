@@ -1,7 +1,43 @@
 import { Box, Button, Typography } from '@mui/joy'
-import React, { memo } from 'react'
+import React, { memo, useCallback } from 'react'
+import { employeeID, succesNofity, warningNofity } from '../../Constant/Constant'
+import { format } from 'date-fns';
+import { axiosApi } from '../../Axios/Axios';
 
-const HkComplaintCard = ({ items }) => {
+const HkComplaintCard = ({ DamagedItem, BedDetail, DepartmentDetail, selectemp }) => {
+
+
+
+
+    // function for regirstering house keeping complaints
+    const handlehousekeepingcomplaintregistration = useCallback(async () => {
+
+        if (selectemp?.length === 0) return warningNofity("Select Employee Before Registering");
+
+        const postdataforcomplaint = {
+            complaint_request_slno: 1,
+            compalint_date: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
+            cm_location: BedDetail?.fb_bed_slno,
+            cm_assets: DamagedItem,
+            complaint_deptslno: DepartmentDetail?.[0]?.em_department,
+            asset_status: 1,
+            complaint_status: 1,
+            assigned_employee: selectemp,
+            create_user: Number(employeeID())
+        };
+
+        try {
+            const complaintResponse = await axiosApi.post('/feedback/hkcmpreg', postdataforcomplaint);
+            if (complaintResponse?.data?.success !== 2) {
+                return warningNofity("Error in Inserting Complaint");
+            }
+            succesNofity("Complaint Registered Successfully");
+        } catch (error) {
+            warningNofity("Error in Inserting Data")
+        }
+    }, [DamagedItem, selectemp, BedDetail, DepartmentDetail]);
+
+    // complaintregistraion
 
     return (
         <>
@@ -14,7 +50,7 @@ const HkComplaintCard = ({ items }) => {
                 borderColor: "rgba(var(--border-primary))",
             }}>
                 <Box sx={{ width: '60%' }}>
-                    {items?.map((val, index) => {
+                    {DamagedItem?.map((val, index) => {
                         return (
                             <Box key={index} sx={{
                                 minHeight: 20
@@ -32,8 +68,7 @@ const HkComplaintCard = ({ items }) => {
                                                 alignItems: 'center',
                                                 px: 2,
                                                 justifyContent: 'space-between',
-                                            }}
-                                        >
+                                            }}>
                                             <Typography sx={{
                                                 fontFamily: 'var(--font-varient)',
                                                 color: 'rgba(var(--font-primary-white))',
@@ -62,7 +97,7 @@ const HkComplaintCard = ({ items }) => {
                     }}>
                         <Button
                             // disabled={IsExist && filteredAssets?.length === 0}
-                            // onClick={handlecomplaintRegistrarion}
+                            onClick={handlehousekeepingcomplaintregistration}
                             variant="outlined"
                             sx={{
                                 fontSize: { xs: 7, sm: 11 },

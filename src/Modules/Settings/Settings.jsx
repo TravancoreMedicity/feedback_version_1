@@ -39,7 +39,7 @@ const Settings = () => {
     { menuSlno: 16, menuName: 'Asset Map Master', menuCodeName: 'assetmapping' },
     { menuSlno: 17, menuName: 'Room CheckList Master', menuCodeName: 'roomchecklist' },
     { menuSlno: 18, menuName: 'Discharge Room Cleaning Master', menuCodeName: 'dischargeroomcleaning' },
-    { menuSlno: 19, menuName: 'Housekeeping Employee Master', menuCodeName: 'houskeepingempmaster' },
+    { menuSlno: 19, menuName: 'Housekeeping Employee Master', menuCodeName: 'houskeepingempmaster' }
   ]
 
   //The .some() method is used to check if at least one element in an array satisfies a given condition

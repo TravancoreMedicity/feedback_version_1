@@ -16,6 +16,7 @@ import CleaningServicesTwoToneIcon from '@mui/icons-material/CleaningServicesTwo
 import CollectionsBookmarkTwoToneIcon from '@mui/icons-material/CollectionsBookmarkTwoTone';
 import HeadsetMicTwoToneIcon from '@mui/icons-material/HeadsetMicTwoTone';
 import KeyboardHideTwoToneIcon from '@mui/icons-material/KeyboardHideTwoTone';
+import SummarizeTwoToneIcon from '@mui/icons-material/SummarizeTwoTone';
 
 const FloatingDrawer = ({ anchorEl, handlepopoveClose }) => {
 
@@ -27,10 +28,12 @@ const FloatingDrawer = ({ anchorEl, handlepopoveClose }) => {
     }, [navigation, handlepopoveClose]);
 
     const id = EmpauthId();
+
     const { data: allmoduleitem = [] } = useQuery({
         queryKey: ['getallmoduleitem', id],
         queryFn: () => getUserModules(id),
-        enabled: !!id
+        enabled: !!id,
+        staleTime: Infinity
     });
 
     const drawerMenu = useMemo(() => {
@@ -46,6 +49,8 @@ const FloatingDrawer = ({ anchorEl, handlepopoveClose }) => {
             { modslno: 9, menu: "CheckList", text: "/Home/Maintenace", icon: <EngineeringTwoToneIcon className='hoverClass' sx={{ width: { xs: 20, sm: 30 }, height: { xs: 20, sm: 30 }, color: "#fb6f92" }} /> },
             { modslno: 10, menu: "Call Center", text: "/Home/dischargepatient", icon: <HeadsetMicTwoToneIcon className='hoverClass' sx={{ width: { xs: 20, sm: 30 }, height: { xs: 20, sm: 30 }, color: "#ff006e" }} /> },
             { modslno: 11, menu: "PRO Followup", text: "/Home/followupratient", icon: <KeyboardHideTwoToneIcon className='hoverClass' sx={{ width: { xs: 20, sm: 30 }, height: { xs: 20, sm: 30 }, color: "#00a8e8" }} /> },
+            { modslno: 11, menu: "Reports", text: "/Home/AllReports", icon: <SummarizeTwoToneIcon className='hoverClass' sx={{ width: { xs: 20, sm: 30 }, height: { xs: 20, sm: 30 }, color: "#7b2cbf" }} /> },
+
         ]
     }, []);
 

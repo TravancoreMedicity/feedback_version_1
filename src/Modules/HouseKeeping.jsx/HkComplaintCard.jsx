@@ -1,22 +1,31 @@
 import { Box, Button, Chip, Typography } from '@mui/joy'
 import React, { memo, useCallback, useState } from 'react'
-import { employeeID, succesNofity, warningNofity } from '../../Constant/Constant'
+import { EmpauthId, succesNofity, warningNofity } from '../../Constant/Constant'
 import { format } from 'date-fns';
 import { axiosApi } from '../../Axios/Axios';
-// import { useQuery } from '@tanstack/react-query';
-// import { gethkcomplaintdetail } from '../../Function/CommonFunction';
+import AssignmentIndTwoToneIcon from '@mui/icons-material/AssignmentIndTwoTone';
+import DoneAllTwoToneIcon from '@mui/icons-material/DoneAllTwoTone';
+import VpnKeyTwoToneIcon from '@mui/icons-material/VpnKeyTwoTone';
+import ChipList from '../../Components/ChipList';
+import AssignmentTurnedInTwoToneIcon from '@mui/icons-material/AssignmentTurnedInTwoTone';
 
-const HkComplaintCard = ({ DamagedItem, BedDetail, DepartmentDetail, selectemp, Complaints, setOpen }) => {
+
+const HkComplaintCard = ({
+    DamagedItem,
+    BedDetail,
+    selectemp,
+    Complaints,
+    setOpen,
+    DepartmentDetail,
+    RefetchComplaint
+}) => {
 
     const [cmploading, setCmpLoading] = useState(false);
-    const [fetchcomplaint, setFetchComplaint] = useState(false);
 
     // filtering item to insert if the item selected for complaint don't already Checked
     const DamageItemtoInsert = DamagedItem?.filter((item) => item?.isAlreadyChecked === 0);
 
-
     // const isAnyComplaintRectified = Complaints?.filter(val => val?.compalint_status === 2);
-
 
     // for tracking how many of the Damaged Items are not  Registerd Yet
     const unmatchedItems = DamagedItem?.filter(item =>
@@ -34,27 +43,27 @@ const HkComplaintCard = ({ DamagedItem, BedDetail, DepartmentDetail, selectemp, 
                 return;
             }
 
-            if (!selectemp?.length) {
-                warningNofity("Select Employee Before Registering");
-                return;
-            };
             const postdataforcomplaint = {
                 complaint_request_slno: 1,
                 compalint_date: format(new Date(), "yyyy-MM-dd HH:mm:ss"),
-                cm_location: BedDetail?.fb_bed_slno,
-                cm_assets: DamagedItem,
-                complaint_deptslno: DepartmentDetail?.[0]?.em_department,
+                cm_location: BedDetail.rm_outlet_slno,
+                cm_assets: unmatchedItems,
+                complaint_deptslno: DepartmentDetail?.[0]?.complaint_dept_slno,
                 asset_status: 1,
-                complaint_status: 1,
-                assigned_employee: selectemp,
-                create_user: Number(employeeID())
+                complaint_status: 0,
+                complaint_typeslno: 28, // doubt in this part
+                cm_complaint_location: BedDetail?.fb_bdc_no,
+                complaint_dept_secslno: BedDetail.rm_outlet_slno,
+                create_user: Number(EmpauthId()),
+                fb_ticket: 2
             };
+
 
             const payload = {
                 data: DamageItemtoInsert,
                 fb_bed_slno: BedDetail?.fb_bed_slno,
                 fb_hk_bd_status: (BedDetail?.fb_hk_check_status === null || BedDetail?.fb_hk_check_status === undefined)
-                    ? 1 : BedDetail?.fb_hk_check_status,
+                    ? 0 : BedDetail?.fb_hk_check_status,
                 fb_hk_emp_assign: selectemp
             };
 
@@ -68,17 +77,19 @@ const HkComplaintCard = ({ DamagedItem, BedDetail, DepartmentDetail, selectemp, 
             if (complaintResponse?.data?.success !== 2) {
                 return warningNofity("Error in Inserting Complaint");
             };
-
             succesNofity("Complaint Registered Successfully");
-            // setFetchComplaint(true)
+            RefetchComplaint()
         } catch (error) {
             warningNofity("Error in Inserting Data")
         } finally {
             setCmpLoading(false)
-            // setFetchComplaint(false)
-
         }
-    }, [DamagedItem, selectemp, BedDetail, DepartmentDetail, DamageItemtoInsert, setOpen, unmatchedItems]);
+    }, [selectemp, BedDetail, DamageItemtoInsert, unmatchedItems, DepartmentDetail, RefetchComplaint]);
+
+
+
+
+
 
 
     return (
@@ -90,20 +101,27 @@ const HkComplaintCard = ({ DamagedItem, BedDetail, DepartmentDetail, selectemp, 
                 borderRadius: 5,
                 border: 0.03,
                 borderColor: "rgba(var(--border-primary))",
+                py: 0.2
             }}>
-                <Box sx={{ width: '60%' }}>
+                <Box sx={{ width: { xs: "80%", sm: '70%' } }}>
                     {DamagedItem?.map((val, index) => {
                         const matcheddata = Complaints?.find(item => item?.complaint_desc === val?.fb_hk_rm_cklist_name);
                         return (
                             <Box key={index} sx={{
-                                minHeight: 20
+                                minHeight: 25,
+                                display: { xs: 'block', sm: 'block', md: 'block', lg: 'flex' }
+
                             }}>
                                 <Box
                                     sx={{
                                         display: 'flex',
-                                        width: '100%',
+                                        mb: 0.2
                                     }}>
-                                    <Box sx={{ width: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                    <Box sx={{
+                                        overflow: 'hidden',
+                                        textOverflow: 'ellipsis',
+                                        whiteSpace: 'nowrap'
+                                    }}>
                                         <Box
                                             sx={{
                                                 height: 30,
@@ -111,6 +129,8 @@ const HkComplaintCard = ({ DamagedItem, BedDetail, DepartmentDetail, selectemp, 
                                                 alignItems: 'center',
                                                 px: 2,
                                                 justifyContent: 'space-between',
+                                                flexWrap: 'wrap',
+                                                position: 'relative'
                                             }}>
                                             <Typography sx={{
                                                 fontFamily: 'var(--font-varient)',
@@ -120,44 +140,44 @@ const HkComplaintCard = ({ DamagedItem, BedDetail, DepartmentDetail, selectemp, 
                                             }}>
                                                 {`${index + 1}. ${val?.fb_hk_rm_cklist_name?.toUpperCase()}`}
                                             </Typography>
-                                            {
-                                                matcheddata?.compalint_status === 2 ?
-                                                    <Chip
-                                                        variant='soft'
-                                                        color='success'
-                                                        size='sm'
-                                                        sx={{
-                                                            // width: 100,
-                                                            // bgcolor: 'rgba(var(--qustion-box))',
-                                                            // color: 'rgba(var(--font-primary-white))',
-                                                        }}>
-                                                        Complaint Rectifed
-                                                    </Chip> : matcheddata?.compalint_status === 1 ?
-                                                        <Chip
-                                                            variant='soft'
-                                                            size='sm'
-                                                            color='warning'
-                                                            sx={{
-                                                                // width: 100,
-                                                                // bgcolor: 'rgba(var(--qustion-box))',
-                                                                // color: 'rgba(var(--font-primary-white))',
-                                                            }}>
-                                                            Complaint Assigned
-                                                        </Chip> : <Chip
-                                                            variant='soft'
-                                                            size='sm'
-                                                            color='danger'
-                                                            sx={{
-                                                                // width: 100,
-                                                                // bgcolor: 'rgba(var(--qustion-box))',
-                                                                // color: 'rgba(var(--font-primary-white))',
-                                                            }}>
-                                                            Not Registered
-                                                        </Chip>
-                                            }
                                         </Box>
                                     </Box>
+                                    <Box sx={{ position: { xs: 'relative', sm: 'relative', md: 'relative', lg: 'absolute' }, ml: 0.2 }}>
+                                        {
+                                            matcheddata?.compalint_status === 2 ?
+                                                <DoneAllTwoToneIcon color='success' sx={{ fontSize: 15 }} /> : matcheddata?.compalint_status === 1 ?
+                                                    <DoneAllTwoToneIcon color='warning' sx={{ fontSize: 15 }} /> : ""
+                                        }
+                                    </Box>
                                 </Box>
+
+                                {
+                                    matcheddata?.Registered_user && <ChipList
+                                        label="Registered By:"
+                                        Icon={VpnKeyTwoToneIcon}
+                                        color="success"
+                                        list={[matcheddata?.Registered_user]}
+                                    />
+                                }
+
+                                {
+                                    matcheddata?.assigned_employees !== null && matcheddata?.assigned_employees !== undefined && <ChipList
+                                        label="Assigned By"
+                                        Icon={AssignmentIndTwoToneIcon}
+                                        color="warning"
+                                        list={matcheddata?.assigned_employees?.split(',')}
+                                    />
+                                }
+                                {
+                                    matcheddata?.rectified_employees !== null && matcheddata?.rectified_employees !== undefined && <ChipList
+                                        label="Rectified By"
+                                        Icon={AssignmentTurnedInTwoToneIcon}
+                                        color="danger"
+                                        list={matcheddata?.rectified_employees?.split(',')}
+                                    />
+                                }
+
+
                             </Box>
                         )
                     }
@@ -190,7 +210,9 @@ const HkComplaintCard = ({ DamagedItem, BedDetail, DepartmentDetail, selectemp, 
                                     color: 'rgb(216, 75, 154, 1)',
                                 }
                             }}>
-                            Register Complaints
+                            {
+                                cmploading && unmatchedItems?.length === 0 ? ' Registered ' : 'Register'
+                            }
                         </Button>
                     </Box>
                 </Box>

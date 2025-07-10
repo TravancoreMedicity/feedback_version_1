@@ -22,6 +22,8 @@ const BedList = ({ data, name, icon, matchdata, getallremarkrefetch, getallBloke
         overallremarks: ""
     });
 
+
+    // Fetcing  the Room asset detail
     const { data: getroomassetData } = useQuery({
         queryKey: ["roomassetdata", data?.fb_rm_room_slno],
         queryFn: () => getallRoomAssetData(data?.fb_rm_room_slno),
@@ -29,13 +31,14 @@ const BedList = ({ data, name, icon, matchdata, getallremarkrefetch, getallBloke
         staleTime: Infinity
     });
 
-    //STATIC ASSET DATA
+    // Grouping the fetched asset to theri corresponding dapartments
     const groupedByDepid = getroomassetData?.reduce((acc, item) => {
         acc[item?.fb_complaint_dep] = [...(acc[item?.fb_complaint_dep] || []), item];
         return acc;
     }, {});
 
 
+    // fetching the complaintt department
     const { data: complaintDep } = useQuery({
         queryKey: ["complaintdetail"],
         queryFn: () => getAllComplaintDetail(),
@@ -43,13 +46,13 @@ const BedList = ({ data, name, icon, matchdata, getallremarkrefetch, getallBloke
         staleTime: Infinity
     });
 
+
+
     //Combining Asset with their Corresponding Department
     const combinedData = useMemo(() => {
-
         if (!complaintDep || !groupedByDepid) {
             return [];
         }
-
         return complaintDep?.map(department => {
             const departmentSlno = department?.complaint_dept_slno;
             const matchingAssets = groupedByDepid[departmentSlno] || [];
@@ -68,6 +71,7 @@ const BedList = ({ data, name, icon, matchdata, getallremarkrefetch, getallBloke
         queryFn: () => getBedRemarkDetails(data?.fb_bed_slno),
         enabled: !!open,
     });
+
 
 
     //dynamic state updations
@@ -104,7 +108,6 @@ const BedList = ({ data, name, icon, matchdata, getallremarkrefetch, getallBloke
     const handleChecklistClick = useCallback(() => {
         HandleCheckList(data?.fb_bdc_no)
     }, [HandleCheckList, data?.fb_bdc_no])
-
 
     return (
         <>
@@ -251,10 +254,13 @@ const BedList = ({ data, name, icon, matchdata, getallremarkrefetch, getallBloke
                             {matchdata && matchdata !== undefined ? (matchdata?.fb_bed_service_status === 2 ? "RENOVATION" : matchdata?.fb_bed_service_status === 1 ? 'ONHOLD' : "NOT READY") : data?.fb_bdc_occup === "N" ? "NOT READY" : ""}
                         </Typography>
                         {
-                            matchdata?.fb_bed_service_status === null &&
                             matchdata?.fb_initail_checked === "Y" &&
                             <InitialCheckComplited
-                                color={matchdata?.fb_bed_service_status === 2 ? "#c42348" : matchdata?.fb_bed_service_status === 1 ? '#ff4d6d' : "#ef3c2d"} />
+                                color={
+                                    matchdata?.fb_bed_service_status === 2 ?
+                                        "#c42348" : matchdata?.fb_bed_service_status === 1 ?
+                                            '#ff4d6d' : "#ef3c2d"
+                                } />
                         }
                     </Box>
                     <Box

@@ -11,6 +11,8 @@ import { useQuery } from '@tanstack/react-query';
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
 import { EmpauthId, employeeID, errorNofity, succesNofity, warningNofity } from '../../Constant/Constant';
 import { axiosApi } from '../../Axios/Axios';
+import NoAssignedBed from './NoAssignedBed ';
+import ErrorFallback from '../../Components/ErrorFallback ';
 
 const HkDashboard = lazy(() => import('./HkDashboard'));
 const Housekeepinglist = lazy(() => import('./Housekeepinglist'));
@@ -21,15 +23,35 @@ const HkContainer = () => {
     const [value, setValue] = useState("1");
     const id = EmpauthId()
 
-    const { data: getllBlockedBed } = useQuery({
+
+    // Fetching all blockec  bed for housekeeping
+    const {
+        data: getllBlockedBed = [],
+        isError: isBlockedBedError,
+        isSuccess: isBlockedBedSuccess,
+        error: BlockedBedError,
+        isLoading: isBlockedBedLoading,
+        refetch: fetchallBlockBed,
+    } = useQuery({
         queryKey: ["getallblockedbed"],
         queryFn: () => getAllBlockedBed()
     });
 
-    const { data: getallhkassignedbed = [], refetch: getallAssignedBed } = useQuery({
+
+
+
+    // Get all assinged bed done by the superviso
+    const {
+        data: getallhkassignedbed = [],
+        isError: isAssignedBedError,
+        isSuccess: isAssignedBedSuccess,
+        error: assignedBedError,
+        isLoading: isAssignedBedLoading,
+        refetch: getallAssignedBed,
+    } = useQuery({
         queryKey: ["getallassignedbed", id],
         queryFn: () => getAllhkAssignedBed(id),
-        enabled: !!id
+        enabled: !!id,
     });
 
 
@@ -56,6 +78,8 @@ const HkContainer = () => {
             warningNofity(error)
         }
     }, [id])
+
+
 
 
     return (
@@ -88,8 +112,7 @@ const HkContainer = () => {
                                     backgroundColor: 'rgba(var(--logo-pink))',
                                 },
                             }}
-                            className="flex justify-end items-center"
-                        >
+                            className="flex justify-end items-center">
                             <Tab
                                 icon={<PageStar color='rgba(var(--color-white))' />}
                                 label="House Keeping"
@@ -139,15 +162,31 @@ const HkContainer = () => {
                     </Box>
 
                     <TabPanel value="1" className="overflow-scroll" sx={{ p: 1 }} >
-                        {
-                            getllBlockedBed &&
-                            <HkDashboard
-                                getllBlockedBed={getllBlockedBed}
-                                assingedbed={getallhkassignedbed}
-                                HandleBedAssign={HandleBedAssign}
-                                refetch={getallAssignedBed}
+
+                        {/* showing loading screen when loading Housekkeping Bed */}
+                        {isBlockedBedLoading && <CustomBackDropWithOutState message={"Dashboard Loading..."} />}
+
+                        {/* fall back to the Error component when their is error in fethcing the house keeping bed */}
+                        {isBlockedBedError && (
+                            <ErrorFallback
+                                message="Failed to fetch Houspeeeking beds"
+                                error={BlockedBedError}
+                                onRetry={() => fetchallBlockBed()}
                             />
-                        }
+                        )}
+
+                        {/* only show bed if their is bloked bed for the housekeeping */}
+                        <Suspense fallback={<CustomBackDropWithOutState message={"Dashboard Loading..."} />}>
+                            {
+                                isBlockedBedSuccess && getllBlockedBed &&
+                                <HkDashboard
+                                    getllBlockedBed={getllBlockedBed}
+                                    assingedbed={getallhkassignedbed}
+                                    HandleBedAssign={HandleBedAssign}
+                                    refetch={getallAssignedBed}
+                                />
+                            }
+                        </Suspense>
 
                     </TabPanel>
                     <TabPanel value="2" className="overflow-scroll" sx={{ p: 1 }} >
@@ -166,44 +205,42 @@ const HkContainer = () => {
                                     width: "100%",
                                     mt: 1,
                                 }}>
+
+                                {/* showing loading screen when loading Housekkeping Assigned Beds */}
+                                {isAssignedBedLoading && <CustomBackDropWithOutState message={"Checklist Loading..."} />}
+
+                                {/* this will trigger if in the case of Error in the Fetching Assinged Bed Usequery  */}
+                                {isAssignedBedError && (
+                                    <ErrorFallback
+                                        message="Failed to fetch assigned beds"
+                                        error={assignedBedError}
+                                        onRetry={() => getallAssignedBed()}
+                                    />
+                                )}
+
+                                {/* only show this if the usquery is success and there is no assigned bed  */}
                                 {
-                                    getallhkassignedbed?.length === 0 &&
-                                    <Box sx={{
-                                        width: '100%',
-                                        height: '60vh',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        flexDirection: 'column'
-                                    }}>
-                                        <img src={nobedDetail} alt={'No bed'} style={{
-                                            objectFit: 'contain', width: 100, height: 100
-                                        }} />
-                                        <Typography sx={{
-                                            fontSize: { xs: 14, sm: 14, md: 15, lg: 17 },
-                                            fontWeight: { xs: 500, sm: 500 },
-                                            color: 'rgba(var(--font-primary-white))',
-                                            fontFamily: "Bahnschrift",
-                                            mt: 2,
-                                            mb: 0
-                                        }}>
-                                            No Assigned Bed Found
-                                        </Typography>
-                                    </Box>
+                                    isAssignedBedSuccess && getallhkassignedbed?.length === 0 &&
+                                    <NoAssignedBed img={nobedDetail} name={"No Assigned Bed Found"} />
                                 }
-                                {
-                                    getallhkassignedbed?.length > 0 && getallhkassignedbed?.map((item, index) => {
-                                        return <Box key={index}>
-                                            <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
+
+                                {/* map The assigned bed if the Query return sucess and bed is present */}
+                                <Suspense fallback={<CustomBackDropWithOutState message={"Checklist Loading..."} />}>
+                                    {
+                                        isAssignedBedSuccess && getallhkassignedbed?.length > 0 && getallhkassignedbed?.map((item, index) => {
+                                            return <Box key={index}>
                                                 <Housekeepinglist
                                                     refetch={getallAssignedBed}
                                                     data={item}
                                                     assingedbed={getallhkassignedbed}
                                                     name={"INFROMATION TECHNOLOGY"}
-                                                    icon={<CleaningServicesTwoToneIcon className='hoverClass' sx={{ width: 30, height: 30, color: 'rgba(var(--icon-primary))', }} />} />
-                                            </Suspense>
-                                        </Box>
-                                    })}
+                                                    icon={<CleaningServicesTwoToneIcon
+                                                        className='hoverClass'
+                                                        sx={{ width: 30, height: 30, color: 'rgba(var(--icon-primary))' }}
+                                                    />} />
+                                            </Box>
+                                        })}
+                                </Suspense>
                             </Box>
                         </Box>
                     </TabPanel>

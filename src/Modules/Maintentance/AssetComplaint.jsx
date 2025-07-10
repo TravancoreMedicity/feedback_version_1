@@ -19,6 +19,7 @@ const AssetComplaint = ({
     Beddata
 }) => {
 
+
     return (
         <Box sx={{
             p: 1,

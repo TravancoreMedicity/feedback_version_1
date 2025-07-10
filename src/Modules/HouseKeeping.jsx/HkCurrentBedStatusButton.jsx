@@ -8,12 +8,12 @@ const HkCurrentBedStatusButton = ({
     remarks,
     activeButton,
     setTotalDetail,
-    disable
+    disable,
+    FinalCheck
 }) => {
 
 
-
-
+    // handle button tooggling
     const handleButtonClick = useCallback((buttonName) => {
         setTotalDetail((prev) => ({
             ...prev,
@@ -29,14 +29,14 @@ const HkCurrentBedStatusButton = ({
 
     // change the active button if their is any thing damaged
     useEffect(() => {
-        if (disable && activeButton === "Cleaned") {
+        if (disable && activeButton === "Cleaned" && FinalCheck) {
             setTotalDetail((prev) => ({
                 ...prev,
                 activeButton: "Cleaning Started",
                 remarks: "" // clear remarks when switching
             }));
         }
-    }, [disable, activeButton, setTotalDetail]);
+    }, [disable, activeButton, setTotalDetail, FinalCheck]);
 
     return (
         <>

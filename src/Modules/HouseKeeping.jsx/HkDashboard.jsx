@@ -5,12 +5,10 @@ import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 
-
-
 const HkDashboardCards = lazy(() => import('./HkDashboardCards'));
 const HouseKeeping = lazy(() => import('./HouseKeeping'));
 
-const HkDashboard = ({ getllBlockedBed, assingedbed, HandleBedAssign,refetch }) => {
+const HkDashboard = ({ getllBlockedBed, assingedbed, HandleBedAssign, refetch }) => {
 
 
     const groupedBeds = useMemo(() => {
@@ -30,8 +28,12 @@ const HkDashboard = ({ getllBlockedBed, assingedbed, HandleBedAssign,refetch }) 
         }, {});
     }, [getllBlockedBed, assingedbed]);
 
-    const AllBeds = useMemo(() => getllBlockedBed?.length, [getllBlockedBed]);
 
+    // All beds fro cleaning counts
+    const AllBeds = useMemo(() => getllBlockedBed?.length, [getllBlockedBed]);
+    const AllassignedBeds = useMemo(() => assingedbed?.length, [assingedbed]);
+    const TotalPendingBeds = useMemo(() => Object.values(groupedBeds)?.reduce((total, wardBeds) => total + wardBeds?.length, 0), [groupedBeds]);
+    const ToatlOnProcessBeds = useMemo(() => assingedbed?.filter(item => [0, 1].includes(item?.fb_hk_check_status))?.length, [assingedbed]);
 
     return (
         <Box
@@ -44,12 +46,12 @@ const HkDashboard = ({ getllBlockedBed, assingedbed, HandleBedAssign,refetch }) 
             <Box sx={{ display: 'flex', flexWrap: 'wrap', width: '100%' }}>
                 {[
                     { name: 'ALL', code: AllBeds, icon: <ReceiptLongIcon className='hoverClass' sx={{ width: 30, height: 30, color: 'rgba(var(--icon-primary))', }} /> },
-                    { name: 'PENDING', code: 25, icon: <PendingActionsIcon className='hoverClass' sx={{ width: 30, height: 30, color: 'rgba(var(--icon-primary))', }} /> },
-                    { name: 'COMPLETED', code: 35, icon: <AssignmentTurnedInIcon className='hoverClass' sx={{ width: 30, height: 30, color: 'rgba(var(--icon-primary))', }} /> },
-                    { name: 'PROCESSING', code: 40, icon: <PlaylistAddIcon className='hoverClass' sx={{ width: 30, height: 30, color: 'rgba(var(--icon-primary))', }} /> },
+                    { name: 'ASSIGNED', code: AllassignedBeds, icon: <PendingActionsIcon className='hoverClass' sx={{ width: 30, height: 30, color: 'rgba(var(--icon-primary))', }} /> },
+                    { name: 'PENDING', code: TotalPendingBeds, icon: <AssignmentTurnedInIcon className='hoverClass' sx={{ width: 30, height: 30, color: 'rgba(var(--icon-primary))', }} /> },
+                    { name: 'PROCESSING', code: ToatlOnProcessBeds, icon: <PlaylistAddIcon className='hoverClass' sx={{ width: 30, height: 30, color: 'rgba(var(--icon-primary))', }} /> },
                 ].map((item) => (
                     <HkDashboardCards
-                        key={item?.code}
+                        key={item?.name}
                         count={item?.code}
                         data={[]} // You might want to pass actual data here later
                         name={item?.name}

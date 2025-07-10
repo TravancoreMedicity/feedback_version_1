@@ -7,6 +7,7 @@ import { Box, Button, ModalDialog, Typography } from '@mui/joy';
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
 import { getDepartmentEmployee, gethkcomplaintdetail, getllhkroomChecklist, getLoggedEmpDetail } from '../../Function/CommonFunction';
 import { axiosApi } from '../../Axios/Axios';
+import HkComplaintRectificationCard from './HkComplaintRectificationCard';
 
 
 const HkChecklistCard = lazy(() => import('./HkChecklistCard'));
@@ -29,6 +30,8 @@ const HouseKeepingBedlistModal = ({ open, data, setOpen, CheckedItems, refetch, 
     });
 
     const { activeButton, remarks } = totaldetail;
+    // This Ticket Id is for getting the Complaint Registerd Through Housekeeping
+    const HkTicketId = 2;
 
     // Modal closing
     const HanldeModalClose = useCallback(() => {
@@ -56,7 +59,7 @@ const HouseKeepingBedlistModal = ({ open, data, setOpen, CheckedItems, refetch, 
 
 
     // selecting the current employee deparment
-    const departmentSection = useMemo(() => getlogempdetail?.[0]?.em_dept_section, [getlogempdetail]);
+    const departmentSection = useMemo(() => getlogempdetail?.[0]?.complaint_dept_slno, [getlogempdetail]);
 
     //fetching departemployee
     const { data: departmentemp } = useQuery({
@@ -65,6 +68,14 @@ const HouseKeepingBedlistModal = ({ open, data, setOpen, CheckedItems, refetch, 
         enabled: !!departmentSection,
     });
 
+
+    // Fetching Housekeeping Complaints
+    const { data: getBedComplaints = [], refetch: FetchBedComplaints } = useQuery({
+        queryKey: ["gethkcomplaints", data?.fb_bdc_no, departmentSection, HkTicketId],
+        queryFn: () => gethkcomplaintdetail(data?.fb_bdc_no, departmentSection, HkTicketId),
+        enabled: !!open && !!getlogempdetail && !!HkTicketId,
+        staleTime: Infinity
+    });
 
 
     // handle the Good Bad selectors (switch)
@@ -115,6 +126,29 @@ const HouseKeepingBedlistModal = ({ open, data, setOpen, CheckedItems, refetch, 
     // Filtering the item that already submit for reducing reduntency
     const DataforInsertion = checklistItems?.filter(item => item?.isAlreadyChecked === 0 && item?.ispresent !== 0);
 
+    // Complaints ready for Rectifications
+    const CmRectificationRequired = getBedComplaints?.filter(item => item?.compalint_status === 1);
+
+
+    //Checking where DamagedItem has already rectified if recitified simple exclude that form the DamageItem array
+    const IsDamgedItemAlreadyRecitified = useMemo(() => {
+        return checklistItems?.some(item => {
+            if (item?.ispresent !== 1) return false;
+
+            // If complaints exist, check if this item has a resolved complaint
+            const hasResolvedComplaint = getBedComplaints?.some(
+                comp =>
+                    comp?.compalint_status === 2 &&
+                    comp?.complaint_desc === item?.fb_hk_rm_cklist_name
+            );
+
+            // If it has a resolved complaint, exclude it
+            return !hasResolvedComplaint;
+        });
+    }, [checklistItems, getBedComplaints]);
+
+
+
 
 
     // handleing the checklist submissionz
@@ -123,6 +157,7 @@ const HouseKeepingBedlistModal = ({ open, data, setOpen, CheckedItems, refetch, 
 
         try {
 
+            if (BedDetails?.[0]?.fb_hk_check_status === 1 && CmRectificationRequired?.length > 0) return warningNofity("Rectify all Complaint Befor Sumbitting")
             if (isNotSelected) return warningNofity("Select Befor Sumbitting.");
             if (activeButton === null) return warningNofity("Please select the Current Bed Status");
             if (activeButton !== null && remarks === "") return warningNofity("Please Enter the Remarks");
@@ -148,20 +183,17 @@ const HouseKeepingBedlistModal = ({ open, data, setOpen, CheckedItems, refetch, 
             refetch()
         }
 
-    }, [isNotSelected, activeButton, remarks, empid, DataforInsertion, HanldeModalClose, data,refetch]);
-
-
-
-    // const { data: allhkcmpdtl, refetch: fetchallhkcmpdtl } = useQuery({
-    //     queryKey: ['getallhkcmpdtl'],
-    //     queryFn: () => gethkcomplaintdetail(data?.fb_bed_slno),
-    //     enabled: !!data?.fb_bed_slno
-    // })
-
-
-
-
-
+    }, [isNotSelected,
+        activeButton,
+        remarks,
+        empid,
+        DataforInsertion,
+        HanldeModalClose,
+        data,
+        refetch,
+        BedDetails,
+        CmRectificationRequired
+    ]);
 
     return (
         <Box>
@@ -203,16 +235,32 @@ const HouseKeepingBedlistModal = ({ open, data, setOpen, CheckedItems, refetch, 
                                 selectemp={empid}
                                 Complaints={Complaints}
                                 setOpen={setOpen}
+                                getBedComplaints={getBedComplaints}
+                                RefetchComplaint={FetchBedComplaints}
                             />
                         </Suspense>
                     }
                     {
-                        BedDetails && BedDetails?.length > 0 &&
+                        isDamagedItemsArray?.length > 0 &&
+                        getBedComplaints?.length > 0 &&
+                        (
+                            <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
+                                <HkComplaintRectificationCard
+                                    selectemp={empid}
+                                    name={"RECTIFY COMPLAINT"}
+                                    checkcomplaint={getBedComplaints}
+                                    RefetchComplaint={FetchBedComplaints}
+                                />
+                            </Suspense>
+                        )
+                    }
+
+                    {
+                        BedDetails && BedDetails?.length > 0 && BedDetails?.[0]?.fb_hk_check_status !== 0 &&
                         <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
                             <OverallDetailCard
                                 name={"CHECKLIST DETAIL"}
                                 employee={BedDetails?.[0]?.em_name}
-                                // condition={Number(BedDetails?.[0]?.fb_hk_bed_status) === 2 ? "Cleanded" :"Cleaning Started"}
                                 remark={BedDetails?.[0]?.fb_hk_bed_remark}
                             />
                         </Suspense>
@@ -259,10 +307,11 @@ const HouseKeepingBedlistModal = ({ open, data, setOpen, CheckedItems, refetch, 
                                 }}>Select Status</Typography>
                             <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
                                 <HkCurrentBedStatusButton
-                                    disable={isDamagedItemsArray?.length > 0}
+                                    disable={isDamagedItemsArray?.length > 0 && IsDamgedItemAlreadyRecitified}
                                     setTotalDetail={setTotalDetail}
                                     remarks={remarks}
                                     activeButton={activeButton}
+                                    FinalCheck={IsDamgedItemAlreadyRecitified}
                                 />
                             </Suspense>
                         </>
@@ -294,7 +343,10 @@ const HouseKeepingBedlistModal = ({ open, data, setOpen, CheckedItems, refetch, 
                                     color: 'rgb(216, 75, 154, 1)',
                                 },
                             }}>
-                            CheckList Completed
+                            {
+                                activeButton === "Cleaning Started" ? "Complete Initial CheckList" : (activeButton === "Cleaned" || BedDetails?.[0]?.fb_hk_check_status === 1) ? "Complete Final CheckList" : "Complete CheckList"
+                            }
+
                         </Button>
                     </Box>
                 </ModalDialog>

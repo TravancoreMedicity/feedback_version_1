@@ -1,5 +1,5 @@
 // @ts-nocheck
-import { Box, Divider, Typography } from "@mui/joy";
+import { Box, Divider, Skeleton, Typography } from "@mui/joy";
 import React, { lazy, memo, Suspense, useMemo, useState } from "react";
 import Grid from '@mui/material/Grid2'
 import DurationModel from "./DurationModel";
@@ -15,10 +15,12 @@ import {
 import { format, startOfMonth, subMonths } from "date-fns";
 import { useMediaQuery } from "@mui/material";
 import { predefinedCategories } from "../../Constant/Data";
-// import { PUBLIC_NAS_FOLDER } from "../../Constant/Static";
 import CustomBackDropWithOutState from "../../Components/CustomBackDropWithOutState";
 
-import feedbackLogo from '../../assets/FeedbackLogo.png'
+
+
+import TmcLogo from '../../assets/images/FeedbackLogo.png';
+import kmcLogo from '../../assets/images/FeedbackLogo2.png';
 
 const StarRendering = lazy(() => import('./StarRendering'));
 const FeedbackRatings = lazy(() => import('./FeedbackRatings'));
@@ -32,11 +34,6 @@ const Dashboard = () => {
   const [fetchdate, setFetchDate] = useState(format(startOfMonth(subMonths(new Date(), 1)), "yyyy-MM-dd"));
   const isMdUp = useMediaQuery('(min-width: 760px)');
 
-
-  //state to track Header image getting 404 for getting Error
-  // const [imgLoaded, setImgLoaded] = useState(false);
-  // const [imgError, setImgError] = useState(false);
-  // const imgSrc = `${PUBLIC_NAS_FOLDER}/logo/FeedbackLogo.png`;
 
   const { data: allfeedbackNames } = useQuery({
     queryKey: ['allfeedbackname'],
@@ -67,19 +64,21 @@ const Dashboard = () => {
   });
 
 
-
-
   //KMC OR TMC COMPANY NAME SELECTING
-  const { data: getCurrentCompany } = useQuery({
+  const { data: getCurrentCompany,
+    isSuccess: CurrentCompanyFetchSucess,
+    isLoading: LoadingCurrentCompany
+  } = useQuery({
     queryKey: ['getcurrentcompany'],
     queryFn: () => fetchCurrentCompany(),
     staleTime: Infinity
   });
 
+  // GETTING THE COMPANY SLNO
+  const CurrentCompany = CurrentCompanyFetchSucess && getCurrentCompany?.[0]?.company_slno;
 
-
-
-
+  // CONDITION RENDERING OF LOGO
+  const logoSrc = CurrentCompany === 1 ? TmcLogo : kmcLogo;
 
   // getCurrentCompany?.[0]?.company_slno
 
@@ -198,31 +197,35 @@ const Dashboard = () => {
           }}>
             <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: "center" }}>
 
-
-              {/* {(!imgLoaded || imgError) && (
+              {LoadingCurrentCompany || !CurrentCompany || !CurrentCompanyFetchSucess ? (
                 <Skeleton
                   variant="circular"
-                  width={40}
-                  height={40}
+                  width={60}
+                  height={60}
                   sx={{
-                    // position: 'absolute',
+                    background: 'linear-gradient(45deg, rgba(123, 31, 162, 0.59), rgba(194, 24, 92, 0.6), rgba(25, 118, 210, 0.62))',
+                    position: 'absolute',
                     top: 0,
                     left: 0,
-                    background: 'linear-gradient(45deg, rgba(123, 31, 162, 0.59), rgba(194, 24, 92, 0.6), rgba(25, 118, 210, 0.62))'
                   }}
                 />
-              )} */}
-
+              ) : (
+                <img
+                  src={logoSrc}
+                  alt="Feedback Logo"
+                  style={{
+                    height: 60
+                  }}
+                />
+              )}
+              {/* 
               <img
                 src={feedbackLogo}
                 alt="logo"
-                // onLoad={() => setImgLoaded(true)}
-                // onError={() => setImgError(true)}
                 style={{
-                  // display: imgLoaded && !imgError ? 'block' : 'none',
                   height: 60
                 }}
-              />
+              /> */}
 
               <Box sx={{
                 position: 'relative',
@@ -249,7 +252,7 @@ const Dashboard = () => {
                   }}>
                   {
                     getCurrentCompany &&
-                      getCurrentCompany?.[0]?.company_slno === 1 ? 'Travancore Medicity' : 'kerala Medical College'
+                      getCurrentCompany?.[0]?.company_slno === 1 ? 'Travancore Medicity' : 'Kerala Medical College'
                   }
 
                 </Typography>

@@ -2,7 +2,7 @@ import { Box, Typography } from '@mui/joy';
 import React, { memo, useCallback, useRef } from 'react';
 import HotelOutlinedIcon from '@mui/icons-material/HotelOutlined';
 
-const HkRoomComponent = ({ roomnumber, data, HandleBedAssign, refetch }) => {
+const HkRoomComponent = ({ roomnumber, data, HandleBedAssign, refetch, FetchAllBlockedBed }) => {
     const boxRef = useRef(null);
 
     const rand = (min, max) => Math.floor(Math.random() * (max - min) + min);
@@ -70,9 +70,10 @@ const HkRoomComponent = ({ roomnumber, data, HandleBedAssign, refetch }) => {
 
             //Refeching data after the animation completes
             refetch()
+            FetchAllBlockedBed()
 
         });
-    }, [data]);
+    }, [data, HandleBedAssign, FetchAllBlockedBed, refetch]);
 
 
     return (

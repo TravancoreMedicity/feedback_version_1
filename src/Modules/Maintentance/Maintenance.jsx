@@ -157,7 +157,7 @@ const Maintenance = () => {
 
                             <Suspense fallback={<CustomBackDropWithOutState message={"loading"} />}>
                                 {
-                                    FilterBedSearch?.map((item, index) => {
+                                    FilterBedSearch?.length > 0 ? FilterBedSearch?.map((item, index) => {
                                         const matchdata = filterbedwithremarks?.find((remark) => remark?.fb_bdc_no === item?.fb_bdc_no)
                                         return <Box key={index}>
                                             <BedList
@@ -169,7 +169,11 @@ const Maintenance = () => {
                                                     sx={{ width: 30, height: 30, color: 'rgba(var(--icon-primary))' }} />}
                                             />
                                         </Box>
-                                    })}
+                                    })
+                                        :
+                                        <NoAssignedBed img={nobedDetail} name={"No Bed Found"} />
+
+                                }
                             </Suspense>
                         </Box>
                     </Box>

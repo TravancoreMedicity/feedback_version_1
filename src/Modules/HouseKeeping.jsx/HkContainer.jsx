@@ -1,5 +1,5 @@
 import React, { useState, memo, Suspense, useCallback, lazy } from 'react';
-import { Box, Typography } from "@mui/joy";
+import { Box } from "@mui/joy";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
@@ -184,6 +184,7 @@ const HkContainer = () => {
                                     assingedbed={getallhkassignedbed}
                                     HandleBedAssign={HandleBedAssign}
                                     refetch={getallAssignedBed}
+                                    FetchAllBlockedBed={fetchallBlockBed}
                                 />
                             }
                         </Suspense>

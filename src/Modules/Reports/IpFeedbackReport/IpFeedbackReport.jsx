@@ -50,7 +50,7 @@ const IpFeedbackReport = () => {
     // Automatically call the function on first render and on date change
     useEffect(() => {
         getCommonFeedbackDetail();
-    }, [getCommonFeedbackDetail]);
+    }, []);
 
 
 
@@ -155,6 +155,7 @@ const IpFeedbackReport = () => {
                                     mt: 2
                                 }} />
                             }
+                            isShowBackIcon={true}
                             name={'IP FEEDBACK REPORT '}
                         />
                         <Paper

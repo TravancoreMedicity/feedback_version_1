@@ -50,7 +50,7 @@ const CommonFeedbackReport = () => {
     // Automatically call the function on first render and on date change
     useEffect(() => {
         getCommonFeedbackDetail();
-    }, [getCommonFeedbackDetail]);
+    }, []);
 
 
 
@@ -129,6 +129,7 @@ const CommonFeedbackReport = () => {
                                     mt: 2
                                 }} />
                             }
+                            isShowBackIcon={true}
                             name={'COMMON FEEDBACK REPORT'}
                         />
                         <Paper

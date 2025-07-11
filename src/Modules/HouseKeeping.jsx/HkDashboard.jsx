@@ -8,7 +8,7 @@ import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 const HkDashboardCards = lazy(() => import('./HkDashboardCards'));
 const HouseKeeping = lazy(() => import('./HouseKeeping'));
 
-const HkDashboard = ({ getllBlockedBed, assingedbed, HandleBedAssign, refetch }) => {
+const HkDashboard = ({ getllBlockedBed, assingedbed, HandleBedAssign, refetch ,FetchAllBlockedBed}) => {
 
 
     const groupedBeds = useMemo(() => {
@@ -62,6 +62,7 @@ const HkDashboard = ({ getllBlockedBed, assingedbed, HandleBedAssign, refetch })
                     groupedBeds={groupedBeds}
                     HandleBedAssign={HandleBedAssign}
                     refetch={refetch}
+                    FetchAllBlockedBed={FetchAllBlockedBed}
                 />
             </Box>
         </Box>

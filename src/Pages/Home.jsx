@@ -1,9 +1,9 @@
 // @ts-nocheck
-import React, { memo, useEffect, useRef } from "react";
+import React, { memo } from "react";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Toolbar from "@mui/material/Toolbar";
-import { Outlet, useNavigate, } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { useState } from "react";
 import "./Style.css";
 import Header from "../Layouts/Header";

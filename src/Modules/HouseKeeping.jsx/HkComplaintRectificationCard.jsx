@@ -10,12 +10,12 @@ import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutSt
 
 const CustomeChip = lazy(() => import('../../Components/CustomeChip'));
 
+const HkComplaintRectificationCard = ({ name, checkcomplaint, RefetchComplaint, selectemp }) => {
 
-const RectifyCard = ({ name, checkcomplaint, fetchBedComplaints, selectemp }) => {
 
-
-    // Getting Loged Employee id
     const id = EmpauthId();
+
+
 
     const HanldeComplaintRectification = useCallback(async (value, slno, status, AssignedUser, RegisterUser) => {
 
@@ -24,6 +24,8 @@ const RectifyCard = ({ name, checkcomplaint, fetchBedComplaints, selectemp }) =>
             warningNofity(`Item already assigned By  ${RegisterUser}`)
             return
         };
+
+
 
         const postData = {
             complaint_slno: slno,
@@ -39,11 +41,14 @@ const RectifyCard = ({ name, checkcomplaint, fetchBedComplaints, selectemp }) =>
             const { success } = response?.data;
             if (success !== 2) return warningNofity("Error in Rectifying complaints")
             succesNofity(value === 2 ? "Complaint Rectified" : 'Complaint Not Rectified')
-            fetchBedComplaints()
+            RefetchComplaint()
         } catch (error) {
             warningNofity("Error in Rectifing Complaint");
         }
-    }, [fetchBedComplaints, selectemp, id]);
+
+    }, [selectemp, RefetchComplaint]);
+
+
 
 
     return (
@@ -124,5 +129,8 @@ const RectifyCard = ({ name, checkcomplaint, fetchBedComplaints, selectemp }) =>
         </Box>
     );
 }
-export default memo(RectifyCard);
+export default memo(HkComplaintRectificationCard);
+
+
+
 

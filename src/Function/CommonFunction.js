@@ -1,7 +1,8 @@
 import { getYear, format } from 'date-fns'
 import { axiosApi, axiosellider } from '../Axios/Axios';
 import { warningNofity } from '../Constant/Constant';
-
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 /**
  * Pads a given number with leading zeros until it reaches the given total length.
@@ -68,6 +69,22 @@ export const getAllBlockedBed = async () => {
     if (success === 0) return warningNofity("Error in fetching Data");
     return data ? data : [];
 }
+
+// export const getAllCommonFeedbackData = async () => {
+//     const result = await axiosApi.get("/feedback/commonfbreport");
+//     const { data, success } = result.data;
+//     if (success === 0) return warningNofity("Error in fetching Data");
+//     return data ? data : [];
+// }
+
+
+export const FetchAllCheckListBed = async () => {
+    const result = await axiosApi.get("/feedback/getchecklistbed");
+    const { data, success } = result.data;
+    if (success === 0) return warningNofity("Error in fetching Data");
+    return data ? data : [];
+}
+
 
 export const getBedRemarkStatus = async () => {
     const result = await axiosApi.get("/feedback/getberremarkstatus");
@@ -422,13 +439,18 @@ export const gethkBedDetial = async (slno) => {
 
 
 // house keeeping complaints
-export const gethkcomplaintdetail = async (slno) => {
+export const gethkcomplaintdetail = async (bedslno, depsec, ticketid) => {
     try {
-        const res = await axiosApi.post('/feedback/gethkcmpdetail', { cm_location: slno });
+        const res = await axiosApi.post('/feedback/gethkcmpdetail', {
+            location: bedslno,
+            complaint_deptslno: depsec,
+            fb_ticket: ticketid
+
+        });
         const { data, success } = res.data;
         return success === 2 ? data || [] : [];
     } catch (error) {
-        console.log("Error fetching menu:", error);
+        console.log("Error fetching Housekeeping Complaints:");
         return []; // Return empty array on error
     }
 }
@@ -519,6 +541,18 @@ export const getAllComplaintDetail = async () => {
         }
     })
 }
+
+
+export const getAllcomplaintTypeDetail = async (id) => {
+    return axiosApi.get(`/feedback/getallComplaintType/${id}`).then((res) => {
+        const { success, data } = res.data;
+        if (success === 2) {
+            return data ? data : []
+        }
+    })
+}
+
+
 export const getallRoomAssetData = async (id) => {
     return axiosApi.get(`/feedback/getallroomassetdata/${id}`).then((res) => {
         const { success, data } = res.data;
@@ -543,3 +577,27 @@ export const getallemployeeright = async () => {
     if (success === 1) return warningNofity("Error in fetching Data");
     return data ? data : [];
 }
+
+
+export const DownloadToExcelFile = (data, name) => {
+    if (!data || data?.length === 0) {
+        warningNofity("No data to export");
+        return;
+    }
+
+    // Create worksheet
+    const worksheet = XLSX.utils.json_to_sheet(data);
+
+    // Create workbook and add the worksheet
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "FeedbackReport");
+
+    // Create buffer
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+
+    // Save to file
+    const fileName = `${name}_${format(new Date(), 'yyyyMMdd_HHmmss')}.xlsx`;
+    const blob = new Blob([excelBuffer], { type: "application/octet-stream" });
+
+    saveAs(blob, fileName);
+};

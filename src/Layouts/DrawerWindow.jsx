@@ -26,7 +26,8 @@ import {
     BookStack,
     UserBadgeCheck,
     MicrophoneSpeaking,
-    PcFirewall
+    PcFirewall,
+    StatsReport
 } from 'iconoir-react'
 import { EmpauthId } from "../Constant/Constant";
 import { getUserModules } from "../Function/CommonFunction";
@@ -47,7 +48,8 @@ const DrawerWindow = memo(({ drawerWidth, handleDrawerClose }) => {
     const { data: allmoduleitem = [] } = useQuery({
         queryKey: ['getallmoduleitem', id],
         queryFn: () => getUserModules(id),
-        enabled: !!id
+        enabled: !!id,
+        staleTime: Infinity
     });
 
     const drawerMenu = useMemo(() => {
@@ -56,13 +58,14 @@ const DrawerWindow = memo(({ drawerWidth, handleDrawerClose }) => {
             { modslno: 2, menu: "FeedBack Links", text: "/Home/Feedbackdetail", icon: <MessageText height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
             { modslno: 3, menu: "FeedBackCollection", text: "/Home/collectiondetail", icon: <BookStack height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
             { modslno: 4, menu: "Settings", text: "/Home/Settings", icon: <Settings height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
-            { modslno: 5, menu: "CheckList", text: "/Home/Maintenace", icon: <TaskList height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
+            { modslno: 9, menu: "CheckList", text: "/Home/Maintenace", icon: <TaskList height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
             { modslno: 6, menu: "InformationTech", text: "/Home/it", icon: <Computer height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
             { modslno: 7, menu: "BioMedical", text: "/Home/biomedical", icon: <Microscope height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
             { modslno: 8, menu: "HouseKeeping", text: "/Home/housekeeping", icon: <HospitalCircle height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
-            { modslno: 9, menu: "PRO CheckList", text: "/Home/prochecklist", icon: <UserBadgeCheck height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
+            { modslno: 5, menu: "PRO CheckList", text: "/Home/prochecklist", icon: <UserBadgeCheck height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
             { modslno: 10, menu: "Call Center", text: "/Home/dischargepatient", icon: <MicrophoneSpeaking height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
             { modslno: 11, menu: "PRO Followup", text: "/Home/followupratient", icon: <PcFirewall height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
+            { modslno: 11, menu: "Reports", text: "/Home/AllReports", icon: <StatsReport height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
         ]
     }, []);
 

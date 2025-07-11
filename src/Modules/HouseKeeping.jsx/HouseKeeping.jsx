@@ -7,7 +7,7 @@ import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutSt
 const HkRoomComponent = lazy(() => import('./HkRoomComponent'));
 const ChecklistHeaders = lazy(() => import('../../Components/ChecklistHeaders'));
 
-const HouseKeeping = ({ groupedBeds, HandleBedAssign, refetch }) => {
+const HouseKeeping = ({ groupedBeds, HandleBedAssign, refetch ,FetchAllBlockedBed}) => {
     return (
         <Box sx={{ p: 0.5, width: '100%' }}>
             <Box sx={{ mb: 2, p: 1, backgroundColor: 'rgba(var(--bg-card))' }}>
@@ -70,6 +70,7 @@ const HouseKeeping = ({ groupedBeds, HandleBedAssign, refetch }) => {
                                                     data={item}
                                                     roomnumber={item?.fb_bdc_no}
                                                     HandleBedAssign={HandleBedAssign}
+                                                    FetchAllBlockedBed={FetchAllBlockedBed}
                                                 />
                                             </Suspense>
                                         </Grid>

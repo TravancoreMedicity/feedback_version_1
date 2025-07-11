@@ -1,12 +1,14 @@
 import { Box } from '@mui/joy';
 import React, { useState, useEffect } from 'react';
-// import { PUBLIC_NAS_FOLDER } from '../Constant/Static';
 
 
-
-const logo = require("../../src/assets/medilogo.png");
+const TmcFeedbackLogo = require("../../src/assets/medilogo.png");
+const KmcFeedbackLogo = require("../../src/assets/images/kmcformlogo.png");
 
 const FeedBackLog = ({ CurrentCompany }) => {
+
+    // selecting Feedback Logo based on the current company KMC OR TMC
+    const logoSrc = CurrentCompany === 1 ? TmcFeedbackLogo : KmcFeedbackLogo;
 
     const [scrolled, setScrolled] = useState(false);
 
@@ -55,7 +57,7 @@ const FeedBackLog = ({ CurrentCompany }) => {
                     }}
                     // src={logo}
                     // src={`${PUBLIC_NAS_FOLDER}/logo/logo.png`}
-                    src={logo}
+                    src={logoSrc}
                     alt="A beautiful landscape."
                 />
             </Box>

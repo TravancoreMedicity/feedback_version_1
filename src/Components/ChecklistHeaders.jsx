@@ -4,8 +4,13 @@ import { LogOut } from 'iconoir-react'
 import { useNavigate } from 'react-router-dom'
 import { useMediaQuery } from '@mui/material'
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
+// import DatePickerIconComponent from './DatePickerIconComponent'
+import FilterComponent from './FilterComponent'
 
-const ChecklistHeaders = ({ name, icon, value, setValue, searchvalue }) => {
+const ChecklistHeaders = ({ name, icon, value, setValue, searchvalue, setSelectedFilter, isShowBackIcon }) => {
+
+    
+
 
     const isMdUp = useMediaQuery('(min-width: 960px)');
     const isSmallScreen = useMediaQuery('(min-width: 760px)');
@@ -30,13 +35,15 @@ const ChecklistHeaders = ({ name, icon, value, setValue, searchvalue }) => {
                 }}>
                 {name}
             </Typography>
+
             {
-                value === 2 && <Box sx={{
+                value === 2
+                &&
+                <Box sx={{
                     width: { xs: 150, sm: 200 },
                     height: 30,
                     position: "absolute",
                     right: showsearch && !isMdUp ? 35 : 0,
-
                 }}>
                     <Box sx={{
                         width: '100%',
@@ -73,7 +80,27 @@ const ChecklistHeaders = ({ name, icon, value, setValue, searchvalue }) => {
                     </Box>
                 </Box>
             }
-
+            {
+                setSelectedFilter && <Box sx={{
+                    color: 'rgba(var(--font-primary-white))',
+                    position: 'absolute',
+                    right: showsearch && isMdUp ? 200 : showsearch && !isMdUp ? 180 : 65,
+                    display: showsearch && !isMdUp ? 'none' : "block"
+                }}>
+                    <FilterComponent setSelectedFilter={setSelectedFilter} />
+                </Box>
+            }
+            {
+                isShowBackIcon && isMdUp && <Box
+                    sx={{
+                        right: 0,
+                        position: 'absolute',
+                        mt: 2
+                    }}
+                    onClick={() => navigate(-1)} >
+                    <LogOut className='text-iconprimary cursor-pointer mr-3' />
+                </Box>
+            }
             {
                 value !== 1 && !isMdUp &&
                 <Box

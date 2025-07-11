@@ -3,7 +3,7 @@ import Modal from '@mui/joy/Modal';
 import { axiosApi } from '../../Axios/Axios';
 import { useQuery } from '@tanstack/react-query';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
-import { Box, Button, ModalClose, ModalDialog, Typography } from '@mui/joy';
+import { Box, Button, ModalDialog, Typography } from '@mui/joy';
 import VerifiedUserTwoToneIcon from '@mui/icons-material/VerifiedUserTwoTone';
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
 import { EmpauthId, employeeID, succesNofity, warningNofity } from '../../Constant/Constant';
@@ -37,16 +37,19 @@ const BedListModal = ({ open,
 }) => {
 
 
+
     const id = EmpauthId()
     const [empid, setEmpid] = useState([]);
     const { ovarallconditon, activeButton, remarks, overallremarks } = totaldetail;
 
+    // check the query correctly
     const { data: checkcomplaint, refetch: fetchBedComplaints } = useQuery({
-        queryKey: ["checkcomplaint", data?.fb_bed_slno],
-        queryFn: () => getComplaintDetail(data?.fb_bed_slno),
+        queryKey: ["checkcomplaint", data?.fb_bdc_no],
+        queryFn: () => getComplaintDetail(data?.fb_bdc_no),
         enabled: !!open,
         staleTime: Infinity
     });
+
 
     const getIconColor = useCallback((buttonName) => {
         return ovarallconditon === buttonName ? 'rgb(216, 75, 154, 1)' : 'rgba(var(--font-primary-white))';
@@ -135,7 +138,7 @@ const BedListModal = ({ open,
         item => beddetails && !beddetails?.find(val => val?.fb_asset_name === item?.fb_asset_name
         ));
 
-    const RectifiedComplaint = checkcomplaint?.filter(item => item?.compalint_status === 2)
+    const RectifiedComplaint = checkcomplaint?.filter(item => item?.compalint_status === 2);
 
     //MODAL CLOSE 
     const HanldeModalClose = useCallback(() => {
@@ -147,10 +150,10 @@ const BedListModal = ({ open,
         setEmpid([])
     }, [setOpen, setEmpid, getallBlokedbedRefetch, getallremarkrefetch, setTotalDetail, isinitalchecked, checkcomplaint]);
 
-    const handleInitialCheckList = useCallback(async () => {
 
+    const handleInitialCheckList = useCallback(async () => {
         if (postAssetData?.length === 0) return warningNofity("Please Select the Assets")
-        if (empid.length === 0) return warningNofity("Please select the Employee");
+        if (empid?.length === 0) return warningNofity("Please select the Employee");
         const postdata = {
             fb_bed_slno: data?.fb_bed_slno,
             fb_bd_code: data?.fb_bd_code,
@@ -160,6 +163,8 @@ const BedListModal = ({ open,
             fb_initail_checked: 'Y',
             fb_initial_emp_assign: empid,
             data: postAssetData,
+            fb_bed_service_status: activeButton === "Renovation" ? 2 : activeButton === "OnHold" ? 1 : 0,
+            fb_bed_remark: remarks,
             create_user: employeeID()
         };
 
@@ -174,7 +179,7 @@ const BedListModal = ({ open,
             warningNofity("Error in Inserting Data")
         }
 
-    }, [empid, getbedremarkRefetch, data, postAssetData, setIsInitialChecked])
+    }, [empid, getbedremarkRefetch, data, postAssetData, setIsInitialChecked, activeButton, remarks])
 
 
     //CHECKLIST INSERTION
@@ -199,7 +204,6 @@ const BedListModal = ({ open,
         if (activeButton === null) return warningNofity("Please select the Bed Status");
         if (ovarallconditon === null) return warningNofity("Please select the Overall Condition");
         if (ovarallconditon !== null && overallremarks === "") return warningNofity("Please Enter the Overall Remarks");
-        if (activeButton !== null && remarks === "") return warningNofity("Please Enter the Remarks");
         if (assetData?.length !== Object.entries(condition)?.length) return warningNofity("Please Check all Assets");
         if (empid.length === 0) return warningNofity("Please select the Employee");
         if (checkcomplaint?.length > 0 && !isinitalchecked) return warningNofity("Please Complete the Intial CheckList");
@@ -218,7 +222,23 @@ const BedListModal = ({ open,
         } catch (error) {
             warningNofity("Error in Inserting Data")
         }
-    }, [activeButton, empid, remarks, ovarallconditon, getallremarkrefetch, getallBlokedbedRefetch, isinitalchecked, checkcomplaint, assetData, condition, overallremarks, data, postAssetData, setOpen, getbedremarkRefetch, RectifiedComplaint, filteredAssets]);
+    }, [activeButton,
+        empid,
+        ovarallconditon,
+        getallremarkrefetch,
+        getallBlokedbedRefetch,
+        isinitalchecked,
+        checkcomplaint,
+        assetData,
+        condition,
+        overallremarks,
+        data,
+        postAssetData,
+        setOpen,
+        getbedremarkRefetch,
+        RectifiedComplaint,
+        filteredAssets
+    ]);
 
 
     return (
@@ -290,6 +310,30 @@ const BedListModal = ({ open,
                                         />
                                     </Suspense>
                                 </Box>
+                                <>
+                                    <Typography level='body-sm'
+                                        sx={{
+                                            fontWeight: 600,
+                                            fontFamily: "var(--font-varient)",
+                                            opacity: 0.8,
+                                            paddingLeft: "0.26rem",
+                                            lineHeight: "1.0rem",
+                                            fontSize: "0.81rem",
+                                            color: 'rgba(var(--font-primary-white))',
+                                            paddingY: "0.26rem",
+                                            mt: 2,
+                                            ml: 1,
+                                            fontSize: { xs: 12, sm: 14 },
+
+                                        }}>Select Status</Typography>
+                                    <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
+                                        <MaintenanceRemarkButton
+                                            setTotalDetail={setTotalDetail}
+                                            remarks={remarks}
+                                            activeButton={activeButton}
+                                        />
+                                    </Suspense>
+                                </>
                                 {
                                     filteredAssets && filteredAssets?.length > 0 &&
                                     <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />}>
@@ -337,8 +381,6 @@ const BedListModal = ({ open,
                                         {
                                             beddetails && beddetails?.length > 0 && beddetails?.[0]?.fb_initail_checked === 'Y' ? "Initial CheckList Completed" : " Complete Initial CheckList "
                                         }
-
-
                                     </Button>
                                 </Box>
 
@@ -397,7 +439,7 @@ const BedListModal = ({ open,
                                             display: 'flex',
                                             justifyContent: 'space-between',
                                             gap: 2,
-                                            
+
                                         }}
                                     >
                                         <Button
@@ -474,7 +516,7 @@ const BedListModal = ({ open,
                                         </Box>
                                     }
                                 </Box>
-                                <>
+                                {/* <>
                                     <Typography level='body-sm'
                                         sx={{
                                             fontWeight: 600,
@@ -497,7 +539,7 @@ const BedListModal = ({ open,
                                             activeButton={activeButton}
                                         />
                                     </Suspense>
-                                </>
+                                </> */}
                                 <Box sx={{
                                     px: 1,
                                     width: '100%',

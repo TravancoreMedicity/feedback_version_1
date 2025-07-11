@@ -74,6 +74,9 @@ const UserGroupRightMaster = () => {
             fb_menu_view: 1,
             create_user: employeeID()
         }
+
+        console.log(insert_data,"dfssf");
+        
         try {
             const result = await axiosApi.post("/feedback/insertuserright", insert_data);
             const { success, message } = result.data;

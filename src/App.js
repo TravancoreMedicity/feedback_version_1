@@ -10,6 +10,9 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import CustomBackDropWithOutState from "./Components/CustomBackDropWithOutState";
 import CommonFinalFeedSkeleton from './Feedback/Commoncomponents/commonFinalFeedSkeleton';
+import AllReports from "./Modules/Reports/AllReports.jsx";
+import CommonFeedbackReport from "./Modules/Reports/CommonFeedbackReport/CommonFeedbackReport.jsx";
+import IpFeedbackReport from "./Modules/Reports/IpFeedbackReport/IpFeedbackReport.jsx";
 
 // import { socket } from "./ws/socket";
 // import Scanner from "./Components/Scanner.jsx";
@@ -282,7 +285,25 @@ const routes = createBrowserRouter([
               <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
                 <FollowupPatient />
               </Suspense>, errorElement: <ErrorElement />
-          }
+          },
+          {
+            path: "commonfbreport", element:
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
+                <CommonFeedbackReport />
+              </Suspense>, errorElement: <ErrorElement />
+          },
+          {
+            path: "ipfbreport", element:
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
+                <IpFeedbackReport />
+              </Suspense>, errorElement: <ErrorElement />
+          },
+          {
+            path: "AllReports", element:
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
+                <AllReports />
+              </Suspense>, errorElement: <ErrorElement />
+          },
         ],
       },
       {

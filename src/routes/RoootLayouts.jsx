@@ -101,11 +101,12 @@ const RoootLayouts = () => {
         warningNofity(message); // incorrected credientials
       } else if (success === 2) {
         succesNofity(message); // credential verified
-        const { empdtl_slno, login_method_allowed, em_id } = JSON.parse(userInfo);
+        const { empdtl_slno, login_method_allowed, em_id, token } = JSON.parse(userInfo);
         const authData = {
           authNo: btoa(empdtl_slno),//btoa() encodes a string into Base64 format.
           authType: btoa(login_method_allowed),
           authId: btoa(em_id),
+          token: btoa(token)
         };
         localStorage.setItem("app_auth", JSON.stringify(authData));
         setTimeout(() => {

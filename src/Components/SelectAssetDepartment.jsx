@@ -13,6 +13,7 @@ const SelectAssetDepartment = ({ handleChange, value, label }) => {
         staleTime: Infinity
     });
 
+
     const formattedData = data ?
         data?.map((item) => ({
             value: Number(item?.complaint_dept_slno),
@@ -26,7 +27,7 @@ const SelectAssetDepartment = ({ handleChange, value, label }) => {
         <CustomSelectWithLabel
             labelName={label || 'List'}
             dataCollection={formattedData}
-            values={Number(value)}
+            values={value ? value : Number(value)}
             handleChangeSelect={handleChange}
             placeholder={isLoading ? "Loading..." : "Select here ..."}
         />

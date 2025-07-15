@@ -45,12 +45,15 @@ const DrawerWindow = memo(({ drawerWidth, handleDrawerClose }) => {
 
 
     const id = EmpauthId();
+
     const { data: allmoduleitem = [] } = useQuery({
         queryKey: ['getallmoduleitem', id],
         queryFn: () => getUserModules(id),
         enabled: !!id,
         staleTime: Infinity
     });
+
+
 
     const drawerMenu = useMemo(() => {
         return [
@@ -65,7 +68,7 @@ const DrawerWindow = memo(({ drawerWidth, handleDrawerClose }) => {
             { modslno: 5, menu: "PRO CheckList", text: "/Home/prochecklist", icon: <UserBadgeCheck height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
             { modslno: 10, menu: "Call Center", text: "/Home/dischargepatient", icon: <MicrophoneSpeaking height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
             { modslno: 11, menu: "PRO Followup", text: "/Home/followupratient", icon: <PcFirewall height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
-            { modslno: 11, menu: "Reports", text: "/Home/AllReports", icon: <StatsReport height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
+            { modslno: 12, menu: "Reports", text: "/Home/AllReports", icon: <StatsReport height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
         ]
     }, []);
 

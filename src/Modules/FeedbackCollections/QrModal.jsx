@@ -4,6 +4,8 @@ import { QRCodeSVG } from 'qrcode.react';
 import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 import { Box, ModalDialog, Typography } from '@mui/joy';
 import { COMMON_FEEDBACK_LINK_URL, OUTLINK_FEEDBACK } from '../../Constant/Static';
+
+
 const QrModal = ({ open, setOpen, item, inpatientDetail, currentIndex, feedbackedexit }) => {
 
     const isFeedbackGiven = feedbackedexit?.some(fb =>

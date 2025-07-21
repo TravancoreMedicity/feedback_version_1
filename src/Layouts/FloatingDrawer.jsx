@@ -29,6 +29,7 @@ const FloatingDrawer = ({ anchorEl, handlepopoveClose }) => {
 
     const id = EmpauthId();
 
+    // Fetching all modules which has right against that....!
     const { data: allmoduleitem = [] } = useQuery({
         queryKey: ['getallmoduleitem', id],
         queryFn: () => getUserModules(id),
@@ -49,8 +50,7 @@ const FloatingDrawer = ({ anchorEl, handlepopoveClose }) => {
             { modslno: 9, menu: "CheckList", text: "/Home/Maintenace", icon: <EngineeringTwoToneIcon className='hoverClass' sx={{ width: { xs: 20, sm: 30 }, height: { xs: 20, sm: 30 }, color: "#fb6f92" }} /> },
             { modslno: 10, menu: "Call Center", text: "/Home/dischargepatient", icon: <HeadsetMicTwoToneIcon className='hoverClass' sx={{ width: { xs: 20, sm: 30 }, height: { xs: 20, sm: 30 }, color: "#ff006e" }} /> },
             { modslno: 11, menu: "PRO Followup", text: "/Home/followupratient", icon: <KeyboardHideTwoToneIcon className='hoverClass' sx={{ width: { xs: 20, sm: 30 }, height: { xs: 20, sm: 30 }, color: "#00a8e8" }} /> },
-            { modslno: 11, menu: "Reports", text: "/Home/AllReports", icon: <SummarizeTwoToneIcon className='hoverClass' sx={{ width: { xs: 20, sm: 30 }, height: { xs: 20, sm: 30 }, color: "#7b2cbf" }} /> },
-
+            { modslno: 12, menu: "Reports", text: "/Home/AllReports", icon: <SummarizeTwoToneIcon className='hoverClass' sx={{ width: { xs: 20, sm: 30 }, height: { xs: 20, sm: 30 }, color: "#7b2cbf" }} /> },
         ]
     }, []);
 
@@ -71,7 +71,8 @@ const FloatingDrawer = ({ anchorEl, handlepopoveClose }) => {
             onClose={handlepopoveClose}
             sx={{
                 mt: 5,
-                ml: { xs: 0, sm: 5 }
+                ml: { xs: 0, sm: 5 },
+
             }}
             disableEnforceFocus={true}
             anchorOrigin={{
@@ -92,9 +93,8 @@ const FloatingDrawer = ({ anchorEl, handlepopoveClose }) => {
                 border: 0.03,
                 borderColor: "rgba(var(--border-primary))",
                 minHeight: { xs: 200, sm: 300 }
-
             }}>
-                <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between' }}>
+                <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-between', height: '100%' }}>
                     <Box
                         sx={{
                             display: 'flex',
@@ -102,7 +102,7 @@ const FloatingDrawer = ({ anchorEl, handlepopoveClose }) => {
                             gap: 1,
                             px: 1,
                             mt: 2,
-                            width: '100%'
+                            height: '100%'
                         }}>
                         <Box sx={{ width: '100%' }}>
                             <Grid container spacing={2} >

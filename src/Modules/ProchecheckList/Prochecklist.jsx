@@ -4,6 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import { getDischargeEntryBed, getProcheckedbedDetail } from '../../Function/CommonFunction';
 import BookTwoToneIcon from '@mui/icons-material/BookTwoTone';
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
+import ErrorFallback from '../../Components/ErrorFallback ';
+import ChecklistCardSkeleton from '../../Components/ChecklistCardSkeleton';
 
 const ProBedlist = lazy(() => import('./ProBedlist'));
 const ChecklistHeaders = lazy(() => import('../../Components/ChecklistHeaders'));
@@ -11,17 +13,25 @@ const ChecklistHeaders = lazy(() => import('../../Components/ChecklistHeaders'))
 const Prochecklist = () => {
     const [searchQuery, setSearchQuery] = useState('');
 
-    const { data: getdischargeentrybed } = useQuery({
+    const {
+        data: getdischargeentrybed,
+        isSuccess: isSucessGetDishchargeEntrtBed,
+        isLoading: isLoadingDischargeEntryBed,
+        isError: isErrorDischargeEntryBed,
+        error: dischargebederror,
+        refetch: fetchalldischargeEntryBed
+    } = useQuery({
         queryKey: ['getdischargebed'],
         queryFn: () => getDischargeEntryBed(),
+        staleTime: Infinity
     });
 
     const UniqueDischargeBed = useMemo(() => {
-        return getdischargeentrybed?.filter(
+        return isSucessGetDishchargeEntrtBed && !isErrorDischargeEntryBed && getdischargeentrybed?.filter(
             (item, index, self) =>
                 index === self?.findIndex(t => t?.fb_bed_slno === item?.fb_bed_slno)
         );
-    }, [getdischargeentrybed]);
+    }, [getdischargeentrybed, isSucessGetDishchargeEntrtBed, isErrorDischargeEntryBed]);
 
     const { data: getproCheckBed, refetch: fetchProcheckdetail } = useQuery({
         queryKey: ['getprocheckbed'],
@@ -76,10 +86,24 @@ const Prochecklist = () => {
                             mt: 1,
                         }}>
                         {
-                            FilteredBeds?.map((item, index) => {
+                            !isSucessGetDishchargeEntrtBed && isLoadingDischargeEntryBed &&
+                            <ChecklistCardSkeleton bgcolor='rgb(239, 131, 15)' />
+                            ///<CustomBackDropWithOutState message={"Loading DichargeEntryBed...!"} />
+                        }
+                        {
+                            isErrorDischargeEntryBed && (
+                                <ErrorFallback
+                                    message="Failed to fetch assigned beds"
+                                    error={dischargebederror}
+                                    onRetry={() => fetchalldischargeEntryBed()}
+                                />
+                            )
+                        }
+                        {
+                            isSucessGetDishchargeEntrtBed && FilteredBeds?.map((item, index) => {
                                 const matchdata = getproCheckBed?.find((bed) => bed?.fb_bdc_no === item?.fb_bdc_no)
                                 return <Box key={index} >
-                                    <Suspense fallback={<CustomBackDropWithOutState message={'loading...!'} />}>
+                                    <Suspense fallback={<ChecklistCardSkeleton bgcolor='rgb(239, 131, 15)' />}>
                                         <ProBedlist
                                             fetchProcheckdetail={fetchProcheckdetail}
                                             matchdata={matchdata}

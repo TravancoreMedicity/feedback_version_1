@@ -11,16 +11,31 @@ import { PageStar } from 'iconoir-react'
 import FormatAlignJustifyIcon from '@mui/icons-material/FormatAlignJustify';
 import PlaylistPlayIcon from '@mui/icons-material/PlaylistPlay';
 import { OUTLINK_FEEDBACK } from '../../Constant/Static';
+import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
+import ErrorFallback from '../../Components/ErrorFallback ';
 
 
 const Feedback = () => {
 
   const [value, setValue] = useState("1");
 
-  const { data: allfeedbackNames } = useQuery({
+
+  // Get all Feedback From the Feedback Master (eg: Radiolody,Ip,Op ...)
+  const {
+    data: allfeedbackNames,
+    isSuccess: FetchAllFeedbackNameSucess,
+    isLoading: LoadingallFeedbackNames,
+    isError: isErrorInfeedbackNames,
+    error: feedbacknameerror,
+    refetch: fetchallFeedbackNames
+
+  } = useQuery({
     queryKey: ['allfeedbackname'],
     queryFn: () => getallfeedbackMaster(),
-  })
+  });
+
+
+  // The function to open the feedback Form in a New Tab
 
   const openFeedbackForm = useCallback((feedbackId) => {
     const encodedId = btoa(feedbackId);
@@ -77,8 +92,21 @@ const Feedback = () => {
               </TabList>
             </Box>
             <TabPanel value="1" className="overflow-scroll" sx={{ p: 1 }} >
+
               {
-                allfeedbackNames?.map((item, index) => {
+                LoadingallFeedbackNames && !FetchAllFeedbackNameSucess && <CustomBackDropWithOutState message={"All Feedback Loading..."} />
+              }
+
+              {isErrorInfeedbackNames && (
+                <ErrorFallback
+                  message="Failed to fetch Houspeeeking beds or Reload"
+                  error={feedbacknameerror}
+                  onRetry={() => fetchallFeedbackNames()}
+                />
+              )}
+
+              {
+                FetchAllFeedbackNameSucess && allfeedbackNames?.map((item, index) => {
                   return (
                     <Box
                       key={index}
@@ -119,7 +147,7 @@ const Feedback = () => {
                               fontSize: { xs: 11, sm: 14 },
                             }}
                           >
-                            {item.feedback_name.toUpperCase()}
+                            {item?.feedback_name.toUpperCase()}
                           </Typography>
                         </Box>
                         <Tooltip sx={{ fontSize: 12 }} title={`${item?.feedback_name?.toLowerCase()} preview `} placement="top">
@@ -138,12 +166,11 @@ const Feedback = () => {
                   )
                 })
               }
+
             </TabPanel>
           </TabContext>
         </Box>
       </Box >
-
-
     </>
   )
 }

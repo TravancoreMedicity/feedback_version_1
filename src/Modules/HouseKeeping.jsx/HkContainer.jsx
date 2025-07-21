@@ -14,6 +14,7 @@ import { axiosApi } from '../../Axios/Axios';
 import NoAssignedBed from './NoAssignedBed ';
 import ErrorFallback from '../../Components/ErrorFallback ';
 
+
 const HkDashboard = lazy(() => import('./HkDashboard'));
 const Housekeepinglist = lazy(() => import('./Housekeepinglist'));
 const nobedDetail = require('../../assets/NoBed.png');

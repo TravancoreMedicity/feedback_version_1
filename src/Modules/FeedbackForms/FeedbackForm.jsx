@@ -38,7 +38,8 @@ const FeedbackForm = ({
     Relatives,
     Children,
     patientnotResponding,
-    PatientNotRespondingRemark
+    PatientNotRespondingRemark,
+    getDishcargePatientDetail
 }) => {
     const [useranswer, setUserAnswer] = useState({});
     const [issubmit, setIsSubmit] = useState(false);
@@ -280,6 +281,7 @@ const FeedbackForm = ({
                                 feedbackId={feedbackId}
                                 getFeedbackData={getFeedbackData}
                                 PatientData={PatientData}
+                                getDishcargePatientDetail={getDishcargePatientDetail}
                             />
                         </Suspense>
                     </>

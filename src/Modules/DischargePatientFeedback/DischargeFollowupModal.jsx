@@ -42,10 +42,6 @@ const DischargeFollowupModal = ({
 
     const [opentextarea, setOpenTextArea] = useState(false);
 
-    // console.log();
-
-
-
 
     // modal close
     const handleModalClose = useCallback(() => {
@@ -290,7 +286,7 @@ const DischargeFollowupModal = ({
                                             <Tooltip title={"Add Remarks"}>
                                                 <AddCircleTwoToneIcon
                                                     onClick={handleopenTextarea}
-                                                    sx={{ fontSize: 26, color: 'rgba(var(--icon-primary))', cursor: 'pointer' }} />
+                                                    sx={{ fontSize: 26, color: 'rgba(var(--icon-primary))', cursor: 'pointer',mt:3 }} />
                                             </Tooltip>
                                         </Box>
                                         {
@@ -328,7 +324,6 @@ const DischargeFollowupModal = ({
                                             </Box>
                                         }
                                         <Box sx={{ position: 'relative' }}>
-
                                             <Button
                                                 disabled={InPatientDetail?.IsOnlyView || SumbittingData}
                                                 onClick={() => handleDateScheduling(InPatientDetail)}
@@ -341,7 +336,7 @@ const DischargeFollowupModal = ({
                                                     '&:hover': {
                                                         backgroundColor: '#9db4c0',
                                                     },
-                                                    width: '95%'
+                                                    width: '98%'
                                                 }}>
                                                 {
                                                     SumbittingData ? "Submitting...." :

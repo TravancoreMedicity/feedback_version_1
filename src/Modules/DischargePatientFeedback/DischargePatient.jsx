@@ -261,7 +261,7 @@ const DischargePatient = () => {
                                             feedbackData={feedbackdata}
                                             getFeedbackData={getDischagreFeedbackFrom}
                                             Loading={followuploading}
-                                        // handleFetchPatientImpression={handleFetchPatientImpression}
+                                            getDishcargePatientDetail={getDishcargePatientDetail}
                                         />
                                     </Suspense>
                             }

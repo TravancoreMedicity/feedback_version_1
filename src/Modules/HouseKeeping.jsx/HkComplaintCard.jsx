@@ -51,7 +51,6 @@ const HkComplaintCard = ({
                 complaint_deptslno: DepartmentDetail?.[0]?.complaint_dept_slno,
                 asset_status: 1,
                 complaint_status: 0,
-                complaint_typeslno: 28, // doubt in this part
                 cm_complaint_location: BedDetail?.fb_bdc_no,
                 complaint_dept_secslno: BedDetail.rm_outlet_slno,
                 create_user: Number(EmpauthId()),

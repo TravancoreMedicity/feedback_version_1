@@ -116,7 +116,6 @@ const IpFeedbackReport = () => {
                 acc[id]["Cultural Support"] = item.rating_value;
             }
 
-
             return acc;
         }, {})
     ).map((item, index) => ({

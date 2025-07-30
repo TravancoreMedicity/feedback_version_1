@@ -24,7 +24,8 @@ const DischargeFeedBackModal = ({
     Relatives,
     Children,
     patientnotResponding,
-    PatientNotRespondingRemark
+    PatientNotRespondingRemark,
+    getDishcargePatientDetail
 }) => {
 
 
@@ -109,6 +110,7 @@ const DischargeFeedBackModal = ({
                                                     Children={Children}
                                                     patientnotResponding={patientnotResponding}
                                                     PatientNotRespondingRemark={PatientNotRespondingRemark}
+                                                    getDishcargePatientDetail={getDishcargePatientDetail}
                                                 />
                                             </Suspense>
                                         : Loading ? <CommonFinalFeedSkeleton /> :

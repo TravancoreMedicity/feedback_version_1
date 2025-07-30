@@ -44,7 +44,7 @@ const CallcenterTable = ({
 
 
     // filtering out day care patient form the discharged patients
-    const FilterDaycarePatient = dischargepatients?.filter(item => item?.fb_doc_name !== "ONCOLOGY DAY CARE") || [];
+    const FilterDaycarePatient = dischargepatients?.filter(item => item?.fb_dep_desc !== "ONCOLOGY DAY CARE") || [];
 
     // patient for scheduling  date by pros
     const updatedPatients = FilterDaycarePatient?.map(patient => {
@@ -62,8 +62,12 @@ const CallcenterTable = ({
     });
 
 
-
     const columnDefs = useMemo(() => [
+        {
+            headerName: 'Slno',
+            field: 'slno',
+            filter: 'agNumberColumnFilter'
+        },
         {
             headerName: 'FollowUp',
             field: 'fb_pt_name',
@@ -140,6 +144,7 @@ const CallcenterTable = ({
         { headerName: 'Admission Number', field: 'fb_ip_no' },
         { headerName: 'Doctor', field: 'fb_doc_name' },
         { headerName: 'Contact', field: 'fb_ptc_mobile' },
+        { headerName: 'Discharge Date', field: 'fb_ipd_disc' },
         {
             headerName: 'Address',
             valueGetter: (params) => {

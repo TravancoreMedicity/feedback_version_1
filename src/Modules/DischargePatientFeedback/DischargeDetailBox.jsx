@@ -37,6 +37,9 @@ const DischargeDetailBox = ({ PatientData, ReviewDetail, Relatives, Children, Pa
     const [respondremark, setRespondRemark] = useState("")
 
 
+
+
+
     // open corresponding patient detail
     const handleOpen = useCallback(() => {
         setOpenIndex(prev => !prev);
@@ -81,8 +84,11 @@ const DischargeDetailBox = ({ PatientData, ReviewDetail, Relatives, Children, Pa
     };
 
 
+
     // patient detail bind in Usememo
     const basicInfoItems = useMemo(() => getBasicInfoItems(PatientData), [PatientData]);
+
+
 
     // closing the relative data when clicking out side the box
     const handleclose = useCallback(() => {
@@ -257,11 +263,26 @@ const DischargeDetailBox = ({ PatientData, ReviewDetail, Relatives, Children, Pa
                                 </Box>
                                 {
                                     PatientData?.ScheduleDate &&
-                                    <Box sx={{ display: 'flex', gap: 1, mb: 0.5 }}>
-                                        <TextComponentBox name={"Scheduled Date :"} size={12} weight={800} />
-                                        <TextComponentBox name={format(parseISO(PatientData?.ScheduleDate), 'yyyy-MM-dd')} size={14} />
-                                    </Box>
+                                    <>
+                                        <Box sx={{ display: 'flex', gap: 1, mb: 0.5 }}>
+                                            <TextComponentBox name={"Scheduled Date :"} size={12} weight={800} />
+                                            <TextComponentBox name={format(parseISO(PatientData?.ScheduleDate), 'yyyy-MM-dd')} size={14} />
+                                        </Box>
+                                    </>
                                 }
+                                {
+                                    PatientData?.fb_ipd_disc &&
+                                    <>
+                                        <Box sx={{ display: 'flex', gap: 1, mb: 0.5 }}>
+                                            <TextComponentBox name={"Discharge Date :"} size={12} weight={800} />
+                                            <TextComponentBox name={format(parseISO(PatientData?.fb_ipd_disc), 'yyyy-MM-dd HH:mm:ss a')} size={14} />
+                                        </Box>
+                                    </>
+                                }
+                                <Box sx={{ display: 'flex', gap: 1, mb: 0.5 }}>
+                                    <TextComponentBox name={"Doctor Name :"} size={12} weight={800} />
+                                    <TextComponentBox name={PatientData?.fb_doc_name} size={14} />
+                                </Box>
                                 <Box sx={{ position: 'relative' }}>
                                     <Box
                                         onClick={handledischargeOpen}
@@ -342,7 +363,7 @@ const DischargeDetailBox = ({ PatientData, ReviewDetail, Relatives, Children, Pa
                                                     padding: 1,
                                                 }}>
                                                 <TextComponentBox
-                                                    name={PatientData?.ProRemark}
+                                                    name={PatientData?.ProRemark?.toUpperCase()}
                                                     size={13}
                                                 />
                                             </Box>
@@ -362,8 +383,8 @@ const DischargeDetailBox = ({ PatientData, ReviewDetail, Relatives, Children, Pa
                         right: 0,
                         transform: 'translateY(-50%)',
                         bgcolor: 'white',
-                        color: `${!responding ? '#FC003E' : '#2dc653'}`,
-                        border: `${!responding ? "1px solid #FC003E" : "1px solid #2dc653"} `,
+                        color: `${!responding ? '#f72585' : '#ee6055'}`,
+                        border: `${!responding ? "1px solid #f72585" : "1px solid #ee6055"} `,
                         borderRadius: '12px',
                         padding: '4px 8px',
                         fontSize: '12px',
@@ -376,7 +397,7 @@ const DischargeDetailBox = ({ PatientData, ReviewDetail, Relatives, Children, Pa
                         cursor: 'pointer'
                     }}>
                     <Box sx={{
-                        bgcolor: `${!responding ? '#FC003E' : '#2dc653'}`,
+                        bgcolor: `${!responding ? '#f72585' : '#ee6055'}`,
                         borderRadius: '50%',
                         p: 0.5
                     }}>

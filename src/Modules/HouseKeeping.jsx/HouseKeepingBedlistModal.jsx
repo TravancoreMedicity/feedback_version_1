@@ -44,6 +44,7 @@ const HouseKeepingBedlistModal = ({ open, data, setOpen, CheckedItems, refetch, 
         queryFn: () => getllhkroomChecklist(),
     });
 
+
     // handle assign employeee selection
     const hanldmultiplechange = useCallback((e, val) => {
         setEmpid(val);

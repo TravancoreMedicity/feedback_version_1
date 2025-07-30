@@ -35,7 +35,7 @@ ModuleRegistry.registerModules([
 const AccessibleTable = ({
     hanldeDischargeFeedback,
     dischargepatients,
-    DischargeForms,
+    // DischargeForms,
     handleFollowUpReview,
     openfeedback,
     setFeedback,
@@ -43,10 +43,9 @@ const AccessibleTable = ({
     getFeedbackData,
     ReviewDetail,
     ProVerifiedPatient,
-    Loading
-    // handleFetchPatientImpression
+    Loading,
+    getDishcargePatientDetail
 }) => {
-
 
 
     const [isImpressionalreadyexist, setIsImpressionAlreadyExist] = useState(false);
@@ -58,16 +57,17 @@ const AccessibleTable = ({
     const [notrespondingdetail, setNotRespondingDetail] = useState([])
 
     // Filtering out day care patient form the discharged patients
-    const FilterDaycarePatient = dischargepatients?.filter(item => item?.fb_doc_name !== "ONCOLOGY DAY CARE") || [];
+    const FilterDaycarePatient = dischargepatients?.filter(item => item?.fb_dep_desc !== "ONCOLOGY DAY CARE") || [];
 
-    // Table column datas
+    // Table column Datas
     const updatedPatients = FilterDaycarePatient?.map(patient => {
+
         // Matching patient detail where the pro verified
         const matchingPatient = ProVerifiedPatient?.find(
             form => form?.fb_ip_no === patient?.fb_ip_no
         );
         // transaction_id
-        const TransactionID = DischargeForms?.find(item => item?.fb_ip_num === patient?.fb_ip_no);
+
         //check in duplicate number exist
         const duplicatePatients = dischargepatients?.filter(
             p => p?.fb_ptc_mobile === patient?.fb_ptc_mobile && p?.fb_ip_no !== patient?.fb_ip_no
@@ -79,8 +79,8 @@ const AccessibleTable = ({
         return {
             ...patient,
             ScheduleDate: matchingPatient?.fb_schedule_date || "Pro not Verifed",
-            isFormSubmitted: DischargeForms?.some(form => form?.fb_ip_num === patient?.fb_ip_no),
-            transactionId: TransactionID?.fb_transact_slno ? TransactionID?.fb_transact_slno : null,
+            isFormSubmitted: patient.fb_call_staus === 1,
+            transactionId: patient?.fb_transact_slno ? patient?.fb_transact_slno : null,
             hasDuplicateMobile: duplicatePatients?.length > 0,
             duplicatePeopleIpnumber,
             ProRemark: matchingPatient?.fb_pro_remark
@@ -171,7 +171,9 @@ const AccessibleTable = ({
 
     // handle all Function relative to a person where her submitted feedback , submitted Default impresion,remark and also the relative of the person
     const HandlePatinetDetailBothReviewandInpatient = useCallback(async (ip, data) => {
+
         const { transactionId, duplicatePeopleIpnumber } = data;
+
         setPatientRelative([]) // clearing befor inserting new
 
         await handleChildBirthDetail(ip) // fetching birth detail for correspoinding mother
@@ -197,6 +199,11 @@ const AccessibleTable = ({
 
 
     const columnDefs = useMemo(() => [
+        {
+            headerName: 'Slno',
+            field: 'slno',
+            filter: 'agNumberColumnFilter'
+        },
         {
             headerName: 'Actions',
             field: 'isFormSubmitted',
@@ -231,7 +238,7 @@ const AccessibleTable = ({
                                             sx={{
                                                 fontSize: 18,
                                                 mr: 0.2,
-                                                color: isSubmitted ? 'Green' : 'red',
+                                                color: 'Green',
                                             }}
                                         />
                                     </Tooltip>
@@ -241,7 +248,7 @@ const AccessibleTable = ({
                                             sx={{
                                                 fontSize: 18,
                                                 mr: 0.2,
-                                                color: isSubmitted ? 'Green' : 'red',
+                                                color: 'red',
                                             }}
                                         />
                                     </Tooltip>
@@ -250,6 +257,7 @@ const AccessibleTable = ({
                 );
             }
         },
+        { headerName: 'Discharge Date', field: 'fb_ipd_disc' },
         {
             headerName: 'Schedule Date',
             valueGetter: (params) => {
@@ -262,6 +270,7 @@ const AccessibleTable = ({
                 }
             }
         },
+
         {
             headerName: 'Patient Name',
             field: 'fb_ptc_name',
@@ -290,6 +299,7 @@ const AccessibleTable = ({
         { headerName: 'Admission Number', field: 'fb_ip_no' },
         { headerName: 'Doctor', field: 'fb_doc_name' },
         { headerName: 'Contact', field: 'fb_ptc_mobile' },
+
         {
             headerName: 'Department',
             field: 'fb_dep_desc',
@@ -327,6 +337,7 @@ const AccessibleTable = ({
                         Children={childrendetail}
                         patientnotResponding={notrespondingdetail}
                         PatientNotRespondingRemark={handlefetchpatientNotRespondingDetail}
+                        getDishcargePatientDetail={getDishcargePatientDetail}
                     />
                 </Suspense>
             }

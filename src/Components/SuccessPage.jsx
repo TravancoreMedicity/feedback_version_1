@@ -6,7 +6,7 @@ import React, { useState, useEffect, memo, useCallback } from 'react';
 const successAnimation = require('../assets/successanimation.gif');
 const successStatic = require('../assets/succespic.png');
 
-const SuccessPage = ({ setIsSubmit, feedbackId, setOpen, getFeedbackData, PatientData }) => {
+const SuccessPage = ({ setIsSubmit, feedbackId, setOpen, getFeedbackData, PatientData, getDishcargePatientDetail }) => {
 
     const [showGif, setShowGif] = useState(true);
     useEffect(() => {
@@ -25,6 +25,7 @@ const SuccessPage = ({ setIsSubmit, feedbackId, setOpen, getFeedbackData, Patien
         if (feedbackId === "8" && PatientData !== undefined) {
             setOpen(false)
             getFeedbackData()
+            getDishcargePatientDetail()
         } else {
             window.open("https://travancoremedicity.com/wellness-executive-health-care-center/", "_blank");
         }

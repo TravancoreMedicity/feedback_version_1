@@ -51,7 +51,8 @@ const RoomComponent = ({
     const handleClick = useCallback(async () => {
         if (ispresent !== 'A') {
             const isInRemark = await getallremarkstatus?.some((item) => item?.fb_bd_code === Number(bdcode));
-            if (!isInRemark && ispresent !== 'N') {
+            // && ispresent !== 'N'
+            if (!isInRemark) {
                 setModalOpen(true)
                 getdetail(bdcode)
                 setRoomStatus({})

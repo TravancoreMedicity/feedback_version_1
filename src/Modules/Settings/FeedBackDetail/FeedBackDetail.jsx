@@ -88,8 +88,6 @@ const FeedBackDetail = () => {
 
 
 
-
-
     const hanldeinputData = useCallback(async (e) => { //usecallback
         const { name, value } = e.target;
         setFeedbackDetail({ ...feedbackdetail, [e.target.name]: e.target.value })

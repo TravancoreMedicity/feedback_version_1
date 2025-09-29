@@ -14,6 +14,8 @@ import AllReports from "./Modules/Reports/AllReports.jsx";
 import CommonFeedbackReport from "./Modules/Reports/CommonFeedbackReport/CommonFeedbackReport.jsx";
 import IpFeedbackReport from "./Modules/Reports/IpFeedbackReport/IpFeedbackReport.jsx";
 
+
+
 // import { socket } from "./ws/socket";
 // import Scanner from "./Components/Scanner.jsx";
 // import HkContainer from "./Modules/HouseKeeping.jsx/HkContainer.jsx";
@@ -57,6 +59,8 @@ const Prochecklist = lazy(() => import("./Modules/ProchecheckList/Prochecklist.j
 const HkContainer = lazy(() => import("./Modules/HouseKeeping.jsx/HkContainer.jsx"));
 const DischargePatient = lazy(() => import("./Modules/DischargePatientFeedback/DischargePatient.jsx"));
 const FollowupPatient = lazy(() => import("./Modules/ProFollowup/FollowupPatient.jsx"));
+const SearchPatientModal = lazy(() => import("./Modules/FeedbackForms/SearchPatientModal.jsx"));
+const Prem = lazy(() => import("./Modules/PREM/Prem.jsx"));
 
 
 //Feedback
@@ -85,6 +89,15 @@ const routes = createBrowserRouter([
     element: (
       <Suspense fallback={<CommonFinalFeedSkeleton />}>
         <FeedbackForm />
+      </Suspense>
+    ),
+    errorElement: <ErrorElement />
+  },
+  {
+    path: "/feedback/searchmodal/:feedbackId",
+    element: (
+      <Suspense fallback={<CommonFinalFeedSkeleton />}>
+        <SearchPatientModal />
       </Suspense>
     ),
     errorElement: <ErrorElement />
@@ -302,6 +315,12 @@ const routes = createBrowserRouter([
             path: "AllReports", element:
               <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
                 <AllReports />
+              </Suspense>, errorElement: <ErrorElement />
+          },
+          {
+            path: "Prem", element:
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
+                <Prem />
               </Suspense>, errorElement: <ErrorElement />
           },
         ],

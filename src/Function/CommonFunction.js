@@ -601,3 +601,37 @@ export const DownloadToExcelFile = (data, name) => {
 
     saveAs(blob, fileName);
 };
+
+
+export const getFamilyDetails = async (mrdnumber) => {
+    try {
+        let uppercasetext = mrdnumber?.toUpperCase().trim();
+
+        if (!uppercasetext) {
+            warningNofity('Please Enter MRD Number');
+            return null;
+        }
+        const result = await axiosellider.get(`/admission/patientInfo/${uppercasetext}`);
+        const { success, data } = result.data;
+        if (success === 1) {
+            return data;
+        } else {
+            warningNofity("Please Enter Correct MRD Number!");
+            return null;
+        }
+    } catch (error) {
+        warningNofity("Something went wrong while fetching details. Please try again.");
+        return null;
+    }
+};
+
+
+// utils/base64Url.js
+
+export const safeAtob = (value) => {
+    try {
+        return value && /^[A-Za-z0-9+/=]+$/.test(value) ? atob(value) : value;
+    } catch {
+        return value;
+    }
+};

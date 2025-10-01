@@ -148,11 +148,22 @@ const DischargePatient = () => {
         }
     }, []);
 
-    //discharge feedback modal opening
+
+    // Discharge feedback modal opening
     const hanldeDischargeFeedback = useCallback((data) => {
-        setOpenFeedbackModal(true)
-        setFeedbackData(data)
+        if (!data) {
+            warningNofity(" Called with no data");
+            return;
+        }
+
+        try {
+            setFeedbackData(data);       // Set the feedback data first
+            setOpenFeedbackModal(true);  // Then open the modal
+        } catch (error) {
+            console.error("Error handling discharge feedback:", error);
+        }
     }, [setOpenFeedbackModal, setFeedbackData]);
+
 
 
     return (

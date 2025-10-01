@@ -1,7 +1,7 @@
 // NEW
-import React, { useState, memo, useCallback } from 'react';
+import React, { useState, memo } from 'react';
 import { Box, Modal, ModalDialog, Tooltip } from "@mui/joy";
-import { getallfeedbackMaster } from "../../Function/CommonFunction";
+import { getallpremdetail } from "../../Function/CommonFunction";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
@@ -16,6 +16,7 @@ import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutSt
 import ErrorFallback from '../../Components/ErrorFallback ';
 import PopupQrScanner from '../FeedbackForms/PopupQrScanner';
 import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
+import { warningNofity } from '../../Constant/Constant';
 
 const Prem = () => {
     const [value, setValue] = useState("1");
@@ -32,21 +33,35 @@ const Prem = () => {
         refetch: fetchallFeedbackNames
     } = useQuery({
         queryKey: ['allfeedbackname'],
-        queryFn: () => getallfeedbackMaster(),
+        queryFn: async () => await getallpremdetail(), // changes
     });
 
     // The function to open the feedback Form
-    const openFeedbackForm = useCallback((feedbackId) => {
-        const encodedId = btoa(feedbackId);
-        const externalUrl = `${OUTLINK_FEEDBACK}/${encodedId}`;
-        window.open(externalUrl, "_blank");
-    }, []);
+    const openFeedbackForm = (feedbackId) => {
+        if (!feedbackId) {
+            warningNofity("feedbackId is missing")
+            console.error("feedbackId is missing");
+            return;
+        }
+
+        try {
+            const encodedId = btoa(feedbackId);
+            const externalUrl = `${OUTLINK_FEEDBACK}/${encodedId}`;
+            window.open(externalUrl, "_blank");
+        } catch (error) {
+            console.error("Error opening feedback form:", error);
+        }
+    };
+
 
     // open qrcode 
-    const openFeedbackQrCode = useCallback((feedbackId) => {
+    const openFeedbackQrCode = (feedbackId) => {
+        if (!feedbackId) return;
+
         setFeedbackId(feedbackId);
-        setOpenQrScanner(true); // step 1 → open QR scanner first
-    }, []);
+        setOpenQrScanner(true);
+    };
+
 
     return (
         <>

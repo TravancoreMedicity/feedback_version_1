@@ -14,6 +14,7 @@ import PlaylistPlayIcon from '@mui/icons-material/PlaylistPlay';
 import { OUTLINK_FEEDBACK } from '../../Constant/Static';
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
 import ErrorFallback from '../../Components/ErrorFallback ';
+import { infoNofity } from '../../Constant/Constant';
 
 
 
@@ -35,11 +36,17 @@ const Feedback = () => {
   });
 
   // The function to open the feedback Form
-  const openFeedbackForm = useCallback((feedbackId) => {
-    const encodedId = btoa(feedbackId);
+  const openFeedbackForm = (feedbackId) => {
+    if (!feedbackId) {
+      infoNofity("Feedback ID is missing ! Please Try Later");
+      return;
+    }
+
+    const encodedId = btoa(String(feedbackId));
     const externalUrl = `${OUTLINK_FEEDBACK}/${encodedId}`;
-    window.open(externalUrl, "_blank");
-  }, []);
+    window.open(externalUrl, "_blank", "noopener,noreferrer");
+  };
+
 
   return (
     <>

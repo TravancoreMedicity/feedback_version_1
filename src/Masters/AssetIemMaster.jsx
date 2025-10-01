@@ -14,9 +14,6 @@ import { EditPencil } from "iconoir-react";
 import SelectAssetItemType from '../Components/SelectAssetItemType'
 
 
-
-
-
 const CommonMenuList = lazy(() => import('../Components/CommonMenuList'));
 const CustomInputWithLabel = lazy(() => import('../Components/CustomInputWithLabel'));
 const CustomCheckBoxWithLabel = lazy(() => import('../Components/CustomCheckBoxWithLabel'));
@@ -64,6 +61,7 @@ const AssetIemMaster = () => {
         if (asset_name === "") return warningNofity("Please enter the Asset Name");
         if (dep_id === "") return warningNofity("Please select the Deparment");
         if (dep_item_type_id === 0) return warningNofity("Please select Complaint Type");
+
         const insertData = {
             fb_asset_name: asset_name?.toLowerCase(),
             fb_dep_id: dep_id,
@@ -71,6 +69,7 @@ const AssetIemMaster = () => {
             fb_asset_type: dep_item_type_id,
             create_user: Number(employeeID())
         }
+
         const UpdateinsertingData = {
             fb_assets_slno: updationdetail.fb_asset_slno,
             fb_asset_name: asset_name?.toLowerCase(),
@@ -162,11 +161,11 @@ const AssetIemMaster = () => {
                     {
                         allassetitems?.map((item, idx) => (
                             <tr key={idx}>
-                                <td>{item.fb_asset_slno}</td>
-                                <td>{item.complaint_dept_name?.toUpperCase()}</td>
-                                <td>{item.fb_asset_name?.toUpperCase()}</td>
-                                <td>{item.complaint_type_name?.toUpperCase()}</td>
-                                <td>{item.fb_asset_status === 1 ? "ACTIVE" : "INACTIVE"}</td>
+                                <td>{item?.fb_asset_slno}</td>
+                                <td>{item?.complaint_dept_name?.toUpperCase()}</td>
+                                <td>{item?.fb_asset_name?.toUpperCase()}</td>
+                                <td>{item?.complaint_type_name?.toUpperCase()}</td>
+                                <td>{item?.fb_asset_status === 1 ? "ACTIVE" : "INACTIVE"}</td>
                                 <td><Tooltip title="Edit Data" placement="top">
                                     <IconButton
                                         variant="outlined"

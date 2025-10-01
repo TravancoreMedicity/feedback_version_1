@@ -106,7 +106,7 @@ const HkEmployeeDetailMaster = () => {
     }, [employee_name, fetallhkempdetail, status, updateflag, updationdetail, isSupervisor, emp_id])
 
     return (
-        <DefaultPageLayout label="Module Master" >
+        <DefaultPageLayout label="House keeping Module Master" >
             <MasterPageLayout>
                 <Suspense fallback={<CustomBackDropWithOutState message={'Loading...'} />} >
                     <CustomInputWithLabel

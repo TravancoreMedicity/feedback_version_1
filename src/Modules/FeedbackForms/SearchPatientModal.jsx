@@ -1,5 +1,5 @@
-import React, { useCallback, useState } from "react";
-import { Box, Input, Button, Typography, Card, Divider, Stack } from "@mui/joy";
+import React, { useState } from "react";
+import { Box, Input, Button, Typography, Card } from "@mui/joy";
 import { getFamilyDetails } from "../../Function/CommonFunction";
 import SearchIcon from "@mui/icons-material/Search";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
@@ -18,7 +18,6 @@ const SearchPatientModal = () => {
 
     const { feedbackId } = useParams();
 
-
     const [mrd, setMrd] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -26,7 +25,7 @@ const SearchPatientModal = () => {
 
 
     // fetch patient details
-    const fetchPatientDetail = useCallback(async (mrdNo) => {
+    const fetchPatientDetail = async (mrdNo) => {
         try {
             setError("");
             const result = await getFamilyDetails(mrdNo);
@@ -42,26 +41,39 @@ const SearchPatientModal = () => {
             setError("Something went wrong while fetching patient details.");
             return null;
         }
-    }, []);
+    };
 
     // search handler
-    const handleSearch = useCallback(async () => {
-        if (mrd?.length < 10) {
-            setError("Please enter a Valid MRD NUMBER");
-            return;
-        }
+    const handleSearch = async () => {
         setLoading(true);
         setError("");
+
+        if (mrd.length < 10) {
+            setError("Please enter a Valid MRD NUMBER");
+            setLoading(false);
+            return;
+        }
+
         try {
             await fetchPatientDetail(mrd);
+        } catch (err) {
+            setError("Something went wrong while fetching patient details.");
+            console.error(err);
         } finally {
             setLoading(false);
         }
-    }, [mrd, fetchPatientDetail]);
+    };
+
 
     // confirm details
-    const handleConfirm = useCallback(() => {
-        if (patient) {
+    const handleConfirm = () => {
+
+        if (!patient || !feedbackId) {
+            console.error("Patient or feedbackId is missing");
+            return;
+        }
+
+        try {
             const encodedName = btoa(patient?.PTC_PTNAME);
             const encodepatientid = btoa(patient?.PT_NO);
             const encodemobile = btoa(patient?.PTC_MOBILE);
@@ -71,8 +83,12 @@ const SearchPatientModal = () => {
             const externalQrUrl = `${OUTLINK_FEEDBACK}/${encodedId}?name=${encodedName}&pid=${encodepatientid}&mbno=${encodemobile}&qrs=${qrstausCode}`;
             // Step 3 → open new tab
             window.open(externalQrUrl, "_blank");
+        } catch (error) {
+            console.error("Error generating QR link:", error);
         }
-    }, [patient, feedbackId]);
+
+    };
+
 
     return (
         <Box
@@ -100,7 +116,7 @@ const SearchPatientModal = () => {
                         Search Patient
                     </Typography>
                     <Typography level="body-sm" sx={{ fontSize: { xs: 12, sm: 14, md: 16 } }} color="neutral">
-                        Enter MRD number to fetch patient details
+                        Enter MRD number to get patient details
                     </Typography>
                 </Box>
 
@@ -108,7 +124,7 @@ const SearchPatientModal = () => {
                     <>
                         <Input
                             variant="outlined"
-                            placeholder="Enter MRD Number"
+                            placeholder="Eg:A-00000001"
                             value={mrd}
                             startDecorator={<SearchIcon />}
                             onChange={(e) => {

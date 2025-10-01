@@ -125,9 +125,9 @@ const FeedbackMaster = () => {
                     {
                         allfeedbackNames?.map((item, idx) => (
                             <tr key={idx}>
-                                <td>{item.fd_slno}</td>
-                                <td>{item.feedback_name?.toUpperCase()}</td>
-                                <td>{item.feedback_status === 1 ? "ACTIVE" : "INACTIVE"}</td>
+                                <td>{item?.fd_slno}</td>
+                                <td>{item?.feedback_name}</td>
+                                <td>{item?.feedback_status === 1 ? "ACTIVE" : "INACTIVE"}</td>
                                 <td><Tooltip title="Edit Data" placement="top">
                                     <IconButton
                                         variant="outlined"

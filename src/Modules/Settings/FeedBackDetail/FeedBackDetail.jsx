@@ -60,9 +60,6 @@ const FeedBackDetail = () => {
         componentid: 0
     })
 
-
-
-
     const [yesorno, setYesOrNo] = useState({
         Yes: "",
         No: "",

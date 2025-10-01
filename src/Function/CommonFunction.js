@@ -29,38 +29,98 @@ export const customDocNumber = (number) => {
     return `DOC-${year}-${day}-${addLeadingZeros(number, 6)}`
 }
 
-
 export const getallFeedbackCategory = async () => {
-    const result = await axiosApi.get("/feedback/getallCategories");
-    const { data, success } = result.data;
-    if (success === 1) return warningNofity("Error in fetching Data");
-    return data ? data : [];
-}
+    try {
+        const result = await axiosApi.get("/feedback/getallCategories");
+        const { data, success } = result.data;
 
+        if (success !== 2) {
+            warningNofity("Error in fetching Data");
+            return [];
+        }
+
+        return data || [];
+    } catch (error) {
+        console.error("Error fetching feedback categories:", error);
+        warningNofity("Server error while fetching data");
+        return [];
+    }
+};
 
 export const allfeedbacksubCategory = async () => {
-    const result = await axiosApi.get("/feedback/getallsubCategories");
-    const { data, success } = result.data;
-    if (success === 1) return warningNofity("Error in fetching Data");
-    return data ? data : [];
-}
+    try {
+        const result = await axiosApi.get("/feedback/getallsubCategories");
+        const { data, success } = result.data;
+
+        if (success !== 2) {
+            warningNofity("Error in fetching Data");
+            return [];
+        }
+
+        return data || [];
+    } catch (error) {
+        console.error("Error fetching all feedback subcategories:", error);
+        warningNofity("Server error while fetching data");
+        return [];
+    }
+};
 
 
 export const allfeedbackcollection = async () => {
-    const result = await axiosApi.get("/feedback/allfeedbackcollection");
-    const { data, success } = result.data;
-    if (success === 1) return warningNofity("Error in fetching Data");
-    return data ? data : [];
-}
+    try {
+        const result = await axiosApi.get("/feedback/allfeedbackcollection");
+        const { data, success } = result.data;
+
+        if (success !== 2) {
+            warningNofity("Error in fetching Data allfeedbackcollection");
+            return [];
+        }
+
+        return data || [];
+    } catch (error) {
+        console.error("Error fetching all feedback collections:", error);
+        warningNofity("Server error while fetching data");
+        return [];
+    }
+};
 
 
-
+//change
 export const getallfeedbackMaster = async () => {
-    const result = await axiosApi.get("/feedback/getallfeedback");
-    const { data, success } = result.data;
-    if (success === 1) return warningNofity("Error in fetching Data");
-    return data ? data : [];
-}
+    try {
+        const result = await axiosApi.get("/feedback/getallfeedback");
+        const { data, success } = result.data;
+
+        if (success !== 2) {
+            warningNofity("Error in fetching Data");
+            return [];
+        }
+
+        return data || [];
+    } catch (error) {
+        console.error("Error fetching feedback master:", error);
+        warningNofity("Server error while fetching data getallfeedbackMaster");
+        return [];
+    }
+};
+
+export const getallpremdetail = async () => {
+    try {
+        const result = await axiosApi.get("/feedback/premdetail");
+        const { data, success } = result.data;
+
+        if (success !== 2) {
+            warningNofity("Error in fetching Data");
+            return [];
+        }
+
+        return data || [];
+    } catch (error) {
+        console.error("Error fetching feedback master:", error);
+        warningNofity("Server error while fetching data getallfeedbackMaster");
+        return [];
+    }
+};
 
 
 export const getAllBlockedBed = async () => {
@@ -87,11 +147,23 @@ export const FetchAllCheckListBed = async () => {
 
 
 export const getBedRemarkStatus = async () => {
-    const result = await axiosApi.get("/feedback/getberremarkstatus");
-    const { data, success } = result.data;
-    if (success === 0) return warningNofity("Error in fetching Data");
-    return data ? data : [];
-}
+    try {
+        const result = await axiosApi.get("/feedback/getberremarkstatus");
+        const { data, success } = result.data;
+
+        if (success === 0) {
+            warningNofity("Error in fetching Data");
+            return [];
+        }
+
+        return data || [];
+    } catch (error) {
+        console.error("Error fetching bed remark status:", error);
+        warningNofity("Server error while fetching data");
+        return [];
+    }
+};
+
 
 
 export const getDischargeEntryBed = async () => {
@@ -142,26 +214,70 @@ export const getLoggedEmpDetail = async (id) => {
 
 
 export const getallmoudleMaster = async () => {
-    const result = await axiosApi.get("/feedback/getallmodulemaster");
-    const { data, success } = result.data;
-    if (success === 1) return warningNofity("Error in fetching Data");
-    return data ? data : [];
-}
+    try {
+        const result = await axiosApi.get("/feedback/getallmodulemaster");
+        const { data, success } = result.data;
+
+        if (success !== 2) {
+            warningNofity("Error in fetching Data dddd");
+            return [];
+        }
+
+        return data || [];
+    } catch (error) {
+        console.error("Error fetching module master data:", error);
+        warningNofity("Server error while fetching data getallmoudleMaster");
+        return [];
+    }
+};
+
+// export const getallHkEmployeeDetail = async () => {
+//     try {
+//         const result = await axiosApi.get("/feedback/getallhkempdtl");
+//         const { data, success } = result.data;
+
+//         if (success !== 2) {
+//             warningNofity("Error in fetching Data");
+//             return [];
+//         }
+
+//         return data || [];
+//     } catch (error) {
+//         console.error("Error fetching HK employee details:", error);
+//         warningNofity("Server error while fetching data getallHkEmployeeDetail");
+//         return [];
+//     }
+// };
 
 export const getallHkEmployeeDetail = async () => {
     const result = await axiosApi.get("/feedback/getallhkempdtl");
     const { data, success } = result.data;
-    if (success === 1) return warningNofity("Error in fetching Data");
-    return data ? data : [];
-}
+    if (success !== 2) {
+        warningNofity("Error in fetching Data");
+        return [];
+    }
+    return data || [];
+};
 
 
 export const getassetItemMaster = async () => {
-    const result = await axiosApi.get("/feedback/getassetitem");
-    const { data, success } = result.data;
-    if (success === 1) return warningNofity("Error in fetching Data");
-    return data ? data : [];
-}
+    try {
+        const result = await axiosApi.get("/feedback/getassetitem");
+        const { data, success } = result.data;
+
+        if (success !== 2) {
+            warningNofity("Error in fetching Data");
+            return [];
+        }
+
+        return data || [];
+    } catch (error) {
+        console.error("Error fetching asset item master:", error);
+        warningNofity("Server error while fetching data getassetItemMaster");
+        return [];
+    }
+};
+
 
 export const getallroomchecklist = async () => {
     const result = await axiosApi.get("/feedback/getroomchecklist");
@@ -208,11 +324,22 @@ export const getallroomassetDetail = async () => {
 
 
 export const getalluserModuleRight = async () => {
-    const result = await axiosApi.get("/feedback/getallusermodulemaster");
-    const { data, success } = result.data;
-    if (success === 1) return warningNofity("Error in fetching Data");
-    return data ? data : [];
-}
+    try {
+        const result = await axiosApi.get("/feedback/getallusermodulemaster");
+        const { data, success } = result.data;
+
+        if (success !== 2) {
+            warningNofity("Error in fetching Data");
+            return [];
+        }
+
+        return data || [];
+    } catch (error) {
+        console.error("Error fetching user module rights:", error);
+        warningNofity("Server error while fetching data");
+        return [];
+    }
+};
 
 
 export const getCurrentEmpMenu = async (id) => {
@@ -239,13 +366,23 @@ export const getUserModules = async (id) => {
 
 
 
-
 export const getallGroupMaster = async () => {
-    const result = await axiosApi.get("/feedback/getallgroupmaster");
-    const { data, success } = result.data;
-    if (success === 1) return warningNofity("Error in fetching Data");
-    return data ? data : [];
-}
+    try {
+        const result = await axiosApi.get("/feedback/getallgroupmaster");
+        const { data, success } = result.data;
+
+        if (success !== 2) {
+            warningNofity("Error in fetching Data");
+            return [];
+        }
+
+        return data || [];
+    } catch (error) {
+        console.error("Error fetching group master data:", error);
+        warningNofity("Server error while fetching data");
+        return [];
+    }
+};
 
 
 export const getallmenumaster = async () => {
@@ -276,27 +413,47 @@ export const getallRoomDetail = async () => {
     return data ? data : [];
 }
 
-
+//change 3
 export const getDepartment = async () => {
-    return axiosApi.get('/feedback/deparment').then((res) => {
+    try {
+        const res = await axiosApi.get('/feedback/deparment');
         const { success, data } = res.data;
+
         if (success === 1) {
-            return data
+            return data || [];
+        } else {
+            return [];
         }
-    })
-}
+    } catch (error) {
+        console.error("Error fetching departments:", error);
+        return [];
+    }
+};
 
-
+//change 1
 export const getfeedbacksubcategory = async (id) => {
-    return axiosApi.post('/feedback/getfeedbacksubcategory', {
-        fb_category_slno: id
-    }).then((res) => {
+    try {
+        if (!id) return [];
+
+        const res = await axiosApi.post('/feedback/getfeedbacksubcategory', {
+            fb_category_slno: id,
+        });
+
         const { success, data } = res.data;
-        if (success === 1) {
-            return data ? data : []
+
+        if (success === 1 && data) {
+            return data;
+        } else {
+            return [];
         }
-    })
-}
+    } catch (error) {
+        console.error("Error fetching feedback subcategory:", error);
+        return [];
+    }
+};
+
+
+
 
 export const getallfeedbackDetail = async () => {
     return axiosApi.get('/feedback/getallfeedbackDetail').then((res) => {
@@ -314,7 +471,7 @@ export const fetchFeedbackdtl = async (value) => {
             fdmast_slno: value
         })
         const { data, success } = result.data;
-        if (success === 1) return warningNofity("Error in fetching Data")
+        if (success === 1) return warningNofity("Error in fetching Data fetchFeedbackdtl")
         return data ? data : []
     } catch (error) {
         warningNofity("Error Occured While Fetching..!")
@@ -336,83 +493,147 @@ export const FeedbackDetailForDisplay = async (value) => {
     }
 }
 
-
+// change 4
 export const fetchCurrentCompany = async () => {
-    return axiosApi.get('/feedback/getcurrentCompany').then((res) => {
+    try {
+        const res = await axiosApi.get('/feedback/getcurrentCompany');
         const { success, data } = res.data;
+
         if (success === 2) {
-            return data
+            return data || [];
+        } else {
+            return [];
         }
-    })
-}
+    } catch (error) {
+        console.error("Error fetching current company:", error);
+        return [];
+    }
+};
 
 
+//change 5
 export const getalluserfeedbackAnswers = async (date) => {
-    return axiosApi.post('/feedback/getalluserfeedback', {
-        current_date: date
-    }).then((res) => {
-        const { success, data } = res.data;
-        if (success === 2) {
-            return data ? data : []
-        }
-    })
-}
+    try {
+        if (!date) return [];
 
+        const res = await axiosApi.post('/feedback/getalluserfeedback', {
+            current_date: date,
+        });
+
+        const { success, data } = res.data;
+
+        if (success === 2) {
+            return data || [];
+        } else {
+            return [];
+        }
+    } catch (error) {
+        console.error("Error fetching user feedback answers:", error);
+        return [];
+    }
+};
+
+// change 6
 export const getallFeedBackCount = async (id) => {
-    return axiosApi.get(`/feedback/getfeedbackcount`).then((res) => {
+    try {
+        const res = await axiosApi.get('/feedback/getfeedbackcount');
         const { success, data } = res.data;
+
         if (success === 2) {
-            return data ? data : []
+            return data || [];
         } else {
-            return []
+            return [];
         }
-    })
-}
+    } catch (error) {
+        console.error("Error fetching feedback count:", error);
+        return [];
+    }
+};
 
 
+// change 7
 export const gettotalstarCount = async (id) => {
-    return axiosApi.get(`/feedback/getstarcount`).then((res) => {
+    try {
+        const res = await axiosApi.get('/feedback/getstarcount');
         const { success, data } = res.data;
+
         if (success === 2) {
-            return data ? data : []
+            return data || [];
         } else {
-            return []
+            return [];
         }
-    })
-}
+    } catch (error) {
+        console.error("Error fetching total star count:", error);
+        return [];
+    }
+};
 
-
+// change 8
 export const getCategoryCountDetail = async (id) => {
-    return axiosApi.get(`/feedback/getcategorycount`).then((res) => {
+    try {
+        // if (!id) {
+        //     console.warn("getCategoryCountDetail called without an id");
+        //     return []; // safe default when id is missing
+        // }
+
+        const res = await axiosApi.get('/feedback/getcategorycount');
         const { success, data } = res.data;
+
         if (success === 2) {
-            return data ? data : []
+            return data || [];
         } else {
-            return []
+            return [];
         }
-    })
-}
+    } catch (error) {
+        console.error("Error fetching category count detail:", error);
+        return [];
+    }
+};
 
-
+// change 9
 export const getDepartmentSection = async (id) => {
-    return axiosApi.get(`/feedback/deparmentsec/${id}`).then((res) => {
+    try {
+        if (!id) {
+            console.warn("getDepartmentSection called without an id");
+            return [];
+        }
+
+        const res = await axiosApi.get(`/feedback/deparmentsec/${id}`);
         const { success, data } = res.data;
+
         if (success === 1) {
-            return data ? data : []
+            return data || [];
+        } else {
+            return [];
         }
-    })
-}
+    } catch (error) {
+        console.error("Error fetching department section:", error);
+        return [];
+    }
+};
 
 
+// change 10
 export const getAllhkAssignedBed = async (id) => {
-    return axiosApi.get(`/feedback/getallassignedbed/${id}`).then((res) => {
-        const { success, data } = res.data;
-        if (success === 2) {
-            return data ? data : []
+    try {
+        if (!id) {
+            console.warn("getAllhkAssignedBed called without an id");
+            return [];
         }
-    })
-}
 
+        const res = await axiosApi.get(`/feedback/getallassignedbed/${id}`);
+        const { success, data } = res.data;
+
+        if (success === 2) {
+            return data || [];
+        } else {
+            return [];
+        }
+    } catch (error) {
+        console.error("Error fetching all assigned beds:", error);
+        return [];
+    }
+};
 
 export const gethkcheckbedDetail = async (slno) => {
     try {
@@ -455,46 +676,91 @@ export const gethkcomplaintdetail = async (bedslno, depsec, ticketid) => {
     }
 }
 
+
+
 export const getdepassetonly = async (id) => {
-    return axiosApi.get(`/feedback/getdepassetonly/${id}`).then((res) => {
-        const { success, data } = res.data;
-        if (success === 2) {
-            return data ? data : []
+    try {
+        if (!id) {
+            console.warn("getdepassetonly called without an id");
+            return [];
         }
-    })
-}
+
+        const res = await axiosApi.get(`/feedback/getdepassetonly/${id}`);
+        const { success, data } = res.data;
+
+        if (success === 2) {
+            return data || [];
+        } else {
+            return [];
+        }
+    } catch (error) {
+        console.error("Error fetching department asset only:", error);
+        return [];
+    }
+};
+
 
 
 export const getallNurseStation = async () => {
-    return axiosellider.get('/melioraEllider/nurse').then((res) => {
+    try {
+        const res = await axiosellider.get('/melioraEllider/nurse');
         const { success, data } = res.data;
-        if (success === 1) return []
-        if (success === 2) {
-            return data ? data : []
-        }
-    })
-}
 
+        if (success === 1) {
+            // No data found or some specific condition
+            return [];
+        }
+
+        if (success === 2) {
+            return data || [];
+        }
+
+        // fallback for any other success code
+        return [];
+    } catch (error) {
+        console.error("Error fetching nurse stations:", error);
+        return [];
+    }
+};
 
 
 export const getallNurseStationMeliora = async () => {
-    return axiosApi.get('/feedback/nurse').then((res) => {
+    try {
+        const res = await axiosApi.get('/feedback/nurse');
         const { success, data } = res.data;
-        if (success === 1) return []
-        if (success === 2) {
-            return data ? data : []
+
+        if (success === 1) {
+            // No data found
+            return [];
         }
-    })
-}
+        if (success === 2) {
+            return data || [];
+        }
+        // fallback for any other success code
+        return [];
+    } catch (error) {
+        console.error("Error fetching nurse stations (Meliora):", error);
+        return [];
+    }
+};
+
 
 export const getAllFloorMaster = async () => {
-    return axiosApi.get('/floorcreation/view').then((res) => {
+    try {
+        const res = await axiosApi.get('/floorcreation/view');
         const { success, data } = res.data;
+
         if (success === 2) {
-            return data ? data : []
+            return data || [];
         }
-    })
-}
+
+        return [];
+    } catch (error) {
+        console.error("Error fetching floor master data:", error);
+        return [];
+    }
+};
+
 
 export const getallOutlets = async () => {
     return axiosellider.get('/melioraEllider/outlet').then((res) => {
@@ -504,79 +770,178 @@ export const getallOutlets = async () => {
         }
     })
 }
+
+
 export const getallNurseStationMaster = async () => {
-    return axiosApi.get('/feedback/getallnursestation').then((res) => {
+    try {
+        const res = await axiosApi.get('/feedback/getallnursestation');
         const { success, data } = res.data;
-        if (success === 0) return []
-        if (success === 2) {
-            return data ? data : []
+
+        if (success === 0) {
+            // No data found
+            return [];
         }
-    })
-}
+
+        if (success === 2) {
+            return data || [];
+        }
+
+        // fallback for any other success code
+        return [];
+    } catch (error) {
+        console.error("Error fetching all nurse stations:", error);
+        return [];
+    }
+};
+
 
 
 export const getDepartmentEmployee = async (id) => {
-    return axiosApi.get(`/feedback/departmentemp/${id}`).then((res) => {
-        const { success, data } = res.data;
-        if (success === 1) {
-            return data
+    try {
+        if (!id) {
+            console.warn("getDepartmentEmployee called without an id");
+            return [];
         }
-    })
-}
+
+        const res = await axiosApi.get(`/feedback/departmentemp/${id}`);
+        const { success, data } = res.data;
+
+        if (success === 1) {
+            return data || [];
+        } else {
+            return [];
+        }
+    } catch (error) {
+        console.error("Error fetching department employees:", error);
+        return [];
+    }
+};
+
 
 export const getBedRemarkDetails = async (id) => {
-    return axiosApi.get(`/feedback/getbedremarkDetail/${id}`).then((res) => {
-        const { success, data } = res.data;
-        if (success === 2) {
-            return data ? data : []
+    try {
+        if (!id) {
+            console.warn("getBedRemarkDetails called without an id");
+            return [];
         }
-    })
-}
+
+        const res = await axiosApi.get(`/feedback/getbedremarkDetail/${id}`);
+        const { success, data } = res.data;
+
+        if (success === 2) {
+            return data || [];
+        } else {
+            return [];
+        }
+    } catch (error) {
+        console.error("Error fetching bed remark details:", error);
+        return [];
+    }
+};
+
 
 export const getAllComplaintDetail = async () => {
-    return axiosApi.get(`/feedback/getallcomplaintdetail`).then((res) => {
+    try {
+        const res = await axiosApi.get('/feedback/getallcomplaintdetail');
         const { success, data } = res.data;
+
         if (success === 2) {
-            return data ? data : []
+            return data || [];
+        } else {
+            return [];
         }
-    })
-}
+    } catch (error) {
+        console.error("Error fetching complaint details:", error);
+        return [];
+    }
+};
+
 
 
 export const getAllcomplaintTypeDetail = async (id) => {
-    return axiosApi.get(`/feedback/getallComplaintType/${id}`).then((res) => {
-        const { success, data } = res.data;
-        if (success === 2) {
-            return data ? data : []
+    try {
+        if (!id) {
+            console.warn("getAllcomplaintTypeDetail called without an id");
+            return [];
         }
-    })
-}
+
+        const res = await axiosApi.get(`/feedback/getallComplaintType/${id}`);
+        const { success, data } = res.data;
+
+        if (success === 2) {
+            return data || [];
+        } else {
+            return [];
+        }
+    } catch (error) {
+        console.error("Error fetching complaint type details:", error);
+        return [];
+    }
+};
 
 
 export const getallRoomAssetData = async (id) => {
-    return axiosApi.get(`/feedback/getallroomassetdata/${id}`).then((res) => {
-        const { success, data } = res.data;
-        if (success === 2) {
-            return data ? data : []
+    try {
+        if (!id) {
+            console.warn("getallRoomAssetData called without an id");
+            return [];
         }
-    })
-}
+
+        const res = await axiosApi.get(`/feedback/getallroomassetdata/${id}`);
+        const { success, data } = res.data;
+
+        if (success === 2) {
+            return data || [];
+        } else {
+            return [];
+        }
+    } catch (error) {
+        console.error("Error fetching room asset data:", error);
+        return [];
+    }
+};
+
 
 export const getComplaintDetail = async (id) => {
-    return axiosApi.get(`/feedback/getcomplaintdetail/${id}`).then((res) => {
-        const { success, data } = res.data;
-        if (success === 2) {
-            return data ? data : []
+    try {
+        if (!id) {
+            console.warn("getComplaintDetail called without an id");
+            return [];
         }
-    })
-}
+
+        const res = await axiosApi.get(`/feedback/getcomplaintdetail/${id}`);
+        const { success, data } = res.data;
+
+        if (success === 2) {
+            return data || [];
+        } else {
+            return [];
+        }
+    } catch (error) {
+        console.error("Error fetching complaint detail:", error);
+        return [];
+    }
+};
+
 
 export const getallemployeeright = async () => {
-    const result = await axiosApi.get("/feedback/getallemployeeright");
-    const { data, success } = result.data;
-    if (success === 1) return warningNofity("Error in fetching Data");
-    return data ? data : [];
-}
+    try {
+        const result = await axiosApi.get("/feedback/getallemployeeright");
+        const { data, success } = result.data;
+
+        if (success !== 2) {
+            warningNofity("Error in fetching Data");
+            return [];
+        }
+
+        return data || [];
+    } catch (error) {
+        console.error("Error fetching employee rights:", error);
+        warningNofity("Server error while fetching data");
+        return [];
+    }
+};
+
 
 
 export const DownloadToExcelFile = (data, name) => {

@@ -16,7 +16,7 @@ const AllReports = () => {
     const id = EmpauthId();
     const { data: allmenuitems = [] } = useQuery({
         queryKey: ['getcurrentempmenu', id],
-        queryFn: () => getCurrentEmpMenu(id),
+        queryFn: async () => await getCurrentEmpMenu(id),
         enabled: !!id // Ensures query only runs when id is valid
     });
 

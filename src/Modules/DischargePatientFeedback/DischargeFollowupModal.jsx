@@ -131,14 +131,17 @@ const DischargeFollowupModal = ({
                     alignItems: 'center'
                 }}>
                 <ModalDialog sx={{
-                    width: { xs: 200, sm: 680 },
+                    width: { xs: '100%', sm: 680 },
                     borderRadius: 'md',
                     p: 1,
                     minHeight: 280,
+                    maxHeight: '95vh',
                     boxShadow: "none",
                     backgroundColor: "rgba(var(--bg-card))",
                     border: 0.03,
                     borderColor: "rgba(var(--border-primary))",
+                    // bgcolor:'red',
+                    overflowY: "auto",
                 }}>
                     <Suspense fallback={<CustomBackDropWithOutState message={"Loading"} />}>
                         <InpatientModalCard name={"Review Follow Up"} ipno={InPatientDetail?.fb_ip_no} />
@@ -152,59 +155,80 @@ const DischargeFollowupModal = ({
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                px: 2
+                                px: 2,
+                                flexDirection: { xs: 'column', sm: 'row' }
                             }}>
                                 <Box sx={{
-                                    minWidth: '30%',
-                                    maxWidth: '40%',
-                                    minHeight: 240,
-                                    py: 1
+                                    minWidth: { xs: '100%', sm: '30%' },
+                                    maxWidth: { xs: '100%', sm: '40%' },
+                                    minHeight: { xs: 140, sm: 240 },
+                                    py: 1,
+                                    display: 'flex',
+                                    flexDirection: { xs: 'row', sm: 'column' },
+                                    gap: 1
                                 }}>
                                     <Box sx={{
-                                        width: '60%',
-                                        height: 125,
+                                        width: { xs: '30%', sm: '65%' },
+                                        height: { xs: 100, sm: 125 },
                                         bgcolor: '#ebebeb',
-                                        px: 0.5,
                                         mb: 1,
                                         display: 'flex',
                                         alignItems: 'center',
                                         justifyContent: 'center',
+
                                     }}>
                                         {
-                                            InPatientDetail?.fb_ptc_sex === "M" || InPatientDetail?.fb_gender === "Male" ? <img
-                                                src={male}
-                                                alt="Male"
-                                                width={120}
-                                                height={120}
-                                            /> : <img
-                                                src={female}
-                                                alt="Female"
-                                                width={120}
-                                                height={120}
-                                            />
+                                            InPatientDetail?.fb_ptc_sex === "M" || InPatientDetail?.fb_gender === "Male" ?
+                                                <Box sx={{
+                                                    width: { xs: 80, sm: 120 },
+                                                    height: { xs: 80, sm: 120 }
+                                                }}>
+                                                    <img
+                                                        src={male}
+                                                        alt="Male"
+                                                        width={'100%'}
+                                                        height={'100%'}
+                                                    />
+                                                </Box>
+                                                :
+                                                <Box sx={{
+                                                    width: { xs: 90, sm: 120 },
+                                                    height: { xs: 90, sm: 120 },
+                                                    borderRadius: { xs: '50%', sm: 5 },
+                                                }}>
+                                                    <img
+                                                        src={female}
+                                                        alt="Female"
+                                                        width={'100%'}
+                                                        height={'100%'}
+                                                    />
+                                                </Box>
                                         }
                                     </Box>
-                                    {getBasicInfoItems(InPatientDetail)?.map((item, index) => (
-                                        <Box key={index} sx={{ display: 'flex', justifyContent: 'space-between', width: '100%', gap: 0.2 }}>
-                                            <Box sx={{ width: '10%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                                                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                                    <Tooltip sx={{ cursor: 'pointer' }} title={item?.label}>
-                                                        {item?.icon}
-                                                    </Tooltip>
+                                    <Box sx={{ width: { xs: '70%', sm: '100%' } }}>
+                                        {getBasicInfoItems(InPatientDetail)?.map((item, index) => (
+                                            <Box key={index} sx={{ display: 'flex', justifyContent: 'space-between', width: '100%', gap: 0.2 }}>
+                                                <Box sx={{ width: '10%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                        <Tooltip sx={{ cursor: 'pointer' }} title={item?.label}>
+                                                            {item?.icon}
+                                                        </Tooltip>
+                                                    </Box>
+                                                </Box>
+                                                <Box sx={{
+                                                    width: { xs: '100%', sm: '90%' }, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'
+                                                }}>
+                                                    <TextComponentBox name={item?.value} size={13} />
                                                 </Box>
                                             </Box>
-                                            <Box sx={{
-                                                width: { xs: '100%', sm: '90%' }, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap'
-                                            }}>
-                                                <TextComponentBox name={item?.value} size={13} />
-                                            </Box>
-                                        </Box>
-                                    ))}
+                                        ))}
+                                    </Box>
+
                                 </Box>
                                 <Box sx={{
-                                    minWidth: '70%',
-                                    maxWidth: '60%',
-                                    minHeight: 240,
+                                    minWidth: { xs: '100%', sm: '60%' },
+                                    maxWidth: { xs: '100%', sm: '70%' },
+                                    minHeight: { xs: 140, sm: 240 },
                                     position: 'relative',
                                     mb: 1
                                 }}>
@@ -286,7 +310,7 @@ const DischargeFollowupModal = ({
                                             <Tooltip title={"Add Remarks"}>
                                                 <AddCircleTwoToneIcon
                                                     onClick={handleopenTextarea}
-                                                    sx={{ fontSize: 26, color: 'rgba(var(--icon-primary))', cursor: 'pointer',mt:3 }} />
+                                                    sx={{ fontSize: 26, color: 'rgba(var(--icon-primary))', cursor: 'pointer', mt: 3 }} />
                                             </Tooltip>
                                         </Box>
                                         {

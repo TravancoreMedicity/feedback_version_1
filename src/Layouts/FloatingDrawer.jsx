@@ -17,6 +17,7 @@ import CollectionsBookmarkTwoToneIcon from '@mui/icons-material/CollectionsBookm
 import HeadsetMicTwoToneIcon from '@mui/icons-material/HeadsetMicTwoTone';
 import KeyboardHideTwoToneIcon from '@mui/icons-material/KeyboardHideTwoTone';
 import SummarizeTwoToneIcon from '@mui/icons-material/SummarizeTwoTone';
+import QuestionAnswerTwoToneIcon from '@mui/icons-material/QuestionAnswerTwoTone';
 
 const FloatingDrawer = ({ anchorEl, handlepopoveClose }) => {
 
@@ -51,6 +52,7 @@ const FloatingDrawer = ({ anchorEl, handlepopoveClose }) => {
             { modslno: 10, menu: "Call Center", text: "/Home/dischargepatient", icon: <HeadsetMicTwoToneIcon className='hoverClass' sx={{ width: { xs: 20, sm: 30 }, height: { xs: 20, sm: 30 }, color: "#ff006e" }} /> },
             { modslno: 11, menu: "PRO Followup", text: "/Home/followupratient", icon: <KeyboardHideTwoToneIcon className='hoverClass' sx={{ width: { xs: 20, sm: 30 }, height: { xs: 20, sm: 30 }, color: "#00a8e8" }} /> },
             { modslno: 12, menu: "Reports", text: "/Home/AllReports", icon: <SummarizeTwoToneIcon className='hoverClass' sx={{ width: { xs: 20, sm: 30 }, height: { xs: 20, sm: 30 }, color: "#7b2cbf" }} /> },
+            { modslno: 13, menu: "PREM", text: "/Home/Prem", icon: <QuestionAnswerTwoToneIcon className='hoverClass' sx={{ width: { xs: 20, sm: 30 }, height: { xs: 20, sm: 30 }, color: "#01ea6aff" }} /> },
         ]
     }, []);
 

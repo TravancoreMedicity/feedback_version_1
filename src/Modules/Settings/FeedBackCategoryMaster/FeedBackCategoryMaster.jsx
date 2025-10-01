@@ -28,7 +28,7 @@ const FeedBackCategoryMaster = () => {
 
     const { data: allfeedbackcategory, refetch: allcategoriesrefetch } = useQuery({
         queryKey: ['allfeedbackcategory'],
-        queryFn: () => getallFeedbackCategory(),
+        queryFn: async () => await getallFeedbackCategory(),
     });
 
     const HanldeUpdation = useCallback(

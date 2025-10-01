@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getallfeedbackMaster, getBedRemarkStatus } from '../../Function/CommonFunction';
 import { OUTLINK_FEEDBACK } from '../../Constant/Static';
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
-import { infoNofity } from '../../Constant/Constant';
+import { infoNofity, warningNofity } from '../../Constant/Constant';
 
 
 const PatientModal = lazy(() => import('./PatientModal'));
@@ -32,20 +32,22 @@ const RoomComponent = ({
 
     const { data: allfeedbackNames } = useQuery({
         queryKey: ['allfeedbackname'],
-        queryFn: () => getallfeedbackMaster(),
+        queryFn: async () => await getallfeedbackMaster(),
         staleTime: Infinity
     })
 
     const { data: getallremarkstatus } = useQuery({
         queryKey: ["getbedremarkstatus"],
-        queryFn: () => getBedRemarkStatus(),
+        queryFn: async () => await getBedRemarkStatus(),
         staleTime: Infinity,
         enabled: !!bdcode
     });
 
+    // fetching Remarks
     const remarkDetails = useCallback((bdcode) => {
-        const result = getallremarkstatus?.find((item) => item?.fb_bd_code === Number(bdcode))
-        setRoomStatus(result)
+        if (!bdcode) return warningNofity("Bed Code Not Found!");
+        const result = getallremarkstatus?.find((item) => item?.fb_bd_code === Number(bdcode));
+        setRoomStatus(result || {});
     }, [getallremarkstatus, setRoomStatus])
 
     const handleClick = useCallback(async () => {
@@ -68,21 +70,37 @@ const RoomComponent = ({
     }, [setModalOpen, getallremarkstatus, setRoomStatus, bdcode, ispresent, setEntering, getdetail, remarkDetails]);
 
 
+
     const openFeedbackForm = useCallback((feedbackId, name, PatientId, patMobile, ipnumber) => {
-        const encodedId = btoa(feedbackId);
-        const encodedName = btoa(name)
-        const encodepatientid = btoa(PatientId)
-        const encodemobile = btoa(patMobile)
-        const encodeipnum = btoa(ipnumber)
-        const externalUrl = `${OUTLINK_FEEDBACK}/${encodedId}?name=${encodedName}&pid=${encodepatientid}&mbno=${encodemobile}&ipnum=${encodeipnum}`;
-        window.open(externalUrl, '_blank'); // Opens in a new tab
+        try {
+            if (!feedbackId) {
+                warningNofity("Feedback ID is missing!");
+                return;
+            }
+
+            const encodedId = btoa(feedbackId || "");
+            const encodedName = btoa(name || "");
+            const encodePatientId = btoa(PatientId || "");
+            const encodeMobile = btoa(patMobile || "");
+            const encodeIpNum = btoa(ipnumber || "");
+
+            const externalUrl = `${OUTLINK_FEEDBACK}/${encodedId}?name=${encodedName}&pid=${encodePatientId}&mbno=${encodeMobile}&ipnum=${encodeIpNum}`;
+
+            window.open(externalUrl, "_blank");
+        } catch (error) {
+            console.error("Error opening feedback form:", error);
+            warningNofity("Unable to open feedback form");
+        }
     }, []);
 
 
     const handlebuttonClick = useCallback((id, name, pid, mob, ipnum) => {
         openFeedbackForm(id, name, pid, mob, ipnum)
         setAnchorEl(null)
-    }, [openFeedbackForm, setAnchorEl])
+    }, [openFeedbackForm]);
+
+
+
 
     // Function to go to the next patient card
     const nextPatient = useCallback(() => {

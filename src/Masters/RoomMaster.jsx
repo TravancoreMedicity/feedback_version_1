@@ -14,10 +14,6 @@ import { IconButton, Tooltip } from "@mui/joy";
 import { EditPencil } from "iconoir-react";
 
 
-// import { getDocTypeMasterList } from '.. /api/docTypeMasterApi'
-// import SelectBedMaster from '../Components/SelectBedMaster'
-// import SelectRoomMaster from '../Components/SelectRoomMaster'
-// import CustomCheckBoxWithLabel from '../Components/CustomCheckBoxWithLabel'
 
 const FeedbackCategoryMasterList = lazy(() => import('../Components/CustomTable'));
 const SelectRoomMaster = lazy(() => import('../Components/SelectRoomMaster'));

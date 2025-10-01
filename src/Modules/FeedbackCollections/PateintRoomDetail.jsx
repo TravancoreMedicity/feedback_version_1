@@ -31,16 +31,19 @@ const PateintRoomDetail = ({ beddetail, nsname, view, setView, nscode }) => {
     //QUERY FOR GETTING ALL BED REMARKS
     const { data: getallremarkstatus } = useQuery({
         queryKey: ["getbedremarkstatus"],
-        queryFn: () => getBedRemarkStatus()
+        queryFn: async () => await getBedRemarkStatus()
     });
 
 
     //FETCHING INFORMATION THAT HAVE ALREADY SUBMITTED FEEDBACK
     const FetchPatientFeedback = useCallback(async (inpatientDetail) => {
+        if (!inpatientDetail) return infoNofity("Patient Detail Not Found!")
+
         const searchdata = {
             fb_patient_num: inpatientDetail[0]?.fb_pt_no,
             fb_ip_num: inpatientDetail[0]?.fb_ip_no,
         }
+
         try {
             const response = await axiosApi.post('/feedback/getpatientfeedback', searchdata);
             const { success, data } = response?.data;
@@ -49,24 +52,26 @@ const PateintRoomDetail = ({ beddetail, nsname, view, setView, nscode }) => {
         } catch (error) {
             warningNofity("Error in Fetching Data");
         }
-    }, [])
+    }, []);
 
     //Fetching Patient Detail From the Melior
     const GetPatientDetailFromMeliora = useCallback(async (bdcode) => {
+        if (!bdcode) return warningNofity("Bed Code is Missing!");
+
+        setLoading(true)
+
         const insertData = {
             fb_ns_code: nscode,
             fb_bd_code: parseInt(bdcode)
         }
 
         try {
-            setLoading(true)
             setInpatientDetailFromMeliora({});
             const response = await axiosApi.post('/feedback/inpatientdetil', insertData)
             const { success, data } = response?.data;
 
             if (success === 1) {
                 setOpen(true)
-                // infoNofity("No patient Detail")
                 setInpatientDetailFromMeliora({})
                 setLoading(false)
                 return;
@@ -83,10 +88,11 @@ const PateintRoomDetail = ({ beddetail, nsname, view, setView, nscode }) => {
             }));
 
             await FetchPatientFeedback(data)
-            setLoading(false)
+
         } catch (error) {
             warningNofity("Error in Api")
             setAnchorEl(null)
+        } finally {
             setLoading(false)
         }
     }, [nscode, setInpatientDetailFromMeliora, setAnchorEl, FetchPatientFeedback, setLoading])

@@ -60,9 +60,6 @@ const FeedBackDetail = () => {
         componentid: 0
     })
 
-
-
-
     const [yesorno, setYesOrNo] = useState({
         Yes: "",
         No: "",
@@ -85,8 +82,6 @@ const FeedBackDetail = () => {
             obj[key] = checkboxanswer[key];
             return obj;
         }, {});
-
-
 
 
 

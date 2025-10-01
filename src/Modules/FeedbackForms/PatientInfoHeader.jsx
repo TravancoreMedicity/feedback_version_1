@@ -16,10 +16,13 @@ const PatientInfoHeader = ({ PatientName, inpatientNumber, patientNo, getCurrent
                 fontFamily: 'var(--font-varient)',
                 color: 'rgba(var(--font-primary-white))',
             }} fontWeight={600} fontSize={{ xs: 8, sm: 12, md: 12, lg: 14, xl: 15 }}>PT NAME :{PatientName}</Typography>
-            <Typography sx={{
-                fontFamily: 'var(--font-varient)',
-                color: 'rgba(var(--font-primary-white))',
-            }} fontWeight={600} fontSize={{ xs: 8, sm: 12, md: 12, lg: 14, xl: 15 }}>IP NO :{inpatientNumber}</Typography>
+            {
+                inpatientNumber && <Typography sx={{
+                    fontFamily: 'var(--font-varient)',
+                    color: 'rgba(var(--font-primary-white))',
+                }} fontWeight={600} fontSize={{ xs: 8, sm: 12, md: 12, lg: 14, xl: 15 }}>IP NO :{inpatientNumber}</Typography>
+            }
+
             <Typography sx={{
                 fontFamily: 'var(--font-varient)',
                 color: 'rgba(var(--font-primary-white))',

@@ -97,11 +97,14 @@ const BlockComponent = ({
     // }, [setLoading]);
 
     const HandleBedFetchFromMeliora = useCallback(async (code) => {
+        setLoading(true)
+        if (!code) return warningNofity("Please Select Nursing Station Properlly");
+        
         const insertData = {
             NS_CODE: code
         }
         try {
-            setLoading(true)
+
             const response = await axiosApi.post('/feedback/getbed', insertData)
             const { success, data } = response?.data;
             if (success === 1) return warningNofity("No Bed Available")
@@ -110,7 +113,6 @@ const BlockComponent = ({
             setNsName(stationname)
             setBedDetail(data ? data : {})
             setView(1)
-            // setLoading(false)
         } catch (error) {
             warningNofity("Error in Api")
             setView(0)

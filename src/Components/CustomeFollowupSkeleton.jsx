@@ -57,7 +57,7 @@ const CustomeFollowupSkeleton = () => {
                         <Skeleton variant="text" width="45%" height={20} sx={{ bgcolor: 'rgba(var(---skeleton-color))' }} />
                         <Skeleton variant="text" width="45%" height={20} sx={{ bgcolor: 'rgba(var(---skeleton-color))' }} />
                     </Box>
-                    <Skeleton variant="rectangular" width={290} height={40} sx={{ mt: 2, bgcolor: 'rgba(var(---skeleton-color))' }} />
+                    <Skeleton variant="rectangular" width={'100%'} height={40} sx={{ mt: 2, bgcolor: 'rgba(var(---skeleton-color))' }} />
                     <Skeleton variant="rectangular" width="95%" height={36} sx={{ mt: 2, bgcolor: 'rgba(var(---skeleton-color))' }} />
                 </Box>
             </Box>

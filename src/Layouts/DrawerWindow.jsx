@@ -27,7 +27,8 @@ import {
     UserBadgeCheck,
     MicrophoneSpeaking,
     PcFirewall,
-    StatsReport
+    StatsReport,
+    Peerlist
 } from 'iconoir-react'
 import { EmpauthId } from "../Constant/Constant";
 import { getUserModules } from "../Function/CommonFunction";
@@ -69,6 +70,7 @@ const DrawerWindow = memo(({ drawerWidth, handleDrawerClose }) => {
             { modslno: 10, menu: "Call Center", text: "/Home/dischargepatient", icon: <MicrophoneSpeaking height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
             { modslno: 11, menu: "PRO Followup", text: "/Home/followupratient", icon: <PcFirewall height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
             { modslno: 12, menu: "Reports", text: "/Home/AllReports", icon: <StatsReport height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
+            { modslno: 13, menu: "PREM", text: "/Home/Prem", icon: <Peerlist height={20} width={20} color="rgba(var(--drawer-font-color))" className='hoverClass' /> },
         ]
     }, []);
 

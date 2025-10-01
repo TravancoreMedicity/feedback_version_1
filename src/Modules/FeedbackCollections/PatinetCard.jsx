@@ -6,8 +6,9 @@ import { format } from 'date-fns';
 const PatinetCard = ({ inpatientDetail, ispresent }) => {
 
     // Render a single patient card
-    
+
     const isDataEmpty = !inpatientDetail || Object.keys(inpatientDetail).length === 0;
+
     if (ispresent === "T" && isDataEmpty) {
         return (
             <Box sx={{

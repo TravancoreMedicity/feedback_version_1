@@ -129,6 +129,7 @@ const FollowupPatient = () => {
 
     // fetching apporiapte patient follow up for Ellider
     const handleFollowUpReview = useCallback(async (data, ipdetail) => {
+        console.log("detail");
         setFollowupLoading(true)
         setOpenReviewModal(true)
         setIpDetail(ipdetail)

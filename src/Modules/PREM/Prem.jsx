@@ -73,10 +73,13 @@ const Prem = () => {
                         height: "calc(100% - 50px)",
                         border: 0.03,
                         borderColor: "rgba(var(--border-primary))",
-                    }}
-                >
+                    }}>
                     <TabContext value={value}>
-                        <Box sx={{ border: 0, borderBottom: 1.5, borderColor: "rgba(var(--tab-border-color))", borderBottomColor: 'divider', borderWidth: 2 }}>
+                        <Box sx={{
+                            border: 0, borderBottom: 1.5,
+                            borderColor: "rgba(var(--tab-border-color))",
+                            borderBottomColor: 'divider', borderWidth: 2
+                        }}>
                             <TabList
                                 aria-label="lab API tabs example"
                                 sx={{

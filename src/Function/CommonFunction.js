@@ -123,6 +123,24 @@ export const getallpremdetail = async () => {
 };
 
 
+export const getNsLastUpdteDate = async () => {
+    try {
+        const result = await axiosApi.get("/feedback/getlastnsupdate");
+        const { data, success } = result.data;
+
+        if (success !== 2) {
+            warningNofity("Error in fetching Data");
+            return [];
+        }
+
+        return data || [];
+    } catch (error) {
+        console.error("Error fetching feedback master:", error);
+        warningNofity("Server error while fetching data getallfeedbackMaster");
+        return [];
+    }
+};
+
 export const getAllBlockedBed = async () => {
     const result = await axiosApi.get("/feedback/getallblockedbed");
     const { data, success } = result.data;

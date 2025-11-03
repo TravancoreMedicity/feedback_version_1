@@ -61,6 +61,7 @@ const DischargePatient = lazy(() => import("./Modules/DischargePatientFeedback/D
 const FollowupPatient = lazy(() => import("./Modules/ProFollowup/FollowupPatient.jsx"));
 const SearchPatientModal = lazy(() => import("./Modules/FeedbackForms/SearchPatientModal.jsx"));
 const Prem = lazy(() => import("./Modules/PREM/Prem.jsx"));
+const Dataimport = lazy(() => import("./Modules/Settings/DataImportMaster/Dataimport.jsx"));
 
 
 //Feedback
@@ -321,6 +322,12 @@ const routes = createBrowserRouter([
             path: "Prem", element:
               <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
                 <Prem />
+              </Suspense>, errorElement: <ErrorElement />
+          },
+          {
+            path: "dataimport", element:
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
+                <Dataimport />
               </Suspense>, errorElement: <ErrorElement />
           },
         ],

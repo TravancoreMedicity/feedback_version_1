@@ -123,6 +123,24 @@ export const getallpremdetail = async () => {
 };
 
 
+export const getNsLastUpdteDate = async () => {
+    try {
+        const result = await axiosApi.get("/feedback/getlastnsupdate");
+        const { data, success } = result.data;
+
+        if (success !== 2) {
+            warningNofity("Error in fetching Data");
+            return [];
+        }
+
+        return data || [];
+    } catch (error) {
+        console.error("Error fetching feedback master:", error);
+        warningNofity("Server error while fetching data getallfeedbackMaster");
+        return [];
+    }
+};
+
 export const getAllBlockedBed = async () => {
     const result = await axiosApi.get("/feedback/getallblockedbed");
     const { data, success } = result.data;
@@ -705,16 +723,13 @@ export const getallNurseStation = async () => {
     try {
         const res = await axiosellider.get('/melioraEllider/nurse');
         const { success, data } = res.data;
-
         if (success === 1) {
             // No data found or some specific condition
             return [];
         }
-
         if (success === 2) {
             return data || [];
         }
-
         // fallback for any other success code
         return [];
     } catch (error) {

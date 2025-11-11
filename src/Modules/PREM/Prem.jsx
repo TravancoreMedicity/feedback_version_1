@@ -17,12 +17,13 @@ import ErrorFallback from '../../Components/ErrorFallback ';
 import PopupQrScanner from '../FeedbackForms/PopupQrScanner';
 import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 import { warningNofity } from '../../Constant/Constant';
+import { EmpauthId } from '../../Constant/Constant';
 
 const Prem = () => {
     const [value, setValue] = useState("1");
     const [feedbackid, setFeedbackId] = useState(0);
     const [openqrscanner, setOpenQrScanner] = useState(false);
-
+    const emp_id = EmpauthId();
     // Get all Feedback From the Feedback Master
     const {
         data: allfeedbackNames,
@@ -57,7 +58,6 @@ const Prem = () => {
     // open qrcode 
     const openFeedbackQrCode = (feedbackId) => {
         if (!feedbackId) return;
-
         setFeedbackId(feedbackId);
         setOpenQrScanner(true);
     };
@@ -73,10 +73,13 @@ const Prem = () => {
                         height: "calc(100% - 50px)",
                         border: 0.03,
                         borderColor: "rgba(var(--border-primary))",
-                    }}
-                >
+                    }}>
                     <TabContext value={value}>
-                        <Box sx={{ border: 0, borderBottom: 1.5, borderColor: "rgba(var(--tab-border-color))", borderBottomColor: 'divider', borderWidth: 2 }}>
+                        <Box sx={{
+                            border: 0, borderBottom: 1.5,
+                            borderColor: "rgba(var(--tab-border-color))",
+                            borderBottomColor: 'divider', borderWidth: 2
+                        }}>
                             <TabList
                                 aria-label="lab API tabs example"
                                 sx={{
@@ -226,7 +229,7 @@ const Prem = () => {
                         border: 0.03,
                         borderColor: "rgba(var(--border-primary))",
                     }} >
-                    <PopupQrScanner feedbackid={feedbackid} />
+                    <PopupQrScanner feedbackid={feedbackid} empId={emp_id} />
                 </ModalDialog>
             </Modal>
         </>

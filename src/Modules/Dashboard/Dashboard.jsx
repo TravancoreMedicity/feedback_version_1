@@ -17,8 +17,6 @@ import { useMediaQuery } from "@mui/material";
 import { predefinedCategories } from "../../Constant/Data";
 import CustomBackDropWithOutState from "../../Components/CustomBackDropWithOutState";
 
-
-
 import TmcLogo from '../../assets/images/FeedbackLogo.png';
 import kmcLogo from '../../assets/images/FeedbackLogo2.png';
 
@@ -35,17 +33,22 @@ const Dashboard = () => {
   const isMdUp = useMediaQuery('(min-width: 760px)');
 
 
-  const { data: allfeedbackNames } = useQuery({
+  // fetching all Active Feedbacks
+  const { data: allActiveFeedbacks } = useQuery({
     queryKey: ['allfeedbackname'],
     queryFn: () => getallfeedbackMaster(),
   });
 
+  // excluding prems form the feedbacks
+  const allfeedbackNames = useMemo((item) => allActiveFeedbacks?.filter(item => item?.fb_qr_status != 1), [allActiveFeedbacks]);
+
+  // fetchinga all user feedbacks
   const { data: getalluserfeedback = [] } = useQuery({
     queryKey: ['getalluserfeedback', fetchdate],
     queryFn: () => getalluserfeedbackAnswers(fetchdate),
   });
 
-
+  //Get Total Feedback coungs
   const { data: getfeedbackCount = [] } = useQuery({
     queryKey: ['gettotalfeedbackcount'],
     queryFn: () => getallFeedBackCount(),
@@ -57,7 +60,7 @@ const Dashboard = () => {
     queryFn: () => gettotalstarCount(),
   });
 
-
+  // Fetching all Categories
   const { data: getCatergoryCount = [] } = useQuery({
     queryKey: ['getcategorycount'],
     queryFn: () => getCategoryCountDetail(),
@@ -129,19 +132,12 @@ const Dashboard = () => {
     });
 
 
-
-  //This is currently not using
-  // const totalFeedbackSum = useMemo(() => {
-  //   return formattedGroupedFeedback?.reduce((sum, category) => sum + category?.totalFeed, 0)
-  // }, [formattedGroupedFeedback]);
-
-
+  // calculating all Categorical rating values
   const totalRating = useMemo(() => {
     return formattedGroupedFeedback?.reduce((sum, category) => sum + category?.categoryRating, 0)
   }, [formattedGroupedFeedback]);
 
   const HospitalRating = useMemo(() => totalRating / 5, [totalRating])
-
 
   //calculating total rating for each individual feedback form
   const feedbackDataArray = allfeedbackNames?.map(feedbackItem => {
@@ -218,14 +214,6 @@ const Dashboard = () => {
                   }}
                 />
               )}
-              {/* 
-              <img
-                src={feedbackLogo}
-                alt="logo"
-                style={{
-                  height: 60
-                }}
-              /> */}
 
               <Box sx={{
                 position: 'relative',

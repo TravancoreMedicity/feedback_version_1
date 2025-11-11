@@ -14,6 +14,7 @@ import CustomInputWithLabel from '../../../Components/CustomInputWithLabel'
 import CustomCheckBoxWithLabel from '../../../Components/CustomCheckBoxWithLabel'
 import CustomBackDropWithOutState from '../../../Components/CustomBackDropWithOutState'
 import { warningNofity, succesNofity, errorNofity, employeeID } from '../../../Constant/Constant'
+import SelectFeedbackType from '../../../Components/SelectFeedbackType';
 
 
 const FeedbackCategoryMasterList = lazy(() => import('../../../Components/CustomTable'));
@@ -24,10 +25,11 @@ const FeedbackMaster = () => {
     const [updationdetail, setUpdateDetial] = useState({})
     const [feedbackmastername, setfeedbackMasterName] = useState({
         feedbackName: '',
-        status: false
+        status: false,
+        type_slno: 0
     })
 
-    const { feedbackName, status } = feedbackmastername;
+    const { feedbackName, status, type_slno } = feedbackmastername;
 
     const handleChange = (e) => {
         setfeedbackMasterName({ ...feedbackmastername, [e.target.name]: e.target.value })
@@ -35,7 +37,7 @@ const FeedbackMaster = () => {
 
     const { data: allfeedbackNames, refetch: allfeedbackNamesRefectch } = useQuery({
         queryKey: ['allfeedbackname'],
-        queryFn: () => getallfeedbackMaster(),
+        queryFn: getallfeedbackMaster,
     })
 
     const HanldeUpdation = useCallback(
@@ -46,7 +48,8 @@ const FeedbackMaster = () => {
             setUpdateDetial(rowData)
             setfeedbackMasterName({
                 feedbackName: rowData.feedback_name,
-                status: rowData.feedback_status
+                status: rowData.feedback_status,
+                type_slno: rowData.fb_qr_status
             })
         },
         []
@@ -57,14 +60,15 @@ const FeedbackMaster = () => {
             feedback_name: feedbackName,
             fdmast_slno: 0,
             feedback_status: status,
+            fb_qr_status: type_slno,
             create_user: employeeID()
         }
-
         const UpdateinsertingData = {
             feedback_slno: updationdetail.fd_slno,
             feedback_name: feedbackName,
             fdmast_slno: 0,
             feedback_status: status,
+            fb_qr_status: type_slno,
             update_user: employeeID()
         }
         if (updateflag === 0) {
@@ -75,10 +79,10 @@ const FeedbackMaster = () => {
                 if (success !== 2) return errorNofity("Error in inserting Data!")
                 allfeedbackNamesRefectch()
                 succesNofity("Successfully Inserted Data..!")
-                setfeedbackMasterName({ feedbackName: '', status: false })
+                setfeedbackMasterName({ feedbackName: '', status: false, type_slno: 0 })
             } catch (error) {
                 warningNofity(error)
-                setfeedbackMasterName({ feedbackName: '', status: false })
+                setfeedbackMasterName({ feedbackName: '', status: false, type_slno: 0 })
             }
         } else {
             try {
@@ -88,14 +92,14 @@ const FeedbackMaster = () => {
                 allfeedbackNamesRefectch()
                 succesNofity("Successfully Updated Data..!")
                 setUpdateFlag(0)
-                setfeedbackMasterName({ feedbackName: '', status: false })
+                setfeedbackMasterName({ feedbackName: '', status: false, type_slno: 0 })
             } catch (error) {
                 warningNofity(error)
-                setfeedbackMasterName({ feedbackName: '', status: false })
+                setfeedbackMasterName({ feedbackName: '', status: false, type_slno: 0 })
             }
         }
 
-    }, [allfeedbackNamesRefectch, feedbackName, status, updateflag, updationdetail])
+    }, [allfeedbackNamesRefectch, feedbackName, status, updateflag, updationdetail, type_slno])
 
     return (
         <DefaultPageLayout label="Feedback  Master" >
@@ -107,6 +111,12 @@ const FeedbackMaster = () => {
                     sx={{}}
                     labelName='Feedback Name'
                     type="text"
+                />
+
+                <SelectFeedbackType
+                    label={'Select the Feedback Type'}
+                    value={type_slno}
+                    handleChange={(e, val) => handleChange({ target: { name: 'type_slno', value: val } })}
                 />
                 <Box className="flex flex-1 items-center justify-between py-[0.299rem]">
                     <CustomCheckBoxWithLabel
@@ -121,13 +131,14 @@ const FeedbackMaster = () => {
                 />
             </MasterPageLayout>
             <Suspense fallback={<CustomBackDropWithOutState message={'Loading...'} />} >
-                <FeedbackCategoryMasterList tableHeaderCol={['SlNo', 'Categroy Name', 'Category Status', 'Action']} >
+                <FeedbackCategoryMasterList tableHeaderCol={['SlNo', 'Categroy Name', 'Category Status', "Feedback Type", 'Action']} >
                     {
                         allfeedbackNames?.map((item, idx) => (
                             <tr key={idx}>
                                 <td>{item?.fd_slno}</td>
                                 <td>{item?.feedback_name}</td>
                                 <td>{item?.feedback_status === 1 ? "ACTIVE" : "INACTIVE"}</td>
+                                <td>{item?.fb_qr_status === 0 ? "NORMAL" : item?.fb_qr_status === 1 ? "PREM" : "NORMAL WITH QR"}</td>
                                 <td><Tooltip title="Edit Data" placement="top">
                                     <IconButton
                                         variant="outlined"

@@ -16,7 +16,7 @@ import searchbg from '../../assets/searchbg.jpg'
 
 const SearchPatientModal = () => {
 
-    const { feedbackId } = useParams();
+    const { feedbackId, employeeId } = useParams();
 
     const [mrd, setMrd] = useState("");
     const [loading, setLoading] = useState(false);
@@ -53,7 +53,6 @@ const SearchPatientModal = () => {
             setLoading(false);
             return;
         }
-
         try {
             await fetchPatientDetail(mrd);
         } catch (err) {
@@ -63,7 +62,6 @@ const SearchPatientModal = () => {
             setLoading(false);
         }
     };
-
 
     // confirm details
     const handleConfirm = () => {
@@ -78,9 +76,10 @@ const SearchPatientModal = () => {
             const encodepatientid = btoa(patient?.PT_NO);
             const encodemobile = btoa(patient?.PTC_MOBILE);
             const encodedId = feedbackId;
+            const enocodeEmpId = employeeId;
             const qrstausCode = btoa("1")
 
-            const externalQrUrl = `${OUTLINK_FEEDBACK}/${encodedId}?name=${encodedName}&pid=${encodepatientid}&mbno=${encodemobile}&qrs=${qrstausCode}`;
+            const externalQrUrl = `${OUTLINK_FEEDBACK}/${encodedId}?name=${encodedName}&pid=${encodepatientid}&mbno=${encodemobile}&qrs=${qrstausCode}&empid=${enocodeEmpId}`;
             // Step 3 → open new tab
             window.open(externalQrUrl, "_blank");
         } catch (error) {

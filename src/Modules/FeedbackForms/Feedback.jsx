@@ -1,6 +1,6 @@
 /// NEW
-import React, { useState, memo, useCallback } from 'react';
-import { Box, Tooltip } from "@mui/joy";
+import React, { useState, memo } from 'react';
+import { Box, Modal, ModalDialog, Tooltip } from "@mui/joy";
 import { getallfeedbackMaster } from "../../Function/CommonFunction";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
@@ -15,13 +15,15 @@ import { OUTLINK_FEEDBACK } from '../../Constant/Static';
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
 import ErrorFallback from '../../Components/ErrorFallback ';
 import { infoNofity } from '../../Constant/Constant';
-
+import PopupQrScanner from '../FeedbackForms/PopupQrScanner';
+import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 
 
 const Feedback = () => {
 
   const [value, setValue] = useState("1");
-
+  const [openqrscanner, setOpenQrScanner] = useState(false);
+  const [feedbackid, setFeedbackId] = useState(0);
   // Get all Feedback From the Feedback Master
   const {
     data: allfeedbackNames,
@@ -46,6 +48,13 @@ const Feedback = () => {
     const externalUrl = `${OUTLINK_FEEDBACK}/${encodedId}`;
     window.open(externalUrl, "_blank", "noopener,noreferrer");
   };
+
+  const openFeedbackQrCode = (feedbackId) => {
+    if (!feedbackId) return;
+    setFeedbackId(feedbackId);
+    setOpenQrScanner(true);
+  };
+
 
 
   return (
@@ -115,7 +124,7 @@ const Feedback = () => {
 
               {FetchAllFeedbackNameSucess &&
                 allfeedbackNames
-                  ?.filter(item => item?.fb_qr_status === 0)
+                  ?.filter(item => item?.fb_qr_status != 1)
                   ?.map((item, index) => (
                     <Box
                       key={index}
@@ -160,22 +169,42 @@ const Feedback = () => {
                             {item?.feedback_name.toUpperCase()}
                           </Typography>
                         </Box>
-                        <Tooltip
-                          sx={{ fontSize: 12 }}
-                          title={`${item?.feedback_name?.toLowerCase()} preview `}
-                          placement="top"
-                        >
-                          <PlaylistPlayIcon
-                            onClick={() => openFeedbackForm(item?.fdmast_slno)}
-                            sx={{
-                              cursor: "pointer",
-                              transition: "transform 0.3s ease",
-                              transform: "translateX(0)",
-                              width: { xs: 20, sm: 25 },
-                              height: { xs: 20, sm: 25 }
-                            }}
-                          />
-                        </Tooltip>
+                        <Box sx={{ display: 'flex', gap: 2 }}>
+                          <Tooltip
+                            sx={{ fontSize: 12 }}
+                            title={`${item?.feedback_name?.toLowerCase()} preview `}
+                            placement="top">
+                            <PlaylistPlayIcon
+                              onClick={() => openFeedbackForm(item?.fdmast_slno)}
+                              sx={{
+                                cursor: "pointer",
+                                transition: "transform 0.3s ease",
+                                transform: "translateX(0)",
+                                width: { xs: 20, sm: 25 },
+                                height: { xs: 20, sm: 25 }
+                              }}
+                            />
+                          </Tooltip>
+                          {
+                            item?.fb_qr_status === 2 &&
+                            <Tooltip
+                              sx={{ fontSize: 12 }}
+                              title={`Scan now`}
+                              size='sm'
+                              placement="top">
+                              <QrCodeScannerIcon
+                                onClick={() => openFeedbackQrCode(item?.fdmast_slno)}
+                                sx={{
+                                  cursor: "pointer",
+                                  transition: "transform 0.3s ease",
+                                  transform: "translateX(0)",
+                                  width: { xs: 20, sm: 22 },
+                                  height: { xs: 20, sm: 22 }
+                                }}
+                              />
+                            </Tooltip>
+                          }
+                        </Box>
                       </div>
                     </Box>
                   ))}
@@ -183,6 +212,23 @@ const Feedback = () => {
           </TabContext>
         </Box>
       </Box>
+
+      {/* Step 1 → QR Modal */}
+      <Modal open={openqrscanner} onClose={() => setOpenQrScanner(false)}>
+        <ModalDialog
+          sx={{
+            width: 200,
+            borderRadius: "md",
+            p: 1,
+            minHeight: 280,
+            boxShadow: "none",
+            backgroundColor: "rgba(var(--bg-card))",
+            border: 0.03,
+            borderColor: "rgba(var(--border-primary))",
+          }} >
+          <PopupQrScanner feedbackid={feedbackid} />
+        </ModalDialog>
+      </Modal>
     </>
   );
 };

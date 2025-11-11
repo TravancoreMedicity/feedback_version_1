@@ -138,7 +138,7 @@ const DischargePatient = () => {
         try {
             const result = await axiosellider.post("/melioraEllider/getipfollowup", insertdata);
             const { data, success } = result.data;
-            if (success === 0) return warningNofity("Error in fetching Data");
+            if (success === 0) return warningNofity("Error in fetching Data sdfsdfsdfsd");
             const cleanData = await CleanHtmlString(data?.[0]?.DSC_DESCRIPTION);
             setIpFollowUpReviewe(data?.length > 0 ? cleanData : 'NO PREVIOUS PRVIEW FOR THIS PARTICULAR PATIENT');
         } catch (error) {

@@ -67,14 +67,49 @@ axiosApi.interceptors.response.use(
     }
 );
 
+// CONNECTION TO THE ELLIDER MYSQL DATABASE
 
 export const axiosellider = Axios.create({
     baseURL: ELLIDER_API_URL,
     headers: {
-        "Content-Type": 'application/json',
-        "Accept": 'application/json',
-        "Accept-Language": "en-GB,en"
+        'Content-Type': 'application/json',
+        Accept: 'application/json',
+        'Accept-Language': 'en-GB,en'
     }
-});
+})
+//geting elider token
+export const fetchEliderToken = async () => {
+    try {
+        const result = await axiosApi.get(`/user/get-elider-token`)
+        const { success, data } = result.data
+        if (success === 1 && data.length > 0) {
+            const token = data?.[0]?.Elider_token;
+            return token
+        } else {
+            return null
+        }
+    } catch (err) {
+        console.error("Failed to fetch elider token:", err);
+        return null;
+    }
+};
 
-
+axiosellider.interceptors.request.use(
+    async function (config) {
+        const userinfo = sessionStorage.getItem('userDetl')
+        const accessToken = userinfo ? JSON.parse(sessionStorage.getItem('userDetl')).token : 0
+        // const userId = localData ? atob(JSON.parse(localData)?.authNo) : null;
+        const token = await fetchEliderToken();
+        if (token) {
+            config.headers.Authorization = `Token ${token} `;
+        } else {
+            // config.headers['x-access-token'] = accessToken;
+            config.headers.Authorization = `Bearer ${accessToken} `;
+        }
+        return config;
+    },
+    function (err) {
+        // console.log(err);
+        return Promise.reject(err);
+    }
+);

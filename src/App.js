@@ -15,7 +15,6 @@ import CommonFeedbackReport from "./Modules/Reports/CommonFeedbackReport/CommonF
 import IpFeedbackReport from "./Modules/Reports/IpFeedbackReport/IpFeedbackReport.jsx";
 
 
-
 // import { socket } from "./ws/socket";
 // import Scanner from "./Components/Scanner.jsx";
 // import HkContainer from "./Modules/HouseKeeping.jsx/HkContainer.jsx";
@@ -61,6 +60,7 @@ const DischargePatient = lazy(() => import("./Modules/DischargePatientFeedback/D
 const FollowupPatient = lazy(() => import("./Modules/ProFollowup/FollowupPatient.jsx"));
 const SearchPatientModal = lazy(() => import("./Modules/FeedbackForms/SearchPatientModal.jsx"));
 const Prem = lazy(() => import("./Modules/PREM/Prem.jsx"));
+const Dataimport = lazy(() => import("./Modules/Settings/DataImportMaster/Dataimport.jsx"));
 
 
 //Feedback
@@ -74,8 +74,6 @@ const Prem = lazy(() => import("./Modules/PREM/Prem.jsx"));
 //   import("./Modules/Search/AdvancedSearch.jsx")
 // );
 // const FileUpload = lazy(() => import("./Modules/FileUpload/FileUpload.jsx"));
-
-
 
 const routes = createBrowserRouter([
   {
@@ -94,7 +92,7 @@ const routes = createBrowserRouter([
     errorElement: <ErrorElement />
   },
   {
-    path: "/feedback/searchmodal/:feedbackId",
+    path: "/feedback/searchmodal/:feedbackId/:employeeId",
     element: (
       <Suspense fallback={<CommonFinalFeedSkeleton />}>
         <SearchPatientModal />
@@ -321,6 +319,12 @@ const routes = createBrowserRouter([
             path: "Prem", element:
               <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
                 <Prem />
+              </Suspense>, errorElement: <ErrorElement />
+          },
+          {
+            path: "dataimport", element:
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
+                <Dataimport />
               </Suspense>, errorElement: <ErrorElement />
           },
         ],

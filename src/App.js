@@ -15,7 +15,6 @@ import CommonFeedbackReport from "./Modules/Reports/CommonFeedbackReport/CommonF
 import IpFeedbackReport from "./Modules/Reports/IpFeedbackReport/IpFeedbackReport.jsx";
 
 
-
 // import { socket } from "./ws/socket";
 // import Scanner from "./Components/Scanner.jsx";
 // import HkContainer from "./Modules/HouseKeeping.jsx/HkContainer.jsx";
@@ -76,8 +75,6 @@ const Dataimport = lazy(() => import("./Modules/Settings/DataImportMaster/Dataim
 // );
 // const FileUpload = lazy(() => import("./Modules/FileUpload/FileUpload.jsx"));
 
-
-
 const routes = createBrowserRouter([
   {
     path: "/",
@@ -95,7 +92,7 @@ const routes = createBrowserRouter([
     errorElement: <ErrorElement />
   },
   {
-    path: "/feedback/searchmodal/:feedbackId",
+    path: "/feedback/searchmodal/:feedbackId/:employeeId",
     element: (
       <Suspense fallback={<CommonFinalFeedSkeleton />}>
         <SearchPatientModal />

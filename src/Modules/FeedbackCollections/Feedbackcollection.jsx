@@ -5,35 +5,35 @@ import { getallNurseStation, getallNurseStationMaster } from '../../Function/Com
 import { useQuery } from '@tanstack/react-query'
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
 
-
-
 const CollectionDetail = lazy(() => import('./CollectionDetail'));
 const PateintRoomDetail = lazy(() => import('./PateintRoomDetail'));
 
-
 const Feedbackcollection = () => {
-
     const [view, setView] = useState(0);
     const [beddetail, setBedDetail] = useState([]);
     const [nsname, setNsName] = useState("");
     const [nscode, setNsCode] = useState('');
     const [loading, setLoading] = useState(false);
-
-    const { data: getallnursestation } = useQuery({
+    const { data: getallnursestation,
+        isLoading: nsstationloading
+    } = useQuery({
         queryKey: ['getallnsmaster'],
-        queryFn: () => getallNurseStationMaster(),
+        queryFn: getallNurseStationMaster,
     });
 
-    const { data: elidernursingstation, } = useQuery({
+    const { data: elidernursingstation,
+        isLoading: ElliderNsLoading
+    } = useQuery({
         queryKey: ['allnursestation'],
-        queryFn: () => getallNurseStation(),
+        queryFn: getallNurseStation,
     });
 
-    
-    
 
     return (
         <Box sx={{ minHeight: '100vh' }}>
+
+            {(ElliderNsLoading || nsstationloading) && <CustomBackDropWithOutState message={"Please Wait Loading..."} />}
+
             {
                 view === 0 ?
                     <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >

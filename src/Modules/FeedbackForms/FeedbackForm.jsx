@@ -3,11 +3,11 @@ import { axiosApi } from '../../Axios/Axios';
 import { useQuery } from '@tanstack/react-query';
 import { useLocation, useParams } from 'react-router-dom';
 import { EmpauthId, errorNofity, warningNofity } from '../../Constant/Constant';
-import { FeedbackDetailForDisplay, fetchCurrentCompany, safeAtob } from '../../Function/CommonFunction';
+import { FeedbackDetailForDisplay, fetchCurrentCompany } from '../../Function/CommonFunction';
 import EmojiSkeleton from '../../Feedback/Commoncomponents/ChooseEmogjiSkeleton';
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
 import QuestionBoxSkeleton from '../../Feedback/Commoncomponents/QuestionBoxSkeleton';
-import React, { memo, lazy, useState, useCallback, useEffect, useMemo, Suspense } from 'react';
+import React, { memo, lazy, useState, useCallback, useEffect, Suspense } from 'react';
 import TextComponentBox from '../../Components/TextComponentBox';
 import EditNoteTwoToneIcon from '@mui/icons-material/EditNoteTwoTone';
 
@@ -52,10 +52,11 @@ const FeedbackForm = ({
         feedbackId: 0,
         inpatientNumber: 0,
         patientNo: 0,
+        empid: 0
     });
     const { encodedId } = useParams();
     const location = useLocation();
-    const { PatientName, feedbackId, inpatientNumber, patientNo } = formData;
+    const { PatientName, feedbackId, inpatientNumber, patientNo, empid } = formData;
 
     // getting patient detail using url
     useEffect(() => {
@@ -69,6 +70,7 @@ const FeedbackForm = ({
             const patientMob = atob(queryParams.get("mbno") || "")
             const InpatientNumber = atob(queryParams.get("ipnum") || "")
             const qrstausCode = atob(queryParams.get("qrs") || "")
+            const empid = atob(queryParams.get("empid") || "")
             // Fetch feedback data using the decoded feedbackId
             setMobileNumber(patientMob)
             setQrStatus(qrstausCode)
@@ -77,6 +79,7 @@ const FeedbackForm = ({
                 feedbackId: feedbackId,
                 patientNo: patienId,
                 inpatientNumber: InpatientNumber,
+                empid: empid
             });
         } catch (error) {
             warningNofity("Error decoding Data", error);
@@ -208,21 +211,6 @@ const FeedbackForm = ({
     });
 
 
-    //FInal postdata for Feedback Submission
-    // const FinalInsertData = useMemo(() => ({
-    //     fdmast_slno: Number(feedbackId),
-    //     fb_ip_num: inpatientNumber ? inpatientNumber : null,
-    //     fb_patient_num: patientNo ? patientNo : null,
-    //     fb_patient_name: PatientName ? PatientName : null,
-    //     fb_patient_mob: mobilenumber ? mobilenumber : null,
-    //     fb_answers: combinedFeedbackData,
-    //     fb_default_quest: defaultimpression ? defaultimpression : [],
-    //     fb_default_reamark: defaultremarks ? defaultremarks : '',
-    //     create_user: ((qrstatus === "1") || (encodedId && atob(encodedId) === "3")) ? 1 : Number(EmpauthId())
-    // }), [patientNo, PatientName, mobilenumber, combinedFeedbackData, feedbackId, inpatientNumber, defaultimpression, encodedId, defaultremarks, qrstatus])
-
-
-
     // Submit Feedback Forms
     const handlesubmit = useCallback(async () => {
         setLoading(true)
@@ -259,8 +247,9 @@ const FeedbackForm = ({
             fb_answers: combinedFeedbackData,
             fb_default_quest: defaultimpression || [],
             fb_default_reamark: defaultremarks || '',
-            create_user: ((qrstatus === "1") || (encodedId && atob(encodedId) === "3")) ? 1 : Number(EmpauthId())
+            create_user: Number(empid) !== 0 ? empid : ((qrstatus === "1") || (encodedId && atob(encodedId) === "3")) ? 1 : Number(EmpauthId())
         };
+
         try {
             const result = await axiosApi.post('/feedback/feedbackanswers', FinalInsertData);
             const { success } = result.data;
@@ -281,7 +270,7 @@ const FeedbackForm = ({
         mobilevalidation,
         mobilenumber,
         isnoclicked,
-        //new
+        empid,
         feedbackId, inpatientNumber, patientNo, PatientName, mobilenumber, combinedFeedbackData, defaultimpression, defaultremarks, qrstatus, encodedId
     ])
 

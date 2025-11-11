@@ -723,16 +723,13 @@ export const getallNurseStation = async () => {
     try {
         const res = await axiosellider.get('/melioraEllider/nurse');
         const { success, data } = res.data;
-
         if (success === 1) {
             // No data found or some specific condition
             return [];
         }
-
         if (success === 2) {
             return data || [];
         }
-
         // fallback for any other success code
         return [];
     } catch (error) {

@@ -1,6 +1,6 @@
 import { getYear, format } from 'date-fns'
 import { axiosApi, axiosellider } from '../Axios/Axios';
-import { warningNofity } from '../Constant/Constant';
+import { errorNofity, infoNofity, succesNofity, warningNofity } from '../Constant/Constant';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
@@ -1013,5 +1013,37 @@ export const safeAtob = (value) => {
         return value && /^[A-Za-z0-9+/=]+$/.test(value) ? atob(value) : value;
     } catch {
         return value;
+    }
+};
+
+
+export const formatEndOfDay = (d) => {
+    const date = new Date(d);
+    return format(
+        new Date(date.getFullYear(), date.getMonth(), date.getDate(), 23, 59, 59),
+        "yyyy-MM-dd HH:mm:ss"
+    );
+};
+
+
+export const handleApi = async (apiCall, setState, apiName) => {
+    try {
+        const res = await apiCall;
+        const { data, message, success } = res.data;
+
+        if (success === 2) {
+            setState(data ?? []);
+            succesNofity(message || `${apiName} Success`);
+        }
+        else if (success === 1) {
+            infoNofity(message || `${apiName} Data Not Found`);
+        }
+        else {
+            warningNofity(message || `${apiName} Error`);
+        }
+
+    } catch (err) {
+        console.error(`${apiName} Error:`, err);
+        errorNofity(`${apiName} Error Occurred`);
     }
 };

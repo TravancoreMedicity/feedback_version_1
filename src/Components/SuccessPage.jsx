@@ -1,22 +1,44 @@
 import { Box, Typography } from '@mui/joy';
-import React, { useState, useEffect, memo, useCallback } from 'react';
+import React, { useState, useEffect, memo, useCallback, useMemo } from 'react';
+import { fetchCurrentCompany } from '../Function/CommonFunction';
+import { useQuery } from '@tanstack/react-query';
 
 
 
 const successAnimation = require('../assets/successanimation.gif');
 const successStatic = require('../assets/succespic.png');
 
-const SuccessPage = ({ setIsSubmit, feedbackId, setOpen, getFeedbackData, PatientData, getDishcargePatientDetail }) => {
+const SuccessPage = ({
+    setIsSubmit,
+    feedbackId,
+    setOpen,
+    getFeedbackData,
+    PatientData,
+    getDishcargePatientDetail
+}) => {
 
     const [showGif, setShowGif] = useState(true);
+    const { data: currentCompanyData } = useQuery({
+        queryKey: ['getcurrentcompany'],
+        queryFn: fetchCurrentCompany,
+        staleTime: Infinity
+    });
+
+    const redirect = useMemo(() => {
+        const companySlno = currentCompanyData?.[0]?.company_slno ?? 1;
+
+        return companySlno === 1
+            ? "https://travancoremedicity.com/wellness-executive-health-care-center/"
+            : "https://kmcp.co.in/";
+    }, [currentCompanyData]);
+
+
     useEffect(() => {
         const timer = setTimeout(() => {
             setShowGif(false);
         }, 2200); // Adjust based on your GIF duration
         return () => clearTimeout(timer);
     }, []);
-
-
 
 
     // the funcition to return to website or go back when the user submit the Done after the feedback is Done
@@ -27,12 +49,12 @@ const SuccessPage = ({ setIsSubmit, feedbackId, setOpen, getFeedbackData, Patien
             getFeedbackData()
             getDishcargePatientDetail()
         } else {
-            window.open("https://travancoremedicity.com/wellness-executive-health-care-center/", "_blank");
+            window.open(redirect, "_blank");
         }
         setIsSubmit(false);
         // Try closing the current tab 
         window.close();
-    }, [setIsSubmit, setOpen, getFeedbackData, feedbackId, PatientData]);
+    }, [setIsSubmit, setOpen, getFeedbackData, feedbackId, PatientData, redirect]);
 
 
     return (
@@ -44,8 +66,7 @@ const SuccessPage = ({ setIsSubmit, feedbackId, setOpen, getFeedbackData, Patien
             justifyContent: 'center',
             flexDirection: 'column',
             backgroundColor: feedbackId === "8" ? "rgba(var(--bg-card))" : '#e9ecef',
-            // bgcolor: '#e9ecef',
-            // color: 'rgba(var(--font-primary-white))',
+
         }}>
             <style>
                 {`

@@ -406,6 +406,69 @@ export const patientData = [
 ];
 
 
+export const dummyPatientData = [
+  {
+    IP_NO: "2500063201",
+    IPD_DATE: "2025-01-18 10:32:15",
+    PT_NO: "P-00123456",
+    PTC_PTNAME: "ARJUN KUMAR",
+    PTC_SEX: "M",
+    PTN_YEARAGE: 29,
+    PTC_LOADD1: "Kollam",
+    PTC_LOADD2: "Kadappakada",
+    PTC_LOADD3: "Near Bus Stand",
+    PTC_LOADD4: "Kerala",
+    IPD_BD_CODE: "B102",
+    DO_CODE: "D045",
+    IPC_CURSTATUS: "ADM",     // Admitted
+    IPD_DISC: null,
+    PTC_MOBILE: "9876543210",
+    DOC_NAME: "Dr. Rakesh Nair",
+    DPC_DESC: "General Medicine"
+  },
+
+  {
+    IP_NO: "2500063202",
+    IPD_DATE: "2025-01-18 11:45:20",
+    PT_NO: "P-00987654",
+    PTC_PTNAME: "NEETHA P S",
+    PTC_SEX: "F",
+    PTN_YEARAGE: 34,
+    PTC_LOADD1: "Trivandrum",
+    PTC_LOADD2: "Vattiyoorkavu",
+    PTC_LOADD3: "Kochuveli",
+    PTC_LOADD4: "Kerala",
+    IPD_BD_CODE: "G210",
+    DO_CODE: "D078",
+    IPC_CURSTATUS: "DBC",     // Discharged
+    IPD_DISC: "2025-01-19 17:22:01",
+    PTC_MOBILE: "9994456780",
+    DOC_NAME: "Dr. Sneha Raj",
+    DPC_DESC: "Gynecology"
+  },
+
+  {
+    IP_NO: "2500063203",
+    IPD_DATE: "2025-01-19 09:12:55",
+    PT_NO: "P-00311245",
+    PTC_PTNAME: "VISHNU MOHAN",
+    PTC_SEX: "M",
+    PTN_YEARAGE: 41,
+    PTC_LOADD1: "Pathanamthitta",
+    PTC_LOADD2: "Adoor",
+    PTC_LOADD3: "Market Road",
+    PTC_LOADD4: "Kerala",
+    IPD_BD_CODE: "C405",
+    DO_CODE: "D012",
+    IPC_CURSTATUS: "ADM",
+    IPD_DISC: null,
+    PTC_MOBILE: "8089776655",
+    DOC_NAME: "Dr. Ajith Varghese",
+    DPC_DESC: "Cardiology"
+  }
+];
+
+
 export const ratings = [
   { stars: 5, value: 80 },
   { stars: 4, value: 60 },

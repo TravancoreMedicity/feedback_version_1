@@ -14,7 +14,7 @@ import PlaylistPlayIcon from '@mui/icons-material/PlaylistPlay';
 import { OUTLINK_FEEDBACK } from '../../Constant/Static';
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
 import ErrorFallback from '../../Components/ErrorFallback ';
-import { infoNofity } from '../../Constant/Constant';
+import { EmpauthId, infoNofity } from '../../Constant/Constant';
 import PopupQrScanner from '../FeedbackForms/PopupQrScanner';
 import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 
@@ -24,6 +24,7 @@ const Feedback = () => {
   const [value, setValue] = useState("1");
   const [openqrscanner, setOpenQrScanner] = useState(false);
   const [feedbackid, setFeedbackId] = useState(0);
+  const emp_id = EmpauthId();
   // Get all Feedback From the Feedback Master
   const {
     data: allfeedbackNames,
@@ -226,7 +227,7 @@ const Feedback = () => {
             border: 0.03,
             borderColor: "rgba(var(--border-primary))",
           }} >
-          <PopupQrScanner feedbackid={feedbackid} />
+          <PopupQrScanner feedbackid={feedbackid} empId={emp_id} />
         </ModalDialog>
       </Modal>
     </>

@@ -61,7 +61,7 @@ const FollowupPatient = lazy(() => import("./Modules/ProFollowup/FollowupPatient
 const SearchPatientModal = lazy(() => import("./Modules/FeedbackForms/SearchPatientModal.jsx"));
 const Prem = lazy(() => import("./Modules/PREM/Prem.jsx"));
 const Dataimport = lazy(() => import("./Modules/Settings/DataImportMaster/Dataimport.jsx"));
-
+const Ipadmissiondishcarge = lazy(() => import("./Modules/Settings/AdmissionDischargeRefresh/Ipadmissiondishcarge.jsx"));
 
 //Feedback
 // const ChooseFeedbacks = lazy(() => import("./Feedback/ChooseFeedbacks.jsx"));
@@ -326,7 +326,12 @@ const routes = createBrowserRouter([
               <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
                 <Dataimport />
               </Suspense>, errorElement: <ErrorElement />
-          },
+          }, {
+            path: "ipadmissdischarge", element:
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
+                <Ipadmissiondishcarge />
+              </Suspense>, errorElement: <ErrorElement />
+          }
         ],
       },
       {

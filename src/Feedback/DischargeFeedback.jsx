@@ -2,8 +2,6 @@ import { Box } from '@mui/joy'
 import React, { lazy, memo, Suspense } from 'react';
 import CustomBackDropWithOutState from '../Components/CustomBackDropWithOutState';
 
-
-
 const CheckBoxGroup = lazy(() => import('../Components/CheckBoxGroup'));
 const QuestionText = lazy(() => import('../Components/QuestionText'));
 

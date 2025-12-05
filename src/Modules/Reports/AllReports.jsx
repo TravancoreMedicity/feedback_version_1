@@ -29,7 +29,7 @@ const AllReports = () => {
 
     //The .some() method is used to check if at least one element in an array satisfies a given condition
     const employeemenu = menuName?.filter(menu =>
-        allmenuitems?.some(item => item.fb_menu_slno === menu.menuSlno)
+        allmenuitems?.some(item => item?.fb_menu_slno === menu.menuSlno)
     );
 
 

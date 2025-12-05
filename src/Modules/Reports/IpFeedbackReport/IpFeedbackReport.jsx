@@ -115,7 +115,6 @@ const IpFeedbackReport = () => {
             } else if (question.includes("spiritual and cultural")) {
                 acc[id]["Cultural Support"] = item.rating_value;
             }
-
             return acc;
         }, {})
     ).map((item, index) => ({

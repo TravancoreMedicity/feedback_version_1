@@ -71,6 +71,7 @@ const FeedbackForm = ({
             const InpatientNumber = atob(queryParams.get("ipnum") || "")
             const qrstausCode = atob(queryParams.get("qrs") || "")
             const empid = atob(queryParams.get("empid") || "")
+
             // Fetch feedback data using the decoded feedbackId
             setMobileNumber(patientMob)
             setQrStatus(qrstausCode)
@@ -253,6 +254,7 @@ const FeedbackForm = ({
         try {
             const result = await axiosApi.post('/feedback/feedbackanswers', FinalInsertData);
             const { success } = result.data;
+
             if (success !== 2) return errorNofity("Error in inserting Feedback!")
             setIsSubmit(true)
             setUserAnswer({})

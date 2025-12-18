@@ -1,13 +1,15 @@
 import React, { lazy, memo, Suspense, useCallback, useState } from 'react'
 import { Box, Grid, Typography } from '@mui/joy'
 import DefaultPageLayout from '../../Components/DefaultPageLayout'
-import { axiosApi } from '../../Axios/Axios';
-import { infoNofity, warningNofity } from '../../Constant/Constant';
+import { axiosApi, axiosellider } from '../../Axios/Axios';
+import { infoNofity, warningNofity, errorNofity, succesNofity } from '../../Constant/Constant';
 import MeetingRoomTwoToneIcon from '@mui/icons-material/MeetingRoomTwoTone';
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
 import { getBedRemarkStatus } from '../../Function/CommonFunction';
 import { useQuery } from '@tanstack/react-query';
+
 // import FloatingRefreshButton from '../../Components/FloatingRefreshButton';
+
 
 const RoomComponent = lazy(() => import('./RoomComponent'));
 
@@ -18,6 +20,7 @@ const PateintRoomDetail = ({ beddetail, nsname, view, setView, nscode }) => {
     const [patientfeedbackdata, setPatientFeedBackData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [open, setOpen] = useState(false)
+
     // const [loadingrefresh, setLoadingRefresh] = useState(false)
     // const [isCoolingDown, setIsCoolingDown] = useState(false);
 
@@ -98,12 +101,12 @@ const PateintRoomDetail = ({ beddetail, nsname, view, setView, nscode }) => {
     }, [nscode, setInpatientDetailFromMeliora, setAnchorEl, FetchPatientFeedback, setLoading])
 
 
+
     /**
      * 
      * 
      * 
      * 
-
     // REFRESH THE NS STATION FOR PATIENT FETCHING
     const handleRefresh = useCallback(async () => {
         const now = Date.now(); //
@@ -140,7 +143,6 @@ const PateintRoomDetail = ({ beddetail, nsname, view, setView, nscode }) => {
             setLoadingRefresh(false);
         }
     }, [nscode]);
-
      * 
      * 
      * 
@@ -149,6 +151,7 @@ const PateintRoomDetail = ({ beddetail, nsname, view, setView, nscode }) => {
      * 
      * 
      */
+
 
     return (
 
@@ -162,10 +165,12 @@ const PateintRoomDetail = ({ beddetail, nsname, view, setView, nscode }) => {
                         cursor: 'pointer',
 
                     }}>
+
                     {/* <FloatingRefreshButton
                         loading={loadingrefresh}
                         onRefresh={handleRefresh}
                         tooltip="Reload patients" /> */}
+
                     <Box
                         sx={{
                             display: 'flex',

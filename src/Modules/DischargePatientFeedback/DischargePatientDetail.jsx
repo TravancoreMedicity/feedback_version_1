@@ -11,7 +11,7 @@ import {
     CalendarCheck,
     IpAddressTag
 } from 'iconoir-react';
-import { warningNofity } from '../../Constant/Constant';
+import { getAgeInYears, warningNofity } from '../../Constant/Constant';
 import male from '../../assets/male.jpg';
 import female from '../../assets/female.jpg';
 import TextComponentBox from '../../Components/TextComponentBox';
@@ -47,7 +47,7 @@ const DischargePatientDetail = ({ PatientData, ReviewDetail }) => {
             label: 'Gender/Age',
             value: (() => {
                 const gender = PatientData?.fb_ptc_sex ?? 'Unknown';
-                const age = PatientData?.fb_ptn_yearage ?? 'Unknown';
+                const age = getAgeInYears(PatientData?.fb_ptd_dob) ?? 'Unknown';
                 return `${gender} / ${age} year`;
             })(),
             icon: <Male fontSize={12}

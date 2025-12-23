@@ -2,6 +2,7 @@ import React, { memo } from 'react';
 import { Phone, Calendar, IpAddressTag, UserBadgeCheck, DatabaseScriptPlus, Male, PharmacyCrossTag } from 'iconoir-react';
 import { Box, Tooltip, Typography } from '@mui/joy';
 import { format } from 'date-fns';
+import { getAgeInYears } from '../../Constant/Constant';
 
 const PatinetCard = ({ inpatientDetail, ispresent }) => {
 
@@ -66,7 +67,9 @@ const PatinetCard = ({ inpatientDetail, ispresent }) => {
                 },
                 {
                     label: 'Gender/Age',
-                    value: `${inpatientDetail?.fb_ptc_sex === 'F' ? 'F' : 'M'} / ${inpatientDetail?.fb_ptn_yearage ?? 'Unknown'} year`,
+                    value: `${inpatientDetail?.fb_ptc_sex === 'F' ? 'F' : 'M'} /
+                     ${getAgeInYears(inpatientDetail?.fb_ptd_dob) ?? 'Unknown'}
+                      year`,
                     icon: <Male fontSize={12}
                         style={{
                             color: 'rgba(var(--font-primary-white))',
@@ -95,14 +98,15 @@ const PatinetCard = ({ inpatientDetail, ispresent }) => {
                 },
                 {
                     label: 'Address',
-                    value:
-                        (inpatientDetail?.fb_ptc_loadd1 || '') +
-                            (inpatientDetail?.fb_ptc_loadd2 || '') +
-                            (inpatientDetail?.fb_ptc_loadd3 || '')
-                            ? (inpatientDetail?.fb_ptc_loadd1 || '') +
-                            (inpatientDetail?.fb_ptc_loadd2 || '') +
-                            (inpatientDetail?.fb_ptc_loadd3 || '')
-                            : 'Address is not found',
+                    value: inpatientDetail?.fb_ptc_loadd1 || 'Address is not found',
+                    // value:
+                    //     (inpatientDetail?.fb_ptc_loadd1 || '') +
+                    //         (inpatientDetail?.fb_ptc_loadd2 || '') +
+                    //         (inpatientDetail?.fb_ptc_loadd3 || '')
+                    //         ? (inpatientDetail?.fb_ptc_loadd1 || '') +
+                    //         (inpatientDetail?.fb_ptc_loadd2 || '') +
+                    //         (inpatientDetail?.fb_ptc_loadd3 || '')
+                    //         : 'Address is not found',
                     icon: <DatabaseScriptPlus fontSize={12}
                         style={{
                             color: 'rgba(var(--font-primary-white))',

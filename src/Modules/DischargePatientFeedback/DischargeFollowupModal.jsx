@@ -20,6 +20,7 @@ import CustomeFollowupSkeleton from '../../Components/CustomeFollowupSkeleton';
 import TextComponentBox from '../../Components/TextComponentBox';
 import AddCircleTwoToneIcon from '@mui/icons-material/AddCircleTwoTone';
 import EditNoteTwoToneIcon from '@mui/icons-material/EditNoteTwoTone';
+import { getAgeInYears } from '../../Constant/Constant';
 
 
 const DatePickerComponent = lazy(() => import('../../Components/DatePickerComponent'));
@@ -85,7 +86,7 @@ const DischargeFollowupModal = ({
             label: 'Gender/Age',
             value: (() => {
                 const gender = detail?.fb_ptc_sex ?? 'Unknown';
-                const age = detail?.fb_ptn_yearage ?? 'Unknown';
+                const age = getAgeInYears(detail?.fb_ptd_dob) ?? 'Unknown';
                 return `${gender} / ${age} year`;
             })(),
             icon: <Male className='iconStyle' />
@@ -300,7 +301,7 @@ const DischargeFollowupModal = ({
                                                 <DatePickerComponent
                                                     readOnly={InPatientDetail?.IsOnlyView}
                                                     minDate={new Date()}
-                                                    size={390}
+                                                    size={350}
                                                     label={'Select Date'}
                                                     setValue={setValue}
                                                     value={InPatientDetail?.IsOnlyView ? new Date(InPatientDetail?.ScheduleDate

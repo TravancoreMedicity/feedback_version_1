@@ -1043,6 +1043,7 @@ export const handleApi = async (apiCall, setState, apiName) => {
         }
 
     } catch (err) {
+        setState([]);
         console.error(`${apiName} Error:`, err);
         errorNofity(`${apiName} Error Occurred`);
     }

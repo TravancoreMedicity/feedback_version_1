@@ -8,7 +8,7 @@ import { CellStyleModule } from 'ag-grid-enterprise';
 import { ValidationModule } from 'ag-grid-enterprise';
 import { NumberFilterModule } from 'ag-grid-community';
 import PersonIcon from '@mui/icons-material/Person';
-import { warningNofity } from '../Constant/Constant';
+import { getAgeInYears, warningNofity } from '../Constant/Constant';
 import { Box, Button, CssVarsProvider, Tooltip } from '@mui/joy';
 import CustomBackDropWithOutState from './CustomBackDropWithOutState';
 import SmsFailedTwoToneIcon from '@mui/icons-material/SmsFailedTwoTone';
@@ -286,8 +286,14 @@ const AccessibleTable = ({
                 );
             },
         },
-
-        { headerName: 'Age', field: 'fb_ptn_yearage', filter: 'agNumberColumnFilter' },
+        {
+            headerName: 'Age',
+            // field: 'fb_ptn_yearage',
+            // filter: 'agNumberColumnFilter'
+            field: 'fb_ptd_dob', // still reference the DOB field
+            filter: 'agNumberColumnFilter',
+            valueGetter: (params) => getAgeInYears(params.data.fb_ptd_dob)
+        },
         {
             headerName: 'Gender',
             valueGetter: (params) => {

@@ -11,6 +11,7 @@ import CalendarMonthTwoToneIcon from '@mui/icons-material/CalendarMonthTwoTone';
 import { Box, Button, CssVarsProvider, Tooltip } from '@mui/joy';
 import EventBusyTwoToneIcon from '@mui/icons-material/EventBusyTwoTone';
 import CustomBackDropWithOutState from './CustomBackDropWithOutState';
+import { getAgeInYears } from '../Constant/Constant';
 
 
 
@@ -128,10 +129,18 @@ const CallcenterTable = ({
                 );
             },
         },
+        // {
+        //     headerName: 'Age',
+        //     field: 'fb_ptn_yearage',
+        //     filter: 'agNumberColumnFilter'
+        // },
         {
             headerName: 'Age',
-            field: 'fb_ptn_yearage',
-            filter: 'agNumberColumnFilter'
+            // field: 'fb_ptn_yearage',
+            // filter: 'agNumberColumnFilter'
+            field: 'fb_ptd_dob', // still reference the DOB field
+            filter: 'agNumberColumnFilter',
+            valueGetter: (params) => getAgeInYears(params.data.fb_ptd_dob)
         },
         {
             headerName: 'Gender',
@@ -145,16 +154,23 @@ const CallcenterTable = ({
         { headerName: 'Doctor', field: 'fb_doc_name' },
         { headerName: 'Contact', field: 'fb_ptc_mobile' },
         { headerName: 'Discharge Date', field: 'fb_ipd_disc' },
+        // {
+        //     headerName: 'Address',
+        //     valueGetter: (params) => {
+        //         const addr1 = params.data['fb_ptc_loadd1'] || '';
+        //         // const addr2 = params.data['fb_ptc_loadd2'] || '';
+        //         // const addr3 = params.data['fb_ptc_loadd3'] || '';
+        //         // const addr4 = params.data['fb_ptc_loadd4'] || '';
+        //         return [addr1
+        //             // , addr2, addr3, addr4
+        //         ].filter(Boolean).join(', ');
+        //     },
+        // },
         {
             headerName: 'Address',
-            valueGetter: (params) => {
-                const addr1 = params.data['fb_ptc_loadd1'] || '';
-                const addr2 = params.data['fb_ptc_loadd2'] || '';
-                const addr3 = params.data['fb_ptc_loadd3'] || '';
-                const addr4 = params.data['fb_ptc_loadd4'] || '';
-                return [addr1, addr2, addr3, addr4].filter(Boolean).join(', ');
-            },
-        }, {
+            valueGetter: ({ data }) => data?.fb_ptc_loadd1 ?? '',
+        },
+        {
             headerName: 'Status',
             valueGetter: (params) => {
                 const status = params.data['fb_ipc_status'];

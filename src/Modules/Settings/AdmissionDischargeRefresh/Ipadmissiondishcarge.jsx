@@ -57,6 +57,14 @@ const Ipadmissiondischarge = () => {
         }
     }, [isMobile]);
 
+
+    useEffect(() => {
+        if (fromDate && toDate && fromDate > toDate) {
+            setToDate(fromDate);
+        }
+    }, [fromDate, toDate]);
+
+
     // Insert selected patients into MySQL (existing function kept)
     const handleMysqlPatientInsert = async () => {
         if (!selectedPatient || selectedPatient.length === 0) return warningNofity("No Data Found");
@@ -420,7 +428,8 @@ const Ipadmissiondischarge = () => {
                                                     label={'From Date'}
                                                     setValue={setFromDate}
                                                     value={fromDate}
-                                                    maxDate={new Date()}
+                                                    // maxDate={new Date()}
+                                                    maxDate={toDate || new Date()}
                                                 />
                                             </Suspense>
 
@@ -429,6 +438,8 @@ const Ipadmissiondischarge = () => {
                                                     label={'To Date'}
                                                     setValue={setToDate}
                                                     value={toDate}
+                                                    // maxDate={new Date()}
+                                                    minDate={fromDate}
                                                     maxDate={new Date()}
                                                 />
                                             </Suspense>

@@ -6,6 +6,7 @@ import { getallfeedbackMaster, getBedRemarkStatus } from '../../Function/CommonF
 import { OUTLINK_FEEDBACK } from '../../Constant/Static';
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
 import { infoNofity, warningNofity } from '../../Constant/Constant';
+import RoomSkeleton from '../../Components/RoomSkeleton';
 
 
 const PatientModal = lazy(() => import('./PatientModal'));
@@ -21,7 +22,8 @@ const RoomComponent = ({
     multiple,
     loading,
     open,
-    remarkstatus
+    remarkstatus,
+    BedLoading
 }) => {
 
 
@@ -116,70 +118,73 @@ const RoomComponent = ({
     }, [currentIndex]);
 
     return (
-        <>
-            <Box
-                onClick={handleClick}
-                sx={{
-                    width: 155,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    p: 1,
-                    position: 'relative'
-                }}>
+        <>{
+            BedLoading ?
+                <RoomSkeleton /> :
                 <Box
+                    onClick={handleClick}
                     sx={{
-                        width: '100%',
-                        height: 60,
-                        backgroundColor: 'rgba(var(--bg-common))',
-                        border: 0.03,
-                        borderColor: "rgba(var(--border-primary))",
-                        display: 'flex',
-                        borderRadius: 8,
-                    }}>
-                    <Box sx={{
+                        width: 155,
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        flexDirection: "column",
-                        fontSize: 12,
-                        lineHeight: 1,
-                        border: 0.03,
-                        borderColor: "rgba(var(--border-primary))",
-                        backgroundColor: ispresent === "A" ? "#8FD14F" :
-                            ispresent === "O" && multiple === 2 ? "rgba(207, 118, 133, 0.96)" :
-                                ispresent === "T" ? "rgb(239, 131, 15)" : ispresent === "B" ? "rgba(200, 0, 180, 0.8)" :
-                                    ispresent === "N" && remarkstatus?.fb_bed_service_status === 2 ? "rgb(40, 185, 234)" : ispresent === "N" && remarkstatus?.fb_bed_service_status === 1 ? "rgb(72, 54, 134)" : ispresent === "N" ? "rgba(235, 18, 18, 0.84)" :
-                                        ispresent === "F" ? "rgb(53, 170, 193)" : ispresent === "R" ? "rgb(40, 185, 234)" :
-                                            ispresent === "O" ? "rgba(19, 112, 241, 0.68)" : "red",
-                        px: 0.6,
-                        fontFamily: 'var(--font-varient)',
-                        color: 'White',
-                        fontWeight: 900,
-                        py: 0.1,
-                        borderTopLeftRadius: 8,
-                        borderBottomLeftRadius: 8,
+                        p: 1,
+                        position: 'relative'
                     }}>
-                        <Box sx={{ p: 0, m: 0, lineHeight: 1 }}>B</Box>
-                        <Box sx={{ p: 0, m: 0, lineHeight: 1 }}>E</Box>
-                        <Box sx={{ p: 0, m: 0, lineHeight: 1 }}>D</Box>
+                    <Box
+                        sx={{
+                            width: '100%',
+                            height: 60,
+                            backgroundColor: 'rgba(var(--bg-common))',
+                            border: 0.03,
+                            borderColor: "rgba(var(--border-primary))",
+                            display: 'flex',
+                            borderRadius: 8,
+                        }}>
+                        <Box sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexDirection: "column",
+                            fontSize: 12,
+                            lineHeight: 1,
+                            border: 0.03,
+                            borderColor: "rgba(var(--border-primary))",
+                            backgroundColor: ispresent === "A" ? "#8FD14F" :
+                                ispresent === "O" && multiple === 2 ? "rgba(207, 118, 133, 0.96)" :
+                                    ispresent === "T" ? "rgb(239, 131, 15)" : ispresent === "B" ? "rgba(200, 0, 180, 0.8)" :
+                                        ispresent === "N" && remarkstatus?.fb_bed_service_status === 2 ? "rgb(40, 185, 234)" : ispresent === "N" && remarkstatus?.fb_bed_service_status === 1 ? "rgb(72, 54, 134)" : ispresent === "N" ? "rgba(235, 18, 18, 0.84)" :
+                                            ispresent === "F" ? "rgb(53, 170, 193)" : ispresent === "R" ? "rgb(40, 185, 234)" :
+                                                ispresent === "O" ? "rgba(19, 112, 241, 0.68)" : "red",
+                            px: 0.6,
+                            fontFamily: 'var(--font-varient)',
+                            color: 'White',
+                            fontWeight: 900,
+                            py: 0.1,
+                            borderTopLeftRadius: 8,
+                            borderBottomLeftRadius: 8,
+                        }}>
+                            <Box sx={{ p: 0, m: 0, lineHeight: 1 }}>B</Box>
+                            <Box sx={{ p: 0, m: 0, lineHeight: 1 }}>E</Box>
+                            <Box sx={{ p: 0, m: 0, lineHeight: 1 }}>D</Box>
+                        </Box>
+                        <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', position: 'relative' }}>
+                            <HotelOutlinedIcon style={{ fontSize: { xs: 20, sm: 27 }, color: 'rgba(var(--font-primary-white))', }} />
+                            <Typography level='body-sm' fontWeight={'md'}
+                                sx={{
+                                    fontFamily: 'var(--font-varient)',
+                                    color: 'rgba(var(--font-primary-white))',
+                                    fontSize: { xs: 10, sm: 12 },
+                                    fontWeight: 900,
+                                    ml: 1
+                                }} >
+                                {roomnumber}
+                            </Typography>
+                        </Box>
+                        {/* Popover */}
                     </Box>
-                    <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%', position: 'relative' }}>
-                        <HotelOutlinedIcon style={{ fontSize: { xs: 20, sm: 27 }, color: 'rgba(var(--font-primary-white))', }} />
-                        <Typography level='body-sm' fontWeight={'md'}
-                            sx={{
-                                fontFamily: 'var(--font-varient)',
-                                color: 'rgba(var(--font-primary-white))',
-                                fontSize: { xs: 10, sm: 12 },
-                                fontWeight: 900,
-                                ml: 1
-                            }} >
-                            {roomnumber}
-                        </Typography>
-                    </Box>
-                    {/* Popover */}
-                </Box>
-            </Box >
+                </Box >
+        }
             {
                 Object.keys(inpatientDetail)?.length !== 0 && <Suspense fallback={<CustomBackDropWithOutState message={'loading...!'} />}>
                     <PatientModal

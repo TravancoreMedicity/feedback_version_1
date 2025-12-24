@@ -11,6 +11,7 @@ import { Box } from '@mui/joy';
 
 import TextComponentBox from '../../Components/TextComponentBox';
 import BasicInformationCard from './BasicInformationCard';
+import { getAgeInYears } from '../../Constant/Constant';
 
 const DischargeBabyCard = ({ Children }) => {
 
@@ -25,7 +26,7 @@ const DischargeBabyCard = ({ Children }) => {
             label: 'Gender/Age',
             value: (() => {
                 const gender = detail?.fb_ptc_sex === "M" ? "Male" : 'Female' ?? 'Unknown';
-                const age = detail?.fb_ptn_yearage ?? '0';
+                const age = getAgeInYears(detail?.fb_ptd_dob) ?? '0';
                 return `${gender} / ${age} year`;
             })(),
             icon: <Male fontSize={12}
@@ -39,13 +40,16 @@ const DischargeBabyCard = ({ Children }) => {
         },
         {
             label: 'Address',
-            value: (() => {
-                const addr1 = detail?.fb_ptc_loadd1 || '';
-                const addr2 = detail?.fb_ptc_loadd2 || '';
-                const addr3 = detail?.fb_ptc_loadd3 || '';
-                const addr4 = detail?.fb_ptc_loadd4 || '';
-                return [addr1, addr2, addr3, addr4].filter(Boolean).join(', ');
-            })(),
+            value: detail?.fb_ptc_loadd1 ?? '',
+            // value: (() => {
+            //     const addr1 = detail?.fb_ptc_loadd1 || '';
+            //     const addr2 = detail?.fb_ptc_loadd2 || '';
+            //     const addr3 = detail?.fb_ptc_loadd3 || '';
+            //     const addr4 = detail?.fb_ptc_loadd4 || '';
+            //     return [addr1
+            //         ,addr2, addr3, addr4
+            //     ].filter(Boolean).join(', ');
+            // })(),
             icon: <MapPin fontSize={12}
                 style={{ color: 'rgba(var(--font-primary-white))', cursor: 'pointer' }} />
         },

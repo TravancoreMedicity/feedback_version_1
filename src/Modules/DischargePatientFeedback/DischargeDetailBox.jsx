@@ -22,6 +22,7 @@ import CallEndTwoToneIcon from '@mui/icons-material/CallEndTwoTone';
 import PhoneMissedIcon from '@mui/icons-material/PhoneMissed';
 import { Paper } from '@mui/material';
 import CustomBackDropWithOutState from '../../Components/CustomBackDropWithOutState';
+import { getAgeInYears } from '../../Constant/Constant';
 
 
 const PatientNotResponding = lazy(() => import('./PatientNotResponding'))
@@ -68,15 +69,17 @@ const DischargeDetailBox = ({ PatientData, ReviewDetail, Relatives, Children, Pa
 
     // Patient information function
     const getBasicInfoItems = (detail) => {
-        const fullAddress = [detail?.fb_ptc_loadd1, detail?.fb_ptc_loadd2, detail?.fb_ptc_loadd3, detail?.fb_ptc_loadd4]
-            .filter(Boolean).join(', ');
+        // const fullAddress = [detail?.fb_ptc_loadd1 , detail?.fb_ptc_loadd2, detail?.fb_ptc_loadd3, detail?.fb_ptc_loadd4
+        // ].filter(Boolean).join(', ');
+        const fullAddress = detail?.fb_ptc_loadd1 ?? '';
+
         return [
             { label: 'Patient No', value: detail?.fb_pt_no || 'Not Available', icon: <UserBadgeCheck className='iconStyle' /> },
             { label: 'IP No', value: detail?.fb_ip_no || 'Not Available', icon: <IpAddressTag className='iconStyle' /> },
             { label: 'Mobile No', value: detail?.fb_ptc_mobile || 'Not Available', icon: <Phone className='iconStyle' /> },
             {
                 label: 'Gender/Age',
-                value: `${detail?.fb_ptc_sex === "M" ? "Male" : "Female"} / ${detail?.fb_ptn_yearage ?? 'Unknown'} year`,
+                value: `${detail?.fb_ptc_sex === "M" ? "Male" : "Female"} / ${getAgeInYears(detail?.fb_ptd_dob) ?? 'Unknown'} year`,
                 icon: <Male className='iconStyle' />
             },
             { label: 'Address', value: fullAddress || 'Not Available', icon: <MapPin className='iconStyle' /> },

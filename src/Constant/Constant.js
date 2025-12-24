@@ -1,7 +1,8 @@
 import DOMPurify from "dompurify";
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
-import { format } from "date-fns";
+import { format, differenceInYears, differenceInMonths, differenceInDays, parseISO } from "date-fns";
+
 
 export const screenHeight = window.innerHeight;
 export const screenWidth = window.innerWidth;
@@ -179,4 +180,48 @@ export const CleanHtmlString = (htmlString) => {
     cleaned = cleaned.replace(/\s+/g, ' ').trim();
 
     return cleaned;
+};
+
+
+
+
+export const getAgeFromDOB = (dobString) => {
+    if (!dobString) return "";
+
+    // Convert "YYYY-MM-DD HH:mm:ss" → ISO
+    const dob = parseISO(dobString.replace(" ", "T"));
+    const today = new Date();
+
+    const years = differenceInYears(today, dob);
+
+    // Date after removing full years
+    const afterYears = new Date(
+        today.getFullYear() - years,
+        today.getMonth(),
+        today.getDate()
+    );
+
+    const months = differenceInMonths(afterYears, dob);
+
+    // Date after removing full months
+    const afterMonths = new Date(
+        afterYears.getFullYear(),
+        afterYears.getMonth() - months,
+        afterYears.getDate()
+    );
+
+    const days = differenceInDays(afterMonths, dob);
+
+    return `${years}Y ${months}M ${days}D`;
+};
+
+
+export const getAgeInYears = (dobString) => {
+    if (!dobString) return 0;
+
+    // Convert "YYYY-MM-DD HH:mm:ss" → ISO
+    const dob = parseISO(dobString.replace(" ", "T"));
+    const today = new Date();
+
+    return differenceInYears(today, dob);
 };

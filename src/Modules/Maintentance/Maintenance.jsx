@@ -11,11 +11,12 @@ const ChecklistHeaders = lazy(() => import('../../Components/ChecklistHeaders'))
 const Maintenance = () => {
     const [searchQuery, setSearchQuery] = useState('');
 
-    const { data: getllBlockedBed, refetch: getallBlokedbedRefetch } = useQuery({
+    const { data: getllBlockedBed = [], refetch: getallBlokedbedRefetch } = useQuery({
         queryKey: ["getallblockedbed"],
         queryFn: () => getAllBlockedBed()
     });
 
+    
     // const { data: getProcheckcompleteBed, refetch: fetchProCheckCompleteBed } = useQuery({
     //     queryKey: ['getProcheckBed'],
     //     queryFn: () => getProcheckCompletedBedDetail(),
@@ -28,6 +29,7 @@ const Maintenance = () => {
     })
 
     const filteredBlockedBeds = useMemo(() => {
+        if (!getllBlockedBed) return
         return getllBlockedBed?.filter((blockedBed) => {
             const remarkStatus = getallremarkstatus?.find((remark) => remark?.fb_bdc_no === blockedBed?.fb_bdc_no);
             return !(remarkStatus && remarkStatus?.fb_bed_status === 1);

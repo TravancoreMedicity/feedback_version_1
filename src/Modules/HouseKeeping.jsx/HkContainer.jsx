@@ -21,7 +21,7 @@ const HkContainer = () => {
     const [value, setValue] = useState("1");
     const id = EmpauthId()
 
-    const { data: getllBlockedBed } = useQuery({
+    const { data: getllBlockedBed = [] } = useQuery({
         queryKey: ["getallblockedbed"],
         queryFn: () => getAllBlockedBed()
     });

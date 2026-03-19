@@ -24,7 +24,10 @@ const AllReports = () => {
 
     const menuName = [
         { menuSlno: 20, menuName: 'Common Feedback Report', menuCodeName: 'commonfbreport' },
-        { menuSlno: 21, menuName: 'Ip Feedback Report', menuCodeName: 'ipfbreport' }
+        { menuSlno: 21, menuName: 'Ip Feedback Report', menuCodeName: 'ipfbreport' },
+        { menuSlno: 24, menuName: 'Prem Feedback Report', menuCodeName: 'premreport' },
+        { menuSlno: 25, menuName: 'Discharge Feedback Report', menuCodeName: 'dischargefeed' },
+        { menuSlno: 26, menuName: 'Pro FollowUp Report', menuCodeName: 'profollowuprep' },
     ]
 
     //The .some() method is used to check if at least one element in an array satisfies a given condition

@@ -106,7 +106,7 @@ const MenuMaster = () => {
     }, [fetchallmenumaster, moudleid, menu_name, status, updationdetail, updateflag])
 
     return (
-        <DefaultPageLayout label="Feedback SubCategory Master" >
+        <DefaultPageLayout label="Menu Master" >
             <MasterPageLayout>
                 <SelectModuleMaster
                     label={'Select the Module'}

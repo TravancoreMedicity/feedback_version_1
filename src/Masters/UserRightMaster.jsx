@@ -54,7 +54,7 @@ const UserRightMaster = () => {
         queryFn: () => getDepartmentEmployee(secid),
         enabled: !!secid,
     })
-    
+
 
     const handleSubmitUserManagment = useCallback(async () => {
         if (usrgrpid === 0) return warningNofity("Select the User Group");

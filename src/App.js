@@ -15,6 +15,7 @@ import CommonFeedbackReport from "./Modules/Reports/CommonFeedbackReport/CommonF
 import IpFeedbackReport from "./Modules/Reports/IpFeedbackReport/IpFeedbackReport.jsx";
 
 
+
 // import { socket } from "./ws/socket";
 // import Scanner from "./Components/Scanner.jsx";
 // import HkContainer from "./Modules/HouseKeeping.jsx/HkContainer.jsx";
@@ -60,8 +61,12 @@ const DischargePatient = lazy(() => import("./Modules/DischargePatientFeedback/D
 const FollowupPatient = lazy(() => import("./Modules/ProFollowup/FollowupPatient.jsx"));
 const SearchPatientModal = lazy(() => import("./Modules/FeedbackForms/SearchPatientModal.jsx"));
 const Prem = lazy(() => import("./Modules/PREM/Prem.jsx"));
-const Dataimport = lazy(() => import("./Modules/Settings/DataImportMaster/Dataimport.jsx"));
 const Ipadmissiondishcarge = lazy(() => import("./Modules/Settings/AdmissionDischargeRefresh/Ipadmissiondishcarge.jsx"));
+const Dataimport = lazy(() => import("./Modules/Settings/DataImportMaster/Dataimport.jsx"));
+const PremReport = lazy(() => import("./Modules/Reports/PremReport/PremReport.jsx"))
+const DischargeFeedbackReport = lazy(() => import("./Modules/Reports/DischargeFeedbackReport/DischargeFeedbackReport.jsx"))
+const ProFollowUpReport = lazy(() => import("./Modules/Reports/ProFollowUpReport/ProFollowUpReport.jsx"))
+const PremTargetMaster = lazy(() => import("./Masters/PremTargetMaster.jsx"))
 
 //Feedback
 // const ChooseFeedbacks = lazy(() => import("./Feedback/ChooseFeedbacks.jsx"));
@@ -331,7 +336,32 @@ const routes = createBrowserRouter([
               <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
                 <Ipadmissiondishcarge />
               </Suspense>, errorElement: <ErrorElement />
-          }
+          },
+          {
+            path: "premreport", element:
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
+                <PremReport />
+              </Suspense>, errorElement: <ErrorElement />
+          },
+          {
+            path: "dischargefeed", element:
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
+                <DischargeFeedbackReport />
+              </Suspense>, errorElement: <ErrorElement />
+          },
+          {
+            path: "profollowuprep", element:
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
+                <ProFollowUpReport />
+              </Suspense>, errorElement: <ErrorElement />
+          },
+          {
+            path: "premtarget", element:
+              <Suspense fallback={<CustomBackDropWithOutState message={"Loading..."} />} >
+                <PremTargetMaster />
+              </Suspense>, errorElement: <ErrorElement />
+          },
+
         ],
       },
       {

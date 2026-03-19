@@ -695,7 +695,6 @@ export const gethkcomplaintdetail = async (bedslno, depsec, ticketid) => {
 }
 
 
-
 export const getdepassetonly = async (id) => {
     try {
         if (!id) {
@@ -983,6 +982,28 @@ export const DownloadToExcelFile = (data, name) => {
 };
 
 
+
+export const getallpremDashboarddetail = async () => {
+    try {
+        const result = await axiosApi.get("/feedback/premdashdetial");
+        const { data, success } = result.data;
+        if (success === 0) {
+            infoNofity("No Data Found");
+            return [];
+        }
+        if (success !== 2) {
+            warningNofity("Error in fetching Data");
+            return [];
+        }
+        return data || [];
+    } catch (error) {
+        console.error("Error fetching Prem Detail:", error);
+        warningNofity("Server error while fetching data getallpremDashboarddetail");
+        return [];
+    }
+};
+
+
 export const getFamilyDetails = async (mrdnumber) => {
     try {
         let uppercasetext = mrdnumber?.toUpperCase().trim();
@@ -1002,6 +1023,23 @@ export const getFamilyDetails = async (mrdnumber) => {
     } catch (error) {
         warningNofity("Something went wrong while fetching details. Please try again.");
         return null;
+    }
+};
+
+
+export const getAllPremTargets = async (mrdnumber) => {
+    try {
+        const result = await axiosApi.get("/feedback/getallpremtarget");
+        const { data, success } = result.data;
+        if (success === 0) {
+            warningNofity("Error in fetching Data");
+            return [];
+        }
+        return data || [];
+    } catch (error) {
+        console.error("Error fetching Prem Detail:", error);
+        warningNofity("Server error while fetching data getallpremDashboarddetail");
+        return [];
     }
 };
 
@@ -1047,4 +1085,9 @@ export const handleApi = async (apiCall, setState, apiName) => {
         console.error(`${apiName} Error:`, err);
         errorNofity(`${apiName} Error Occurred`);
     }
+
+
+
+
+
 };

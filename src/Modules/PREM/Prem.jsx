@@ -1,5 +1,5 @@
 // NEW
-import React, { useState, memo } from 'react';
+import React, { useState, memo, Suspense, lazy } from 'react';
 import { Box, Modal, ModalDialog, Tooltip } from "@mui/joy";
 import { getallpremdetail } from "../../Function/CommonFunction";
 import Tab from "@mui/material/Tab";
@@ -19,12 +19,16 @@ import QrCodeScannerIcon from '@mui/icons-material/QrCodeScanner';
 import { warningNofity } from '../../Constant/Constant';
 import { EmpauthId } from '../../Constant/Constant';
 
+
+const PremDashBoard = lazy(() => import('./PremDashBoard'));
+
 const Prem = () => {
     const [value, setValue] = useState("1");
     const [feedbackid, setFeedbackId] = useState(0);
     const [openqrscanner, setOpenQrScanner] = useState(false);
     const emp_id = EmpauthId();
     // Get all Feedback From the Feedback Master
+
     const {
         data: allfeedbackNames,
         isSuccess: FetchAllFeedbackNameSucess,
@@ -36,6 +40,7 @@ const Prem = () => {
         queryKey: ['allfeedbackname'],
         queryFn: async () => await getallpremdetail(), // changes
     });
+
 
     // The function to open the feedback Form
     const openFeedbackForm = (feedbackId) => {
@@ -81,6 +86,7 @@ const Prem = () => {
                             borderBottomColor: 'divider', borderWidth: 2
                         }}>
                             <TabList
+                                onChange={(e, newValue) => setValue(newValue)}
                                 aria-label="lab API tabs example"
                                 sx={{
                                     minHeight: 0,
@@ -90,31 +96,42 @@ const Prem = () => {
                                 }}
                                 className="flex justify-end items-center"
                             >
-                                <Tab
-                                    icon={<PageStar color='rgba(var(--color-white))' />}
-                                    label="Patient Reported Experience Measure"
-                                    value="1"
-                                    iconPosition="start"
-                                    sx={{
-                                        display: "flex",
-                                        minHeight: 0,
-                                        textTransform: "none",
-                                        color: 'rgba(var(--color-white),0.9)',
-                                        bgcolor: "rgba(var(--tab-color),0.8)",
-                                        borderRadius: 1,
-                                        borderBottomLeftRadius: 0,
-                                        borderBottomRightRadius: 0,
-                                        minWidth: '15%',
-                                        fontSize: { xs: 10, sm: 14 },
-                                        '&.Mui-selected': {
-                                            color: 'rgba(var(--color-white))',
-                                            bgcolor: 'rgba(var(--tab-color))',
-                                        },
-                                    }}
-                                />
+                                {
+
+                                    [{ label: 'DashBoard', value: '1' },
+                                    { label: 'Patient Reported Experience Measure', value: '2' }
+                                    ]?.map((val, inx) => {
+                                        return (
+                                            <Tab
+                                                key={inx}
+                                                icon={<PageStar color='rgba(var(--color-white))' />}
+                                                label={val?.label}
+                                                value={val?.value}
+                                                iconPosition="start"
+                                                sx={{
+                                                    display: "flex",
+                                                    minHeight: 0,
+                                                    textTransform: "none",
+                                                    color: 'rgba(var(--color-white),0.9)',
+                                                    bgcolor: "rgba(var(--tab-color),0.8)",
+                                                    borderRadius: 1,
+                                                    borderBottomLeftRadius: 0,
+                                                    borderBottomRightRadius: 0,
+                                                    minWidth: '15%',
+                                                    fontSize: { xs: 10, sm: 14 },
+                                                    '&.Mui-selected': {
+                                                        color: 'rgba(var(--color-white))',
+                                                        bgcolor: 'rgba(var(--tab-color))',
+                                                    },
+                                                    mr: 1
+                                                }}
+                                            />
+                                        )
+                                    })
+                                }
                             </TabList>
                         </Box>
-                        <TabPanel value="1" className="overflow-scroll" sx={{ p: 1 }}>
+                        <TabPanel value="2" className="overflow-scroll" sx={{ p: 1 }}>
                             {LoadingallFeedbackNames && !FetchAllFeedbackNameSucess && (
                                 <CustomBackDropWithOutState message={"All Feedback Loading..."} />
                             )}
@@ -211,6 +228,11 @@ const Prem = () => {
                                             </div>
                                         </Box>
                                     ))}
+                        </TabPanel>
+                        <TabPanel value="1" className="overflow-scroll" sx={{ p: 1 }}>
+                            <Suspense fallback={<CustomBackDropWithOutState message="Loading" />}>
+                                <PremDashBoard />
+                            </Suspense>
                         </TabPanel>
                     </TabContext>
                 </Box>

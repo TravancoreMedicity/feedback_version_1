@@ -1,62 +1,88 @@
-import React, { memo, Suspense, useCallback, useEffect, useState, lazy } from 'react'
+import React, { memo, Suspense, useCallback, useState } from 'react';
 import { Box, IconButton, Tooltip } from '@mui/joy';
 import BookTwoToneIcon from '@mui/icons-material/BookTwoTone';
 import { Paper } from '@mui/material';
+import { lazy } from 'react';
 import { endOfDay, format, startOfDay } from 'date-fns';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { axiosApi } from '../../../Axios/Axios';
-import { warningNofity } from '../../../Constant/Constant';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { infoNofity, warningNofity } from '../../../Constant/Constant';
 import { DownloadToExcelFile } from '../../../Function/CommonFunction';
 import CustomBackDropWithOutState from '../../../Components/CustomBackDropWithOutState';
 import DownloadForOfflineTwoToneIcon from '@mui/icons-material/DownloadForOfflineTwoTone';
-import useGroupedFeedback from '../PremReport/useGroupedFeedback';
-import FeedbackReportTable from '../../../Components/FeedbackReportTable';
+import useGroupedFeedback from './useGroupedFeedback';
 
 
 const ChecklistHeaders = lazy(() => import('../../../Components/ChecklistHeaders'));
 const DatePickerComponent = lazy(() => import('../../../Components/DatePickerComponent'));
+const FeedbackReportTable = lazy(() => import('../../../Components/FeedbackReportTable'));
+const SelectPremFeedbacks = lazy(() => import('../../../Components/SelectPremFeedbacks'));
 
-const IpFeedbackReport = () => {
+const PremReport = () => {
 
 
     const [fromdate, setFromDate] = useState(startOfDay(new Date()));
     const [todate, setToDate] = useState(endOfDay(new Date()));
     const [feedbackdata, setFeedbackData] = useState([]);
+    const [feedbackid, setFeedbackId] = useState(null);
+    const [loading, setLoading] = useState(false)
 
     // Formatting Date suitable for the meliora
     const formattedFromDateMeliora = format(fromdate, 'yyyy-MM-dd HH:mm:ss');
     const formattedToDateMeliora = format(todate, 'yyyy-MM-dd HH:mm:ss');
 
-
     // getting Feeedbackdata
-    const getCommonFeedbackDetail = useCallback(async () => {
-        const insertData = {
-            FROM_DATE: formattedFromDateMeliora,
-            TO_DATE: formattedToDateMeliora
+    const getPremDetail = useCallback(async () => {
+
+        if (!formattedFromDateMeliora || !formattedToDateMeliora) {
+            warningNofity("Please select the date");
+            return;
         }
+
+        if (!feedbackid) {
+            warningNofity("Please select the Prem Type");
+            return;
+        }
+
+        setLoading(true);
 
         try {
-            const result = await axiosApi.post("/feedback/ipfbreport", insertData);
-            const { data, success } = result.data;
-            if (success === 1) return warningNofity("Error in fetching Data");
-            setFeedbackData(data ? data : [])
-        } catch (error) {
-            warningNofity("Error in fetching Data")
-        }
-    }, [formattedFromDateMeliora, formattedToDateMeliora]);
+            const result = await axiosApi.post("/feedback/premreport", {
+                FROM_DATE: formattedFromDateMeliora,
+                TO_DATE: formattedToDateMeliora,
+                FEEDBACKID: feedbackid
+            });
 
-    // Automatically call the function on first render and on date change
-    useEffect(() => {
-        getCommonFeedbackDetail();
-    }, []);
+            const { data, success } = result.data;
+
+            if (success === 1) {
+                infoNofity("No Feedback Found");
+                setFeedbackData([]);
+                return;
+            }
+            if (success === 0) {
+                warningNofity("Error in fetching Data");
+                setFeedbackData([]);
+                return;
+            }
+
+            setFeedbackData(data || []);
+        } catch (error) {
+            warningNofity("Error in fetching Data");
+        } finally {
+            setLoading(false);
+        }
+    }, [formattedFromDateMeliora, formattedToDateMeliora, feedbackid]);
+
 
     const rowData = useGroupedFeedback(feedbackdata || []);
 
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             {/* < DefaultPageLayout label="Common Feedback Report" > */}
+            {loading && <CustomBackDropWithOutState message={"Fetching Data Please Wait..."} />}
             <Box sx={{ minHeight: '100vh', width: '100%' }}>
                 <Box
                     className="flex flex-col rounded-xl p-1 w-full"
@@ -84,7 +110,7 @@ const IpFeedbackReport = () => {
                                 }} />
                             }
                             isShowBackIcon={true}
-                            name={'IP FEEDBACK REPORT '}
+                            name={'PREM FEEDBACK REPORT '}
                         />
                         <Paper
                             sx={{
@@ -127,6 +153,18 @@ const IpFeedbackReport = () => {
                                     />
                                 </Suspense>
 
+
+                                <Suspense fallback={<CustomBackDropWithOutState message="Loading..." />}>
+                                    <SelectPremFeedbacks
+                                        label="Select the Feedback"
+                                        value={feedbackid}
+                                        handleChange={(event, newValue) => {
+                                            setFeedbackId(newValue);
+                                            setFeedbackData([])
+                                        }}
+                                    />
+                                </Suspense>
+
                                 <IconButton
                                     sx={{ mt: 4 }}
                                     variant="soft"
@@ -135,7 +173,7 @@ const IpFeedbackReport = () => {
                                             warningNofity("No data to download");
                                             return;
                                         }
-                                        DownloadToExcelFile(rowData, "IP FeedBack Report");
+                                        DownloadToExcelFile(rowData, "Report");
                                     }}>
                                     <Tooltip title="Download to Excel">
                                         <DownloadForOfflineTwoToneIcon />
@@ -144,26 +182,29 @@ const IpFeedbackReport = () => {
 
                                 <IconButton sx={{ mt: 4 }}
                                     variant="soft"
-                                    onClick={getCommonFeedbackDetail}>
+                                    onClick={getPremDetail}>
                                     <SearchTwoToneIcon />
                                 </IconButton>
                             </Box>
 
                         </Paper>
-                        <Box sx={{ width: '100%', mt: 1, backgroundColor: "rgba(var(--bg-card))" }}>
+                        <Box
+                            sx={{
+                                width: '100%',
+                                mt: 1,
+                                backgroundColor: "rgba(var(--bg-card))"
+                            }}>
 
                             {
                                 rowData && rowData?.length > 0 ?
                                     <FeedbackReportTable rowData={rowData} /> :
                                     <Box className="flex items-center justify-center"
-                                        sx={{
-                                            width: '100%',
-                                            height: 650,
-                                            color: 'rgba(var(--font-primary-white))'
-                                        }}>
+                                        sx={{ width: '100%', height: 650, color: 'rgba(var(--font-primary-white))', }}>
                                         No Data Found
                                     </Box>
                             }
+
+
                         </Box>
                     </Box>
                 </Box>
@@ -173,6 +214,8 @@ const IpFeedbackReport = () => {
     )
 }
 
-export default memo(IpFeedbackReport);
+export default memo(PremReport);
+
+
 
 

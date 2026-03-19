@@ -1,7 +1,7 @@
+import React, { memo, Suspense, useCallback, useEffect, useState, lazy } from 'react'
 import { Box, IconButton, Tooltip } from '@mui/joy';
 import BookTwoToneIcon from '@mui/icons-material/BookTwoTone';
 import { Paper } from '@mui/material';
-import { lazy } from 'react';
 import { endOfDay, format, startOfDay } from 'date-fns';
 import SearchTwoToneIcon from '@mui/icons-material/SearchTwoTone';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -9,11 +9,10 @@ import { axiosApi } from '../../../Axios/Axios';
 import { warningNofity } from '../../../Constant/Constant';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DownloadToExcelFile } from '../../../Function/CommonFunction';
-import AgeGridCommonTable from '../../../Components/AgeGridCommonTable';
-import React, { memo, Suspense, useCallback, useEffect, useState } from 'react'
 import CustomBackDropWithOutState from '../../../Components/CustomBackDropWithOutState';
 import DownloadForOfflineTwoToneIcon from '@mui/icons-material/DownloadForOfflineTwoTone';
-
+import useGroupedFeedback from '../PremReport/useGroupedFeedback';
+import FeedbackReportTable from '../../../Components/FeedbackReportTable';
 
 const ChecklistHeaders = lazy(() => import('../../../Components/ChecklistHeaders'));
 const DatePickerComponent = lazy(() => import('../../../Components/DatePickerComponent'));
@@ -32,6 +31,7 @@ const CommonFeedbackReport = () => {
 
     // getting Feeedbackdata
     const getCommonFeedbackDetail = useCallback(async () => {
+        
         const insertData = {
             FROM_DATE: formattedFromDateMeliora,
             TO_DATE: formattedToDateMeliora
@@ -53,52 +53,7 @@ const CommonFeedbackReport = () => {
     }, []);
 
 
-
-    const finalGroupedList = feedbackdata && Object.values(
-        feedbackdata?.reduce((acc, item) => {
-            const id = item?.fb_transact_slno;
-
-            if (!acc[id]) {
-                acc[id] = {
-                    id,
-                    "Patient Name": item?.fb_patient_name || "-",
-                    "Phone": item?.fb_patient_mob || "-",
-                    "IP Number": item?.fb_ip_num || "-",
-                    "Q1: Satisfaction": "-",
-                    "Q2: Response": "-",
-                    "Q3: Cleanliness": "-",
-                    "Q4: Wait Time": "-",
-                    "Q5: Recommend": "-",
-                    "Q6: Contact": "-",
-                    "Q7: Suggestion": "-",
-                    "Create Date": item?.create_date || "-",
-                    "Create Employee": item?.em_name || "-"
-                };
-            }
-
-            const question = (item?.fd_qa_eng || "").toLowerCase();
-
-            if (question.includes("treatment")) {
-                acc[id]["Q1: Satisfaction"] = item.rating_value;
-            } else if (question.includes("concerns")) {
-                acc[id]["Q2: Response"] = item.rating_value;
-            } else if (question.includes("cleanliness")) {
-                acc[id]["Q3: Cleanliness"] = item.rating_value;
-            } else if (question.includes("waiting")) {
-                acc[id]["Q4: Wait Time"] = item.rating_value;
-            } else if (question.includes("recommend")) {
-                acc[id]["Q5: Recommend"] = item.rating_value;
-            } else if (question.includes("contact")) {
-                acc[id]["Q6: Contact"] = item.rating_value;
-            } else if (question.includes("improve")) {
-                acc[id]["Q7: Suggestion"] = item.fb_suggestion || "-";
-            }
-            return acc;
-        }, {})
-    ).map((item, index) => ({
-        "Sl No": index + 1,
-        ...item,
-    }));;
+    const rowData = useGroupedFeedback(feedbackdata || []);
 
     return (
         <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -130,8 +85,7 @@ const CommonFeedbackReport = () => {
                                 }} />
                             }
                             isShowBackIcon={true}
-                            name={'COMMON FEEDBACK REPORT'}
-                        />
+                            name={'COMMON FEEDBACK REPORT'} />
                         <Paper
                             sx={{
                                 width: '100%',
@@ -173,13 +127,22 @@ const CommonFeedbackReport = () => {
                                     />
                                 </Suspense>
 
-                                <IconButton sx={{ mt: 4 }}
+                                <IconButton
+                                    sx={{ mt: 4 }}
                                     variant="soft"
-                                    onClick={() => DownloadToExcelFile(finalGroupedList, "CommonFeedbackData")}>
+                                    onClick={() => {
+                                        if (!rowData || rowData?.length === 0) {
+                                            warningNofity("No data to download");
+                                            return;
+                                        }
+                                        DownloadToExcelFile(rowData, "Report");
+                                    }}>
                                     <Tooltip title="Download to Excel">
                                         <DownloadForOfflineTwoToneIcon />
                                     </Tooltip>
                                 </IconButton>
+
+
                                 <IconButton sx={{ mt: 4 }}
                                     variant="soft"
                                     onClick={getCommonFeedbackDetail}>
@@ -196,9 +159,10 @@ const CommonFeedbackReport = () => {
                             }}>
 
                             {
-                                feedbackdata && feedbackdata?.length > 0 ?
-                                    <AgeGridCommonTable groupedFeedbackData={finalGroupedList} /> :
-                                    <Box className="flex items-center justify-center"
+                                rowData && rowData?.length > 0 ?
+                                    // <AgeGridCommonTable groupedFeedbackData={finalGroupedList} />
+                                    <FeedbackReportTable rowData={rowData} />
+                                    : <Box className="flex items-center justify-center"
                                         sx={{ width: '100%', height: 650, color: 'rgba(var(--font-primary-white))', }}>
                                         No Data Found
                                     </Box>

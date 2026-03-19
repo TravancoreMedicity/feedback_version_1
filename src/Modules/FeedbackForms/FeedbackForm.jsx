@@ -239,6 +239,14 @@ const FeedbackForm = ({
             return
         }
 
+
+        const resolvedEmpId =
+            empid !== undefined && empid !== null && !isNaN(empid)
+                ? Number(empid)
+                : (qrstatus === "1" || (encodedId && atob(encodedId) === "3"))
+                    ? 1
+                    : Number(EmpauthId());
+
         const FinalInsertData = {
             fdmast_slno: Number(feedbackId),
             fb_ip_num: inpatientNumber || null,
@@ -248,8 +256,10 @@ const FeedbackForm = ({
             fb_answers: combinedFeedbackData,
             fb_default_quest: defaultimpression || [],
             fb_default_reamark: defaultremarks || '',
-            create_user: Number(empid) !== 0 ? empid : ((qrstatus === "1") || (encodedId && atob(encodedId) === "3")) ? 1 : Number(EmpauthId())
+            // create_user: Number(empid) !== 0 ? empid : ((qrstatus === "1") || (encodedId && atob(encodedId) === "3")) ? 1 : Number(EmpauthId())
+            create_user: resolvedEmpId
         };
+
 
         try {
             const result = await axiosApi.post('/feedback/feedbackanswers', FinalInsertData);
@@ -273,7 +283,8 @@ const FeedbackForm = ({
         mobilenumber,
         isnoclicked,
         empid,
-        feedbackId, inpatientNumber, patientNo, PatientName, mobilenumber, combinedFeedbackData, defaultimpression, defaultremarks, qrstatus, encodedId
+        feedbackId, inpatientNumber, patientNo, PatientName, mobilenumber, combinedFeedbackData, defaultimpression, defaultremarks, qrstatus, encodedId,
+        EmpauthId
     ])
 
     return (

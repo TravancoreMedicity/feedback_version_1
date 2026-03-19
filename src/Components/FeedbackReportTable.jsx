@@ -1,6 +1,5 @@
-//@ Not using will be deleted Later
 import { Box, CssVarsProvider } from '@mui/joy';
-import React, { useMemo } from 'react';
+import React, { } from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { RowStyleModule } from 'ag-grid-community';
 import { ModuleRegistry } from 'ag-grid-community';
@@ -19,34 +18,23 @@ ModuleRegistry.registerModules([
     NumberFilterModule
 ]);
 
+const FeedbackReportTable = ({ rowData }) => {
 
+    const columnDefs = React.useMemo(() => {
+        if (!rowData || rowData.length === 0) return [];
 
-const AgeGridCommonTable = ({ groupedFeedbackData }) => {
-
-
-
-    const columnDefs = useMemo(() => [
-        { headerName: 'Sl No', field: 'Sl No' },
-        { headerName: 'Patient Name', field: 'Patient Name' },
-        { headerName: 'Phone', field: 'Phone' },
-        { headerName: 'IP Number', field: 'IP Number' },
-        { headerName: 'Q1: Satisfaction', field: 'Q1: Satisfaction' },
-        { headerName: 'Q2: Response', field: 'Q2: Response' },
-        { headerName: 'Q3: Cleanliness', field: 'Q3: Cleanliness' },
-        { headerName: 'Q4: Wait Time', field: 'Q4: Wait Time' },
-        { headerName: 'Q5: Recommend', field: 'Q5: Recommend' },
-        { headerName: 'Q6: Contact', field: 'Q6: Contact' },
-        { headerName: 'Q7: Suggestion', field: 'Q7: Suggestion' },
-        { headerName: 'Create Employee', field: 'Create Employee' },
-        { headerName: 'Create Date', field: 'Create Date' }
-    ], []);
+        return Object.keys(rowData[0]).map((key) => ({
+            headerName: key,
+            field: key,
+        }));
+    }, [rowData]);
 
     return (
         <CssVarsProvider>
             <Box sx={{ height: 700, width: '100%', overflow: 'auto' }} >
                 <AgGridReact
                     className="custom-age-grid ag-grid-container"
-                    rowData={groupedFeedbackData}
+                    rowData={rowData}
                     columnDefs={columnDefs}
                     defaultColDef={{
                         flex: 1,
@@ -69,4 +57,4 @@ const AgeGridCommonTable = ({ groupedFeedbackData }) => {
     );
 };
 
-export default AgeGridCommonTable
+export default FeedbackReportTable;
